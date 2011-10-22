@@ -18,7 +18,8 @@ classdef ImagemApp < handle
 
 %% Properties
 properties
-    
+    % set of image documents managed by this application
+    docList;
 end 
 
 %% Constructor
@@ -41,5 +42,35 @@ methods
     end
 end % general methods
 
+methods
+    function addDocument(this, doc)
+        this.docList = [this.docList {doc}];
+    end
+    
+    function removeDocument(this, doc)
+        ind = -1;
+        for i = 1:length(this.docList)
+            if this.docList{i} == doc
+                ind = i;
+                break;
+            end
+        end
+        
+        if ind == -1
+            error('could not find the document');
+        end
+        
+        this.docList(ind) = [];
+    end
+
+    function docList = documentList(this)
+        docList = this.docList;
+    end
+    
+    function b = hasDocuments(this)
+        b = ~isempty(this.docList);
+    end
+    
+end
 
 end

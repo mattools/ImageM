@@ -20,8 +20,6 @@ properties
     % application
     app;
     
-%     % handle to the main figure;
-%     mainFig;
 end 
 
 %% Constructor
@@ -35,13 +33,6 @@ methods
         
         this.app = appli;
         
-%         img = [];
-%         if ~isempty(varargin)
-%             img = varargin{1};
-%         end
-%         
-%         this.mainFig = imagem.gui.PlanarImageViewer(this, img);
-        
     end % constructor 
 
 end % construction function
@@ -50,7 +41,6 @@ end % construction function
 methods
     function exit(this)
         % EXIT Close all frame
-%         this.mainFig.close();
     end
     
 end % general methods

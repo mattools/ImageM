@@ -23,14 +23,14 @@ properties
     % list of handles to the varisous gui items
     handles;
     
-    % the image to be displayed
-    image;
+    % the image document
+    doc;
 end
 
 methods
-    function this = PlanarImageViewer(gui, img)
+    function this = PlanarImageViewer(gui, doc)
         this.gui = gui;
-        this.image = img;
+        this.doc = doc;
         
         % create default figure
         fig = figure(...
@@ -52,9 +52,6 @@ methods
         set(fig, 'WindowButtonMotionFcn', @this.mouseDragged);
         set(fig, 'WindowScrollWheelFcn', @this.mouseWheelScrolled);
         
-%         % if another plot command is made, create a new 
-%         set(fig, 'NextPlot', 'new');
-
         function setupMenu(hf)
             
             import imagem.gui.actions.*;
@@ -125,14 +122,14 @@ methods
         % Refresh image display of the current slice
         
         api = iptgetapi(this.handles.scrollPanel);
-        api.replaceImage(permute(this.image.data, [2 1 4 3]));
+        api.replaceImage(permute(this.doc.image.data, [2 1 4 3]));
         
         % extract calibration data
-        spacing = this.image.spacing;
-        origin  = this.image.origin;
+        spacing = this.doc.image.spacing;
+        origin  = this.doc.image.origin;
         
         % set up spatial calibration
-        dim     = size(this.image);
+        dim     = size(this.doc.image);
         xdata   = ([0 dim(1)-1] * spacing(1) + origin(1));
         ydata   = ([0 dim(2)-1] * spacing(2) + origin(2));
         
@@ -140,7 +137,7 @@ methods
         set(this.handles.image, 'YData', ydata);
         
         % setup axis extent from imaeg extent
-        extent = physicalExtent(this.image);
+        extent = physicalExtent(this.doc.image);
         set(this.handles.imageAxis, 'XLim', extent(1:2));
         set(this.handles.imageAxis, 'YLim', extent(3:4));
         
@@ -167,22 +164,22 @@ methods
         end
         
         % setup name
-        if isempty(this.image.name)
+        if isempty(this.doc.image.name)
             imgName = 'Unknown Image';
         else
-            imgName = this.image.name;
+            imgName = this.doc.image.name;
         end
     
         % determine the type to display:
         % * data type for intensity / grayscale image
         % * type of image otherwise
-        switch this.image.type
+        switch this.doc.image.type
             case 'grayscale'
-                type = class(this.image.data);
+                type = class(this.doc.image.data);
             case 'color'
                 type = 'color';
             otherwise
-                type = this.image.type;
+                type = this.doc.image.type;
         end
         
         % compute image zoom
@@ -192,7 +189,7 @@ methods
         % compute new title string 
         titlePattern = 'ImageM - %s [%d x %d x %d %s] - %g:%g';
         titleString = sprintf(titlePattern, imgName, ...
-            size(this.image), type, max(1, zoom), max(1, 1/zoom));
+            size(this.doc.image), type, max(1, zoom), max(1, 1/zoom));
 
         % display new title
         set(this.handles.figure, 'Name', titleString);
@@ -203,6 +200,7 @@ end
 methods
        
     function onZoomIn(this, varargin)
+        % multiplies the current zoom by 2
         api = iptgetapi(this.handles.scrollPanel);
         mag = api.getMagnification();
         api.setMagnification(mag * 2);
@@ -210,6 +208,7 @@ methods
     end
     
     function onZoomOut(this, varargin)
+        % divides the current zoom by 2
         api = iptgetapi(this.handles.scrollPanel);
         mag = api.getMagnification();
         api.setMagnification(mag / 2);
@@ -217,12 +216,14 @@ methods
     end
     
     function onZoomOne(this, varargin)
+        % sete the current zoom to 1
         api = iptgetapi(this.handles.scrollPanel);
         api.setMagnification(1);
         this.updateTitle();
     end
     
-    function onZoomBest(this, varargin)
+    function onZoomBest(this, varargin) 
+        % finds the best zoom for current image
         api = iptgetapi(this.handles.scrollPanel);
         mag = api.findFitMag();
         api.setMagnification(mag);
@@ -259,30 +260,30 @@ methods
         coord = round(pointToIndex(this, point));
         
         % control on bounds of image
-        if sum(coord < 1) > 0 || sum(coord > size(this.image, [1 2])) > 0
+        if sum(coord < 1) > 0 || sum(coord > size(this.doc.image, [1 2])) > 0
             set(this.handles.infoPanel, 'string', '');
             return;
         end
         
         % Display coordinates of clicked point
-        if this.image.calibrated
+        if this.doc.image.calibrated
             % Display pixel + physical position
             locString = sprintf('(x,y) = (%d,%d) px = (%5.2f,%5.2f) %s', ...
                 coord(1), coord(2), point(1), point(2), ...
-                this.image.unitName);
+                this.doc.image.unitName);
         else
             % Display only pixel position
             locString = sprintf('(x,y) = (%d,%d) px', coord(1), coord(2));
         end
         
         % Display value of selected pixel
-        if strcmp(this.image.type, 'color')
+        if strcmp(this.doc.image.type, 'color')
             % case of color pixel: values are red, green and blue
-            rgb = this.image(coord(1), coord(2), :);
+            rgb = this.doc.image(coord(1), coord(2), :);
             valueString = sprintf('  RGB = (%d %d %d)', ...
                 rgb(1), rgb(2), rgb(3));
             
-        elseif strcmp(this.image.type, 'vector')
+        elseif strcmp(this.doc.image.type, 'vector')
             % case of vector image: compute norm of the pixel
             values  = this.image(coord(1), coord(2), :);
             norm    = sqrt(sum(double(values(:)) .^ 2));
@@ -290,7 +291,7 @@ methods
             
         else
             % case of a gray-scale pixel
-            value = this.image(coord(1), coord(2));
+            value = this.doc.image(coord(1), coord(2));
             if ~isfloat(value)
                 valueString = sprintf('  value = %3d', value);
             else
@@ -305,8 +306,8 @@ methods
         % Converts coordinates of a point in physical dimension to image index
         % First element is column index, second element is row index, both are
         % given in floating point and no rounding is performed.
-        spacing = this.image.spacing(1:2);
-        origin  = this.image.origin(1:2);
+        spacing = this.doc.image.spacing(1:2);
+        origin  = this.doc.image.origin(1:2);
         index   = (point - origin) ./ spacing + 1;
     end
 end

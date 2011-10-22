@@ -22,6 +22,7 @@ function varargout = ImageM(varargin)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 import imagem.app.ImagemApp;
+import imagem.app.ImagemDoc;
 import imagem.gui.ImagemGUI;
 import imagem.gui.PlanarImageViewer;
 import imagem.gui.actions.SayHelloAction;
@@ -34,11 +35,12 @@ if ~isempty(varargin)
 end
 
 app = ImagemApp;
-gui = ImagemGUI(app, img);
+gui = ImagemGUI(app);
 
 
 % create a new figure for displaying image
-PlanarImageViewer(gui, img);
+doc = ImagemDoc(img);
+PlanarImageViewer(gui, doc);
 
 % action = SayHelloAction(gui, 'sayHello');
 % 
