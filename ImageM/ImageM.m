@@ -31,7 +31,6 @@ import imagem.gui.actions.SayHelloAction;
 img = [];
 if ~isempty(varargin)
     img = varargin{1};
-    
 end
 
 app = ImagemApp;

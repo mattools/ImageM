@@ -49,25 +49,40 @@ methods
         updateTitle(this);
         
         % setup listeners associated to the figure
+        set(fig, 'WindowButtonDownFcn', @this.onFigureSelected);
+        set(fig, 'ButtonDownFcn', @this.onFigureSelected);
         set(fig, 'WindowButtonMotionFcn', @this.mouseDragged);
         set(fig, 'WindowScrollWheelFcn', @this.mouseWheelScrolled);
+        
+        set(fig, 'UserData', this);
         
         function setupMenu(hf)
             
             import imagem.gui.actions.*;
             
-            menu = uimenu(hf, 'Label', 'Files');
+            % File Menu Definition 
+            
+            fileMenu = uimenu(hf, 'Label', 'Files');
             
             action = SayHelloAction(this.gui, 'sayHello');
-            uimenu(menu, 'Label', 'Say Hello!', ...
+            uimenu(fileMenu, 'Label', 'Say Hello!', ...
                 'Callback', @action.actionPerformed);
             
             action = ShowDemoFigureAction(this.gui, 'showCameraman');
-            uimenu(menu, 'Label', 'Show Demo Image', ...
+            uimenu(fileMenu, 'Label', 'Show Demo Image', ...
+                'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
+            
+            uimenu(fileMenu, 'Label', 'Quit', 'Separator', 'On', ...
+                'Callback', @this.close);
+            
+            % Image Menu Definition 
+            
+            imageMenu = uimenu(hf, 'Label', 'Image');
+            
+            action = InvertImageAction(this.gui, 'invertImage');
+            uimenu(imageMenu, 'Label', 'Invert Image', ...
                 'Callback', @action.actionPerformed);
             
-            uimenu(menu, 'Label', 'Quit', 'Separator', 'On', ...
-                'Callback', @this.close);
         end
         
         function setupLayout(hf)
@@ -312,11 +327,16 @@ methods
     end
 end
 
-
+%% Figure management
 methods
     function close(this, varargin)
         close(this.handles.figure);
         disp('Closed parent figure');
+    end
+    
+    function onFigureSelected(this, varargin)
+        disp('selected figure');
+        disp(this.doc.image.name);
     end
     
     function onScrollPanelResized(this, varargin)
