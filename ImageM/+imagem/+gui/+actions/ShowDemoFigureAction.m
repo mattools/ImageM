@@ -24,7 +24,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        imagem.gui.ImagemImageFigure(this.gui);
+        imagem.gui.ImagemImageFigure(this.parent.gui);
     end
 end
 

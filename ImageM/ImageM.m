@@ -33,16 +33,13 @@ if ~isempty(varargin)
     img = varargin{1};
 end
 
+% create the application, and a GUI
 app = ImagemApp;
 gui = ImagemGUI(app);
 
+% use t he GUI to create a new imaeg display
+addImageDocument(gui, img);
 
-% create a new figure for displaying image
-doc = ImagemDoc(img);
-PlanarImageViewer(gui, doc);
-
-% action = SayHelloAction(gui, 'sayHello');
-% 
 
 if nargout > 0
     varargout = {gui};

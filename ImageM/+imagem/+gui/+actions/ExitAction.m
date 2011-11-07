@@ -23,9 +23,9 @@ methods
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD,MANU>
+    function actionPerformed(this, src, event) %#ok<INUSD>
         disp('quit...');
-        this.gui.exit();
+        this.parent.gui.exit();
     end
 end
 

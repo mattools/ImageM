@@ -26,19 +26,15 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Inverts the image');
         
-        % get handle to figure
-        h = src;
-        while ~strcmp(get(h, 'type'), 'figure')
-            h = get(h, 'parent');
-        end
-        
-        % get gui and current doc
-        viewer = get(h, 'userData');
+        % get handle to parent figure, and current doc
+        viewer = this.parent;
         doc = viewer.doc;
         
+        % apply 'invert' operation
         img2 = invert(doc.image);
         
-        addImageDocument(this.gui, img2);
+        % add image to application, and create new display
+        addImageDocument(viewer.gui, img2);
     end
 end
 

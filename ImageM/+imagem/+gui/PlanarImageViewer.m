@@ -1,5 +1,5 @@
 classdef PlanarImageViewer < handle
-%PLANARIMAGEVIEWER  One-line description here, please.
+%PLANARIMAGEVIEWER  A viewer for planar images
 %
 %   output = PlanarImageViewer(input)
 %
@@ -64,11 +64,14 @@ methods
             
             fileMenu = uimenu(hf, 'Label', 'Files');
             
-            action = SayHelloAction(this.gui, 'sayHello');
+            action = SayHelloAction(this, 'sayHello');
             uimenu(fileMenu, 'Label', 'Say Hello!', ...
                 'Callback', @action.actionPerformed);
             
-            action = ShowDemoFigureAction(this.gui, 'showCameraman');
+%             action = ShowDemoFigureAction(this, 'showCameraman');
+%             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
+%                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
+            action = ShowDemoFigureAction(this, 'showCameraman');
             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
             
@@ -79,10 +82,14 @@ methods
             
             imageMenu = uimenu(hf, 'Label', 'Image');
             
-            action = InvertImageAction(this.gui, 'invertImage');
+            action = InvertImageAction(this, 'invertImage');
             uimenu(imageMenu, 'Label', 'Invert Image', ...
                 'Callback', @action.actionPerformed);
             
+            action = PrintImageDocListAction(this, 'printImageDocList');
+            uimenu(imageMenu, 'Label', 'Print Image List', ...
+                'Callback', @action.actionPerformed);
+
         end
         
         function setupLayout(hf)
@@ -91,7 +98,6 @@ methods
             mainPanel = uiextras.VBox('Parent', hf, ...
                 'Units', 'normalized', ...
                 'Position', [0 0 1 1]);
-            
             
             % panel for image display
             displayPanel = uiextras.VBox('Parent', mainPanel);

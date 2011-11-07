@@ -1,7 +1,7 @@
 classdef SayHelloAction < imagem.gui.ImagemAction
 %SAYHELLOACTION  One-line description here, please.
 %
-%   output = SayHelloAction(input)
+%   Simple class for demonstrating the use of action classes.
 %
 %   Example
 %   SayHelloAction
