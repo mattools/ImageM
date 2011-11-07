@@ -75,9 +75,27 @@ methods
             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
             
+            action = OpenDemoImageAction(this, 'openDemoCameraman', 'cameraman.tif');
+            uimenu(fileMenu, 'Label', 'Open cameraman image', ...
+                'Callback', @action.actionPerformed);
+            
+            action = OpenDemoImageAction(this, 'openDemoRice', 'rice.png');
+            uimenu(fileMenu, 'Label', 'Open rice image', ...
+                'Callback', @action.actionPerformed);
+            
+            action = OpenDemoImageAction(this, 'openDemoPeppers', 'peppers.png');
+            uimenu(fileMenu, 'Label', 'Open peppers image', ...
+                'Callback', @action.actionPerformed);
+            
+            action = OpenDemoImageAction(this, 'openDemoCircles', 'circles.png');
+            uimenu(fileMenu, 'Label', 'Open circles image', ...
+                'Callback', @action.actionPerformed);
+            
+            
             uimenu(fileMenu, 'Label', 'Quit', 'Separator', 'On', ...
                 'Callback', @this.close);
             
+
             % Image Menu Definition 
             
             imageMenu = uimenu(hf, 'Label', 'Image');
