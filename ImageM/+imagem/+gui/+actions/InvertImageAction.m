@@ -38,10 +38,7 @@ methods
         
         img2 = invert(doc.image);
         
-        newDoc = imagem.app.ImagemDoc(img2);
-        
-        addDocument(this.gui.app, newDoc);
-        imagem.gui.PlanarImageViewer(this.gui, newDoc);
+        addImageDocument(this.gui, img2);
     end
 end
 

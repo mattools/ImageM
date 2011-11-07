@@ -37,8 +37,23 @@ methods
 
 end % construction function
 
+
 %% General methods
 methods
+    function addImageDocument(this, image)
+        % Create a new document from image, add it to app, and display img
+        
+        % creates new instance of ImageDoc
+        newDoc = imagem.app.ImagemDoc(image);
+        
+        % add ImageDoc to the application
+        addDocument(this.app, newDoc);
+        
+        % creates a display for the new image
+        imagem.gui.PlanarImageViewer(this, newDoc);
+        
+    end
+    
     function exit(this)
         % EXIT Close all frame
     end

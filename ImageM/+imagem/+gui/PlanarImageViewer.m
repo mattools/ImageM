@@ -1,5 +1,5 @@
 classdef PlanarImageViewer < handle
-%PlanarImageViewer  One-line description here, please.
+%PLANARIMAGEVIEWER  One-line description here, please.
 %
 %   output = PlanarImageViewer(input)
 %
@@ -20,7 +20,7 @@ properties
     % reference to the GUI
     gui;
    
-    % list of handles to the varisous gui items
+    % list of handles to the various gui items
     handles;
     
     % the image document
