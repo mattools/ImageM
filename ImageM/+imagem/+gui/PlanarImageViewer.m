@@ -105,6 +105,14 @@ methods
             uimenu(imageMenu, 'Label', 'Invert Image', ...
                 'Callback', @action.actionPerformed);
             
+            action = ImageGradientAction(this, 'imageGradient');
+            uimenu(imageMenu, 'Label', 'Gradient', ...
+                'Callback', @action.actionPerformed);
+            
+            action = ImageNormAction(this, 'imageNorm');
+            uimenu(imageMenu, 'Label', 'Norm', ...
+                'Callback', @action.actionPerformed);
+            
             action = showImageHistogramAction(this, 'showImageHistogram');
             uimenu(imageMenu, 'Label', 'Histogram', ...
                 'Callback', @action.actionPerformed);
@@ -166,8 +174,29 @@ methods
     function displayNewImage(this)
         % Refresh image display of the current slice
         
+        % extract or compute display data
+        if isGrayscale(this.doc.image) || isColor(this.doc.image)
+            cdata = permute(this.doc.image.data, [2 1 4 3]);
+            mini = 0;
+            maxi = intmax(class(cdata));
+            
+        elseif isVector(this.doc.image) 
+            imgNorm = norm(this.doc.image);
+            cdata = permute(imgNorm.data, [2 1 4 3]);
+            mini = min(cdata(:));
+            maxi = max(cdata(:));
+
+        else
+            % intensity or unknown type
+            cdata = permute(this.doc.image.data, [2 1 4 3]);
+            mini = min(cdata(:));
+            maxi = max(cdata(:));
+            
+        end
+        
+        % changes current display data
         api = iptgetapi(this.handles.scrollPanel);
-        api.replaceImage(permute(this.doc.image.data, [2 1 4 3]));
+        api.replaceImage(cdata);
         
         % extract calibration data
         spacing = this.doc.image.spacing;
@@ -186,11 +215,10 @@ methods
         set(this.handles.imageAxis, 'XLim', extent(1:2));
         set(this.handles.imageAxis, 'YLim', extent(3:4));
         
-%         % for grayscale and vector images, adjust displayrange and LUT
-%         if ~strcmp(this.image.type, 'color')
-%             set(this.handles.imageAxis, 'CLim', this.displayRange);
-%             colormap(this.handles.imageAxis, this.lut);
-%         end
+        % for vector images, adjust displayrange
+        if isVector(this.doc.image) || isIntensity(this.doc.image)
+            set(this.handles.imageAxis, 'CLim', [mini maxi]);
+        end
         
         % adjust zoom to view the full image
         api = iptgetapi(this.handles.scrollPanel);
@@ -232,7 +260,7 @@ methods
         zoom = api.getMagnification();
         
         % compute new title string 
-        titlePattern = 'ImageM - %s [%d x %d x %d %s] - %g:%g';
+        titlePattern = 'ImageM - %s [%d x %d %s] - %g:%g';
         titleString = sprintf(titlePattern, imgName, ...
             size(this.doc.image), type, max(1, zoom), max(1, 1/zoom));
 
@@ -330,7 +358,7 @@ methods
             
         elseif strcmp(this.doc.image.type, 'vector')
             % case of vector image: compute norm of the pixel
-            values  = this.image(coord(1), coord(2), :);
+            values  = this.doc.image(coord(1), coord(2), :);
             norm    = sqrt(sum(double(values(:)) .^ 2));
             valueString = sprintf('  value = %g', norm);
             

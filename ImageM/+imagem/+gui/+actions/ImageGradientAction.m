@@ -1,10 +1,10 @@
-classdef showImageHistogramAction < imagem.gui.ImagemAction
-%SHOWIMAGEHISTOGRAMACTION Display histogram of current image
+classdef ImageGradientAction < imagem.gui.ImagemAction
+%IMAGEGRADIENTACTION Compute and display gradient of current image
 %
-%   output = showImageHistogramAction(input)
+%   output = ImageGradientAction(input)
 %
 %   Example
-%   showImageHistogramAction
+%   ImageGradientAction
 %
 %   See also
 %
@@ -16,7 +16,7 @@ classdef showImageHistogramAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = showImageHistogramAction(varargin)
+    function this = ImageGradientAction(varargin)
         % calls the parent constructor
         this = this@imagem.gui.ImagemAction(varargin{:});
     end
@@ -24,16 +24,17 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Show image histogram');
+        disp('Compute Image gradient');
         
         % get handle to parent figure, and current doc
         viewer = this.parent;
         doc = viewer.doc;
         
-        % open figure to display histogram
-        figure;
-        histogram(doc.image);
-
+        % apply 'gradient' operation
+        img2 = gradient(doc.image);
+        
+        % add image to application, and create new display
+        addImageDocument(viewer.gui, img2);
     end
 end
 
