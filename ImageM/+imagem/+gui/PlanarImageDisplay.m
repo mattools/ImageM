@@ -1,7 +1,7 @@
 classdef PlanarImageDisplay < imagem.gui.ImageDisplay
 %PLANARIMAGEDISPLAY  One-line description here, please.
 %
-%   Class PlanarImageDisplay
+%   Deprecated: replaced by PlanarImageViewer
 %
 %   Example
 %   PlanarImageDisplay

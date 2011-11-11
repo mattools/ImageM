@@ -22,10 +22,7 @@ function varargout = ImageM(varargin)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 import imagem.app.ImagemApp;
-import imagem.app.ImagemDoc;
 import imagem.gui.ImagemGUI;
-import imagem.gui.PlanarImageViewer;
-import imagem.gui.actions.SayHelloAction;
 
 % check if image is present, or create one
 img = [];

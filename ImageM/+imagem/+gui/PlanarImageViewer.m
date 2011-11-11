@@ -92,7 +92,8 @@ methods
                 'Callback', @action.actionPerformed);
             
             
-            uimenu(fileMenu, 'Label', 'Quit', 'Separator', 'On', ...
+            uimenu(fileMenu, 'Label', 'Quit', ...
+                'Separator', 'On', ...
                 'Callback', @this.close);
             
 
@@ -104,8 +105,13 @@ methods
             uimenu(imageMenu, 'Label', 'Invert Image', ...
                 'Callback', @action.actionPerformed);
             
+            action = showImageHistogramAction(this, 'showImageHistogram');
+            uimenu(imageMenu, 'Label', 'Histogram', ...
+                'Callback', @action.actionPerformed);
+            
             action = PrintImageDocListAction(this, 'printImageDocList');
             uimenu(imageMenu, 'Label', 'Print Image List', ...
+                'Separator', 'on', ...
                 'Callback', @action.actionPerformed);
 
         end
