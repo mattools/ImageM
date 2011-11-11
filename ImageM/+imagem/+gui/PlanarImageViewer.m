@@ -105,6 +105,10 @@ methods
             uimenu(imageMenu, 'Label', 'Invert Image', ...
                 'Callback', @action.actionPerformed);
             
+            action = ImageThresholdAction(this, 'thresholdImage');
+            uimenu(imageMenu, 'Label', 'Threshold...', ...
+                'Callback', @action.actionPerformed);
+            
             action = ImageGradientAction(this, 'imageGradient');
             uimenu(imageMenu, 'Label', 'Gradient', ...
                 'Callback', @action.actionPerformed);
@@ -178,7 +182,11 @@ methods
         if isGrayscale(this.doc.image) || isColor(this.doc.image)
             cdata = permute(this.doc.image.data, [2 1 4 3]);
             mini = 0;
-            maxi = intmax(class(cdata));
+            if islogical(cdata)
+                maxi = 1;
+            else
+                maxi = intmax(class(cdata));
+            end
             
         elseif isVector(this.doc.image) 
             imgNorm = norm(this.doc.image);
