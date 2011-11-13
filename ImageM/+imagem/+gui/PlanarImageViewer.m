@@ -25,6 +25,11 @@ properties
     
     % the image document
     doc;
+    
+    mouseListeners = [];
+    
+    % the tool currently selected
+    currentTool = [];
 end
 
 methods
@@ -49,16 +54,20 @@ methods
         updateTitle(this);
         
         % setup listeners associated to the figure
-        set(fig, 'WindowButtonDownFcn', @this.onFigureSelected);
-        set(fig, 'ButtonDownFcn', @this.onFigureSelected);
-        set(fig, 'WindowButtonMotionFcn', @this.mouseDragged);
-        set(fig, 'WindowScrollWheelFcn', @this.mouseWheelScrolled);
+        set(fig, 'WindowButtonDownFcn',     @this.processMouseButtonPressed);
+        set(fig, 'WindowButtonUpFcn',       @this.processMouseButtonReleased);
+        set(fig, 'WindowButtonMotionFcn',   @this.processMouseMoved);
+%         set(fig, 'WindowButtonDownFcn', @this.onFigureSelected);
+%         set(fig, 'ButtonDownFcn', @this.onFigureSelected);
+%         set(fig, 'WindowButtonMotionFcn', @this.mouseDragged);
+%         set(fig, 'WindowScrollWheelFcn', @this.mouseWheelScrolled);
         
         set(fig, 'UserData', this);
         
         function setupMenu(hf)
             
             import imagem.gui.actions.*;
+            import imagem.gui.tools.*;
             
             % File Menu Definition 
             
@@ -123,6 +132,12 @@ methods
             
             action = PrintImageDocListAction(this, 'printImageDocList');
             uimenu(imageMenu, 'Label', 'Print Image List', ...
+                'Separator', 'on', ...
+                'Callback', @action.actionPerformed);
+
+            tool = PrintCurrentPointTool(this, 'printCurrentPoint');
+            action = SelectToolAction(this, 'selectTool', tool);
+            uimenu(imageMenu, 'Label', 'Print Current Point', ...
                 'Separator', 'on', ...
                 'Callback', @action.actionPerformed);
 
@@ -393,18 +408,45 @@ methods
     end
 end
 
+%% Mouse listeners management
+methods
+    function addMouseListener(this, listener)
+        this.mouseListeners = [this.mouseListeners listener];
+    end
+    
+    function removeMouseListener(this, listener)
+        inds = find(this.mouseListeners == listener);
+        if ~isempty(inds)
+            this.mouseListeners(inds(1)) = [];
+        end
+    end
+    
+    function processMouseButtonPressed(this, hObject, eventdata)
+        for listener = this.mouseListeners
+            onMouseButtonPressed(listener, hObject, eventdata);
+        end
+    end
+    
+    function processMouseButtonReleased(this, hObject, eventdata)
+        for listener = this.mouseListeners
+            onMouseButtonReleased(listener, hObject, eventdata);
+        end
+    end
+    
+    function processMouseMoved(this, hObject, eventdata)
+        for listener = this.mouseListeners
+            onMouseMoved(listener, hObject, eventdata);
+        end
+    end
+end
+
 %% Figure management
 methods
     function close(this, varargin)
         close(this.handles.figure);
         disp('Closed parent figure');
     end
-    
-    function onFigureSelected(this, varargin)
-        disp('selected figure');
-        disp(this.doc.image.name);
-    end
-    
+        
     function onScrollPanelResized(this, varargin)
         % function called when the Scroll panel has been resized
         

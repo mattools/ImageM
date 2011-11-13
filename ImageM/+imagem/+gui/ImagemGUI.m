@@ -54,8 +54,9 @@ methods
         
     end
     
-    function exit(this)
+    function exit(this) %#ok<MANU>
         % EXIT Close all frame
+        disp('calling ImagemGUI.exit() method');
     end
     
 end % general methods
