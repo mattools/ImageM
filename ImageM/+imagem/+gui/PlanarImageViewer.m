@@ -57,11 +57,7 @@ methods
         set(fig, 'WindowButtonDownFcn',     @this.processMouseButtonPressed);
         set(fig, 'WindowButtonUpFcn',       @this.processMouseButtonReleased);
         set(fig, 'WindowButtonMotionFcn',   @this.processMouseMoved);
-%         set(fig, 'WindowButtonDownFcn', @this.onFigureSelected);
-%         set(fig, 'ButtonDownFcn', @this.onFigureSelected);
-%         set(fig, 'WindowButtonMotionFcn', @this.mouseDragged);
-%         set(fig, 'WindowScrollWheelFcn', @this.mouseWheelScrolled);
-        
+
         set(fig, 'UserData', this);
         
         function setupMenu(hf)
@@ -135,10 +131,16 @@ methods
                 'Separator', 'on', ...
                 'Callback', @action.actionPerformed);
 
+            
             tool = PrintCurrentPointTool(this, 'printCurrentPoint');
             action = SelectToolAction(this, 'selectTool', tool);
             uimenu(imageMenu, 'Label', 'Print Current Point', ...
                 'Separator', 'on', ...
+                'Callback', @action.actionPerformed);
+
+            tool = LineProfileTool(this, 'lineProfile');
+            action = SelectToolAction(this, 'selectTool', tool);
+            uimenu(imageMenu, 'Label', 'Plot Line Profile', ...
                 'Callback', @action.actionPerformed);
 
         end

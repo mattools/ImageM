@@ -1,12 +1,14 @@
 classdef ImagemTool < imagem.gui.events.MouseListener
 %IMAGEMTOOL Base class for interactive (mouse management) tools
 %
-%   output = ImagemTool(input)
+%   ImagemTool is an abstract class that serves as basis for developping
+%   more sophisticated classes. It encapsulates functions for interpreting
+%   mouse button events and mouse motion events.
 %
-%   Example
-%   ImagemTool
+%   An ImageM Tool depends on a display, usually an ImageViewer.
 %
-%   See also
+%   Most ImageM Tool are also defined by their current "state". The state
+%   will change the way the mouse events are processed.
 %
 %
 % ------
@@ -22,6 +24,12 @@ properties
     
     % the name of this tool, that should be unique for all actions
     name;
+    
+    % the current step, between 1 and stepNumber
+    state = 0;
+    
+    % the total number of steps for this tool.
+    stateNumber = 0;
 end 
 
 %% Constructor
