@@ -58,6 +58,10 @@ methods
         set(fig, 'WindowButtonUpFcn',       @this.processMouseButtonReleased);
         set(fig, 'WindowButtonMotionFcn',   @this.processMouseMoved);
 
+        % setup mouse listener for display of mouse coordinates
+        tool = imagem.gui.tools.ShowCursorPositionTool(this, 'showMousePosition');
+        addMouseListener(this, tool);
+        
         set(fig, 'UserData', this);
         
         function setupMenu(hf)
@@ -413,31 +417,41 @@ end
 %% Mouse listeners management
 methods
     function addMouseListener(this, listener)
-        this.mouseListeners = [this.mouseListeners listener];
+        this.mouseListeners = [this.mouseListeners {listener}];
     end
     
     function removeMouseListener(this, listener)
-        inds = find(this.mouseListeners == listener);
+        
+        % find which listeners are the same as the given one
+        inds = false(size(this.mouseListeners));
+        for i = 1:numel(this.mouseListeners)
+            if this.mouseListeners{i} == listener
+                inds(i) = true;
+            end
+        end
+        
+        % remove first existing listener
+        inds = find(inds);
         if ~isempty(inds)
             this.mouseListeners(inds(1)) = [];
         end
     end
     
     function processMouseButtonPressed(this, hObject, eventdata)
-        for listener = this.mouseListeners
-            onMouseButtonPressed(listener, hObject, eventdata);
+        for i = 1:length(this.mouseListeners)
+            onMouseButtonPressed(this.mouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseButtonReleased(this, hObject, eventdata)
-        for listener = this.mouseListeners
-            onMouseButtonReleased(listener, hObject, eventdata);
+        for i = 1:length(this.mouseListeners)
+            onMouseButtonReleased(this.mouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseMoved(this, hObject, eventdata)
-        for listener = this.mouseListeners
-            onMouseMoved(listener, hObject, eventdata);
+        for i = 1:length(this.mouseListeners)
+            onMouseMoved(this.mouseListeners{i}, hObject, eventdata);
         end
     end
 end

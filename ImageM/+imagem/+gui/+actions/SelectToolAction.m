@@ -36,13 +36,7 @@ methods
         
         if ~isempty(this.parent.currentTool)
             deselect(this.parent.currentTool);
-%             hFig = this.parent.handles.figure;
             removeMouseListener(this.parent, this.parent.currentTool);
-            
-%             funs = get(hFig, 'WindowButtonDownFcn');
-%             funs(funs == @this.tool.onMouseButtonPressed) = [];
-%             set(hFig, 'WindowButtonDownFcn', funs);
-
         end
         
         this.parent.currentTool = this.tool;
@@ -50,19 +44,6 @@ methods
         if ~isempty(this.tool)
             select(this.tool);
             addMouseListener(this.parent, this.tool);
-%             hFig = this.parent.handles.figure;
-            
-%             funs = get(hFig, 'WindowButtonDownFcn');
-%             funs = [funs, @this.tool.onMouseButtonPressed];
-%             set(hFig, 'WindowButtonDownFcn', funs);
-% 
-%             funs = get(hFig, 'WindowButtonUpFcn');
-%             funs = [funs, @this.tool.onMouseButtonReleased];
-%             set(hFig, 'WindowButtonUpFcn', funs);
-% 
-%             funs = get(hFig, 'WindowButtonMotionFcn');
-%             funs = {funs, @this.tool.onMouseMoved};
-%             set(hFig, 'WindowButtonMotionFcn', funs);
         end
     end
 end
