@@ -36,7 +36,7 @@ methods
         img = doc.image;
         
         % control on bounds of image
-        if sum(coord < 1) > 0 || sum(coord > size(img, [1 2])) > 0
+        if any(coord < 1) || any(coord > size(img, [1 2]))
             set(this.parent.handles.infoPanel, 'string', '');
             return;
         end

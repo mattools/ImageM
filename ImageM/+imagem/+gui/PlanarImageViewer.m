@@ -50,7 +50,7 @@ methods
         
         this.handles.figure = fig;
         
-        displayNewImage(this);
+        updateDisplay(this);
         updateTitle(this);
         
         % setup listeners associated to the figure
@@ -77,6 +77,8 @@ methods
             uimenu(fileMenu, 'Label', 'Say Hello!', ...
                 'Callback', @action.actionPerformed);
             
+            demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
+            
 %             action = ShowDemoFigureAction(this, 'showCameraman');
 %             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
 %                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
@@ -85,19 +87,19 @@ methods
                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
             
             action = OpenDemoImageAction(this, 'openDemoCameraman', 'cameraman.tif');
-            uimenu(fileMenu, 'Label', 'Open cameraman image', ...
+            uimenu(demoMenu, 'Label', 'Cameraman', ...
                 'Callback', @action.actionPerformed);
             
             action = OpenDemoImageAction(this, 'openDemoRice', 'rice.png');
-            uimenu(fileMenu, 'Label', 'Open rice image', ...
+            uimenu(demoMenu, 'Label', 'Rice', ...
                 'Callback', @action.actionPerformed);
             
             action = OpenDemoImageAction(this, 'openDemoPeppers', 'peppers.png');
-            uimenu(fileMenu, 'Label', 'Open peppers image', ...
+            uimenu(demoMenu, 'Label', 'Peppers', ...
                 'Callback', @action.actionPerformed);
             
             action = OpenDemoImageAction(this, 'openDemoCircles', 'circles.png');
-            uimenu(fileMenu, 'Label', 'Open circles image', ...
+            uimenu(demoMenu, 'Label', 'Circles', ...
                 'Callback', @action.actionPerformed);
             
             
@@ -139,6 +141,12 @@ methods
             tool = PrintCurrentPointTool(this, 'printCurrentPoint');
             action = SelectToolAction(this, 'selectTool', tool);
             uimenu(imageMenu, 'Label', 'Print Current Point', ...
+                'Separator', 'on', ...
+                'Callback', @action.actionPerformed);
+
+            tool = SetPixelToWhiteTool(this, 'setPixelToWhite');
+            action = SelectToolAction(this, 'selectTool', tool);
+            uimenu(imageMenu, 'Label', 'Set Pixel to White', ...
                 'Separator', 'on', ...
                 'Callback', @action.actionPerformed);
 
@@ -196,7 +204,7 @@ end
 
 methods
     
-    function displayNewImage(this)
+    function updateDisplay(this)
         % Refresh image display of the current slice
         
         % extract or compute display data
