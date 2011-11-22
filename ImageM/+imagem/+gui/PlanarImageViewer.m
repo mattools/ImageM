@@ -132,6 +132,11 @@ methods
             uimenu(imageMenu, 'Label', 'Histogram', ...
                 'Callback', @action.actionPerformed);
             
+            action = ApplyImageFunctionAction(this, 'applyImageMethod', 'distanceMap');
+            uimenu(imageMenu, 'Label', 'Distance Map', ...
+                'Callback', @action.actionPerformed);
+            
+            
             action = PrintImageDocListAction(this, 'printImageDocList');
             uimenu(imageMenu, 'Label', 'Print Image List', ...
                 'Separator', 'on', ...
@@ -208,7 +213,7 @@ methods
         % Refresh image display of the current slice
         
         % extract or compute display data
-        if isGrayscale(this.doc.image) || isColor(this.doc.image)
+        if isGrayscaleImage(this.doc.image) || isColorImage(this.doc.image)
             cdata = permute(this.doc.image.data, [2 1 4 3]);
             mini = 0;
             if islogical(cdata)
@@ -217,7 +222,7 @@ methods
                 maxi = intmax(class(cdata));
             end
             
-        elseif isVector(this.doc.image) 
+        elseif isVectorImage(this.doc.image) 
             imgNorm = norm(this.doc.image);
             cdata = permute(imgNorm.data, [2 1 4 3]);
             mini = min(cdata(:));
@@ -253,7 +258,7 @@ methods
         set(this.handles.imageAxis, 'YLim', extent(3:4));
         
         % for vector images, adjust displayrange
-        if isVector(this.doc.image) || isIntensity(this.doc.image)
+        if isVectorImage(this.doc.image) || isIntensityImage(this.doc.image)
             set(this.handles.imageAxis, 'CLim', [mini maxi]);
         end
         

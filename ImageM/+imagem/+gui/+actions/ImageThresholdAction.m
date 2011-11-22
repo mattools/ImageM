@@ -30,7 +30,7 @@ methods
         viewer = this.parent;
         doc = viewer.doc;
         
-        if ~isScalar(doc.image)
+        if ~isScalarImage(doc.image)
             warning('ImageM:WrongImageType', ...
                 'Threshold can be applied only on scalar images');
             return;
