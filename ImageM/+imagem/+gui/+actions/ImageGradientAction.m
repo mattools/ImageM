@@ -16,9 +16,9 @@ classdef ImageGradientAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageGradientAction(varargin)
+    function this = ImageGradientAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'imageGradient');
     end
 end
 

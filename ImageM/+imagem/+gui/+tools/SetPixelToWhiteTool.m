@@ -22,9 +22,9 @@ end
 
 %% Constructor
 methods
-    function this = SetPixelToWhiteTool(varargin)
+    function this = SetPixelToWhiteTool(parent, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(varargin{:});
+         this = this@imagem.gui.ImagemTool(parent, 'setPixelToWhite');
     end % constructor 
 
 end % construction function

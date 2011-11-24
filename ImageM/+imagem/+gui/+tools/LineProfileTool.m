@@ -26,9 +26,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = LineProfileTool(varargin)
+    function this = LineProfileTool(parent, varargin)
         % Constructor for LineProfileTool class
-        this = this@imagem.gui.ImagemTool(varargin{:});
+        this = this@imagem.gui.ImagemTool(parent, 'lineProfile');
         
         % setup state
         this.stateNumber = 2;

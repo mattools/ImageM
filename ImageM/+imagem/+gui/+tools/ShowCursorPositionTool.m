@@ -18,9 +18,9 @@ classdef ShowCursorPositionTool < imagem.gui.ImagemTool
 
 %% Constructor
 methods
-    function this = ShowCursorPositionTool(varargin)
+    function this = ShowCursorPositionTool(parent, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(varargin{:});
+         this = this@imagem.gui.ImagemTool(parent, 'showCursorPosition');
     end % constructor 
 
 end % construction function

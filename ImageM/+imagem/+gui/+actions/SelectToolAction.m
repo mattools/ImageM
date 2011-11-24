@@ -21,8 +21,9 @@ properties
 end
 
 methods
-    function this = SelectToolAction(parent, name, tool)
+    function this = SelectToolAction(parent, tool)
         % calls the parent constructor
+        name = ['selectTool-' tool.name];
         this = this@imagem.gui.ImagemAction(parent, name);
         this.tool = tool;
     end

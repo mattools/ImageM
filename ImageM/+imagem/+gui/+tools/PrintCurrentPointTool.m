@@ -18,9 +18,9 @@ classdef PrintCurrentPointTool < imagem.gui.ImagemTool
 
 %% Constructor
 methods
-    function this = PrintCurrentPointTool(varargin)
+    function this = PrintCurrentPointTool(parent, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(varargin{:});
+         this = this@imagem.gui.ImagemTool(parent, 'printCurrentPoint');
     end % constructor 
 
 end % construction function

@@ -73,7 +73,7 @@ methods
             
             fileMenu = uimenu(hf, 'Label', 'Files');
             
-            action = SayHelloAction(this, 'sayHello');
+            action = SayHelloAction(this);
             uimenu(fileMenu, 'Label', 'Say Hello!', ...
                 'Callback', @action.actionPerformed);
             
@@ -82,7 +82,7 @@ methods
 %             action = ShowDemoFigureAction(this, 'showCameraman');
 %             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
 %                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
-            action = ShowDemoFigureAction(this, 'showCameraman');
+            action = ShowDemoFigureAction(this);
             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
             
@@ -102,61 +102,61 @@ methods
             uimenu(demoMenu, 'Label', 'Circles', ...
                 'Callback', @action.actionPerformed);
             
-            
+            action = ExitAction(this);
             uimenu(fileMenu, 'Label', 'Quit', ...
                 'Separator', 'On', ...
-                'Callback', @this.close);
+                'Callback', @action.actionPerformed);
             
 
             % Image Menu Definition 
             
             imageMenu = uimenu(hf, 'Label', 'Image');
             
-            action = InvertImageAction(this, 'invertImage');
+            action = InvertImageAction(this);
             uimenu(imageMenu, 'Label', 'Invert Image', ...
                 'Callback', @action.actionPerformed);
             
-            action = ImageThresholdAction(this, 'thresholdImage');
+            action = ImageThresholdAction(this);
             uimenu(imageMenu, 'Label', 'Threshold...', ...
                 'Callback', @action.actionPerformed);
             
-            action = ImageGradientAction(this, 'imageGradient');
+            action = ImageGradientAction(this);
             uimenu(imageMenu, 'Label', 'Gradient', ...
                 'Callback', @action.actionPerformed);
             
-            action = ImageNormAction(this, 'imageNorm');
+            action = ImageNormAction(this);
             uimenu(imageMenu, 'Label', 'Norm', ...
                 'Callback', @action.actionPerformed);
             
-            action = showImageHistogramAction(this, 'showImageHistogram');
+            action = showImageHistogramAction(this);
             uimenu(imageMenu, 'Label', 'Histogram', ...
                 'Callback', @action.actionPerformed);
             
-            action = ApplyImageFunctionAction(this, 'applyImageMethod', 'distanceMap');
+            action = ApplyImageFunctionAction(this, 'distanceMap');
             uimenu(imageMenu, 'Label', 'Distance Map', ...
                 'Callback', @action.actionPerformed);
             
             
-            action = PrintImageDocListAction(this, 'printImageDocList');
+            action = PrintImageDocListAction(this);
             uimenu(imageMenu, 'Label', 'Print Image List', ...
                 'Separator', 'on', ...
                 'Callback', @action.actionPerformed);
 
             
-            tool = PrintCurrentPointTool(this, 'printCurrentPoint');
-            action = SelectToolAction(this, 'selectTool', tool);
+            tool = PrintCurrentPointTool(this);
+            action = SelectToolAction(this, tool);
             uimenu(imageMenu, 'Label', 'Print Current Point', ...
                 'Separator', 'on', ...
                 'Callback', @action.actionPerformed);
 
-            tool = SetPixelToWhiteTool(this, 'setPixelToWhite');
-            action = SelectToolAction(this, 'selectTool', tool);
+            tool = SetPixelToWhiteTool(this);
+            action = SelectToolAction(this, tool);
             uimenu(imageMenu, 'Label', 'Set Pixel to White', ...
                 'Separator', 'on', ...
                 'Callback', @action.actionPerformed);
 
-            tool = LineProfileTool(this, 'lineProfile');
-            action = SelectToolAction(this, 'selectTool', tool);
+            tool = LineProfileTool(this);
+            action = SelectToolAction(this, tool);
             uimenu(imageMenu, 'Label', 'Plot Line Profile', ...
                 'Callback', @action.actionPerformed);
 

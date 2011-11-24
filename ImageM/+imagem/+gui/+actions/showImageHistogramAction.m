@@ -16,9 +16,9 @@ classdef showImageHistogramAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = showImageHistogramAction(varargin)
+    function this = showImageHistogramAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'showImageHistogram');
     end
 end
 

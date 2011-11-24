@@ -1,5 +1,5 @@
 classdef ShowDemoFigureAction < imagem.gui.ImagemAction
-%SHOWDEMOFIGUREACTION Close the application
+%SHOWDEMOFIGUREACTION Show a demo image
 %
 %   output = ShowDemoFigureAction(input)
 %
@@ -16,9 +16,9 @@ classdef ShowDemoFigureAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ShowDemoFigureAction(varargin)
+    function this = ShowDemoFigureAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'showCameraman');
     end
 end
 

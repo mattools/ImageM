@@ -16,9 +16,9 @@ classdef ExitAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ExitAction(varargin)
+    function this = ExitAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'quit');
     end
 end
 

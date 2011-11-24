@@ -16,9 +16,9 @@ classdef ImageNormAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageNormAction(varargin)
+    function this = ImageNormAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'imageNorm');
     end
 end
 

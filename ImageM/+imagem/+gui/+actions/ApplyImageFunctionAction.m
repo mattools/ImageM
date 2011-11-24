@@ -20,8 +20,9 @@ properties
 end
 
 methods
-    function this = ApplyImageFunctionAction(parent, name, methodName)
+    function this = ApplyImageFunctionAction(parent, methodName)
         % calls the parent constructor
+        name = ['applyImageMethod-' methodName];
         this = this@imagem.gui.ImagemAction(parent, name);
         this.methodName = methodName;
     end

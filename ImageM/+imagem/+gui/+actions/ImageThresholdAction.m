@@ -16,9 +16,9 @@ classdef ImageThresholdAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageThresholdAction(varargin)
+    function this = ImageThresholdAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'thresholdImage');
     end
 end
 

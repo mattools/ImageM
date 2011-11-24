@@ -16,9 +16,9 @@ classdef PrintImageDocListAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
  
 methods
-    function this = PrintImageDocListAction(varargin)
+    function this = PrintImageDocListAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'printImageDocList');
     end
 end
 

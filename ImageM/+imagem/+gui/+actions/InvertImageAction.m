@@ -16,9 +16,9 @@ classdef InvertImageAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = InvertImageAction(varargin)
+    function this = InvertImageAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(varargin{:});
+        this = this@imagem.gui.ImagemAction(parent, 'invertImage');
     end
 end
 
