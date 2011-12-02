@@ -21,7 +21,11 @@ properties
     % the reference image
     image;
    
-    % other properties later...
+    % a set of views attached to this doc. Can be image viewer, profiles...
+    views = {};
+    
+    % a flag of modification
+    modif = false;
     
 end % end properties
 
@@ -44,6 +48,30 @@ end % end constructors
 
 %% Methods
 methods
+    function addView(this, v)
+        this.views = [this.views {v}];
+    end
+    
+    function removeView(this, v)
+        ind = -1;
+        for i = 1:length(this.views)
+            if this.views{i} == v
+                ind = i;
+                break;
+            end
+        end
+        
+        if ind == -1
+            error('could not find the view');
+        end
+        
+        this.views(ind) = [];
+    end
+    
+    function v = getViews(this)
+        v = this.views;
+    end
+    
 end % end methods
 
 end % end classdef

@@ -43,7 +43,8 @@ methods
             'MenuBar', 'none', ...
             'NumberTitle', 'off', ...
             'NextPlot', 'new', ...
-            'Name', 'ImageM Main Figure');
+            'Name', 'ImageM Main Figure', ...
+            'CloseRequestFcn', @this.close);
         
         % create main figure menu
         setupMenu(fig);
@@ -99,11 +100,9 @@ methods
             action = OpenDemoImageAction(this, 'openDemoCircles', 'circles.png');
             uimenu(demoMenu, 'Label', 'Circles', ...
                 'Callback', @action.actionPerformed);
-            
-            action = ExitAction(this);
-            uimenu(fileMenu, 'Label', 'Quit', ...
-                'Separator', 'On', ...
-                'Callback', @action.actionPerformed);
+
+            addMenuItem(fileMenu, CloseImageAction(this), 'Close', true);
+            addMenuItem(fileMenu, ExitAction(this), 'Quit');
             
 
             % Image Menu Definition 
@@ -457,10 +456,15 @@ end
 %% Figure management
 methods
     function close(this, varargin)
-        close(this.handles.figure);
-        disp('Closed parent figure');
+        disp('Close image viewer');
+        delete(this.handles.figure);
     end
-        
+    
+%     function closeDoc(this, varargin)
+%         disp('Closed image viewer');
+%         delete(this.handles.figure);
+%     end
+    
     function onScrollPanelResized(this, varargin)
         % function called when the Scroll panel has been resized
         

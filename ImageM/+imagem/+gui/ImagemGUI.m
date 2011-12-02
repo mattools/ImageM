@@ -44,19 +44,35 @@ methods
         % Create a new document from image, add it to app, and display img
         
         % creates new instance of ImageDoc
-        newDoc = imagem.app.ImagemDoc(image);
+        doc = imagem.app.ImagemDoc(image);
         
         % add ImageDoc to the application
-        addDocument(this.app, newDoc);
+        addDocument(this.app, doc);
         
         % creates a display for the new image
-        imagem.gui.PlanarImageViewer(this, newDoc);
+        view = imagem.gui.PlanarImageViewer(this, doc);
+        addView(doc, view);
         
     end
     
-    function exit(this) %#ok<MANU>
-        % EXIT Close all frame
-        disp('calling ImagemGUI.exit() method');
+    function exit(this)
+        % EXIT Close all viewers
+        
+%         disp('calling ImagemGUI.exit() method');
+           
+        docList = getDocuments(this.app);
+        for d = 1:length(docList)
+            doc = docList{d};
+%             disp(['closing doc: ' doc.image.name]);
+            
+            views = getViews(doc);
+            for v = 1:length(views)
+                view = views{v};
+                removeView(doc, view);
+                close(view);
+            end
+        
+        end
     end
     
 end % general methods
