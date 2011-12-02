@@ -17,7 +17,7 @@ classdef PlanarImageViewer < handle
 
 
 properties
-    % reference to the GUI
+    % reference to the main GUI
     gui;
    
     % list of handles to the various gui items
@@ -26,9 +26,10 @@ properties
     % the image document
     doc;
     
+    % the set of mouse listeners, stored as a cell array 
     mouseListeners = [];
     
-    % the tool currently selected
+    % the currently selected tool
     currentTool = [];
 end
 
@@ -79,9 +80,6 @@ methods
             
             demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
             
-%             action = ShowDemoFigureAction(this, 'showCameraman');
-%             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
-%                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
             action = ShowDemoFigureAction(this);
             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
@@ -112,60 +110,54 @@ methods
             
             imageMenu = uimenu(hf, 'Label', 'Image');
             
-            action = InvertImageAction(this);
-            uimenu(imageMenu, 'Label', 'Invert Image', ...
-                'Callback', @action.actionPerformed);
+            addMenuItem(imageMenu, InvertImageAction(this),     'Invert Image');
+            addMenuItem(imageMenu, ImageThresholdAction(this),  'Threshold...');
+            addMenuItem(imageMenu, ImageGradientAction(this),   'Gradient');
+            addMenuItem(imageMenu, ImageNormAction(this),       'Norm');
             
-            action = ImageThresholdAction(this);
-            uimenu(imageMenu, 'Label', 'Threshold...', ...
-                'Callback', @action.actionPerformed);
-            
-            action = ImageGradientAction(this);
-            uimenu(imageMenu, 'Label', 'Gradient', ...
-                'Callback', @action.actionPerformed);
-            
-            action = ImageNormAction(this);
-            uimenu(imageMenu, 'Label', 'Norm', ...
-                'Callback', @action.actionPerformed);
-            
-            action = showImageHistogramAction(this);
-            uimenu(imageMenu, 'Label', 'Histogram', ...
-                'Callback', @action.actionPerformed);
-            
-            action = ApplyImageFunctionAction(this, 'distanceMap');
-            uimenu(imageMenu, 'Label', 'Distance Map', ...
-                'Callback', @action.actionPerformed);
-            
-            
-            action = PrintImageDocListAction(this);
-            uimenu(imageMenu, 'Label', 'Print Image List', ...
-                'Separator', 'on', ...
-                'Callback', @action.actionPerformed);
+            addMenuItem(imageMenu, showImageHistogramAction(this), 'Histogram');
+            addMenuItem(imageMenu, ...
+                ApplyImageFunctionAction(this, 'distanceMap'), ...
+                'Distance Map');
+                        
+            addMenuItem(imageMenu, ...
+                PrintImageDocListAction(this), 'Print Image List', true);
 
-            
+            addMenuItem(imageMenu, ZoomInAction(this), 'Zoom In');
+            addMenuItem(imageMenu, ZoomOutAction(this), 'Zoom Out');
+            addMenuItem(imageMenu, ZoomOneAction(this), 'Zoom 1:1');
+            addMenuItem(imageMenu, ZoomBestAction(this), 'Zoom Best');
+
             tool = PrintCurrentPointTool(this);
-            action = SelectToolAction(this, tool);
-            uimenu(imageMenu, 'Label', 'Print Current Point', ...
-                'Separator', 'on', ...
-                'Callback', @action.actionPerformed);
+            addMenuItem(imageMenu, SelectToolAction(this, tool), ...
+                'Print Current Point', true);
 
-            tool = SetPixelToWhiteTool(this);
-            action = SelectToolAction(this, tool);
-            uimenu(imageMenu, 'Label', 'Set Pixel to White', ...
-                'Separator', 'on', ...
-                'Callback', @action.actionPerformed);
+            addMenuItem(imageMenu, ...
+                SelectToolAction(this, SetPixelToWhiteTool(this)), ...
+                'Set Pixel to White');
 
-            tool = BrushTool(this);
-            action = SelectToolAction(this, tool);
-            uimenu(imageMenu, 'Label', 'Bush', ...
-                'Separator', 'on', ...
-                'Callback', @action.actionPerformed);
+            addMenuItem(imageMenu, ...
+                SelectToolAction(this, BrushTool(this)), ...
+                'Brush');
 
-            tool = LineProfileTool(this);
-            action = SelectToolAction(this, tool);
-            uimenu(imageMenu, 'Label', 'Plot Line Profile', ...
-                'Callback', @action.actionPerformed);
+            addMenuItem(imageMenu, ...
+                SelectToolAction(this, LineProfileTool(this)), ...
+                'Plot Line Profile');
+        end
 
+        function item = addMenuItem(menu, action, label, varargin)
+            
+            % creates new item
+            item = uimenu(menu, 'Label', label, ...
+                'Callback', @action.actionPerformed);
+            
+            % eventually add separator above item
+            if ~isempty(varargin)
+                var = varargin{1};
+                if islogical(var)
+                    set(item, 'Separator', 'On');
+                end
+            end
         end
         
         function setupLayout(hf)
@@ -319,61 +311,43 @@ end
 
 %% Zoom Management
 methods
-       
-    function onZoomIn(this, varargin)
-        % multiplies the current zoom by 2
+    function zoom = getZoom(this)
         api = iptgetapi(this.handles.scrollPanel);
-        mag = api.getMagnification();
-        api.setMagnification(mag * 2);
-        this.updateTitle();
+        zoom = api.getMagnification();
     end
     
-    function onZoomOut(this, varargin)
-        % divides the current zoom by 2
+    function setZoom(this, newZoom)
         api = iptgetapi(this.handles.scrollPanel);
-        mag = api.getMagnification();
-        api.setMagnification(mag / 2);
-        this.updateTitle();
+        api.setMagnification(newZoom);
     end
     
-    function onZoomOne(this, varargin)
-        % sete the current zoom to 1
+    function zoom = findBestZoom(this)
         api = iptgetapi(this.handles.scrollPanel);
-        api.setMagnification(1);
-        this.updateTitle();
+        zoom = api.findFitMag();
     end
-    
-    function onZoomBest(this, varargin) 
-        % finds the best zoom for current image
-        api = iptgetapi(this.handles.scrollPanel);
-        mag = api.findFitMag();
-        api.setMagnification(mag);
-        this.updateTitle();
-    end
-
 end
 
 
 %% Mouse management
 methods
-    function mouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        point = get(this.handles.imageAxis, 'CurrentPoint');
-        displayPixelCoords(this, point);
-    end
-    
-    function mouseDragged(this, hObject, eventdata) %#ok<INUSD>
-        point = get(this.handles.imageAxis, 'CurrentPoint');
-        displayPixelCoords(this, point);
-    end
-    
-    function mouseWheelScrolled(this, hObject, eventdata)
-        % when mouse wheel is scrolled, zoom is modified
-        if eventdata.VerticalScrollCount < 0
-            onZoomIn(this, hObject, eventdata);
-        else
-            onZoomOut(this, hObject, eventdata);
-        end
-    end
+%     function mouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
+%         point = get(this.handles.imageAxis, 'CurrentPoint');
+%         displayPixelCoords(this, point);
+%     end
+%     
+%     function mouseDragged(this, hObject, eventdata) %#ok<INUSD>
+%         point = get(this.handles.imageAxis, 'CurrentPoint');
+%         displayPixelCoords(this, point);
+%     end
+%     
+%     function mouseWheelScrolled(this, hObject, eventdata)
+%         % when mouse wheel is scrolled, zoom is modified
+%         if eventdata.VerticalScrollCount < 0
+%             onZoomIn(this, hObject, eventdata);
+%         else
+%             onZoomOut(this, hObject, eventdata);
+%         end
+%     end
     
     function displayPixelCoords(this, point)
         
@@ -436,10 +410,12 @@ end
 %% Mouse listeners management
 methods
     function addMouseListener(this, listener)
+        % Add a mouse listener to this viewer
         this.mouseListeners = [this.mouseListeners {listener}];
     end
     
     function removeMouseListener(this, listener)
+        % Remove a mouse listener from this viewer
         
         % find which listeners are the same as the given one
         inds = false(size(this.mouseListeners));
@@ -457,18 +433,21 @@ methods
     end
     
     function processMouseButtonPressed(this, hObject, eventdata)
+        % propagates mouse event to all listeners
         for i = 1:length(this.mouseListeners)
             onMouseButtonPressed(this.mouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseButtonReleased(this, hObject, eventdata)
+        % propagates mouse event to all listeners
         for i = 1:length(this.mouseListeners)
             onMouseButtonReleased(this.mouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseMoved(this, hObject, eventdata)
+        % propagates mouse event to all listeners
         for i = 1:length(this.mouseListeners)
             onMouseMoved(this.mouseListeners{i}, hObject, eventdata);
         end
