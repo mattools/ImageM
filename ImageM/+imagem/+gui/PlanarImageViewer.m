@@ -113,6 +113,7 @@ methods
             addMenuItem(imageMenu, ImageThresholdAction(this),  'Threshold...');
             addMenuItem(imageMenu, ImageGradientAction(this),   'Gradient');
             addMenuItem(imageMenu, ImageNormAction(this),       'Norm');
+            addMenuItem(imageMenu, SplitImageRGBAction(this),   'Split RGB');
             
             addMenuItem(imageMenu, showImageHistogramAction(this), 'Histogram');
             addMenuItem(imageMenu, ...
