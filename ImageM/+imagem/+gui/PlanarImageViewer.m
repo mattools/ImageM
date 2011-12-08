@@ -110,39 +110,54 @@ methods
             imageMenu = uimenu(hf, 'Label', 'Image');
             
             addMenuItem(imageMenu, InvertImageAction(this),     'Invert Image');
-            addMenuItem(imageMenu, ImageThresholdAction(this),  'Threshold...');
-            addMenuItem(imageMenu, ImageGradientAction(this),   'Gradient');
-            addMenuItem(imageMenu, ImageNormAction(this),       'Norm');
             addMenuItem(imageMenu, SplitImageRGBAction(this),   'Split RGB');
+                       
+            % View Menu Definition 
             
-            addMenuItem(imageMenu, showImageHistogramAction(this), 'Histogram');
-            addMenuItem(imageMenu, ...
-                ApplyImageFunctionAction(this, 'distanceMap'), ...
-                'Distance Map');
-                        
-            addMenuItem(imageMenu, ...
+            viewMenu = uimenu(hf, 'Label', 'View');
+            addMenuItem(viewMenu, ZoomInAction(this), 'Zoom In');
+            addMenuItem(viewMenu, ZoomOutAction(this), 'Zoom Out');
+            addMenuItem(viewMenu, ZoomOneAction(this), 'Zoom 1:1');
+            addMenuItem(viewMenu, ZoomBestAction(this), 'Zoom Best');
+
+            addMenuItem(viewMenu, ...
                 PrintImageDocListAction(this), 'Print Image List', true);
 
-            addMenuItem(imageMenu, ZoomInAction(this), 'Zoom In');
-            addMenuItem(imageMenu, ZoomOutAction(this), 'Zoom Out');
-            addMenuItem(imageMenu, ZoomOneAction(this), 'Zoom 1:1');
-            addMenuItem(imageMenu, ZoomBestAction(this), 'Zoom Best');
-
+            
+            % Process Menu Definition 
+            
+            processMenu = uimenu(hf, 'Label', 'Process');
+ 
+            addMenuItem(processMenu, ImageThresholdAction(this),  'Threshold...');
+            addMenuItem(processMenu, ImageGradientAction(this),   'Gradient');
+            addMenuItem(processMenu, ImageNormAction(this),       'Norm');
+            
+            addMenuItem(processMenu, ...
+                ApplyImageFunctionAction(this, 'distanceMap'), ...
+                'Distance Map');
+             
             tool = PrintCurrentPointTool(this);
-            addMenuItem(imageMenu, SelectToolAction(this, tool), ...
+            addMenuItem(processMenu, SelectToolAction(this, tool), ...
                 'Print Current Point', true);
 
-            addMenuItem(imageMenu, ...
+            addMenuItem(processMenu, ...
                 SelectToolAction(this, SetPixelToWhiteTool(this)), ...
                 'Set Pixel to White');
 
-            addMenuItem(imageMenu, ...
+            addMenuItem(processMenu, ...
                 SelectToolAction(this, BrushTool(this)), ...
                 'Brush');
 
-            addMenuItem(imageMenu, ...
+            % Analyze Menu Definition 
+            
+            analyzeMenu = uimenu(hf, 'Label', 'Analyze');
+ 
+            addMenuItem(analyzeMenu, showImageHistogramAction(this), 'Histogram');
+    
+            addMenuItem(analyzeMenu, ...
                 SelectToolAction(this, LineProfileTool(this)), ...
                 'Plot Line Profile');
+            
         end
 
         function item = addMenuItem(menu, action, label, varargin)
