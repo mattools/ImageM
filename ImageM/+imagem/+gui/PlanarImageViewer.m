@@ -76,6 +76,14 @@ methods
             fileMenu = uimenu(hf, 'Label', 'Files');
             
             action = SayHelloAction(this);
+            uimenu(fileMenu, 'Label', 'New...', ...
+                'Callback', @action.actionPerformed);
+            
+            action = OpenImageAction(this);
+            uimenu(fileMenu, 'Label', 'Open...', ...
+                'Callback', @action.actionPerformed);
+            
+            action = SayHelloAction(this);
             uimenu(fileMenu, 'Label', 'Say Hello!', ...
                 'Callback', @action.actionPerformed);
             
