@@ -139,6 +139,13 @@ methods
             addMenuItem(processMenu, ImageThresholdAction(this),  'Threshold...');
             addMenuItem(processMenu, ImageGradientAction(this),   'Gradient');
             addMenuItem(processMenu, ImageNormAction(this),       'Norm');
+
+            morphoMenu = uimenu(processMenu, 'Label', 'Morphology');
+            addMenuItem(morphoMenu, ImageErosionAction(this),     'Erosion');
+            addMenuItem(morphoMenu, ImageDilationAction(this),    'Dilation');
+            addMenuItem(morphoMenu, ImageOpeningAction(this),     'Opening');
+            addMenuItem(morphoMenu, ImageClosingAction(this),     'CLosing');
+            
             
             addMenuItem(processMenu, ...
                 ApplyImageFunctionAction(this, 'distanceMap'), ...
