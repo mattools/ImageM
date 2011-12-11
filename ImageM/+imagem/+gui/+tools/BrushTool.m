@@ -71,12 +71,16 @@ methods
         end
 
         if ~isempty(this.previousPoint)
+            % mouse moved from a previous position
             drawBrushLine(this, coord, this.previousPoint);
         else
+            % respond to mouse button pressed, mouse hasan't moved yet
             drawBrush(this, coord);
         end
         
         this.previousPoint = coord;
+        
+        doc.modified = true;
         
         updateDisplay(this.parent);
    end
@@ -101,10 +105,9 @@ methods
    
    function drawBrush(this, coord)
        doc  = this.parent.doc;
-       img = doc.image;
        
        % compute bounds
-       dim = size(img);
+       dim = size(doc.image);
        x1 = max(coord(1)-1, 1);
        y1 = max(coord(2)-1, 1);
        x2 = min(coord(1)+1, dim(1));

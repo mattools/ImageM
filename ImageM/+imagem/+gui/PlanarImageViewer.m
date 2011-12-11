@@ -116,9 +116,39 @@ methods
             % Image Menu Definition 
             
             imageMenu = uimenu(hf, 'Label', 'Image');
+
+            lutMenu = uimenu(imageMenu, 'Label', 'LUT');
+            addMenuItem(lutMenu, ChangeImageLutAction(this, 'gray'), 'Gray');
+            addMenuItem(lutMenu, ChangeImageLutAction(this, 'inverted'), 'Inverted');
+            addMenuItem(lutMenu, ChangeImageLutAction(this, 'blue-gray-red'), 'Blue-Gray-Red');
+
+            addMenuItem(lutMenu , ChangeImageLutAction(this, 'jet'), 'Jet', true);
+            addMenuItem(lutMenu , ChangeImageLutAction(this, 'hsv'), 'HSV');
+            addMenuItem(lutMenu , ChangeImageLutAction(this, 'colorcube'), 'Color Cube');
+            addMenuItem(lutMenu , ChangeImageLutAction(this, 'prism'), 'Prism');
             
-            addMenuItem(imageMenu, InvertImageAction(this),     'Invert Image');
+            matlabLutMenu = uimenu(lutMenu, 'Label', 'Matlab''s');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'hot'), 'Hot');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'cool'), 'Cool');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'spring'), 'Spring');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'summer'), 'Summer');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'winter'), 'Winter');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'autumn'), 'Autumn');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'copper'), 'Copper');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'bone'), 'Bone');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'pink'), 'Pink');
+            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'lines'), 'Lines');
+
+            colorLutMenu = uimenu(lutMenu, 'Label', 'Simple Colors');
+            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'blue'), 'Blue');
+            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'red'), 'Red');
+            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'green'), 'Green');
+            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'cyan'), 'Cyan');
+            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'yellow'), 'Yellow');
+            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'magenta'), 'Magenta');
+            
             addMenuItem(imageMenu, SplitImageRGBAction(this),   'Split RGB');
+            addMenuItem(imageMenu, InvertImageAction(this),     'Invert Image');
                        
             % View Menu Definition 
             
@@ -280,7 +310,7 @@ methods
         set(this.handles.image, 'XData', xdata);
         set(this.handles.image, 'YData', ydata);
         
-        % setup axis extent from imaeg extent
+        % setup axis extent from image extent
         extent = physicalExtent(this.doc.image);
         set(this.handles.imageAxis, 'XLim', extent(1:2));
         set(this.handles.imageAxis, 'YLim', extent(3:4));
@@ -288,6 +318,11 @@ methods
         % for vector images, adjust displayrange
         if isVectorImage(this.doc.image) || isIntensityImage(this.doc.image)
             set(this.handles.imageAxis, 'CLim', [mini maxi]);
+        end
+        
+        % set up lookup table (if not empty)
+        if ~isColorImage(this.doc.image) && ~isempty(this.doc.lut)
+            colormap(this.handles.imageAxis, this.doc.lut);
         end
         
         % adjust zoom to view the full image

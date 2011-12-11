@@ -20,12 +20,18 @@ classdef ImagemDoc < handle
 properties
     % the reference image
     image;
-   
+    
+    % look-up table used for displaying the image. if empty, no lut
+    lut = [];
+    
+    % name of the current lookup table (used for display in menus)
+    lutName = '';
+    
     % a set of views attached to this doc. Can be image viewer, profiles...
     views = {};
     
     % a flag of modification
-    modif = false;
+    modified = false;
     
 end % end properties
 
