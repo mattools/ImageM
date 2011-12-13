@@ -21,6 +21,9 @@ properties
     % the reference image
     image;
     
+    % an image used for preview when an action is running, or empty
+    previewImage = [];
+    
     % look-up table used for displaying the image. if empty, no lut
     lut = [];
     

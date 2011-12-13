@@ -270,9 +270,14 @@ methods
     function updateDisplay(this)
         % Refresh image display of the current slice
         
+        img = this.doc.image;
+        if ~isempty(this.doc.previewImage)
+            img = this.doc.previewImage;
+        end
+        
         % extract or compute display data
-        if isGrayscaleImage(this.doc.image) || isColorImage(this.doc.image)
-            cdata = permute(this.doc.image.data, [2 1 4 3]);
+        if isGrayscaleImage(img) || isColorImage(img)
+            cdata = permute(img.data, [2 1 4 3]);
             mini = 0;
             if islogical(cdata)
                 maxi = 1;
@@ -280,15 +285,15 @@ methods
                 maxi = intmax(class(cdata));
             end
             
-        elseif isVectorImage(this.doc.image) 
-            imgNorm = norm(this.doc.image);
+        elseif isVectorImage(img) 
+            imgNorm = norm(img);
             cdata = permute(imgNorm.data, [2 1 4 3]);
             mini = min(cdata(:));
             maxi = max(cdata(:));
 
         else
             % intensity or unknown type
-            cdata = permute(this.doc.image.data, [2 1 4 3]);
+            cdata = permute(img.data, [2 1 4 3]);
             mini = min(cdata(:));
             maxi = max(cdata(:));
             
@@ -299,11 +304,11 @@ methods
         api.replaceImage(cdata);
         
         % extract calibration data
-        spacing = this.doc.image.spacing;
-        origin  = this.doc.image.origin;
+        spacing = img.spacing;
+        origin  = img.origin;
         
         % set up spatial calibration
-        dim     = size(this.doc.image);
+        dim     = size(img);
         xdata   = ([0 dim(1)-1] * spacing(1) + origin(1));
         ydata   = ([0 dim(2)-1] * spacing(2) + origin(2));
         
@@ -311,17 +316,17 @@ methods
         set(this.handles.image, 'YData', ydata);
         
         % setup axis extent from image extent
-        extent = physicalExtent(this.doc.image);
+        extent = physicalExtent(img);
         set(this.handles.imageAxis, 'XLim', extent(1:2));
         set(this.handles.imageAxis, 'YLim', extent(3:4));
         
         % for vector images, adjust displayrange
-        if isVectorImage(this.doc.image) || isIntensityImage(this.doc.image)
+        if isVectorImage(img) || isIntensityImage(img)
             set(this.handles.imageAxis, 'CLim', [mini maxi]);
         end
         
         % set up lookup table (if not empty)
-        if ~isColorImage(this.doc.image) && ~isempty(this.doc.lut)
+        if ~isColorImage(img) && ~isempty(this.doc.lut)
             colormap(this.handles.imageAxis, this.doc.lut);
         end
         
