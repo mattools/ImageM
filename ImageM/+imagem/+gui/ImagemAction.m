@@ -34,4 +34,10 @@ methods (Abstract)
     actionPerformed(this, src, event)
 end
 
+methods
+    function b = isActivable(this) %#ok<MANU>
+        b = true;
+    end
+end
+
 end

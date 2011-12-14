@@ -57,7 +57,7 @@ methods
         doc = this.parent.doc;
         img = doc.image;
         
-        if ~strcmp(img.type, 'grayscale')
+        if ~isGrayscaleImage(img)
             return;
         end
         
@@ -178,5 +178,13 @@ methods
        
    end
 end % methods
+
+
+methods
+    function b = isActivable(this)
+        doc = this.parent.doc;
+        b = ~isempty(doc.image) && isScalarImage(doc.image);
+    end
+end
 
 end % classdef

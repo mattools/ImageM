@@ -47,7 +47,8 @@ methods
             'CloseRequestFcn', @this.close);
         
         % create main figure menu
-        setupMenu(fig);
+        createFigureMenu(gui, fig, this);
+%         setupMenu(fig);
         setupLayout(fig);
         
         this.handles.figure = fig;
@@ -66,163 +67,163 @@ methods
         
         set(fig, 'UserData', this);
         
-        function setupMenu(hf)
-            
-            import imagem.gui.actions.*;
-            import imagem.gui.tools.*;
-            
-            % File Menu Definition 
-            
-            fileMenu = uimenu(hf, 'Label', 'Files');
-            
-            action = SayHelloAction(this);
-            uimenu(fileMenu, 'Label', 'New...', ...
-                'Callback', @action.actionPerformed);
-            
-            action = OpenImageAction(this);
-            uimenu(fileMenu, 'Label', 'Open...', ...
-                'Callback', @action.actionPerformed);
-            
-            action = SayHelloAction(this);
-            uimenu(fileMenu, 'Label', 'Say Hello!', ...
-                'Callback', @action.actionPerformed);
-            
-            demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
-            
-            action = ShowDemoFigureAction(this);
-            uimenu(fileMenu, 'Label', 'Show Demo Image', ...
-                'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
-            
-            action = OpenDemoImageAction(this, 'openDemoCameraman', 'cameraman.tif');
-            uimenu(demoMenu, 'Label', 'Cameraman', ...
-                'Callback', @action.actionPerformed);
-            
-            action = OpenDemoImageAction(this, 'openDemoRice', 'rice.png');
-            uimenu(demoMenu, 'Label', 'Rice', ...
-                'Callback', @action.actionPerformed);
-            
-            action = OpenDemoImageAction(this, 'openDemoPeppers', 'peppers.png');
-            uimenu(demoMenu, 'Label', 'Peppers', ...
-                'Callback', @action.actionPerformed);
-            
-            action = OpenDemoImageAction(this, 'openDemoCircles', 'circles.png');
-            uimenu(demoMenu, 'Label', 'Circles', ...
-                'Callback', @action.actionPerformed);
+%         function setupMenu(hf)
+%             
+%             import imagem.gui.actions.*;
+%             import imagem.gui.tools.*;
+%             
+%             % File Menu Definition 
+%             
+%             fileMenu = uimenu(hf, 'Label', 'Files');
+%             
+%             action = SayHelloAction(this);
+%             uimenu(fileMenu, 'Label', 'New...', ...
+%                 'Callback', @action.actionPerformed);
+%             
+%             action = OpenImageAction(this);
+%             uimenu(fileMenu, 'Label', 'Open...', ...
+%                 'Callback', @action.actionPerformed);
+%             
+%             action = SayHelloAction(this);
+%             uimenu(fileMenu, 'Label', 'Say Hello!', ...
+%                 'Callback', @action.actionPerformed);
+%             
+%             demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
+%             
+%             action = ShowDemoFigureAction(this);
+%             uimenu(fileMenu, 'Label', 'Show Demo Image', ...
+%                 'Callback', @(hObject,eventdata)action.actionPerformed(hObject, eventdata));
+%             
+%             action = OpenDemoImageAction(this, 'openDemoCameraman', 'cameraman.tif');
+%             uimenu(demoMenu, 'Label', 'Cameraman', ...
+%                 'Callback', @action.actionPerformed);
+%             
+%             action = OpenDemoImageAction(this, 'openDemoRice', 'rice.png');
+%             uimenu(demoMenu, 'Label', 'Rice', ...
+%                 'Callback', @action.actionPerformed);
+%             
+%             action = OpenDemoImageAction(this, 'openDemoPeppers', 'peppers.png');
+%             uimenu(demoMenu, 'Label', 'Peppers', ...
+%                 'Callback', @action.actionPerformed);
+%             
+%             action = OpenDemoImageAction(this, 'openDemoCircles', 'circles.png');
+%             uimenu(demoMenu, 'Label', 'Circles', ...
+%                 'Callback', @action.actionPerformed);
+% 
+%             addMenuItem(fileMenu, CloseImageAction(this), 'Close', true);
+%             addMenuItem(fileMenu, ExitAction(this), 'Quit');
+%             
+% 
+%             % Image Menu Definition 
+%             
+%             imageMenu = uimenu(hf, 'Label', 'Image');
+% 
+%             lutMenu = uimenu(imageMenu, 'Label', 'LUT');
+%             addMenuItem(lutMenu, ChangeImageLutAction(this, 'gray'), 'Gray');
+%             addMenuItem(lutMenu, ChangeImageLutAction(this, 'inverted'), 'Inverted');
+%             addMenuItem(lutMenu, ChangeImageLutAction(this, 'blue-gray-red'), 'Blue-Gray-Red');
+% 
+%             addMenuItem(lutMenu , ChangeImageLutAction(this, 'jet'), 'Jet', true);
+%             addMenuItem(lutMenu , ChangeImageLutAction(this, 'hsv'), 'HSV');
+%             addMenuItem(lutMenu , ChangeImageLutAction(this, 'colorcube'), 'Color Cube');
+%             addMenuItem(lutMenu , ChangeImageLutAction(this, 'prism'), 'Prism');
+%             
+%             matlabLutMenu = uimenu(lutMenu, 'Label', 'Matlab''s');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'hot'), 'Hot');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'cool'), 'Cool');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'spring'), 'Spring');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'summer'), 'Summer');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'winter'), 'Winter');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'autumn'), 'Autumn');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'copper'), 'Copper');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'bone'), 'Bone');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'pink'), 'Pink');
+%             addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'lines'), 'Lines');
+% 
+%             colorLutMenu = uimenu(lutMenu, 'Label', 'Simple Colors');
+%             addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'blue'), 'Blue');
+%             addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'red'), 'Red');
+%             addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'green'), 'Green');
+%             addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'cyan'), 'Cyan');
+%             addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'yellow'), 'Yellow');
+%             addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'magenta'), 'Magenta');
+%             
+%             addMenuItem(imageMenu, SplitImageRGBAction(this),   'Split RGB');
+%             addMenuItem(imageMenu, InvertImageAction(this),     'Invert Image');
+%                        
+%             % View Menu Definition 
+%             
+%             viewMenu = uimenu(hf, 'Label', 'View');
+%             addMenuItem(viewMenu, ZoomInAction(this), 'Zoom In');
+%             addMenuItem(viewMenu, ZoomOutAction(this), 'Zoom Out');
+%             addMenuItem(viewMenu, ZoomOneAction(this), 'Zoom 1:1');
+%             addMenuItem(viewMenu, ZoomBestAction(this), 'Zoom Best');
+% 
+%             addMenuItem(viewMenu, ...
+%                 PrintImageDocListAction(this), 'Print Image List', true);
+% 
+%             
+%             % Process Menu Definition 
+%             
+%             processMenu = uimenu(hf, 'Label', 'Process');
+%  
+%             addMenuItem(processMenu, ImageMeanFilter3x3Action(this),  'Mean');
+%             addMenuItem(processMenu, ImageMedianFilter3x3Action(this),  'Median');
+% 
+%             addMenuItem(processMenu, ImageThresholdAction(this),  'Threshold...', true);
+%             addMenuItem(processMenu, ImageGradientAction(this),   'Gradient');
+%             addMenuItem(processMenu, ImageNormAction(this),       'Norm');
+% 
+%             morphoMenu = uimenu(processMenu, 'Label', 'Morphology');
+%             addMenuItem(morphoMenu, ImageErosionAction(this),     'Erosion');
+%             addMenuItem(morphoMenu, ImageDilationAction(this),    'Dilation');
+%             addMenuItem(morphoMenu, ImageOpeningAction(this),     'Opening');
+%             addMenuItem(morphoMenu, ImageClosingAction(this),     'CLosing');
+%             
+%             
+%             addMenuItem(processMenu, ...
+%                 ApplyImageFunctionAction(this, 'distanceMap'), ...
+%                 'Distance Map');
+%              
+%             tool = PrintCurrentPointTool(this);
+%             addMenuItem(processMenu, SelectToolAction(this, tool), ...
+%                 'Print Current Point', true);
+% 
+%             addMenuItem(processMenu, ...
+%                 SelectToolAction(this, SetPixelToWhiteTool(this)), ...
+%                 'Set Pixel to White');
+% 
+%             addMenuItem(processMenu, ...
+%                 SelectToolAction(this, BrushTool(this)), ...
+%                 'Brush');
+% 
+%             % Analyze Menu Definition 
+%             
+%             analyzeMenu = uimenu(hf, 'Label', 'Analyze');
+%  
+%             addMenuItem(analyzeMenu, showImageHistogramAction(this), 'Histogram');
+%     
+%             addMenuItem(analyzeMenu, ...
+%                 SelectToolAction(this, LineProfileTool(this)), ...
+%                 'Plot Line Profile');
+%             
+%         end
 
-            addMenuItem(fileMenu, CloseImageAction(this), 'Close', true);
-            addMenuItem(fileMenu, ExitAction(this), 'Quit');
-            
-
-            % Image Menu Definition 
-            
-            imageMenu = uimenu(hf, 'Label', 'Image');
-
-            lutMenu = uimenu(imageMenu, 'Label', 'LUT');
-            addMenuItem(lutMenu, ChangeImageLutAction(this, 'gray'), 'Gray');
-            addMenuItem(lutMenu, ChangeImageLutAction(this, 'inverted'), 'Inverted');
-            addMenuItem(lutMenu, ChangeImageLutAction(this, 'blue-gray-red'), 'Blue-Gray-Red');
-
-            addMenuItem(lutMenu , ChangeImageLutAction(this, 'jet'), 'Jet', true);
-            addMenuItem(lutMenu , ChangeImageLutAction(this, 'hsv'), 'HSV');
-            addMenuItem(lutMenu , ChangeImageLutAction(this, 'colorcube'), 'Color Cube');
-            addMenuItem(lutMenu , ChangeImageLutAction(this, 'prism'), 'Prism');
-            
-            matlabLutMenu = uimenu(lutMenu, 'Label', 'Matlab''s');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'hot'), 'Hot');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'cool'), 'Cool');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'spring'), 'Spring');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'summer'), 'Summer');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'winter'), 'Winter');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'autumn'), 'Autumn');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'copper'), 'Copper');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'bone'), 'Bone');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'pink'), 'Pink');
-            addMenuItem(matlabLutMenu, ChangeImageLutAction(this, 'lines'), 'Lines');
-
-            colorLutMenu = uimenu(lutMenu, 'Label', 'Simple Colors');
-            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'blue'), 'Blue');
-            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'red'), 'Red');
-            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'green'), 'Green');
-            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'cyan'), 'Cyan');
-            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'yellow'), 'Yellow');
-            addMenuItem(colorLutMenu, ChangeImageLutAction(this, 'magenta'), 'Magenta');
-            
-            addMenuItem(imageMenu, SplitImageRGBAction(this),   'Split RGB');
-            addMenuItem(imageMenu, InvertImageAction(this),     'Invert Image');
-                       
-            % View Menu Definition 
-            
-            viewMenu = uimenu(hf, 'Label', 'View');
-            addMenuItem(viewMenu, ZoomInAction(this), 'Zoom In');
-            addMenuItem(viewMenu, ZoomOutAction(this), 'Zoom Out');
-            addMenuItem(viewMenu, ZoomOneAction(this), 'Zoom 1:1');
-            addMenuItem(viewMenu, ZoomBestAction(this), 'Zoom Best');
-
-            addMenuItem(viewMenu, ...
-                PrintImageDocListAction(this), 'Print Image List', true);
-
-            
-            % Process Menu Definition 
-            
-            processMenu = uimenu(hf, 'Label', 'Process');
- 
-            addMenuItem(processMenu, ImageMeanFilter3x3Action(this),  'Mean');
-            addMenuItem(processMenu, ImageMedianFilter3x3Action(this),  'Median');
-
-            addMenuItem(processMenu, ImageThresholdAction(this),  'Threshold...', true);
-            addMenuItem(processMenu, ImageGradientAction(this),   'Gradient');
-            addMenuItem(processMenu, ImageNormAction(this),       'Norm');
-
-            morphoMenu = uimenu(processMenu, 'Label', 'Morphology');
-            addMenuItem(morphoMenu, ImageErosionAction(this),     'Erosion');
-            addMenuItem(morphoMenu, ImageDilationAction(this),    'Dilation');
-            addMenuItem(morphoMenu, ImageOpeningAction(this),     'Opening');
-            addMenuItem(morphoMenu, ImageClosingAction(this),     'CLosing');
-            
-            
-            addMenuItem(processMenu, ...
-                ApplyImageFunctionAction(this, 'distanceMap'), ...
-                'Distance Map');
-             
-            tool = PrintCurrentPointTool(this);
-            addMenuItem(processMenu, SelectToolAction(this, tool), ...
-                'Print Current Point', true);
-
-            addMenuItem(processMenu, ...
-                SelectToolAction(this, SetPixelToWhiteTool(this)), ...
-                'Set Pixel to White');
-
-            addMenuItem(processMenu, ...
-                SelectToolAction(this, BrushTool(this)), ...
-                'Brush');
-
-            % Analyze Menu Definition 
-            
-            analyzeMenu = uimenu(hf, 'Label', 'Analyze');
- 
-            addMenuItem(analyzeMenu, showImageHistogramAction(this), 'Histogram');
-    
-            addMenuItem(analyzeMenu, ...
-                SelectToolAction(this, LineProfileTool(this)), ...
-                'Plot Line Profile');
-            
-        end
-
-        function item = addMenuItem(menu, action, label, varargin)
-            
-            % creates new item
-            item = uimenu(menu, 'Label', label, ...
-                'Callback', @action.actionPerformed);
-            
-            % eventually add separator above item
-            if ~isempty(varargin)
-                var = varargin{1};
-                if islogical(var)
-                    set(item, 'Separator', 'On');
-                end
-            end
-        end
-        
+%         function item = addMenuItem(menu, action, label, varargin)
+%             
+%             % creates new item
+%             item = uimenu(menu, 'Label', label, ...
+%                 'Callback', @action.actionPerformed);
+%             
+%             % eventually add separator above item
+%             if ~isempty(varargin)
+%                 var = varargin{1};
+%                 if islogical(var)
+%                     set(item, 'Separator', 'On');
+%                 end
+%             end
+%         end
+%         
         function setupLayout(hf)
             
             % vertical layout: image display and status bar

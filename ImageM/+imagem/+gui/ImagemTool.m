@@ -61,4 +61,11 @@ methods
     
 end % general methods
 
+
+methods
+    function b = isActivable(this)
+        b = true;
+    end
+end
+
 end % classdef

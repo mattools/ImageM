@@ -49,4 +49,10 @@ methods
     end
 end
 
+methods
+    function b = isActivable(this)
+        b = isActivable(this.tool);
+    end
+end
+
 end

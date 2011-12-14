@@ -38,4 +38,11 @@ methods
     end
 end
 
+methods
+    function b = isActivable(this)
+        doc = this.parent.doc;
+        b = ~isempty(doc.image) && ~isScalarImage(doc.image);
+    end
+end
+
 end

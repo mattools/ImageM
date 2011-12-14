@@ -103,4 +103,11 @@ methods
     end
 end
 
+methods
+    function b = isActivable(this)
+        doc = this.parent.doc;
+        b = ~isempty(doc.image) && ~isColorImage(doc.image);
+    end
+end
+
 end
