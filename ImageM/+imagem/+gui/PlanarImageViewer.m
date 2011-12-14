@@ -166,7 +166,10 @@ methods
             
             processMenu = uimenu(hf, 'Label', 'Process');
  
-            addMenuItem(processMenu, ImageThresholdAction(this),  'Threshold...');
+            addMenuItem(processMenu, ImageMeanFilter3x3Action(this),  'Mean');
+            addMenuItem(processMenu, ImageMedianFilter3x3Action(this),  'Median');
+
+            addMenuItem(processMenu, ImageThresholdAction(this),  'Threshold...', true);
             addMenuItem(processMenu, ImageGradientAction(this),   'Gradient');
             addMenuItem(processMenu, ImageNormAction(this),       'Norm');
 
