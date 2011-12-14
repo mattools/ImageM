@@ -69,13 +69,9 @@ methods
             
             % convert point to image indices
             pts = [x' y'];
-            inds = pointToIndex(this.parent.doc.image, pts);
             
             % extract corresponding pixel values (nearest-neighbor eval)
-            vals = zeros(nValues, 1);
-            for i = 1:nValues
-                vals(i) = this.parent.doc.image(inds(i,1), inds(i,2));
-            end
+            vals = interp(this.parent.doc.image, pts);
             
             % display grayscale profile in new figure
             figure;
