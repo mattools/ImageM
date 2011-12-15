@@ -155,9 +155,11 @@ methods
         addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'yellow'), 'Yellow');
         addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'magenta'), 'Magenta');
         
-        addMenuItem(imageMenu, SplitImageRGBAction(viewer),   'Split RGB');
-        addMenuItem(imageMenu, ImageOverlayAction(viewer),     'Image Overlay');
-        addMenuItem(imageMenu, InvertImageAction(viewer),     'Invert Image');
+        addMenuItem(imageMenu, SplitImageRGBAction(viewer),     'Split RGB');
+        addMenuItem(imageMenu, ImageOverlayAction(viewer),      'Image Overlay');
+        addMenuItem(imageMenu, InvertImageAction(viewer),       'Invert Image');
+        addMenuItem(imageMenu, RenameImageAction(viewer),       'Rename', true);
+        addMenuItem(imageMenu, DuplicateImageAction(viewer),    'Duplicate');
         
         % View Menu Definition
         
