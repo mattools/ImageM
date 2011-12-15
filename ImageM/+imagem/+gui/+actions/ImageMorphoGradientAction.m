@@ -34,7 +34,7 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute Image erosion');
+        disp('Compute Image morphological gradient');
         
         % get handle to parent figure, and current doc
         viewer = this.parent;

@@ -128,8 +128,12 @@ methods
             mini = 0;
             if islogical(cdata)
                 maxi = 1;
-            else
+            elseif isinteger(cdata)
                 maxi = intmax(class(cdata));
+            else
+                warning('ImageM:Display', ...
+                    'Try to display a grayscale image with float data');
+                maxi = max(cdata(:));
             end
             
         elseif isVectorImage(img) 

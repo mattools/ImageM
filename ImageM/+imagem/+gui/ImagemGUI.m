@@ -43,9 +43,14 @@ methods
     function addImageDocument(this, image)
         % Create a new document from image, add it to app, and display img
         
+        % find a 'free' name for image
+        newName = createDocumentName(this.app, image.name);
+        
+        image.name = newName;
+        
         % creates new instance of ImageDoc
         doc = imagem.app.ImagemDoc(image);
-        
+                
         % add ImageDoc to the application
         addDocument(this.app, doc);
         
@@ -58,8 +63,6 @@ methods
     function exit(this)
         % EXIT Close all viewers
         
-%         disp('calling ImagemGUI.exit() method');
-           
         docList = getDocuments(this.app);
         for d = 1:length(docList)
             doc = docList{d};
@@ -87,10 +90,6 @@ methods
         % File Menu Definition
         
         fileMenu = uimenu(hf, 'Label', 'Files');
-        
-%         action = SayHelloAction(viewer);
-%         uimenu(fileMenu, 'Label', 'New...', ...
-%             'Callback', @action.actionPerformed);
         
         action = CreateImageAction(viewer);
         uimenu(fileMenu, 'Label', 'New...', ...
@@ -157,6 +156,7 @@ methods
         addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'magenta'), 'Magenta');
         
         addMenuItem(imageMenu, SplitImageRGBAction(viewer),   'Split RGB');
+        addMenuItem(imageMenu, ImageOverlayAction(viewer),     'Image Overlay');
         addMenuItem(imageMenu, InvertImageAction(viewer),     'Invert Image');
         
         % View Menu Definition
