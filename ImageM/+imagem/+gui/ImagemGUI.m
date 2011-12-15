@@ -88,16 +88,16 @@ methods
         
         fileMenu = uimenu(hf, 'Label', 'Files');
         
-        action = SayHelloAction(viewer);
+%         action = SayHelloAction(viewer);
+%         uimenu(fileMenu, 'Label', 'New...', ...
+%             'Callback', @action.actionPerformed);
+        
+        action = CreateImageAction(viewer);
         uimenu(fileMenu, 'Label', 'New...', ...
             'Callback', @action.actionPerformed);
         
         action = OpenImageAction(viewer);
         uimenu(fileMenu, 'Label', 'Open...', ...
-            'Callback', @action.actionPerformed);
-        
-        action = SayHelloAction(viewer);
-        uimenu(fileMenu, 'Label', 'Say Hello!', ...
             'Callback', @action.actionPerformed);
         
         demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
@@ -222,11 +222,11 @@ methods
             'Plot Line Profile');
         
         % check which menu items are selected or not
-        updateMenuEnable(this, fileMenu);
-        updateMenuEnable(this, imageMenu);
-        updateMenuEnable(this, viewMenu);
-        updateMenuEnable(this, processMenu);
-        updateMenuEnable(this, analyzeMenu);
+        updateMenuEnable(fileMenu);
+        updateMenuEnable(imageMenu);
+        updateMenuEnable(viewMenu);
+        updateMenuEnable(processMenu);
+        updateMenuEnable(analyzeMenu);
         
         
         function item = addMenuItem(menu, action, label, varargin)
@@ -244,27 +244,28 @@ methods
                 end
             end
         end
-    end
     
-    function updateMenuEnable(this, menu)
-        
-        % default is enabled
-        set(menu, 'Enable', 'on');
-        
-        % first, process recursion on children
-        children = get(menu, 'children');
-        for i = 1:length(children)
-            updateMenuEnable(this, children(i));
+        function updateMenuEnable(menu)
+
+            % default is enabled
+            set(menu, 'Enable', 'on');
+
+            % first, process recursion on children
+            children = get(menu, 'children');
+            for i = 1:length(children)
+                updateMenuEnable(children(i));
+            end
+
+            action = get(menu, 'userdata');
+            if isempty(action)
+                return;
+            end
+
+            if ~isActivable(action)
+                set(menu, 'Enable', 'off');
+            end
         end
         
-        action = get(menu, 'userdata');
-        if isempty(action)
-            return;
-        end
-        
-        if ~isActivable(action)
-            set(menu, 'Enable', 'off');
-        end
     end
 end
 
