@@ -188,6 +188,8 @@ methods
         addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation');
         addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening');
         addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');
+        addMenuItem(morphoMenu, ImageMorphoGradientAction(viewer), ...
+            'Morphological Gradient', true);
         
         
         addMenuItem(processMenu, ...
