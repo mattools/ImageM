@@ -50,6 +50,9 @@ methods
         
         % creates new instance of ImageDoc
         doc = imagem.app.ImagemDoc(image);
+        if isLabelImage(image)
+            doc.lut = 'jet';
+        end
                 
         % add ImageDoc to the application
         addDocument(this.app, doc);
@@ -200,6 +203,8 @@ methods
 
         addMenuItem(processMenu, ImageSkeletonAction(viewer), ...
             'Skeleton');
+        addMenuItem(processMenu, LabelBinaryImageAction(viewer), ...
+            'Connected Components Labeling');
         
         tool = PrintCurrentPointTool(viewer);
         addMenuItem(processMenu, SelectToolAction(viewer, tool), ...

@@ -117,6 +117,8 @@ methods
     function updateDisplay(this)
         % Refresh image display of the current slice
         
+        % current image is either the document image, or the preview image
+        % if there is one
         img = this.doc.image;
         if ~isempty(this.doc.previewImage)
             img = this.doc.previewImage;
@@ -136,6 +138,13 @@ methods
                 maxi = max(cdata(:));
             end
             
+        elseif isLabelImage(img)
+            % replace label image by rgb image
+            rgb = label2rgb(img);
+            cdata = permute(rgb.data, [2 1 4 3]);
+            maxi = 255;
+            mini = 0;
+        
         elseif isVectorImage(img) 
             imgNorm = norm(img);
             cdata = permute(imgNorm.data, [2 1 4 3]);
