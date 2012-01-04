@@ -74,7 +74,7 @@ methods
             views = getViews(doc);
             for v = 1:length(views)
                 view = views{v};
-                removeView(doc, view);
+                %removeView(doc, view);
                 close(view);
             end
         

@@ -29,7 +29,6 @@ methods
         viewer = this.parent;
         doc = viewer.doc;
         
-        removeView(doc, viewer);
         viewer.close();
         
         if isempty(getViews(doc))
