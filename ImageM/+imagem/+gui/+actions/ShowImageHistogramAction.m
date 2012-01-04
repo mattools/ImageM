@@ -1,10 +1,10 @@
-classdef showImageHistogramAction < imagem.gui.ImagemAction
+classdef ShowImageHistogramAction < imagem.gui.ImagemAction
 %SHOWIMAGEHISTOGRAMACTION Display histogram of current image
 %
-%   output = showImageHistogramAction(input)
+%   output = ShowImageHistogramAction(input)
 %
 %   Example
-%   showImageHistogramAction
+%   ShowImageHistogramAction
 %
 %   See also
 %
@@ -16,7 +16,7 @@ classdef showImageHistogramAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = showImageHistogramAction(parent, varargin)
+    function this = ShowImageHistogramAction(parent, varargin)
         % calls the parent constructor
         this = this@imagem.gui.ImagemAction(parent, 'showImageHistogram');
     end

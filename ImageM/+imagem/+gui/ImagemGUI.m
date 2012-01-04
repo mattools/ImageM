@@ -222,7 +222,7 @@ methods
         
         analyzeMenu = uimenu(hf, 'Label', 'Analyze');
         
-        addMenuItem(analyzeMenu, showImageHistogramAction(viewer), 'Histogram');
+        addMenuItem(analyzeMenu, ShowImageHistogramAction(viewer), 'Histogram');
         
         addMenuItem(analyzeMenu, ...
             SelectToolAction(viewer, LineProfileTool(viewer)), ...

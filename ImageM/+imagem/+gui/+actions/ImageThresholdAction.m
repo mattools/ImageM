@@ -43,11 +43,34 @@ methods
         end
         
         createThresholdFigure(this);
-        setThresholdValue(this, 50);
+        setThresholdValue(this, this.value);
         updateWidgets(this);
     end
     
     function hf = createThresholdFigure(this)
+        
+        % compute intensity bounds, based either on type or on image data
+        img = this.parent.doc.image;
+        if isinteger(img.data)
+            type = class(img.data);
+            minVal = intmin(type);
+            maxVal = intmax(type);
+        else
+            minVal = min(img.data(:));
+            maxVal = max(img.data(:));
+        end
+
+        % compute slider steps
+        valExtent = maxVal - minVal;
+        if minVal == 0
+            valExtent = valExtent + 1;
+        end
+        sliderStep1 = 1 / valExtent;
+        sliderStep2 = 10 / valExtent;
+        
+        % startup threshold value
+        sliderValue = minVal + valExtent / 2;
+        this.value = sliderValue;
         
         % action figure
         hf = figure(...
@@ -91,8 +114,9 @@ methods
         this.handles.valueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
-            'Min', 0, 'Max', 255, ...
-            'SliderStep', [1/256 10/256], ...
+            'Min', minVal, 'Max', maxVal, ...
+            'Value', sliderValue, ...
+            'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
             'Callback', @this.onSliderValueChanged);
         set(mainPanel, 'Sizes', [35 25]);
