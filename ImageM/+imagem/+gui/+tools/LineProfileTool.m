@@ -70,12 +70,35 @@ methods
             % convert point to image indices
             pts = [x' y'];
             
-            % extract corresponding pixel values (nearest-neighbor eval)
-            vals = interp(this.parent.doc.image, pts);
-            
-            % display grayscale profile in new figure
+            % new figure for display
             figure;
-            plot(dists, vals);
+
+            % extract corresponding pixel values (nearest-neighbor eval)
+            img = this.parent.doc.image;
+            if isGrayscaleImage(img)
+                vals = interp(this.parent.doc.image, pts);
+                plot(dists, vals);
+                
+            elseif isColorImage(img)
+                % split image channels, and interpolate each channel
+                [red green blue] = splitChannels(img);
+                vals = zeros(size(pts, 1), 3);
+                vals(:,1) = interp(red, pts);
+                vals(:,2) = interp(green, pts);
+                vals(:,3) = interp(blue, pts);
+                
+                % display each color histogram as stairs, to see the 3 curves
+                hh = stairs(vals);
+                
+                % setup curve colors
+                set(hh(1), 'color', [1 0 0]); % red
+                set(hh(2), 'color', [0 1 0]); % green
+                set(hh(3), 'color', [0 0 1]); % blue
+                
+            else
+                warning('LineProfileTool:UnsupportedImageImageType', ...
+                    ['Can not manage images of type ' img.type]);
+            end
             
             % revert to first state
             this.state = 1;

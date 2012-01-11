@@ -53,11 +53,11 @@ methods
         img = this.parent.doc.image;
         if isinteger(img.data)
             type = class(img.data);
-            minVal = intmin(type);
-            maxVal = intmax(type);
+            minVal = double(intmin(type));
+            maxVal = double(intmax(type));
         else
-            minVal = min(img.data(:));
-            maxVal = max(img.data(:));
+            minVal = double(min(img.data(:)));
+            maxVal = double(max(img.data(:)));
         end
 
         % compute slider steps
