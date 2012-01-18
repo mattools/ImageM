@@ -56,53 +56,49 @@ methods
             this.lineHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'Marker', '+', 'color', 'y', 'linewidth', 1);
+            return;
+        end
+    
+        % Start processing state 2
+        
+        % determine the line end point
+        pos2 = pos(1, 1:2);
+        
+        % distribute points along the line
+        nValues = 100;
+        x = linspace(this.pos1(1), pos2(1), nValues);
+        y = linspace(this.pos1(2), pos2(2), nValues);
+        dists = [0 cumsum(hypot(diff(x), diff(y)))];
+        
+        % convert point to image indices
+        pts = [x' y'];
+        
+        % new figure for display
+        figure;
+        
+        img = this.parent.doc.image;
+        
+        % extract corresponding pixel values (nearest-neighbor eval)
+        vals = interp(img, pts);
+        if isGrayscaleImage(img)
+            plot(dists, vals);
+            
+        elseif isColorImage(img)
+            % display each color histogram as stairs, to see the 3 curves
+            hh = stairs(vals);
+            
+            % setup curve colors
+            set(hh(1), 'color', [1 0 0]); % red
+            set(hh(2), 'color', [0 1 0]); % green
+            set(hh(3), 'color', [0 0 1]); % blue
             
         else
-            % determine the line end point
-            pos2 = pos(1, 1:2);
-            
-            % distribute points along the line
-            nValues = 100;
-            x = linspace(this.pos1(1), pos2(1), nValues);
-            y = linspace(this.pos1(2), pos2(2), nValues);
-            dists = [0 cumsum(hypot(diff(x), diff(y)))];
-            
-            % convert point to image indices
-            pts = [x' y'];
-            
-            % new figure for display
-            figure;
-
-            % extract corresponding pixel values (nearest-neighbor eval)
-            img = this.parent.doc.image;
-            if isGrayscaleImage(img)
-                vals = interp(this.parent.doc.image, pts);
-                plot(dists, vals);
-                
-            elseif isColorImage(img)
-                % split image channels, and interpolate each channel
-                [red green blue] = splitChannels(img);
-                vals = zeros(size(pts, 1), 3);
-                vals(:,1) = interp(red, pts);
-                vals(:,2) = interp(green, pts);
-                vals(:,3) = interp(blue, pts);
-                
-                % display each color histogram as stairs, to see the 3 curves
-                hh = stairs(vals);
-                
-                % setup curve colors
-                set(hh(1), 'color', [1 0 0]); % red
-                set(hh(2), 'color', [0 1 0]); % green
-                set(hh(3), 'color', [0 0 1]); % blue
-                
-            else
-                warning('LineProfileTool:UnsupportedImageImageType', ...
-                    ['Can not manage images of type ' img.type]);
-            end
-            
-            % revert to first state
-            this.state = 1;
+            warning('LineProfileTool:UnsupportedImageImageType', ...
+                ['Can not manage images of type ' img.type]);
         end
+        
+        % revert to first state
+        this.state = 1;
     end
     
     function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
