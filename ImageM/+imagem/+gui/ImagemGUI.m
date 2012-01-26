@@ -195,6 +195,7 @@ methods
         addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');
         addMenuItem(morphoMenu, ImageMorphoGradientAction(viewer), ...
             'Morphological Gradient', true);
+        addMenuItem(morphoMenu, ImageExtendedMinimaAction(viewer),  'Extended Minima...', true);
         
         
         addMenuItem(processMenu, ...

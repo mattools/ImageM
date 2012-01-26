@@ -34,9 +34,9 @@ end
 app = ImagemApp;
 gui = ImagemGUI(app);
 
-% use t he GUI to create a new imaeg display
+% use the GUI to create a new image display
 addImageDocument(gui, img);
-
+% view = imagem.gui.PlanarImageViewer(this, doc);
 
 if nargout > 0
     varargout = {gui};
