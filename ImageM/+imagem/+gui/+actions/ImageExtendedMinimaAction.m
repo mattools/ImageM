@@ -33,7 +33,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply Threshold to current image');
+        disp('apply extended minima to current image');
         
         % get handle to parent figure, and current doc
         viewer = this.parent;
@@ -41,7 +41,7 @@ methods
         
         if ~isScalarImage(doc.image)
             warning('ImageM:WrongImageType', ...
-                'Threshold can be applied only on scalar images');
+                'Extended minima can be applied only on scalar images');
             return;
         end
         
@@ -133,7 +133,7 @@ methods
         uicontrol(...
             'Style', 'Text', ...
             'Parent', mainPanel, ...
-            'String', 'Cennectivity:');
+            'String', 'Connectivity:');
         this.handles.connectivityPopup = uicontrol(...
             'Style', 'PopupMenu', ...
             'Parent', mainPanel, ...

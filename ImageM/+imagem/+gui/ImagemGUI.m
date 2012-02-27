@@ -196,6 +196,7 @@ methods
         addMenuItem(morphoMenu, ImageMorphoGradientAction(viewer), ...
             'Morphological Gradient', true);
         addMenuItem(morphoMenu, ImageExtendedMinimaAction(viewer),  'Extended Minima...', true);
+        addMenuItem(morphoMenu, ImageWatershedAction(viewer),  'Watershed...');
         
         
         addMenuItem(processMenu, ...

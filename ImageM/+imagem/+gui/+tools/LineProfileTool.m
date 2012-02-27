@@ -41,7 +41,26 @@ end % end constructors
 %% ImagemTool Methods
 methods
     function select(this) %#ok<*MANU>
+        disp('select line profile');
         this.state = 1;
+    end
+    
+    function deselect(this)
+        removeLineHandle(this);
+    end
+    
+    function removeLineHandle(this)
+        if ~ishandle(this.lineHandle)
+            return;
+        end
+        
+        ax = this.parent.handles.imageAxis;
+        if isempty(ax)
+            return;
+        end
+       
+        delete(this.lineHandle);
+        
     end
     
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
@@ -50,9 +69,10 @@ methods
         fprintf('%f %f\n', pos(1, 1:2));
         
         if this.state == 1
-            % determines thestarting point of next line
+            % determines the starting point of next line
             this.pos1 = pos(1, 1:2);
             this.state = 2;
+            removeLineHandle(this);
             this.lineHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'Marker', '+', 'color', 'y', 'linewidth', 1);
@@ -102,7 +122,7 @@ methods
     end
     
     function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
-        if this.state == 2
+        if this.state == 2 && ishandle(this.lineHandle)
             % determine the line current end point
             ax = this.parent.handles.imageAxis;
             pos = get(ax, 'CurrentPoint');
