@@ -24,13 +24,7 @@ properties
     
     % the name of this tool, that should be unique for all actions
     name;
-    
-    % the current step, between 1 and stepNumber
-    state = 0;
-    
-    % the total number of steps for this tool.
-    stateNumber = 0;
-end 
+end
 
 %% Constructor
 methods

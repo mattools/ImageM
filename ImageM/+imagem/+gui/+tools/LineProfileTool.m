@@ -21,6 +21,10 @@ properties
     pos1;
     
     lineHandle;
+    
+    % the current step, can be 1 or 2
+    state = 0;
+    
 end % end properties
 
 
@@ -31,7 +35,6 @@ methods
         this = this@imagem.gui.ImagemTool(parent, 'lineProfile');
         
         % setup state
-        this.stateNumber = 2;
         this.state = 1;
     end
 

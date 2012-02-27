@@ -199,8 +199,8 @@ methods
 
         addMenuItem(processMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...', true);
         addMenuItem(processMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
-        addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...');
         
+        addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...', true);
         
         addMenuItem(processMenu, ...
             ApplyImageFunctionAction(viewer, 'distanceMap'), ...
@@ -211,17 +211,23 @@ methods
         addMenuItem(processMenu, LabelBinaryImageAction(viewer), ...
             'Connected Components Labeling');
         
+        
+        % Interactive tools
+        
+        toolsMenu = uimenu(hf, 'Label', 'Tools');
+        
         tool = PrintCurrentPointTool(viewer);
-        addMenuItem(processMenu, SelectToolAction(viewer, tool), ...
+        addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
             'Print Current Point', true);
         
-        addMenuItem(processMenu, ...
+        addMenuItem(toolsMenu, ...
             SelectToolAction(viewer, SetPixelToWhiteTool(viewer)), ...
             'Set Pixel to White');
         
-        addMenuItem(processMenu, ...
+        addMenuItem(toolsMenu, ...
             SelectToolAction(viewer, BrushTool(viewer)), ...
             'Brush');
+        
         
         % Analyze Menu Definition
         
