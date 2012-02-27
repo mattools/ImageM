@@ -183,20 +183,22 @@ methods
         
         addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),  'Mean');
         addMenuItem(processMenu, ImageMedianFilter3x3Action(viewer),  'Median');
-        
-        addMenuItem(processMenu, ImageThresholdAction(viewer),  'Threshold...', true);
-        addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient');
-        addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
-        
+                
         morphoMenu = uimenu(processMenu, 'Label', 'Morphology');
         addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion');
         addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation');
         addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening');
         addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');
-        addMenuItem(morphoMenu, ImageMorphoGradientAction(viewer), ...
-            'Morphological Gradient', true);
-        addMenuItem(morphoMenu, ImageExtendedMinimaAction(viewer),  'Extended Minima...', true);
-        addMenuItem(morphoMenu, ImageWatershedAction(viewer),  'Watershed...');
+        
+        addMenuItem(processMenu, ImageThresholdAction(viewer),  'Threshold...', true);
+        addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
+        addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
+        addMenuItem(processMenu, ImageMorphoGradientAction(viewer), ...
+            'Morphological Gradient');
+
+        addMenuItem(processMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...', true);
+        addMenuItem(processMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
+        addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...');
         
         
         addMenuItem(processMenu, ...
