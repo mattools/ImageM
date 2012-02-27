@@ -192,9 +192,10 @@ methods
         
         addMenuItem(processMenu, ImageThresholdAction(viewer),  'Threshold...', true);
         addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
-        addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
         addMenuItem(processMenu, ImageMorphoGradientAction(viewer), ...
             'Morphological Gradient');
+        addMenuItem(processMenu, ImageGradientVectorAction(viewer),   'Gradient Vector');
+        addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
 
         addMenuItem(processMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...', true);
         addMenuItem(processMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
