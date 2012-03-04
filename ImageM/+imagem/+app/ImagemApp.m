@@ -64,11 +64,6 @@ methods
         this.docList(ind) = [];
     end
 
-    function docList = documentList(this)
-        disp('method ''documentList()'' is deprecated, use ''getDocuments()'' instead');
-        docList = this.docList;
-    end
-    
     function docList = getDocuments(this)
         docList = this.docList;
     end

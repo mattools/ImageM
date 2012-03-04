@@ -197,7 +197,7 @@ methods
         addMenuItem(processMenu, ImageGradientVectorAction(viewer),   'Gradient Vector');
         addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
 
-        minimaMenu = uimenu(processMenu, 'Label', 'Minima / Maxima', 'Separator', true);
+        minimaMenu = uimenu(processMenu, 'Label', 'Minima / Maxima', 'Separator', 'on');
         addMenuItem(minimaMenu, ImageRegionalMinimaAction(viewer), 'Regional Minima');
         addMenuItem(minimaMenu, ImageRegionalMaximaAction(viewer), 'Regional Maxima');
         addMenuItem(minimaMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...');

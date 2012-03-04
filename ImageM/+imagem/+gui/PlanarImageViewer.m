@@ -388,9 +388,7 @@ end
 methods
     function close(this, varargin)
         disp('Close image viewer');
-        try
-            removeView(this.doc, this);
-        end
+        removeView(this.doc, this);
         delete(this.handles.figure);
     end
     
