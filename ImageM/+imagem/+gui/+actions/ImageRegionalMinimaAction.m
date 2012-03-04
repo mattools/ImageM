@@ -31,15 +31,18 @@ methods
         
         % get handle to parent figure, and current doc
         viewer = this.parent;
-        doc = viewer.doc;
+        img = viewer.doc.image;
         
-        if ~isScalarImage(doc.image)
+        if ~isScalarImage(img)
             warning('ImageM:WrongImageType', ...
                 'Regional minima can be applied only on scalar images');
             return;
         end
         
-        bin = regionalMinima(this.parent.doc.image, 4);
+        app = viewer.gui.app;
+        conn = getDefaultConnectivity(app, ndims(img));
+
+        bin = regionalMinima(img, conn);
         addImageDocument(this.parent.gui, bin);
         
     end    

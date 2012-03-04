@@ -87,13 +87,8 @@ methods
         
         this.handles.figure = hf;
         
-        
-        % compute background color of most widgets
-        if ispc
-            bgColor = 'White';
-        else
-            bgColor = get(0,'defaultUicontrolBackgroundColor');
-        end
+        % background color of most widgets
+        bgColor = getWidgetBackgroundColor(this.parent.gui);
         
         % vertical layout
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
@@ -140,6 +135,7 @@ methods
             'Parent', mainPanel, ...
             'String', {'4', '8'}, ...
             'Value', 1, ...
+            'BackgroundColor', bgColor, ...
             'Callback', @this.onConnectivityChanged);
             
         % button for control panel

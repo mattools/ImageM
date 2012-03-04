@@ -163,6 +163,8 @@ methods
         addMenuItem(imageMenu, InvertImageAction(viewer),       'Invert Image');
         addMenuItem(imageMenu, RenameImageAction(viewer),       'Rename', true);
         addMenuItem(imageMenu, DuplicateImageAction(viewer),    'Duplicate');
+        addMenuItem(imageMenu, ...
+            SetDefaultConnectivityAction(viewer), 'Set Connectivity', true);
         
         % View Menu Definition
         
@@ -204,7 +206,7 @@ methods
         addMenuItem(minimaMenu, ImageExtendedMaximaAction(viewer), 'Extended Maxima...');
         addMenuItem(minimaMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
         
-        addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...', true);
+        addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...');
         
         addMenuItem(processMenu, ...
             ApplyImageFunctionAction(viewer, 'distanceMap'), ...
@@ -288,6 +290,17 @@ methods
             end
         end
         
+    end
+end
+
+methods
+    function bgColor = getWidgetBackgroundColor(this) %#ok<MANU>
+        % compute background color of most widgets
+        if ispc
+            bgColor = 'White';
+        else
+            bgColor = get(0,'defaultUicontrolBackgroundColor');
+        end
     end
 end
 

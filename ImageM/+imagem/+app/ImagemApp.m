@@ -20,6 +20,11 @@ classdef ImagemApp < handle
 properties
     % set of image documents managed by this application
     docList;
+    
+    % default connectivity associated to each dimension. Equals 4 for 2D,
+    % and 6 for 3D. Stored as a row vector, starting at dim=2 (no need for
+    % connectivity info for 1D)
+    defaultConnectivity = [4 6];
 end 
 
 %% Constructor
@@ -144,6 +149,26 @@ methods
         end
     end
      
+end
+
+%% Method for local settings
+methods
+    function conn = getDefaultConnectivity(this, dim)
+        % Get the default connectivity associated to a dimension
+        % Defaults are 4 for 2D, and 6 for 3D.
+        %
+        
+        if nargin == 1
+            dim = 2;
+        end
+        conn = this.defaultConnectivity(dim - 1);
+    end
+    
+    function setDefaultConnectivity(this, dim, conn)
+        % Changes the default connectivity associated to a dimension
+        this.defaultConnectivity(dim - 1) = conn;
+    end
+    
 end
 
 end % classdef
