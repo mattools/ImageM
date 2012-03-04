@@ -188,7 +188,7 @@ methods
         addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion');
         addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation');
         addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening');
-        addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');
+        addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');    
         
         addMenuItem(processMenu, ImageThresholdAction(viewer),  'Threshold...', true);
         addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
@@ -197,9 +197,12 @@ methods
         addMenuItem(processMenu, ImageGradientVectorAction(viewer),   'Gradient Vector');
         addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
 
-        addMenuItem(processMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...', true);
-        addMenuItem(processMenu, ImageExtendedMaximaAction(viewer), 'Extended Maxima...');
-        addMenuItem(processMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
+        minimaMenu = uimenu(processMenu, 'Label', 'Minima / Maxima', 'Separator', true);
+        addMenuItem(minimaMenu, ImageRegionalMinimaAction(viewer), 'Regional Minima');
+        addMenuItem(minimaMenu, ImageRegionalMaximaAction(viewer), 'Regional Maxima');
+        addMenuItem(minimaMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...');
+        addMenuItem(minimaMenu, ImageExtendedMaximaAction(viewer), 'Extended Maxima...');
+        addMenuItem(minimaMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
         
         addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...', true);
         

@@ -45,13 +45,13 @@ methods
             'NextPlot', 'new', ...
             'Name', 'ImageM Main Figure', ...
             'CloseRequestFcn', @this.close);
+        this.handles.figure = fig;
         
         % create main figure menu
         createFigureMenu(gui, fig, this);
-%         setupMenu(fig);
-        setupLayout(fig);
         
-        this.handles.figure = fig;
+        % creates the layout
+        setupLayout(fig);
         
         updateDisplay(this);
         updateTitle(this);
@@ -388,7 +388,9 @@ end
 methods
     function close(this, varargin)
         disp('Close image viewer');
-        removeView(this.doc, this);
+        try
+            removeView(this.doc, this);
+        end
         delete(this.handles.figure);
     end
     
