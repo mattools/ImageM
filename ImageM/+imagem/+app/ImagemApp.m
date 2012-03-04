@@ -39,7 +39,7 @@ end % construction function
 %% General methods
 methods
 
-    function printVersion(this)
+    function printVersion(this) %#ok<MANU>
         % 
         disp('ImageM is running...');
         disp('testing version!');
@@ -112,10 +112,21 @@ methods
     
     function newName = createDocumentName(this, baseName)
         % returns either the base name of doc, or the name with an index
-        
+       
         newName = baseName;
+       
+        % if the name is free, no problem
         if ~hasDocumentWithName(this, baseName)
             return;
+        end
+        
+        % otherwise, we first check if name contains an "index"
+        % here: the number at the end of the name, separated by a minus
+        [path name ext] = fileparts(baseName);
+        isDigit = ismember(name, '1234567890');
+        numDigits = length(name) - find(~isDigit, 1, 'last');
+        if numDigits > 0 && numDigits < length(name) && name(end-numDigits) == '-'
+            baseName = fullfile(path, [name(1:end-numDigits-1) ext]);
         end
         
         index = 1;
@@ -130,7 +141,7 @@ methods
         % inner function
         function name = createIndexedName(baseName, index)
             % add the given number to the name of the document
-            [path name ext] = fileparts(baseName); %#ok<ASGLU>
+            [path name ext] = fileparts(baseName);
             name = [name '-' num2str(index) ext];
         end
 
