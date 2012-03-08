@@ -183,7 +183,8 @@ methods
         
         processMenu = uimenu(hf, 'Label', 'Process');
         
-        addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),  'Mean');
+        addMenuItem(processMenu, ImageAdjustDynamicAction(viewer),  'Adjust Dynamic');
+        addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),  'Mean', true);
         addMenuItem(processMenu, ImageMedianFilter3x3Action(viewer),  'Median');
                 
         morphoMenu = uimenu(processMenu, 'Label', 'Morphology');
