@@ -1,4 +1,4 @@
-classdef ImageImposeMinimaAction < imagem.gui.ImagemAction
+classdef ImageImposeMinimaAction < imagem.gui.actions.CurrentImageAction
 %IMAGEOVERLAYACTION  One-line description here, please.
 %
 %   Class ImageImposeMinimaAction
@@ -26,7 +26,7 @@ end % end properties
 methods
     function this = ImageImposeMinimaAction(parent)
     % Constructor for ImageImposeMinimaAction class
-        this = this@imagem.gui.ImagemAction(parent, 'imageImposeMinima');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageImposeMinima');
     end
 
 end % end constructors

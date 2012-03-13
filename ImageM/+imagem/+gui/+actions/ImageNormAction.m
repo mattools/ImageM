@@ -1,4 +1,4 @@
-classdef ImageNormAction < imagem.gui.ImagemAction
+classdef ImageNormAction < imagem.gui.actions.CurrentImageAction
 %IMAGENORMACTION Compute norm of current image
 %
 %   output = ImageNormAction(input)
@@ -18,7 +18,7 @@ classdef ImageNormAction < imagem.gui.ImagemAction
 methods
     function this = ImageNormAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'imageNorm');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageNorm');
     end
 end
 

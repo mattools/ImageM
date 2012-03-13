@@ -1,4 +1,4 @@
-classdef ImageRegionalMaximaAction < imagem.gui.ImagemAction
+classdef ImageRegionalMaximaAction < imagem.gui.actions.CurrentImageAction
 %IMAGEEXTENDEDMAXIMAACTION Extract extended maxima in a grayscale image
 %
 %   output = ImageRegionalMaximaAction(input)
@@ -21,7 +21,7 @@ end
 methods
     function this = ImageRegionalMaximaAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'regionalMaxima');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'regionalMaxima');
     end
 end
 

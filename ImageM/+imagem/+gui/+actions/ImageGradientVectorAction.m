@@ -1,4 +1,4 @@
-classdef ImageGradientVectorAction < imagem.gui.ImagemAction
+classdef ImageGradientVectorAction < imagem.gui.actions.CurrentImageAction
 %IMAGEGRADIENTACTION Compute gradient of current image as vector image
 %
 %   output = ImageGradientVectorAction(input)
@@ -18,7 +18,7 @@ classdef ImageGradientVectorAction < imagem.gui.ImagemAction
 methods
     function this = ImageGradientVectorAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'imageGradientVector');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageGradientVector');
     end
 end
 

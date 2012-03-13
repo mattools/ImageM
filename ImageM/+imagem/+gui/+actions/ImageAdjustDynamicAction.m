@@ -1,4 +1,4 @@
-classdef ImageAdjustDynamicAction < imagem.gui.ImagemAction
+classdef ImageAdjustDynamicAction < imagem.gui.actions.CurrentImageAction
 %IMAGENORMACTION Compute norm of current image
 %
 %   output = ImageAdjustDynamicAction(input)
@@ -18,7 +18,7 @@ classdef ImageAdjustDynamicAction < imagem.gui.ImagemAction
 methods
     function this = ImageAdjustDynamicAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'adjustDynamic');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'adjustDynamic');
     end
 end
 

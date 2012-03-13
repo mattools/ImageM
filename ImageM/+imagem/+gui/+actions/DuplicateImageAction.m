@@ -1,4 +1,4 @@
-classdef DuplicateImageAction < imagem.gui.ImagemAction
+classdef DuplicateImageAction < imagem.gui.actions.CurrentImageAction
 %RENAMEIMAGEACTION  One-line description here, please.
 %
 %   Class DuplicateImageAction
@@ -27,7 +27,7 @@ methods
     % Constructor for DuplicateImageAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'duplicateImage');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'duplicateImage');
     end
 
 end % end constructors

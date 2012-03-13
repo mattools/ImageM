@@ -1,4 +1,4 @@
-classdef ImageErosionAction < imagem.gui.ImagemAction
+classdef ImageErosionAction < imagem.gui.actions.CurrentImageAction
 %IMAGEEROSIONACTION  One-line description here, please.
 %
 %   output = ImageDilationAction(input)
@@ -18,7 +18,7 @@ classdef ImageErosionAction < imagem.gui.ImagemAction
 methods
     function this = ImageErosionAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'imageErosion');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageErosion');
     end
 end
 

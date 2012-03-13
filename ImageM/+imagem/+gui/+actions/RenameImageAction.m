@@ -1,4 +1,4 @@
-classdef RenameImageAction < imagem.gui.ImagemAction
+classdef RenameImageAction < imagem.gui.actions.CurrentImageAction
 %RENAMEIMAGEACTION  One-line description here, please.
 %
 %   Class RenameImageAction
@@ -27,7 +27,7 @@ methods
     % Constructor for RenameImageAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'renameImage');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'renameImage');
     end
 
 end % end constructors

@@ -1,4 +1,4 @@
-classdef SaveImageAction < imagem.gui.ImagemAction
+classdef SaveImageAction < imagem.gui.actions.CurrentImageAction
 %OPENIMAGEACTION Open an image from a file
 %
 %   Class SaveImageAction
@@ -27,7 +27,7 @@ methods
     % Constructor for SaveImageAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'saveImage');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'saveImage');
     end
 
 end % end constructors

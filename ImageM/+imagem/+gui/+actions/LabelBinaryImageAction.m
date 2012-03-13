@@ -1,4 +1,4 @@
-classdef LabelBinaryImageAction < imagem.gui.ImagemAction
+classdef LabelBinaryImageAction < imagem.gui.actions.CurrentImageAction
 %LABELBINARYIMAGEACTION  One-line description here, please.
 %
 %   Class LabelBinaryImageAction
@@ -25,7 +25,7 @@ end % end properties
 methods
     function this = LabelBinaryImageAction(parent)
     % Constructor for LabelBinaryImageAction class
-        this = this@imagem.gui.ImagemAction(parent, 'labelBinaryImage');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'labelBinaryImage');
     end
 
 end % end constructors

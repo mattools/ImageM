@@ -1,4 +1,4 @@
-classdef ImageThresholdAction < imagem.gui.ImagemAction
+classdef ImageThresholdAction < imagem.gui.actions.CurrentImageAction
 %IMAGETHRESHOLDACTION Apply a threshold operation to current image
 %
 %   output = ImageThresholdAction(input)
@@ -24,7 +24,7 @@ end
 methods
     function this = ImageThresholdAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'thresholdImage');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'thresholdImage');
     end
 end
 

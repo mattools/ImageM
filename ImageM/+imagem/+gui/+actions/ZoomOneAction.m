@@ -1,4 +1,4 @@
-classdef ZoomOneAction < imagem.gui.ImagemAction
+classdef ZoomOneAction < imagem.gui.actions.CurrentImageAction
 %ZOOMINACTION Set zoom of current image viewer to 1
 %
 %   output = ZoomOneAction(input)
@@ -18,7 +18,7 @@ classdef ZoomOneAction < imagem.gui.ImagemAction
 methods
     function this = ZoomOneAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'zoomOne');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'zoomOne');
     end
 end
 

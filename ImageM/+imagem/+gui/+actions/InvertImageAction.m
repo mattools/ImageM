@@ -1,4 +1,4 @@
-classdef InvertImageAction < imagem.gui.ImagemAction
+classdef InvertImageAction < imagem.gui.actions.CurrentImageAction
 %INVERTIMAGEACTION  Invert the current image
 %
 %   output = InvertImageAction(input)
@@ -18,7 +18,7 @@ classdef InvertImageAction < imagem.gui.ImagemAction
 methods
     function this = InvertImageAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'invertImage');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'invertImage');
     end
 end
 

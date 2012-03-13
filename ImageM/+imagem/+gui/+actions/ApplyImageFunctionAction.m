@@ -1,4 +1,4 @@
-classdef ApplyImageFunctionAction < imagem.gui.ImagemAction
+classdef ApplyImageFunctionAction < imagem.gui.actions.CurrentImageAction
 %APPLYIMAGEFUNCTIONACTION  Apply a function to Image object, and display result 
 %
 %   output = ApplyImageFunctionAction(input)
@@ -23,7 +23,7 @@ methods
     function this = ApplyImageFunctionAction(parent, methodName)
         % calls the parent constructor
         name = ['applyImageMethod-' methodName];
-        this = this@imagem.gui.ImagemAction(parent, name);
+        this = this@imagem.gui.actions.CurrentImageAction(parent, name);
         this.methodName = methodName;
     end
 end

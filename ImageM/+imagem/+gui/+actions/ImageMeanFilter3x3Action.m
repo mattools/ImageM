@@ -1,4 +1,4 @@
-classdef ImageMeanFilter3x3Action < imagem.gui.ImagemAction
+classdef ImageMeanFilter3x3Action < imagem.gui.actions.CurrentImageAction
 %IMAGEMEDIANFILTER3X3  One-line description here, please.
 %
 %   Class ImageMeanFilter3x3Action
@@ -20,7 +20,7 @@ classdef ImageMeanFilter3x3Action < imagem.gui.ImagemAction
 methods
     function this = ImageMeanFilter3x3Action(parent)
     % Constructor for ImageMeanFilter3x3Action class
-        this = this@imagem.gui.ImagemAction(parent, 'meanFilter');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'meanFilter');
     end
 
 end % end constructors

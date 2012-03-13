@@ -1,4 +1,4 @@
-classdef ZoomBestAction < imagem.gui.ImagemAction
+classdef ZoomBestAction < imagem.gui.actions.CurrentImageAction
 %ZOOMBESTACTION Set zoom of current image viewer to the best possible one
 %
 %   output = ZoomBestAction(input)
@@ -18,7 +18,7 @@ classdef ZoomBestAction < imagem.gui.ImagemAction
 methods
     function this = ZoomBestAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'zoomBest');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'zoomBest');
     end
 end
 

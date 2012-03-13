@@ -60,16 +60,19 @@ methods
         updateTitle(this);
         
         % setup listeners associated to the figure
-        set(fig, 'WindowButtonDownFcn',     @this.processMouseButtonPressed);
-        set(fig, 'WindowButtonUpFcn',       @this.processMouseButtonReleased);
-        set(fig, 'WindowButtonMotionFcn',   @this.processMouseMoved);
+        if ~isempty(doc.image)
+            set(fig, 'WindowButtonDownFcn',     @this.processMouseButtonPressed);
+            set(fig, 'WindowButtonUpFcn',       @this.processMouseButtonReleased);
+            set(fig, 'WindowButtonMotionFcn',   @this.processMouseMoved);
 
-        % setup mouse listener for display of mouse coordinates
-        tool = imagem.gui.tools.ShowCursorPositionTool(this, 'showMousePosition');
-        addMouseListener(this, tool);
+            % setup mouse listener for display of mouse coordinates
+            tool = imagem.gui.tools.ShowCursorPositionTool(this, 'showMousePosition');
+            addMouseListener(this, tool);
+        end
         
         set(fig, 'UserData', this);
-         
+        
+        
         function setupLayout(hf)
             
             % vertical layout: image display and status bar
@@ -123,9 +126,14 @@ methods
         % current image is either the document image, or the preview image
         % if there is one
         img = this.doc.image;
+        if isempty(this.doc.image)
+            return;
+        end
+        
         if ~isempty(this.doc.previewImage)
             img = this.doc.previewImage;
         end
+        
         
         % extract or compute display data
         if isGrayscaleImage(img) || isColorImage(img)
@@ -206,6 +214,10 @@ methods
         % small checkup, because function can be called before figure was
         % initialised
         if ~isfield(this.handles, 'figure')
+            return;
+        end
+        
+        if isempty(this.doc) || isempty(this.doc.image)
             return;
         end
         

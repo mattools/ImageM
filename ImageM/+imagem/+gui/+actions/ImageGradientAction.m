@@ -1,4 +1,4 @@
-classdef ImageGradientAction < imagem.gui.ImagemAction
+classdef ImageGradientAction < imagem.gui.actions.CurrentImageAction
 %IMAGEGRADIENTACTION Compute gradient norm of current image
 %
 %   output = ImageGradientAction(input)
@@ -18,7 +18,7 @@ classdef ImageGradientAction < imagem.gui.ImagemAction
 methods
     function this = ImageGradientAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'imageGradient');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageGradient');
     end
 end
 

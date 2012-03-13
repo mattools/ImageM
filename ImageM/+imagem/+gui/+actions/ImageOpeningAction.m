@@ -1,4 +1,4 @@
-classdef ImageOpeningAction < imagem.gui.ImagemAction
+classdef ImageOpeningAction < imagem.gui.actions.CurrentImageAction
 %IMAGEOPENINGACTION  One-line description here, please.
 %
 %   output = ImageOpeningAction(input)
@@ -18,7 +18,7 @@ classdef ImageOpeningAction < imagem.gui.ImagemAction
 methods
     function this = ImageOpeningAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'imageOpening');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageOpening');
     end
 end
 

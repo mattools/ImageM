@@ -156,6 +156,10 @@ methods
         b = false;
         for i = 1:length(this.docList)
             doc = this.docList{i};
+            if isempty(doc.image)
+                continue;
+            end
+            
             if strcmp(doc.image.name, name)
                 b = true;
                 return;

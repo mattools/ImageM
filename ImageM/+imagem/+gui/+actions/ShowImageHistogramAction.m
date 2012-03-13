@@ -1,4 +1,4 @@
-classdef ShowImageHistogramAction < imagem.gui.ImagemAction
+classdef ShowImageHistogramAction < imagem.gui.actions.CurrentImageAction
 %SHOWIMAGEHISTOGRAMACTION Display histogram of current image
 %
 %   output = ShowImageHistogramAction(input)
@@ -18,7 +18,7 @@ classdef ShowImageHistogramAction < imagem.gui.ImagemAction
 methods
     function this = ShowImageHistogramAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'showImageHistogram');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'showImageHistogram');
     end
 end
 

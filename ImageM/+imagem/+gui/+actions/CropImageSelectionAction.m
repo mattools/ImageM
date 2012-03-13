@@ -1,4 +1,4 @@
-classdef CropImageSelectionAction < imagem.gui.ImagemAction
+classdef CropImageSelectionAction < imagem.gui.actions.CurrentImageAction
 %RENAMEIMAGEACTION  One-line description here, please.
 %
 %   Class CropImageSelectionAction
@@ -27,7 +27,7 @@ methods
     % Constructor for CropImageSelectionAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'cropImageSelection');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'cropImageSelection');
     end
 
 end % end constructors

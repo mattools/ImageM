@@ -31,10 +31,12 @@ methods
         gui = viewer.gui;
         app = gui.app;
 
-        docList = documentList(app);
+        docList =getDocuments(app);
         for i = 1:length(docList)
             doc = docList{i};
-            disp(doc.image.name);
+            if ~isempty(doc.image)
+                disp(doc.image.name);
+            end
         end
     end
 end

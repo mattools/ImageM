@@ -58,7 +58,8 @@ end % general methods
 
 methods
     function b = isActivable(this)
-        b = true;
+        doc = this.parent.doc;
+        b = ~isempty(doc) && ~isempty(doc.image);
     end
 end
 

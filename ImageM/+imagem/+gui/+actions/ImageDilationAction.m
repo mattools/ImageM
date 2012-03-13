@@ -1,4 +1,4 @@
-classdef ImageDilationAction < imagem.gui.ImagemAction
+classdef ImageDilationAction < imagem.gui.actions.CurrentImageAction
 %IMAGEDILATIONACTION  One-line description here, please.
 %
 %   output = ImageDilationAction(input)
@@ -18,7 +18,7 @@ classdef ImageDilationAction < imagem.gui.ImagemAction
 methods
     function this = ImageDilationAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'imageDilation');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageDilation');
     end
 end
 

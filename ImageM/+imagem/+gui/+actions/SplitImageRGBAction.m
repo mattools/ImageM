@@ -1,4 +1,4 @@
-classdef SplitImageRGBAction < imagem.gui.ImagemAction
+classdef SplitImageRGBAction < imagem.gui.actions.CurrentImageAction
 %SPLITIMAGERGBACTION  One-line description here, please.
 %
 %   Class SplitImageRGBAction
@@ -19,7 +19,7 @@ classdef SplitImageRGBAction < imagem.gui.ImagemAction
 %% Constructor
 methods
     function this = SplitImageRGBAction(parent, varargin)
-        this = this@imagem.gui.ImagemAction(parent, 'splitImageRGB');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'splitImageRGB');
     end
 
 end % end constructors

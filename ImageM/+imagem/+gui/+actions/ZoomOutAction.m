@@ -1,4 +1,4 @@
-classdef ZoomOutAction < imagem.gui.ImagemAction
+classdef ZoomOutAction < imagem.gui.actions.CurrentImageAction
 %ZOOMINACTION Zoom out the current figure
 %
 %   output = ZoomOutAction(input)
@@ -18,7 +18,7 @@ classdef ZoomOutAction < imagem.gui.ImagemAction
 methods
     function this = ZoomOutAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'zoomOut');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'zoomOut');
     end
 end
 

@@ -1,4 +1,4 @@
-classdef ImageSkeletonAction < imagem.gui.ImagemAction
+classdef ImageSkeletonAction < imagem.gui.actions.CurrentImageAction
 %IMAGESKELETONACTION  One-line description here, please.
 %
 %   Class ImageSkeletonAction
@@ -25,7 +25,7 @@ end % end properties
 methods
     function this = ImageSkeletonAction(parent)
     % Constructor for ImageSkeletonAction class
-        this = this@imagem.gui.ImagemAction(parent, 'imageSkeleton');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageSkeleton');
     end
 
 end % end constructors

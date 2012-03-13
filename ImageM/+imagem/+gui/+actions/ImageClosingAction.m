@@ -1,4 +1,4 @@
-classdef ImageClosingAction < imagem.gui.ImagemAction
+classdef ImageClosingAction < imagem.gui.actions.CurrentImageAction
 %IMAGECLOSINGACTION  One-line description here, please.
 %
 %   output = ImageClosingAction(input)
@@ -18,7 +18,7 @@ classdef ImageClosingAction < imagem.gui.ImagemAction
 methods
     function this = ImageClosingAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'imageClosing');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageClosing');
     end
 end
 

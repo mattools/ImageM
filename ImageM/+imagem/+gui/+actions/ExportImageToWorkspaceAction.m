@@ -1,4 +1,4 @@
-classdef ExportImageToWorkspaceAction < imagem.gui.ImagemAction
+classdef ExportImageToWorkspaceAction < imagem.gui.actions.CurrentImageAction
 %OPENIMAGEACTION Open an image from a file
 %
 %   Class ExportImageToWorkspaceAction
@@ -27,7 +27,7 @@ methods
     % Constructor for ExportImageToWorkspaceAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'exportImageToWorkspace');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'exportImageToWorkspace');
     end
 
 end % end constructors
