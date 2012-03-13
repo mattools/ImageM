@@ -86,7 +86,8 @@ methods
             % scrollable panel for image display
             scrollPanel = uipanel('Parent', displayPanel, ...
                 'resizeFcn', @this.onScrollPanelResized);
-            
+          
+            % creates an axis that fills the available space
             ax = axes('parent', scrollPanel, ...
                 'units', 'normalized', ...
                 'position', [0 0 1 1]);
@@ -94,10 +95,16 @@ methods
             % intialize image display with default image. 
             hIm = imshow(ones(10, 10), 'parent', ax);
             this.handles.scrollPanel = imscrollpanel(scrollPanel, hIm);
-            
+
             % keep widgets handles
             this.handles.imageAxis = ax;
             this.handles.image = hIm;
+
+            % in case of empty doc, hides the axis
+            if isempty(this.doc) || isempty(this.doc.image)
+                set(ax, 'Visible', 'off');
+                set(hIm, 'Visible', 'off');
+            end
 
             % info panel for cursor position and value
             this.handles.infoPanel = uicontrol(...
