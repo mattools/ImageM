@@ -1,10 +1,10 @@
-classdef LineProfileTool < imagem.gui.ImagemTool
+classdef SelectRectangleTool < imagem.gui.ImagemTool
 %LINEPROFILETOOL  One-line description here, please.
 %
-%   Class LineProfileTool
+%   Class SelectRectangleTool
 %
 %   Example
-%   LineProfileTool
+%   SelectRectangleTool
 %
 %   See also
 %
@@ -12,7 +12,7 @@ classdef LineProfileTool < imagem.gui.ImagemTool
 % ------
 % Author: David Legland
 % e-mail: david.legland@grignon.inra.fr
-% Created: 2011-11-16,    using Matlab 7.9.0.529 (R2009b)
+% Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
@@ -30,9 +30,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = LineProfileTool(parent, varargin)
-        % Constructor for LineProfileTool class
-        this = this@imagem.gui.ImagemTool(parent, 'lineProfile');
+    function this = SelectRectangleTool(parent, varargin)
+        % Constructor for SelectRectangleTool class
+        this = this@imagem.gui.ImagemTool(parent, 'selectRectangle');
         
         % setup state
         this.state = 1;
@@ -44,7 +44,8 @@ end % end constructors
 %% ImagemTool Methods
 methods
     function select(this) %#ok<*MANU>
-        disp('select line profile');
+        disp('select rectangle');
+%         this.parent.selection = [];
         this.state = 1;
     end
     
@@ -78,53 +79,33 @@ methods
             removeLineHandle(this);
             this.lineHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
-                'Marker', '+', 'color', 'y', 'linewidth', 1);
+                'Marker', 'none', 'color', 'y', 'linewidth', 1);
+            
+            this.parent.selection = [];
+            
             return;
         end
     
         % Start processing state 2
         
         % determine the line end point
-        pos2 = pos(1, 1:2);
+        x1 = this.pos1(1, 1);
+        x2 = pos(1, 1);
+        y1 = this.pos1(1, 2);
+        y2 = pos(1, 2);
+
+        boxData = [min(x1,x2) max(x1,x2) min(y1,y2) max(y1,y2)];
+        shape = struct('type', 'box', 'data', boxData);
         
-        % distribute points along the line
-        nValues = 100;
-        x = linspace(this.pos1(1), pos2(1), nValues);
-        y = linspace(this.pos1(2), pos2(2), nValues);
-        dists = [0 cumsum(hypot(diff(x), diff(y)))];
+        this.parent.selection = shape;
         
-        % convert point to image indices
-        pts = [x' y'];
-        
-        % new figure for display
-        figure;
-        
-        img = this.parent.doc.image;
-        
-        % extract corresponding pixel values (nearest-neighbor eval)
-        vals = interp(img, pts);
-        if isGrayscaleImage(img)
-            plot(dists, vals);
-            
-        elseif isColorImage(img)
-            % display each color histogram as stairs, to see the 3 curves
-            hh = stairs(vals);
-            
-            % setup curve colors
-            set(hh(1), 'color', [1 0 0]); % red
-            set(hh(2), 'color', [0 1 0]); % green
-            set(hh(3), 'color', [0 0 1]); % blue
-            
-        else
-            warning('LineProfileTool:UnsupportedImageImageType', ...
-                ['Can not manage images of type ' img.type]);
-        end
         
         % revert to first state
         this.state = 1;
     end
     
     function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+        
         if this.state ~= 2 || ~ishandle(this.lineHandle)
             return;
         end
@@ -133,10 +114,18 @@ methods
         ax = this.parent.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         
+        x1 = this.pos1(1, 1);
+        x2 = pos(1, 1);
+        y1 = this.pos1(1, 2);
+        y2 = pos(1, 2);
+        xdata = [x1 x2 x2 x1 x1];
+        ydata = [y1 y1 y2 y2 y1];
+        
         % update line display
-        set(this.lineHandle, 'XData', [this.pos1(1) pos(1, 1)]);
-        set(this.lineHandle, 'YData', [this.pos1(2) pos(1, 2)]);
+        set(this.lineHandle, 'XData', xdata);
+        set(this.lineHandle, 'YData', ydata);
     end
+    
     
 end % end methods
 

@@ -31,6 +31,9 @@ properties
     
     % the currently selected tool
     currentTool = [];
+    
+    % a selected shape
+    selection = [];
 end
 
 methods

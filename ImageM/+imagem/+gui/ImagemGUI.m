@@ -163,6 +163,7 @@ methods
         addMenuItem(imageMenu, InvertImageAction(viewer),       'Invert Image');
         addMenuItem(imageMenu, RenameImageAction(viewer),       'Rename', true);
         addMenuItem(imageMenu, DuplicateImageAction(viewer),    'Duplicate');
+        addMenuItem(imageMenu, CropImageSelectionAction(viewer),    'Crop Selection');
         addMenuItem(imageMenu, ...
             SetDefaultConnectivityAction(viewer), 'Set Connectivity', true);
         
@@ -227,6 +228,10 @@ methods
         addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
             'Print Current Point', true);
         
+        tool = SelectRectangleTool(viewer);
+        addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
+            'Select Rectangle');
+
         addMenuItem(toolsMenu, ...
             SelectToolAction(viewer, SetPixelToWhiteTool(viewer)), ...
             'Set Pixel to White');
