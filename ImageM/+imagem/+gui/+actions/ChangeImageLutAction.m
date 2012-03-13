@@ -68,7 +68,10 @@ methods
             
         elseif strcmp(name, 'colorcube')
             img = this.parent.doc.image;
-            nLabels = round(max(img));
+            nLabels = max(img);
+            if isfloat(nLabels)
+                nLabels = round(nLabels);
+            end
             map = colorcube(double(nLabels) + 2);
             lut = [0 0 0; map(sum(map==0, 2)~=3 & sum(map==1, 2)~=3, :)];
             

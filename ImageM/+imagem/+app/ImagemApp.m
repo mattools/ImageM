@@ -113,8 +113,11 @@ methods
     function newName = createDocumentName(this, baseName)
         % returns either the base name of doc, or the name with an index
        
+        if isempty(baseName)
+            baseName = 'NoName';
+        end
         newName = baseName;
-       
+               
         % if the name is free, no problem
         if ~hasDocumentWithName(this, baseName)
             return;
