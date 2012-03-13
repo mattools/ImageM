@@ -120,6 +120,12 @@ methods
         uimenu(demoMenu, 'Label', 'Circles', ...
             'Callback', @action.actionPerformed);
         
+        addMenuItem(fileMenu, ImportImageFromWorkspaceAction(viewer), 'Import From Workspace...');
+        
+        
+        addMenuItem(fileMenu, SaveImageAction(viewer), 'Save As...', true);
+        addMenuItem(fileMenu, ExportImageToWorkspaceAction(viewer), 'Export To Workspace...');
+        
         addMenuItem(fileMenu, CloseImageAction(viewer), 'Close', true);
         addMenuItem(fileMenu, ExitAction(viewer), 'Quit');
         

@@ -391,14 +391,11 @@ end
 methods
     function close(this, varargin)
         disp('Close image viewer');
-        removeView(this.doc, this);
+        if ~isempty(this.doc)
+            removeView(this.doc, this);
+        end
         delete(this.handles.figure);
     end
-    
-%     function closeDoc(this, varargin)
-%         disp('Closed image viewer');
-%         delete(this.handles.figure);
-%     end
     
     function onScrollPanelResized(this, varargin)
         % function called when the Scroll panel has been resized
