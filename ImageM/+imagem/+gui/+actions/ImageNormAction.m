@@ -1,4 +1,4 @@
-classdef ImageNormAction < imagem.gui.actions.CurrentImageAction
+classdef ImageNormAction < imagem.gui.actions.VectorImageAction
 %IMAGENORMACTION Compute norm of current image
 %
 %   output = ImageNormAction(input)
@@ -18,7 +18,7 @@ classdef ImageNormAction < imagem.gui.actions.CurrentImageAction
 methods
     function this = ImageNormAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageNorm');
+        this = this@imagem.gui.actions.VectorImageAction(parent, 'imageNorm');
     end
 end
 
@@ -35,13 +35,6 @@ methods
         
         % add image to application, and create new display
         addImageDocument(viewer.gui, img2);
-    end
-end
-
-methods
-    function b = isActivable(this)
-        b = isActivable@imagem.gui.actions.CurrentImageAction(this);
-        b = b && ~isScalarImage(this.parent.doc.image);
     end
 end
 

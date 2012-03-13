@@ -165,12 +165,13 @@ methods
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'yellow'), 'Yellow');
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'magenta'), 'Magenta');
         
-        ImagemGUI.addMenuItem(imageMenu, SplitImageRGBAction(viewer),     'Split RGB');
-        ImagemGUI.addMenuItem(imageMenu, ImageOverlayAction(viewer),      'Image Overlay');
-        ImagemGUI.addMenuItem(imageMenu, InvertImageAction(viewer),       'Invert Image');
-        ImagemGUI.addMenuItem(imageMenu, RenameImageAction(viewer),       'Rename', true);
-        ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),    'Duplicate');
-        ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer),    'Crop Selection');
+        ImagemGUI.addMenuItem(imageMenu, SplitImageRGBAction(viewer),       'Split RGB');
+        ImagemGUI.addMenuItem(imageMenu, SplitImageChannelsAction(viewer),  'Split Channels');
+        ImagemGUI.addMenuItem(imageMenu, ImageOverlayAction(viewer),        'Image Overlay');
+        ImagemGUI.addMenuItem(imageMenu, InvertImageAction(viewer),         'Invert Image');
+        ImagemGUI.addMenuItem(imageMenu, RenameImageAction(viewer),         'Rename', true);
+        ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),      'Duplicate');
+        ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer), 	'Crop Selection');
         ImagemGUI.addMenuItem(imageMenu, ...
             SetDefaultConnectivityAction(viewer), 'Set Connectivity', true);
         
