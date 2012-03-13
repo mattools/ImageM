@@ -52,7 +52,7 @@ end
 methods
     function b = isActivable(this)
         doc = this.parent.doc;
-        b = ~isempty(doc.image) && isScalarImage(doc.image);
+        b = ~isempty(doc) && ~isempty(doc.image) && isScalarImage(doc.image);
     end
 end
 

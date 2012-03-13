@@ -40,8 +40,8 @@ end
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && ~isScalarImage(doc.image);
+        b = isActivable@imagem.gui.actions.CurrentImageAction(this);
+        b = b && ~isScalarImage(this.parent.doc.image);
     end
 end
 

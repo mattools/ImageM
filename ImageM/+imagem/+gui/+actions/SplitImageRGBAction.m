@@ -53,7 +53,7 @@ end % end methods
 methods
     function b = isActivable(this)
         doc = this.parent.doc;
-        b = ~isempty(doc.image) && isColorImage(doc.image);
+        b = ~isempty(doc) && ~isempty(doc.image) && isColorImage(doc.image);
     end
 end
 

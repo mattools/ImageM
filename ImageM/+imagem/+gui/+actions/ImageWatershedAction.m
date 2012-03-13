@@ -1,4 +1,4 @@
-classdef ImageWatershedAction < imagem.gui.actions.CurrentImageAction
+classdef ImageWatershedAction < imagem.gui.actions.ScalarImageAction
 %IMAGEEXTENDEDMINIMAACTION Apply watershed to an intensity image
 %
 %   output = ImageWatershedAction(input)
@@ -28,7 +28,7 @@ end
 methods
     function this = ImageWatershedAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'watershed');
+        this = this@imagem.gui.actions.ScalarImageAction(parent, 'watershed');
     end
 end
 
@@ -182,11 +182,11 @@ methods
     end
 end
 
-methods
-    function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && isScalarImage(doc.image);
-    end
-end
+% methods
+%     function b = isActivable(this)
+%         doc = this.parent.doc;
+%         b = ~isempty(doc) && ~isempty(doc.image) && isScalarImage(doc.image);
+%     end
+% end
 
 end

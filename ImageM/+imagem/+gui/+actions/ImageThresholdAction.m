@@ -1,4 +1,4 @@
-classdef ImageThresholdAction < imagem.gui.actions.CurrentImageAction
+classdef ImageThresholdAction < imagem.gui.actions.ScalarImageAction
 %IMAGETHRESHOLDACTION Apply a threshold operation to current image
 %
 %   output = ImageThresholdAction(input)
@@ -24,7 +24,7 @@ end
 methods
     function this = ImageThresholdAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'thresholdImage');
+        this = this@imagem.gui.actions.ScalarImageAction(parent, 'thresholdImage');
     end
 end
 
@@ -215,13 +215,6 @@ methods
     function onSideChanged(this, varargin)
         this.inverted = ~get(this.handles.sideCheckBox, 'Value');
         updateWidgets(this);
-    end
-end
-
-methods
-    function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && isScalarImage(doc.image);
     end
 end
 

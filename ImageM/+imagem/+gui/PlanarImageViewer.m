@@ -60,7 +60,7 @@ methods
         updateTitle(this);
         
         % setup listeners associated to the figure
-        if ~isempty(doc.image)
+        if ~isempty(doc) && ~isempty(doc.image)
             set(fig, 'WindowButtonDownFcn',     @this.processMouseButtonPressed);
             set(fig, 'WindowButtonUpFcn',       @this.processMouseButtonReleased);
             set(fig, 'WindowButtonMotionFcn',   @this.processMouseMoved);
@@ -122,14 +122,15 @@ methods
     
     function updateDisplay(this)
         % Refresh image display of the current slice
+
+        % check up doc validity
+        if isempty(this.doc) || isempty(this.doc.image)
+            return;
+        end
         
         % current image is either the document image, or the preview image
         % if there is one
         img = this.doc.image;
-        if isempty(this.doc.image)
-            return;
-        end
-        
         if ~isempty(this.doc.previewImage)
             img = this.doc.previewImage;
         end

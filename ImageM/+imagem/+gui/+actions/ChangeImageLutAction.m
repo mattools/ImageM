@@ -1,4 +1,4 @@
-classdef ChangeImageLutAction < imagem.gui.ImagemAction
+classdef ChangeImageLutAction < imagem.gui.actions.CurrentImageAction
 %CHANGEIMAGELUTACTION  One-line description here, please.
 %
 %   output = ChangeImageLutAction(input)
@@ -23,7 +23,7 @@ end
 methods
     function this = ChangeImageLutAction(parent, lutName, lutValues)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'changeImageLut');
+        this = this@imagem.gui.actions.CurrentImageAction(parent, 'changeImageLut');
         this.lutName = lutName;
         if nargin > 2
             this.lut = lutValues;
@@ -109,7 +109,7 @@ end
 methods
     function b = isActivable(this)
         doc = this.parent.doc;
-        b = ~isempty(doc.image) && ~isColorImage(doc.image);
+        b = ~isempty(doc) && ~isempty(doc.image) && ~isColorImage(doc.image);
     end
 end
 

@@ -1,10 +1,10 @@
-classdef CurrentImageAction < imagem.gui.ImagemAction
+classdef BinaryImageAction < imagem.gui.actions.CurrentImageAction
 %INVERTIMAGEACTION Superclass for actions that require a current image
 %
-%   output = CurrentImageAction(input)
+%   output = BinaryImageAction(input)
 %
 %   Example
-%   CurrentImageAction
+%   BinaryImageAction
 %
 %   See also
 %
@@ -16,16 +16,16 @@ classdef CurrentImageAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = CurrentImageAction(parent, varargin)
+    function this = BinaryImageAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, varargin{:});
+        this = this@imagem.gui.actions.CurrentImageAction(parent, varargin{:});
     end
 end
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc) && ~isempty(doc.image);
+        b = isActivable@imagem.gui.actions.CurrentImageAction(this);
+        b = b && isBinaryImage(this.parent.doc.image);
     end
 end
 

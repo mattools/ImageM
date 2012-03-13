@@ -43,6 +43,12 @@ methods
     function addImageDocument(this, image)
         % Create a new document from image, add it to app, and display img
         
+        if isempty(image)
+            % in case of empty image, create an "empty view"
+            imagem.gui.PlanarImageViewer(this, []);
+            return;
+        end
+        
         if ~isempty(image)
             % find a 'free' name for image
             newName = createDocumentName(this.app, image.name);

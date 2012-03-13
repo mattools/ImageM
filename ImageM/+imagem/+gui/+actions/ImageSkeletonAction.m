@@ -1,4 +1,4 @@
-classdef ImageSkeletonAction < imagem.gui.actions.CurrentImageAction
+classdef ImageSkeletonAction < imagem.gui.actions.BinaryImageAction
 %IMAGESKELETONACTION  One-line description here, please.
 %
 %   Class ImageSkeletonAction
@@ -25,7 +25,7 @@ end % end properties
 methods
     function this = ImageSkeletonAction(parent)
     % Constructor for ImageSkeletonAction class
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageSkeleton');
+        this = this@imagem.gui.actions.BinaryImageAction(parent, 'imageSkeleton');
     end
 
 end % end constructors
@@ -48,13 +48,6 @@ methods
         addImageDocument(viewer.gui, img2);
     end
 end % end methods
-
-methods
-    function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && isBinaryImage(doc.image);
-    end
-end
 
 end % end classdef
 

@@ -1,4 +1,4 @@
-classdef ImageExtendedMaximaAction < imagem.gui.actions.CurrentImageAction
+classdef ImageExtendedMaximaAction < imagem.gui.actions.ScalarImageAction
 %IMAGEEXTENDEDMAXIMAACTION Extract extended maxima in a grayscale image
 %
 %   output = ImageExtendedMaximaAction(input)
@@ -27,7 +27,7 @@ end
 methods
     function this = ImageExtendedMaximaAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'extendedMaxima');
+        this = this@imagem.gui.actions.ScalarImageAction(parent, 'extendedMaxima');
     end
 end
 
@@ -217,13 +217,6 @@ methods
         this.conn = this.connValues(index);
         
         updateWidgets(this);
-    end
-end
-
-methods
-    function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && isScalarImage(doc.image);
     end
 end
 

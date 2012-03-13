@@ -1,4 +1,4 @@
-classdef ImageMorphoGradientAction < imagem.gui.actions.CurrentImageAction
+classdef ImageMorphoGradientAction < imagem.gui.actions.ScalarImageAction
 %IMAGEMORPHOGRADIENTACTION  One-line description here, please.
 %
 %   Class ImageMorphoGradientAction
@@ -25,7 +25,7 @@ end % end properties
 methods
     function this = ImageMorphoGradientAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageMorphoGradient');
+        this = this@imagem.gui.actions.ScalarImageAction(parent, 'imageMorphoGradient');
     end
 
 end % end constructors

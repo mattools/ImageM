@@ -1,4 +1,4 @@
-classdef ImageGradientAction < imagem.gui.actions.CurrentImageAction
+classdef ImageGradientAction < imagem.gui.actions.ScalarImageAction
 %IMAGEGRADIENTACTION Compute gradient norm of current image
 %
 %   output = ImageGradientAction(input)
@@ -18,7 +18,7 @@ classdef ImageGradientAction < imagem.gui.actions.CurrentImageAction
 methods
     function this = ImageGradientAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageGradient');
+        this = this@imagem.gui.actions.ScalarImageAction(parent, 'imageGradient');
     end
 end
 
@@ -35,13 +35,6 @@ methods
         
         % add image to application, and create new display
         addImageDocument(viewer.gui, gradn);
-    end
-end
-
-methods
-    function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && isScalarImage(doc.image);
     end
 end
 

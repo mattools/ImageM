@@ -1,4 +1,4 @@
-classdef ImageRegionalMinimaAction < imagem.gui.actions.CurrentImageAction
+classdef ImageRegionalMinimaAction < imagem.gui.actions.ScalarImageAction
 %IMAGEEXTENDEDMINIMAACTION Extract extended minima in a grayscale image
 %
 %   output = ImageRegionalMinimaAction(input)
@@ -21,7 +21,7 @@ end
 methods
     function this = ImageRegionalMinimaAction(parent)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'regionalMinima');
+        this = this@imagem.gui.actions.ScalarImageAction(parent, 'regionalMinima');
     end
 end
 
@@ -48,12 +48,5 @@ methods
     end    
 end
 
-
-methods
-    function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && isScalarImage(doc.image);
-    end
-end
 
 end

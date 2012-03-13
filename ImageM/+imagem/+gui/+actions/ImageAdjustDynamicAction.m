@@ -1,4 +1,4 @@
-classdef ImageAdjustDynamicAction < imagem.gui.actions.CurrentImageAction
+classdef ImageAdjustDynamicAction < imagem.gui.actions.ScalarImageAction
 %IMAGENORMACTION Compute norm of current image
 %
 %   output = ImageAdjustDynamicAction(input)
@@ -18,7 +18,7 @@ classdef ImageAdjustDynamicAction < imagem.gui.actions.CurrentImageAction
 methods
     function this = ImageAdjustDynamicAction(parent, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'adjustDynamic');
+        this = this@imagem.gui.actions.ScalarImageAction(parent, 'adjustDynamic');
     end
 end
 
@@ -35,13 +35,6 @@ methods
         
         % add image to application, and create new display
         addImageDocument(viewer.gui, img2);
-    end
-end
-
-methods
-    function b = isActivable(this)
-        doc = this.parent.doc;
-        b = ~isempty(doc.image) && isScalarImage(doc.image);
     end
 end
 
