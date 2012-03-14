@@ -106,12 +106,17 @@ methods
    function drawBrush(this, coord)
        doc  = this.parent.doc;
        
+       % brush size in each direction
+       bs = this.parent.gui.app.brushSize;
+       bs1 = floor((bs-1) / 2);
+       bs2 = ceil((bs-1) / 2);
+       
        % compute bounds
        dim = size(doc.image);
-       x1 = max(coord(1)-1, 1);
-       y1 = max(coord(2)-1, 1);
-       x2 = min(coord(1)+1, dim(1));
-       y2 = min(coord(2)+1, dim(2));
+       x1 = max(coord(1)-bs1, 1);
+       y1 = max(coord(2)-bs1, 1);
+       x2 = min(coord(1)+bs2, dim(1));
+       y2 = min(coord(2)+bs2, dim(2));
        
        % iterate on brush pixels
        for i = x1:x2

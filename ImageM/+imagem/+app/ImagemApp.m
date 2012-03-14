@@ -25,6 +25,10 @@ properties
     % and 6 for 3D. Stored as a row vector, starting at dim=2 (no need for
     % connectivity info for 1D)
     defaultConnectivity = [4 6];
+    
+    % the size (diameter) of the brush (in pixels)
+    brushSize = 3;
+    
 end 
 
 %% Constructor

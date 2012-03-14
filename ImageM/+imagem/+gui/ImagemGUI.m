@@ -172,8 +172,14 @@ methods
         ImagemGUI.addMenuItem(imageMenu, RenameImageAction(viewer),         'Rename', true);
         ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),      'Duplicate');
         ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer), 	'Crop Selection');
-        ImagemGUI.addMenuItem(imageMenu, ...
-            SetDefaultConnectivityAction(viewer), 'Set Connectivity', true);
+        
+        
+        settingsMenu = uimenu(imageMenu, 'Label', 'Settings', 'Separator', 'on');
+        ImagemGUI.addMenuItem(settingsMenu, ...
+            SetDefaultConnectivityAction(viewer), 'Set Connectivity');
+        ImagemGUI.addMenuItem(settingsMenu, ...
+            SetBrushSizeAction(viewer), 'Set Brush Size');
+        
         
         % View Menu Definition
         
