@@ -105,7 +105,10 @@ methods
         fileMenu = uimenu(hf, 'Label', 'Files');
         
         ImagemGUI.addMenuItem(fileMenu, CreateImageAction(viewer), 'New...');
-        ImagemGUI.addMenuItem(fileMenu, OpenImageAction(viewer), 'Open...');
+        item = ImagemGUI.addMenuItem(fileMenu, ...
+            OpenImageAction(viewer), 'Open...');
+        set(item, 'Accelerator', 'O');
+
 
         demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
         
@@ -124,11 +127,18 @@ methods
         ImagemGUI.addMenuItem(fileMenu, ImportImageFromWorkspaceAction(viewer), 'Import From Workspace...');
         
         
-        ImagemGUI.addMenuItem(fileMenu, SaveImageAction(viewer), 'Save As...', true);
+        item = ImagemGUI.addMenuItem(fileMenu, ...
+            SaveImageAction(viewer), 'Save As...', true);
+        set(item, 'Accelerator', 'S');
+
         ImagemGUI.addMenuItem(fileMenu, ExportImageToWorkspaceAction(viewer), 'Export To Workspace...');
         
-        ImagemGUI.addMenuItem(fileMenu, CloseImageAction(viewer), 'Close', true);
-        ImagemGUI.addMenuItem(fileMenu, ExitAction(viewer), 'Quit');
+        item = ImagemGUI.addMenuItem(fileMenu, ...
+            CloseImageAction(viewer), 'Close', true);
+        set(item, 'Accelerator', 'W');
+
+        item = ImagemGUI.addMenuItem(fileMenu, ExitAction(viewer), 'Quit');
+        set(item, 'Accelerator', 'Q');
         
         
         % Image Menu Definition
@@ -168,9 +178,13 @@ methods
         ImagemGUI.addMenuItem(imageMenu, SplitImageRGBAction(viewer),       'Split RGB');
         ImagemGUI.addMenuItem(imageMenu, SplitImageChannelsAction(viewer),  'Split Channels');
         ImagemGUI.addMenuItem(imageMenu, ImageOverlayAction(viewer),        'Image Overlay');
-        ImagemGUI.addMenuItem(imageMenu, InvertImageAction(viewer),         'Invert Image');
+        item = ImagemGUI.addMenuItem(imageMenu, ...
+            InvertImageAction(viewer), 'Invert Image');
+        set(item, 'Accelerator', 'I');
+        
         ImagemGUI.addMenuItem(imageMenu, RenameImageAction(viewer),         'Rename', true);
-        ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),      'Duplicate');
+        item = ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),      'Duplicate');
+        set(item, 'Accelerator', 'D');
         ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer), 	'Crop Selection');
         
         
@@ -242,13 +256,23 @@ methods
         ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
             'Print Current Point', true);
         
-        tool = SelectRectangleTool(viewer);
-        ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
-            'Select Rectangle');
+        
+        ImagemGUI.addMenuItem(toolsMenu, ...
+            SelectToolAction(viewer, SelectRectangleTool(viewer)), ...
+            'Select Rectangle', true);
+
+        ImagemGUI.addMenuItem(toolsMenu, ...
+            SelectToolAction(viewer, SelectPolylineTool(viewer)), ...
+            'Select Polyline');
+
+        ImagemGUI.addMenuItem(toolsMenu, ...
+            SelectToolAction(viewer, SelectLineSegmentTool(viewer)), ...
+            'Select Line Segment');
+
 
         ImagemGUI.addMenuItem(toolsMenu, ...
             SelectToolAction(viewer, SetPixelToWhiteTool(viewer)), ...
-            'Set Pixel to White');
+            'Set Pixel to White', true);
         
         ImagemGUI.addMenuItem(toolsMenu, ...
             SelectToolAction(viewer, BrushTool(viewer)), ...
@@ -259,11 +283,17 @@ methods
         
         analyzeMenu = uimenu(hf, 'Label', 'Analyze');
         
-        ImagemGUI.addMenuItem(analyzeMenu, ShowImageHistogramAction(viewer), 'Histogram');
-        
-        ImagemGUI.addMenuItem(analyzeMenu, ...
-            SelectToolAction(viewer, LineProfileTool(viewer)), ...
+        item = ImagemGUI.addMenuItem(analyzeMenu, ...
+            ShowImageHistogramAction(viewer), 'Histogram');
+        set(item, 'Accelerator', 'H');
+
+%         ImagemGUI.addMenuItem(analyzeMenu, ...
+%             SelectToolAction(viewer, LineProfileTool(viewer)), ...
+%             'Plot Line Profile');
+        item = ImagemGUI.addMenuItem(analyzeMenu, ...
+            ImageSelectionLineProfileAction(viewer), ...
             'Plot Line Profile');
+        set(item, 'Accelerator', 'K');
         
         % check which menu items are selected or not
         ImagemGUI.updateMenuEnable(fileMenu);

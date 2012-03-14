@@ -7,7 +7,7 @@ classdef LineProfileTool < imagem.gui.ImagemTool
 %   LineProfileTool
 %
 %   See also
-%
+%   ImageSelectionLineProfile
 %
 % ------
 % Author: David Legland
