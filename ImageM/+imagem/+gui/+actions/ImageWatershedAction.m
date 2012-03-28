@@ -128,7 +128,9 @@ methods
         updateDisplay(this.parent);
         
         % close the current fig
-        delete(this.handles.figure);
+        if ishandle(this.handles.figure)
+            delete(this.handles.figure);
+        end
     end
     
     function updateWidgets(this)

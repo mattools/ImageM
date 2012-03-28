@@ -18,6 +18,10 @@ classdef ImageThresholdAction < imagem.gui.actions.ScalarImageAction
 properties
     value = 0;
     inverted = false;
+    
+    imageHistogram;
+    xHistogram;
+    
     handles;
 end
 
@@ -51,15 +55,23 @@ methods
         
         % compute intensity bounds, based either on type or on image data
         img = this.parent.doc.image;
-        if isinteger(img.data)
-            type = class(img.data);
-            minVal = double(intmin(type));
-            maxVal = double(intmax(type));
-        else
-            minVal = double(min(img.data(:)));
-            maxVal = double(max(img.data(:)));
-        end
+%         if isinteger(img.data)
+%             type = class(img.data);
+%             minVal = double(intmin(type));
+%             maxVal = double(intmax(type));
+%         else
+%             minVal = double(min(img.data(:)));
+%             maxVal = double(max(img.data(:)));
+%         end
 
+        % compute initial image histogram
+        [histo x] = histogram(img);
+        this.imageHistogram = histo;
+        this.xHistogram = x;
+        
+        minVal = double(x(1));
+        maxVal = double(x(end));
+        
         % compute slider steps
         valExtent = maxVal - minVal;
         if minVal == 0
@@ -76,27 +88,30 @@ methods
         hf = figure(...
             'Name', 'Image Threshold', ...
             'NumberTitle', 'off', ...
-            'MenuBar', 'none', 'Toolbar', 'none');
+            'MenuBar', 'none', ...
+            'Toolbar', 'none', ...
+            'CloseRequestFcn', @this.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
-        pos(3:4) = 200;
+        pos(3:4) = [200 250];
         set(hf, 'Position', pos);
         
         this.handles.figure = hf;
         
         
-        % compute background color of most widgets
-        if ispc
-            bgColor = 'White';
-        else
-            bgColor = get(0,'defaultUicontrolBackgroundColor');
-        end
+        % background color of most widgets
+        bgColor = getWidgetBackgroundColor(this.parent.gui);
         
         % vertical layout
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
+
+        % widget panel
+        mainPanel = uiextras.VBox('Parent', vb);
+
+        % one axis for displaying image histogram
+        this.handles.histogramAxis = axes('Parent', mainPanel);
         
         % one panel for value text input
-        mainPanel = uiextras.VBox('Parent', vb);
         line1 = uiextras.HBox('Parent', mainPanel, 'Padding', 5);
         uicontrol(...
             'Style', 'Text', ...
@@ -119,7 +134,6 @@ methods
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
             'Callback', @this.onSliderValueChanged);
-        set(mainPanel, 'Sizes', [35 25]);
         
         % setup listeners for slider continuous changes
         listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
@@ -134,6 +148,8 @@ methods
             'Value', 1, ...
             'Callback', @this.onSideChanged);
             
+        set(mainPanel, 'Sizes', [-1 35 25 25]);
+        
         % button for control panel
         buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
@@ -144,6 +160,18 @@ methods
             'Callback', @this.onButtonCancel);
         
         set(vb, 'Sizes', [-1 40] );
+        
+        % display full histogram and 
+        bar(this.handles.histogramAxis, x, histo, 1, 'k', ...
+            'LineStyle', 'none');
+        hold on;
+        this.handles.thresholdedHistogramBar = ...
+            bar(this.handles.histogramAxis, x, histo, 1, 'r', ...
+            'LineStyle', 'none');
+        
+        % setup histogram bounds
+        w = x(2) - x(1);
+        set(this.handles.histogramAxis, 'xlim', [minVal-w/2 maxVal+w/2]);
     end
     
     function bin = computeThresholdedImage(this)
@@ -155,23 +183,37 @@ methods
         end
 
     end
-    function closeFigure(this)
+    function closeFigure(this, varargin)
         % clean up parent figure
         this.parent.doc.previewImage = [];
         updateDisplay(this.parent);
         
         % close the current fig
-        close(this.handles.figure);
+        if ishandle(this.handles.figure)
+            delete(this.handles.figure);
+        end
     end
     
     function setThresholdValue(this, newValue)
-        this.value = max(min(round(newValue), 255), 1);
+        values = this.xHistogram;
+        this.value = max(min(round(newValue), values(end)), values(1));
     end
     
     function updateWidgets(this)
-        
+        this.value
         set(this.handles.valueEdit, 'String', num2str(this.value))
         set(this.handles.valueSlider, 'Value', this.value);
+        
+        % Update histogram preview
+        histo2 = this.imageHistogram;
+        if this.inverted
+            ind = find(this.xHistogram < this.value, 1, 'last');
+            histo2(ind+1:end) = 0;
+        else
+            ind = find(this.xHistogram > this.value, 1, 'first');
+            histo2(1:ind-1) = 0;
+        end
+        set(this.handles.thresholdedHistogramBar, 'YData', histo2);
         
         % update preview image of the document
         bin = computeThresholdedImage(this);
