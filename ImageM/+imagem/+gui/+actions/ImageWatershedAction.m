@@ -52,57 +52,63 @@ methods
     
     function hf = createWatershedFigure(this)
         
-        % action figure
+        % creates the figure
         hf = figure(...
-            'Name', 'Image Threshold', ...
+            'Name', 'Image Watershed', ...
             'NumberTitle', 'off', ...
-            'MenuBar', 'none', 'Toolbar', 'none');
+            'MenuBar', 'none', ...
+            'Toolbar', 'none', ...
+            'CloseRequestFcn', @this.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
-        pos(3:4) = 200;
+        pos(3:4) = [200 150];
         set(hf, 'Position', pos);
         
         this.handles.figure = hf;
         
-        
-        % compute background color of most widgets
-        if ispc
-            bgColor = 'White';
-        else
-            bgColor = get(0,'defaultUicontrolBackgroundColor');
-        end
+        % background color of most widgets
+        bgColor = getWidgetBackgroundColor(this.parent.gui);
         
         % vertical layout
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uiextras.VBox('Parent', vb);
         
+        line1 = uiextras.HBox('Parent', mainPanel, ...
+            'Spacing', 5, 'Padding', 5);
+        
         % popup to choose the connectivity
-        connPanel = uiextras.Panel( 'Parent', mainPanel, ...
-            'Title', 'Connectivity:', ...
-            'BorderType', 'none', ...
-            'FontWeight', 'bold', ...
-            'FontSize', 10);
+        uicontrol('Style', 'Text', ...
+            'Parent', line1, ...
+            'String', 'Connectivity:', ...
+            'FontWeight', 'Bold', ...
+            'FontSize', 10, ...
+            'HorizontalAlignment', 'Right');
         this.handles.connectivityPopup = uicontrol(...
             'Style', 'PopupMenu', ...
-            'Parent', connPanel, ...
+            'Parent', line1, ...
             'String', {'4', '8'}, ...
             'BackgroundColor', bgColor, ...
             'Value', 1, ...
             'Callback', @this.onConnectivityChanged);
+        set(line1, 'Sizes', [-1 -1]);
 
         % popup to decide the kind of result to display
-        resultPanel = uiextras.Panel( 'Parent', mainPanel, ...
-            'Title', 'Result Type:', ...
-            'BorderType', 'none', ...
-            'FontWeight', 'bold', ...
-            'FontSize', 10);
+        line2 = uiextras.HBox('Parent', mainPanel, ...
+            'Spacing', 5, 'Padding', 5);        
+        uicontrol('Style', 'Text', ...
+            'Parent', line2, ...
+            'String', 'ResultType:', ...
+            'FontWeight', 'Bold', ...
+            'FontSize', 10, ...
+            'HorizontalAlignment', 'Right');
         this.handles.resultTypePopup = uicontrol(...
             'Style', 'PopupMenu', ...
-            'Parent', resultPanel, ...
+            'Parent', line2, ...
             'String', {'Watershed', 'Basins', 'Both'}, ...
             'BackgroundColor', bgColor, ...
             'Value', 1, ...
             'Callback', @this.onResultTypeChanged);
+        set(line2, 'Sizes', [-1 -1]);
             
         % button for control panel
         buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
@@ -116,13 +122,13 @@ methods
         set(vb, 'Sizes', [-1 40] );
     end
         
-    function closeFigure(this)
+    function closeFigure(this, varargin)
         % clean up parent figure
         this.parent.doc.previewImage = [];
         updateDisplay(this.parent);
         
         % close the current fig
-        close(this.handles.figure);
+        delete(this.handles.figure);
     end
     
     function updateWidgets(this)
@@ -136,7 +142,7 @@ methods
     
 end
 
-%% GUI Items Callback
+%% Control buttons Callback
 methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
@@ -153,8 +159,11 @@ methods
     function onButtonCancel(this, varargin)
         closeFigure(this);
     end
-    
+end
 
+
+%% GUI Items Callback
+methods
     function onConnectivityChanged(this, varargin)
         index = get(this.handles.connectivityPopup, 'Value');
         this.conn = this.connValues(index);
@@ -181,12 +190,5 @@ methods
         wat = watershed(this.parent.doc.image, this.conn);
     end
 end
-
-% methods
-%     function b = isActivable(this)
-%         doc = this.parent.doc;
-%         b = ~isempty(doc) && ~isempty(doc.image) && isScalarImage(doc.image);
-%     end
-% end
 
 end

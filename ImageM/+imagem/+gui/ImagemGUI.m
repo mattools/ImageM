@@ -49,11 +49,9 @@ methods
             return;
         end
         
-        if ~isempty(image)
-            % find a 'free' name for image
-            newName = createDocumentName(this.app, image.name);
-            image.name = newName;
-        end
+        % find a 'free' name for image
+        newName = createDocumentName(this.app, image.name);
+        image.name = newName;
         
         % creates new instance of ImageDoc
         doc = imagem.app.ImagemDoc(image);
@@ -369,7 +367,7 @@ methods
         if ispc
             bgColor = 'White';
         else
-            bgColor = get(0,'defaultUicontrolBackgroundColor');
+            bgColor = get(0, 'defaultUicontrolBackgroundColor');
         end
     end
 end
