@@ -281,6 +281,8 @@ methods
         
         analyzeMenu = uimenu(hf, 'Label', 'Analyze');
         
+        ImagemGUI.addMenuItem(analyzeMenu, ...
+            AnalyzeImageParticlesAction(viewer), 'Analyze Particles');
         item = ImagemGUI.addMenuItem(analyzeMenu, ...
             ShowImageHistogramAction(viewer), 'Histogram');
         set(item, 'Accelerator', 'H');
