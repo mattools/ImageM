@@ -130,6 +130,11 @@ methods
     function updateDisplay(this)
         % Refresh image display of the current slice
 
+        % basic check up to avoid problems when display is already closed
+        if ~ishandle(this.handles.scrollPanel)
+            return;
+        end
+        
         % check up doc validity
         if isempty(this.doc) || isempty(this.doc.image)
             return;

@@ -55,20 +55,13 @@ methods
         
         % compute intensity bounds, based either on type or on image data
         img = this.parent.doc.image;
-%         if isinteger(img.data)
-%             type = class(img.data);
-%             minVal = double(intmin(type));
-%             maxVal = double(intmax(type));
-%         else
-%             minVal = double(min(img.data(:)));
-%             maxVal = double(max(img.data(:)));
-%         end
 
         % compute initial image histogram
         [histo x] = histogram(img);
         this.imageHistogram = histo;
         this.xHistogram = x;
         
+        % range of grayscale values
         minVal = double(x(1));
         maxVal = double(x(end));
         
@@ -77,8 +70,16 @@ methods
         if minVal == 0
             valExtent = valExtent + 1;
         end
-        sliderStep1 = 1 / valExtent;
-        sliderStep2 = 10 / valExtent;
+        
+        if isGrayscaleImage(img)
+            % set unit step equal to 1 grayscale unit
+            sliderStep1 = 1 / valExtent;
+            sliderStep2 = 10 / valExtent;
+        else
+            % for intensity images, use relative step
+            sliderStep1 = .01;
+            sliderStep2 = .1;
+        end
         
         % startup threshold value
         sliderValue = minVal + valExtent / 2;
@@ -196,11 +197,14 @@ methods
     
     function setThresholdValue(this, newValue)
         values = this.xHistogram;
-        this.value = max(min(round(newValue), values(end)), values(1));
+        if isGrayscaleImage(this.parent.doc.image)
+            newValue = round(newValue);
+        end
+        this.value = max(min(newValue, values(end)), values(1));
     end
     
     function updateWidgets(this)
-        this.value
+%         this.value
         set(this.handles.valueEdit, 'String', num2str(this.value))
         set(this.handles.valueSlider, 'Value', this.value);
         
