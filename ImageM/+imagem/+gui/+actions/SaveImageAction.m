@@ -55,12 +55,17 @@ methods
         end
 
 
-        % save the current image
+        % try to save the current image
         img = this.parent.doc.image;
-        write(img, fullfile(pathName, fileName));
+        try
+            write(img, fullfile(pathName, fileName));
+        catch ex
+            errordlg(ex.message, 'Image Writing Error', 'modal');
+            return;
+        end
         
-        
-    end
+    end % end actionPerformed
+    
 end % end methods
 
 end % end classdef

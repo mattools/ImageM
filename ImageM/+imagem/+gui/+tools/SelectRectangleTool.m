@@ -70,7 +70,7 @@ methods
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
         ax = this.parent.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
-        fprintf('%f %f\n', pos(1, 1:2));
+%         fprintf('%f %f\n', pos(1, 1:2));
         
         if this.state == 1
             % determines the starting point of next line
@@ -124,6 +124,17 @@ methods
         % update line display
         set(this.lineHandle, 'XData', xdata);
         set(this.lineHandle, 'YData', ydata);
+        
+        
+        % update label of info panel
+        
+        locString = sprintf('(x,y) = (%d,%d) px', round(x2), round(y2));
+        boxWidth    = abs(round(x2) - round(x1));
+        boxHeight   = abs(round(y2) - round(y1));
+        sizeString = sprintf(', size=(%d,%d) px', boxWidth, boxHeight);
+        set(this.parent.handles.infoPanel, ...
+            'string', [locString sizeString]);
+        
     end
     
     
