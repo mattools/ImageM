@@ -30,7 +30,8 @@ methods
     function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
 
         point = get(this.parent.handles.imageAxis, 'CurrentPoint');
-        coord = round(pointToIndex(this, point(1, 1:2)));
+        point = point(1, 1:2);
+        coord = round(pointToIndex(this, point));
         
         doc = this.parent.doc;
         img = doc.image;

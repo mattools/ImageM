@@ -281,8 +281,8 @@ methods
         
         analyzeMenu = uimenu(hf, 'Label', 'Analyze');
         
-%         ImagemGUI.addMenuItem(analyzeMenu, ...
-%             SetImageScaleAction(viewer), 'Set Image Scale');
+        ImagemGUI.addMenuItem(analyzeMenu, ...
+            SetImageScaleAction(viewer), 'Set Image Scale');
 
         ImagemGUI.addMenuItem(analyzeMenu, ...
             AnalyzeImageParticlesAction(viewer), 'Analyze Particles');
@@ -375,7 +375,7 @@ methods
         uicontrol('Style', 'Text', ...
             'Parent', hLine, ...
             'String', label, ...
-            'FontWeight', 'Bold', ...
+            'FontWeight', 'Normal', ...
             'FontSize', 10, ...
             'HorizontalAlignment', 'Right');
         
@@ -391,7 +391,7 @@ methods
         end
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-1 -1]);
+        set(hLine, 'Sizes', [-6 -4]);
     end
     
     function h = addComboBoxLine(this, parent, label, choices, cb)
@@ -419,7 +419,7 @@ methods
         end
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-1 -1]);
+        set(hLine, 'Sizes', [-6 -4]);
     end
     
 end
