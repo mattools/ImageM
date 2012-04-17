@@ -16,9 +16,9 @@ classdef SayHelloAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = SayHelloAction(parent, varargin)
+    function this = SayHelloAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'sayHello');
+        this = this@imagem.gui.ImagemAction(viewer, 'sayHello');
     end
 end
 

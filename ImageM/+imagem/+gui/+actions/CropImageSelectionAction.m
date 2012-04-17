@@ -1,5 +1,5 @@
 classdef CropImageSelectionAction < imagem.gui.actions.CurrentImageAction
-%RENAMEIMAGEACTION  One-line description here, please.
+%RENAMEIMAGEACTION  Crop current rectangular selection 
 %
 %   Class CropImageSelectionAction
 %
@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = CropImageSelectionAction(parent)
+    function this = CropImageSelectionAction(viewer)
     % Constructor for CropImageSelectionAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'cropImageSelection');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'cropImageSelection');
     end
 
 end % end constructors
@@ -37,7 +37,7 @@ end % end constructors
 methods
      function actionPerformed(this, src, event) %#ok<INUSD>
   
-         selection = this.parent.selection;
+         selection = this.viewer.selection;
          if isempty(selection)
              warndlg('Requires a non empty selection', ...
                  'Empty Selection', createmode);
@@ -53,10 +53,10 @@ methods
 
          box = selection.data;
          box = round(box);
-         cropped = crop(this.parent.doc.image, box);
+         cropped = crop(this.viewer.doc.image, box);
          
          % add image to application, and create new display
-         addImageDocument(this.parent.gui, cropped);
+         addImageDocument(this.viewer.gui, cropped);
          
      end
 end % end methods

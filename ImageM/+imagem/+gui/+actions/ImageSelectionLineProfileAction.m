@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageSelectionLineProfileAction(parent)
+    function this = ImageSelectionLineProfileAction(viewer)
     % Constructor for ImageSelectionLineProfileAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'selectionLineProfile');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'selectionLineProfile');
     end
 
 end % end constructors
@@ -37,7 +37,7 @@ end % end constructors
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         
-        viewer = this.parent;
+        viewer = this.viewer;
         selection = viewer.selection;
         if isempty(selection)
             return;

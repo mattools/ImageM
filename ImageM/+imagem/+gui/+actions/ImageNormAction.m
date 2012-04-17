@@ -16,9 +16,9 @@ classdef ImageNormAction < imagem.gui.actions.VectorImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageNormAction(parent, varargin)
+    function this = ImageNormAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.VectorImageAction(parent, 'imageNorm');
+        this = this@imagem.gui.actions.VectorImageAction(viewer, 'imageNorm');
     end
 end
 
@@ -26,8 +26,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Compute image norm');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % apply 'norm' operation

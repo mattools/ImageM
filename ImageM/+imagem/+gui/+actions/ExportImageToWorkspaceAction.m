@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ExportImageToWorkspaceAction(parent)
+    function this = ExportImageToWorkspaceAction(viewer)
     % Constructor for ExportImageToWorkspaceAction class
         
-        % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'exportImageToWorkspace');
+        % calls the viewer constructor
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'exportImageToWorkspace');
     end
 
 end % end constructors
@@ -50,7 +50,7 @@ methods
             return;
         end
         
-        assignin('base', answer{1}, this.parent.doc.image);
+        assignin('base', answer{1}, this.viewer.doc.image);
         
     end
 end % end methods

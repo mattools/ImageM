@@ -16,16 +16,16 @@ classdef ImagemAction < handle
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    % the parent GUI, that can be ImageDisplay, TableDisplay...
-    parent;
+    % the parent GUI, that can be ImageViewer, TableViewer...
+    viewer;
     
     % the name of this action, that should be unique for all actions
     name;
 end
 
 methods
-    function this = ImagemAction(parent, name)
-        this.parent = parent;
+    function this = ImagemAction(viewer, name)
+        this.viewer = viewer;
         this.name = name;
     end
 end

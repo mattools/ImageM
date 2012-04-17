@@ -24,9 +24,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SetImageScaleAction(parent)
+    function this = SetImageScaleAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'setImageScale');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'setImageScale');
     end
 
 end % end constructors
@@ -60,7 +60,7 @@ methods
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uiextras.VBox('Parent', vb);
         
-        gui = this.parent.gui;
+        gui = this.viewer.gui;
         this.handles.distancePixelsText = addInputTextLine(gui, mainPanel, ...
             'Distance in pixels:', '');
         this.handles.distanceUserUnitText = addInputTextLine(gui, mainPanel, ...
@@ -72,7 +72,7 @@ methods
 
 
         % calibrate from current selection
-        shape = this.parent.selection;
+        shape = this.viewer.selection;
         if ~isempty(shape) && strcmpi(shape.type, 'linesegment')
             len = edgeLength(shape.data);
             set(this.handles.distancePixelsText, 'String', num2str(len));
@@ -94,9 +94,9 @@ methods
     
     
     function closeFigure(this, varargin)
-        % clean up parent figure
-        this.parent.doc.previewImage = [];
-        updateDisplay(this.parent);
+        % clean up viewer figure
+        this.viewer.doc.previewImage = [];
+        updateDisplay(this.viewer);
         
         % close the current fig
         if ishandle(this.handles.figure)
@@ -108,9 +108,9 @@ methods
         
 %         % update preview image of the document
 %         bin = computeWatershedImage(this) == 0;
-%         doc = this.parent.doc;
+%         doc = this.viewer.doc;
 %         doc.previewImage = overlay(doc.image, bin);
-%         updateDisplay(this.parent);
+%         updateDisplay(this.viewer);
     end
 
 end % end methods
@@ -127,7 +127,7 @@ methods
         
         unit = get(this.handles.unitText, 'String');
         
-        img = this.parent.doc.image;
+        img = this.viewer.doc.image;
         
         
         disp(distPx);

@@ -18,8 +18,8 @@ classdef SplitImageChannelsAction < imagem.gui.actions.VectorImageAction
 
 %% Constructor
 methods
-    function this = SplitImageChannelsAction(parent, varargin)
-        this = this@imagem.gui.actions.VectorImageAction(parent, 'splitImageChannels');
+    function this = SplitImageChannelsAction(viewer, varargin)
+        this = this@imagem.gui.actions.VectorImageAction(viewer, 'splitImageChannels');
     end
 
 end % end constructors
@@ -30,8 +30,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Split RGB channels');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         if ~isVectorImage(doc.image)
@@ -52,7 +52,7 @@ end % end methods
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         b = ~isempty(doc) && ~isempty(doc.image) && isVectorImage(doc.image);
     end
 end

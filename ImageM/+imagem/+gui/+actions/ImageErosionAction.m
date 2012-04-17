@@ -16,9 +16,9 @@ classdef ImageErosionAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageErosionAction(parent, varargin)
+    function this = ImageErosionAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageErosion');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'imageErosion');
     end
 end
 
@@ -26,8 +26,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Compute Image erosion');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         se = ones(3, 3);

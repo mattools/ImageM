@@ -24,9 +24,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageOverlayAction(parent)
+    function this = ImageOverlayAction(viewer)
     % Constructor for ImageOverlayAction class
-        this = this@imagem.gui.ImagemAction(parent, 'imageOverlay');
+        this = this@imagem.gui.ImagemAction(viewer, 'imageOverlay');
     end
 
 end % end constructors
@@ -52,7 +52,7 @@ methods
         
         this.handles.figure = hf;
         
-        imageNames = getImageNames(this.parent.gui.app);
+        imageNames = getImageNames(this.viewer.gui.app);
         colorNames = {'Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow'};
         
         % compute background color of most widgets
@@ -119,7 +119,7 @@ methods
     
 
     function closeFigure(this)
-        % clean up parent figure
+        % clean up viewer figure
         
         % close the current fig
         close(this.handles.figure);
@@ -131,7 +131,7 @@ end
 methods
     function onButtonOK(this, varargin)        
         
-        gui = this.parent.gui;
+        gui = this.viewer.gui;
         
         doc = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
         refImg = doc.image;

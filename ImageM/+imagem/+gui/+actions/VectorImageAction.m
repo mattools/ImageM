@@ -16,16 +16,16 @@ classdef VectorImageAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = VectorImageAction(parent, varargin)
+    function this = VectorImageAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, varargin{:});
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, varargin{:});
     end
 end
 
 methods
     function b = isActivable(this)
         b = isActivable@imagem.gui.actions.CurrentImageAction(this);
-        b = b && isVectorImage(this.parent.doc.image);
+        b = b && isVectorImage(this.viewer.doc.image);
     end
 end
 

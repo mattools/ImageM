@@ -16,15 +16,15 @@ classdef CurrentImageAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = CurrentImageAction(parent, varargin)
+    function this = CurrentImageAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, varargin{:});
+        this = this@imagem.gui.ImagemAction(viewer, varargin{:});
     end
 end
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         b = ~isempty(doc) && ~isempty(doc.image);
     end
 end

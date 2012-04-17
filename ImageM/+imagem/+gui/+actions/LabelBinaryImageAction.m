@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = LabelBinaryImageAction(parent)
+    function this = LabelBinaryImageAction(viewer)
     % Constructor for LabelBinaryImageAction class
-        this = this@imagem.gui.actions.BinaryImageAction(parent, 'labelBinaryImage');
+        this = this@imagem.gui.actions.BinaryImageAction(viewer, 'labelBinaryImage');
     end
 
 end % end constructors
@@ -36,8 +36,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('apply labelling to current image');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         lbl = labeling(doc.image);

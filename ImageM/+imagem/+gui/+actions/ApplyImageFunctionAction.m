@@ -20,10 +20,10 @@ properties
 end
 
 methods
-    function this = ApplyImageFunctionAction(parent, methodName)
+    function this = ApplyImageFunctionAction(viewer, methodName)
         % calls the parent constructor
         name = ['applyImageMethod-' methodName];
-        this = this@imagem.gui.actions.CurrentImageAction(parent, name);
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, name);
         this.methodName = methodName;
     end
 end
@@ -34,8 +34,8 @@ methods
             return;
         end
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % apply the given operation

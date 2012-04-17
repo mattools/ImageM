@@ -26,9 +26,9 @@ properties
 end
 
 methods
-    function this = ImageThresholdAction(parent)
+    function this = ImageThresholdAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'thresholdImage');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'thresholdImage');
     end
 end
 
@@ -36,8 +36,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('apply Threshold to current image');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         if ~isScalarImage(doc.image)
@@ -54,7 +54,7 @@ methods
     function hf = createThresholdFigure(this)
         
         % compute intensity bounds, based either on type or on image data
-        img = this.parent.doc.image;
+        img = this.viewer.doc.image;
 
         % compute initial image histogram
         [histo x] = histogram(img);
@@ -101,7 +101,7 @@ methods
         
         
         % background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.parent.gui);
+        bgColor = getWidgetBackgroundColor(this.viewer.gui);
         
         % vertical layout
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
@@ -178,16 +178,16 @@ methods
     function bin = computeThresholdedImage(this)
         % Compute the result of threshold
         if this.inverted
-            bin = this.parent.doc.image < this.value;
+            bin = this.viewer.doc.image < this.value;
         else
-            bin = this.parent.doc.image > this.value;
+            bin = this.viewer.doc.image > this.value;
         end
 
     end
     function closeFigure(this, varargin)
-        % clean up parent figure
-        this.parent.doc.previewImage = [];
-        updateDisplay(this.parent);
+        % clean up viewer figure
+        this.viewer.doc.previewImage = [];
+        updateDisplay(this.viewer);
         
         % close the current fig
         if ishandle(this.handles.figure)
@@ -197,7 +197,7 @@ methods
     
     function setThresholdValue(this, newValue)
         values = this.xHistogram;
-        if isGrayscaleImage(this.parent.doc.image)
+        if isGrayscaleImage(this.viewer.doc.image)
             newValue = round(newValue);
         end
         this.value = max(min(newValue, values(end)), values(1));
@@ -221,9 +221,9 @@ methods
         
         % update preview image of the document
         bin = computeThresholdedImage(this);
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.parent);
+        updateDisplay(this.viewer);
     end
     
 end
@@ -233,7 +233,7 @@ methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
         bin = computeThresholdedImage(this);
-        addImageDocument(this.parent.gui, bin);
+        addImageDocument(this.viewer.gui, bin);
         closeFigure(this);
     end
     

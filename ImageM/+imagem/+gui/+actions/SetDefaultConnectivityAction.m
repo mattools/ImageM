@@ -30,11 +30,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SetDefaultConnectivityAction(parent)
+    function this = SetDefaultConnectivityAction(viewer)
     % Constructor for SetDefaultConnectivityAction class
-        this = this@imagem.gui.ImagemAction(parent, 'setDefaultConnectivity');
+        this = this@imagem.gui.ImagemAction(viewer, 'setDefaultConnectivity');
         
-        app = parent.gui.app;
+        app = viewer.gui.app;
         this.conn2d = getDefaultConnectivity(app, 2);
         this.conn3d = getDefaultConnectivity(app, 3);
     end
@@ -53,7 +53,7 @@ methods
         this.handles.figure = f;
         
         % compute background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.parent.gui);
+        bgColor = getWidgetBackgroundColor(this.viewer.gui);
         
         % vertical layout
         vb  = uiextras.VBox('Parent', f, 'Spacing', 5, 'Padding', 5);
@@ -118,7 +118,7 @@ end
 methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
-        app = this.parent.gui.app;
+        app = this.viewer.gui.app;
         setDefaultConnectivity(app, 2, this.conn2d);
         setDefaultConnectivity(app, 3, this.conn3d);
         close(this.handles.figure);

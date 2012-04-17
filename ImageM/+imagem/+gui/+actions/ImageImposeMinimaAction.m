@@ -1,5 +1,5 @@
 classdef ImageImposeMinimaAction < imagem.gui.actions.CurrentImageAction
-%IMAGEOVERLAYACTION  One-line description here, please.
+%IMAGEOVERLAYACTION Open a dialog to compute imposed minima
 %
 %   Class ImageImposeMinimaAction
 %
@@ -24,9 +24,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageImposeMinimaAction(parent)
+    function this = ImageImposeMinimaAction(viewer)
     % Constructor for ImageImposeMinimaAction class
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'imageImposeMinima');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'imageImposeMinima');
     end
 
 end % end constructors
@@ -52,7 +52,7 @@ methods
         
         this.handles.figure = hf;
         
-        imageNames = getImageNames(this.parent.gui.app);
+        imageNames = getImageNames(this.viewer.gui.app);
         
         % compute background color of most widgets
         if ispc
@@ -117,7 +117,7 @@ methods
     
 
     function closeFigure(this)
-        % clean up parent figure
+        % clean up viewer figure
         
         % close the current fig
         close(this.handles.figure);
@@ -129,7 +129,7 @@ end
 methods
     function onButtonOK(this, varargin)        
         
-        gui = this.parent.gui;
+        gui = this.viewer.gui;
         
         doc = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
         refImg = doc.image;

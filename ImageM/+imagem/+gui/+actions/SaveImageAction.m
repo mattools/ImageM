@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SaveImageAction(parent)
+    function this = SaveImageAction(viewer)
     % Constructor for SaveImageAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'saveImage');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'saveImage');
     end
 
 end % end constructors
@@ -56,7 +56,7 @@ methods
 
 
         % try to save the current image
-        img = this.parent.doc.image;
+        img = this.viewer.doc.image;
         try
             write(img, fullfile(pathName, fileName));
         catch ex

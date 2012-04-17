@@ -1,5 +1,5 @@
 classdef ImageMeanFilter3x3Action < imagem.gui.actions.CurrentImageAction
-%IMAGEMEDIANFILTER3X3  One-line description here, please.
+%IMAGEMEDIANFILTER3X3  Apply a simple filter on current image
 %
 %   Class ImageMeanFilter3x3Action
 %
@@ -18,9 +18,9 @@ classdef ImageMeanFilter3x3Action < imagem.gui.actions.CurrentImageAction
 
 %% Constructor
 methods
-    function this = ImageMeanFilter3x3Action(parent)
+    function this = ImageMeanFilter3x3Action(viewer)
     % Constructor for ImageMeanFilter3x3Action class
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'meanFilter');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'meanFilter');
     end
 
 end % end constructors
@@ -31,8 +31,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Compute Image mean filter');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         se = ones(3, 3);

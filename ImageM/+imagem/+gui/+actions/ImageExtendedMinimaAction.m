@@ -25,9 +25,9 @@ properties
 end
 
 methods
-    function this = ImageExtendedMinimaAction(parent)
+    function this = ImageExtendedMinimaAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'extendedMinima');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'extendedMinima');
     end
 end
 
@@ -35,8 +35,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('apply extended minima to current image');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         if ~isScalarImage(doc.image)
@@ -53,7 +53,7 @@ methods
     function hf = createExtendedMinimaFigure(this)
         
         % compute intensity bounds, based either on type or on image data
-        img = this.parent.doc.image;
+        img = this.viewer.doc.image;
         if isinteger(img.data)
             type = class(img.data);
             minVal = double(intmin(type));
@@ -88,7 +88,7 @@ methods
         this.handles.figure = hf;
         
         % background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.parent.gui);
+        bgColor = getWidgetBackgroundColor(this.viewer.gui);
         
         % vertical layout
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
@@ -126,7 +126,7 @@ methods
         setappdata(this.handles.valueSlider, 'sliderListeners', listener);
 
         % combo box for the connectivity
-        gui = this.parent.gui;
+        gui = this.viewer.gui;
         this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
             @this.onConnectivityChanged);
@@ -145,13 +145,13 @@ methods
     
     function bin = computeMinimaImage(this)
         % Compute the result of threshold
-        bin = extendedMinima(this.parent.doc.image, this.value, this.conn);
+        bin = extendedMinima(this.viewer.doc.image, this.value, this.conn);
     end
     
     function closeFigure(this)
-        % clean up parent figure
-        this.parent.doc.previewImage = [];
-        updateDisplay(this.parent);
+        % clean up viewer figure
+        this.viewer.doc.previewImage = [];
+        updateDisplay(this.viewer);
         
         % close the current fig
         close(this.handles.figure);
@@ -168,9 +168,9 @@ methods
         
         % update preview image of the document
         bin = computeMinimaImage(this);
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.parent);
+        updateDisplay(this.viewer);
     end
     
 end
@@ -180,7 +180,7 @@ methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
         bin = computeMinimaImage(this);
-        addImageDocument(this.parent.gui, bin);
+        addImageDocument(this.viewer.gui, bin);
         closeFigure(this);
     end
     

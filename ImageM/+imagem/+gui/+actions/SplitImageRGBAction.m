@@ -18,8 +18,8 @@ classdef SplitImageRGBAction < imagem.gui.actions.CurrentImageAction
 
 %% Constructor
 methods
-    function this = SplitImageRGBAction(parent, varargin)
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'splitImageRGB');
+    function this = SplitImageRGBAction(viewer, varargin)
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'splitImageRGB');
     end
 
 end % end constructors
@@ -30,8 +30,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Split RGB channels');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         if ~isColorImage(doc.image)
@@ -52,7 +52,7 @@ end % end methods
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         b = ~isempty(doc) && ~isempty(doc.image) && isColorImage(doc.image);
     end
 end

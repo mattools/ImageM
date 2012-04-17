@@ -19,9 +19,9 @@ properties
 end
 
 methods
-    function this = ImageRegionalMinimaAction(parent)
+    function this = ImageRegionalMinimaAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'regionalMinima');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'regionalMinima');
     end
 end
 
@@ -29,8 +29,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('apply regional minima to current image');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         img = viewer.doc.image;
         
         if ~isScalarImage(img)
@@ -43,7 +43,7 @@ methods
         conn = getDefaultConnectivity(app, ndims(img));
 
         bin = regionalMinima(img, conn);
-        addImageDocument(this.parent.gui, bin);
+        addImageDocument(this.viewer.gui, bin);
         
     end    
 end

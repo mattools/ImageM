@@ -19,9 +19,9 @@ properties
 end
 
 methods
-    function this = ImageRegionalMaximaAction(parent)
+    function this = ImageRegionalMaximaAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'regionalMaxima');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'regionalMaxima');
     end
 end
 
@@ -29,8 +29,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('apply regional maxima to current image');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         img = viewer.doc.image;
         
         if ~isScalarImage(img)
@@ -43,7 +43,7 @@ methods
         conn = getDefaultConnectivity(app, ndims(img));
         bin = regionalMaxima(img, conn);
         
-        addImageDocument(this.parent.gui, bin);
+        addImageDocument(this.viewer.gui, bin);
         
     end    
 end
@@ -51,7 +51,7 @@ end
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         b = ~isempty(doc) && ~isempty(doc.image) && isScalarImage(doc.image);
     end
 end

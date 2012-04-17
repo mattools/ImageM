@@ -16,16 +16,16 @@ classdef BinaryImageAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = BinaryImageAction(parent, varargin)
+    function this = BinaryImageAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, varargin{:});
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, varargin{:});
     end
 end
 
 methods
     function b = isActivable(this)
         b = isActivable@imagem.gui.actions.CurrentImageAction(this);
-        b = b && isBinaryImage(this.parent.doc.image);
+        b = b && isBinaryImage(this.viewer.doc.image);
     end
 end
 

@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = OpenImageAction(parent)
+    function this = OpenImageAction(viewer)
     % Constructor for OpenImageAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'openImage');
+        this = this@imagem.gui.ImagemAction(viewer, 'openImage');
     end
 
 end % end constructors
@@ -38,8 +38,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Open new Image ');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         gui = viewer.gui;
         
         [fileName, pathName] = uigetfile( ...

@@ -16,9 +16,9 @@ classdef ImageGradientVectorAction < imagem.gui.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageGradientVectorAction(parent, varargin)
+    function this = ImageGradientVectorAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'imageGradientVector');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageGradientVector');
     end
 end
 
@@ -26,15 +26,15 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Compute Image gradient vector');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % apply 'gradient' operation
-        img2 = gradient(doc.image);
+        grad = gradient(doc.image);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        addImageDocument(viewer.gui, grad);
     end
 end
 

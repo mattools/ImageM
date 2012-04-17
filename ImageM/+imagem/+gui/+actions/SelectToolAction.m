@@ -21,10 +21,10 @@ properties
 end
 
 methods
-    function this = SelectToolAction(parent, tool)
+    function this = SelectToolAction(viewer, tool)
         % calls the parent constructor
         name = ['selectTool-' tool.name];
-        this = this@imagem.gui.ImagemAction(parent, name);
+        this = this@imagem.gui.ImagemAction(viewer, name);
         this.tool = tool;
     end
 end
@@ -33,18 +33,23 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp(['select another tool: ' this.tool.name]);
         
-        this.tool.parent = this.parent;
+        viewer = this.viewer;
+        this.tool.viewer = viewer;
         
-        if ~isempty(this.parent.currentTool)
-            deselect(this.parent.currentTool);
-            removeMouseListener(this.parent, this.parent.currentTool);
+        % remove previous tool
+        currentTool = viewer.currentTool;
+        if ~isempty(currentTool)
+            deselect(currentTool);
+            removeMouseListener(viewer, currentTool);
         end
         
-        this.parent.currentTool = this.tool;
+        % choose the new tool
+        viewer.currentTool = this.tool;
         
+        % initialize new tool if not empty
         if ~isempty(this.tool)
             select(this.tool);
-            addMouseListener(this.parent, this.tool);
+            addMouseListener(viewer, this.tool);
         end
     end
 end

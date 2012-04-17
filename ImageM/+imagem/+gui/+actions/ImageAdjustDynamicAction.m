@@ -16,9 +16,9 @@ classdef ImageAdjustDynamicAction < imagem.gui.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageAdjustDynamicAction(parent, varargin)
-        % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'adjustDynamic');
+    function this = ImageAdjustDynamicAction(viewer, varargin)
+        % calls the viewer constructor
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'adjustDynamic');
     end
 end
 
@@ -26,8 +26,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Adjust image dynamic');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % apply 'norm' operation

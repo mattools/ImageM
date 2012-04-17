@@ -31,9 +31,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SetBrushSizeAction(parent)
+    function this = SetBrushSizeAction(viewer)
     % Constructor for SetBrushSizeAction class
-        this = this@imagem.gui.ImagemAction(parent, 'setBrushSize');
+        this = this@imagem.gui.ImagemAction(viewer, 'setBrushSize');
     end
 
 end % end constructors
@@ -46,7 +46,7 @@ methods
         answer = inputdlg(...
             'Enter the brush size (in pixels):', ...
             'Input Brush size', ...
-            1, {num2str(this.parent.gui.app.brushSize)});
+            1, {num2str(this.viewer.gui.app.brushSize)});
         
         if isempty(answer)
             return;
@@ -57,7 +57,7 @@ methods
             errordlg('Could not understand brush size');
         end
         
-        this.parent.gui.app.brushSize = size;
+        this.viewer.gui.app.brushSize = size;
         
     end
     

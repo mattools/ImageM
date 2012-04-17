@@ -1,5 +1,5 @@
 classdef CreateImageAction < imagem.gui.ImagemAction
-%CREATEIMAGEACTION  One-line description here, please.
+%CREATEIMAGEACTION Open a dialog to create a new image
 %
 %   Class CreateImageAction
 %
@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = CreateImageAction(parent)
+    function this = CreateImageAction(viewer)
     % Constructor for CreateImageAction class
-        this = this@imagem.gui.ImagemAction(parent, 'createImage');
+        this = this@imagem.gui.ImagemAction(viewer, 'createImage');
     end
 
 end % end constructors
@@ -73,7 +73,7 @@ methods
         img = Image.create([dimX dimY], dataType);
         img(:) = fillValue;
         
-        addImageDocument(this.parent.gui, img);
+        addImageDocument(this.viewer.gui, img);
     end
     
     

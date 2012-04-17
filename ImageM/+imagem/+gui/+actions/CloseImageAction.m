@@ -16,9 +16,9 @@ classdef CloseImageAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = CloseImageAction(parent, varargin)
+    function this = CloseImageAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'closeImage');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'closeImage');
     end
 end
 
@@ -26,7 +26,7 @@ methods
     function actionPerformed(this, varargin)
 %         disp('Close image action');
         
-        viewer = this.parent;
+        viewer = this.viewer;
         doc = viewer.doc;
         
         viewer.close();

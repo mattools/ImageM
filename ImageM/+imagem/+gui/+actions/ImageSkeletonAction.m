@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageSkeletonAction(parent)
+    function this = ImageSkeletonAction(viewer)
     % Constructor for ImageSkeletonAction class
-        this = this@imagem.gui.actions.BinaryImageAction(parent, 'imageSkeleton');
+        this = this@imagem.gui.actions.BinaryImageAction(viewer, 'imageSkeleton');
     end
 
 end % end constructors
@@ -36,8 +36,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Compute Image skeleton');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % compute Image skeleton

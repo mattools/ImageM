@@ -24,11 +24,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = OpenDemoImageAction(parent, name, imageName)
+    function this = OpenDemoImageAction(viewer, name, imageName)
     % Constructor for OpenDemoImageAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, name);
+        this = this@imagem.gui.ImagemAction(viewer, name);
         
         % initialize image name
         this.imageName = imageName;
@@ -42,8 +42,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp(['Open demo Image: ' this.imageName]);
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         gui = viewer.gui;
         
         % read the demo image

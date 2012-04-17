@@ -16,15 +16,15 @@ classdef ShowDemoFigureAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ShowDemoFigureAction(parent, varargin)
+    function this = ShowDemoFigureAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'showCameraman');
+        this = this@imagem.gui.ImagemAction(viewer, 'showCameraman');
     end
 end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        imagem.gui.ImagemImageFigure(this.parent.gui);
+        imagem.gui.ImagemImageFigure(this.viewer.gui);
     end
 end
 

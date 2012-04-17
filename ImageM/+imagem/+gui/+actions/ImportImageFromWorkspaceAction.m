@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImportImageFromWorkspaceAction(parent)
+    function this = ImportImageFromWorkspaceAction(viewer)
     % Constructor for ImportImageFromWorkspaceAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(parent, 'importImageFromWorkspace');
+        this = this@imagem.gui.ImagemAction(viewer, 'importImageFromWorkspace');
     end
 
 end % end constructors
@@ -38,8 +38,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Import image from workspace');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         gui = viewer.gui;
         
          % open dialog to input image name

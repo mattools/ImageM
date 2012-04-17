@@ -1,5 +1,5 @@
 classdef ChangeImageLutAction < imagem.gui.actions.CurrentImageAction
-%CHANGEIMAGELUTACTION  One-line description here, please.
+%CHANGEIMAGELUTACTION  Change color palette of current image document
 %
 %   output = ChangeImageLutAction(input)
 %
@@ -21,9 +21,9 @@ properties
 end
 
 methods
-    function this = ChangeImageLutAction(parent, lutName, lutValues)
+    function this = ChangeImageLutAction(viewer, lutName, lutValues)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'changeImageLut');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'changeImageLut');
         this.lutName = lutName;
         if nargin > 2
             this.lut = lutValues;
@@ -35,8 +35,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp(['Change Image LUT to ' this.lutName]);
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
 
         if strcmp(this.lutName, 'none')
@@ -52,7 +52,7 @@ methods
         doc.lutName = this.lutName;
         doc.modified = true;
         
-        updateDisplay(this.parent);
+        updateDisplay(this.viewer);
     end
     
     function lut = computeLutFromName(this)
@@ -67,7 +67,7 @@ methods
             lut(end,:) = [1 0 0];
             
         elseif strcmp(name, 'colorcube')
-            img = this.parent.doc.image;
+            img = this.viewer.doc.image;
             nLabels = max(img);
             if isfloat(nLabels)
                 nLabels = round(nLabels);
@@ -108,7 +108,7 @@ end
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         b = ~isempty(doc) && ~isempty(doc.image) && ~isColorImage(doc.image);
     end
 end

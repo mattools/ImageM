@@ -26,9 +26,9 @@ properties
 end
 
 methods
-    function this = ImageWatershedAction(parent)
+    function this = ImageWatershedAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'watershed');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'watershed');
     end
 end
 
@@ -36,8 +36,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('apply watershed to current image');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         if ~isScalarImage(doc.image)
@@ -70,7 +70,7 @@ methods
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uiextras.VBox('Parent', vb);
         
-        gui = this.parent.gui;
+        gui = this.viewer.gui;
         this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
             @this.onConnectivityChanged);
@@ -92,9 +92,9 @@ methods
     end
         
     function closeFigure(this, varargin)
-        % clean up parent figure
-        this.parent.doc.previewImage = [];
-        updateDisplay(this.parent);
+        % clean up viewer figure
+        this.viewer.doc.previewImage = [];
+        updateDisplay(this.viewer);
         
         % close the current fig
         if ishandle(this.handles.figure)
@@ -106,9 +106,9 @@ methods
         
         % update preview image of the document
         bin = computeWatershedImage(this) == 0;
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.parent);
+        updateDisplay(this.viewer);
     end
     
 end
@@ -119,10 +119,10 @@ methods
         % apply the threshold operation
         wat = computeWatershedImage(this);
         if this.computeWatershed
-            addImageDocument(this.parent.gui, wat == 0);
+            addImageDocument(this.viewer.gui, wat == 0);
         end
         if this.computeBasins
-            addImageDocument(this.parent.gui, uint16(wat));
+            addImageDocument(this.viewer.gui, uint16(wat));
         end
         closeFigure(this);
     end
@@ -158,7 +158,7 @@ methods
     end
     
     function wat = computeWatershedImage(this)
-        wat = watershed(this.parent.doc.image, this.conn);
+        wat = watershed(this.viewer.doc.image, this.conn);
     end
 end
 

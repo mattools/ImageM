@@ -16,16 +16,16 @@ classdef LabelImageAction < imagem.gui.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = LabelImageAction(parent, varargin)
+    function this = LabelImageAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, varargin{:});
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, varargin{:});
     end
 end
 
 methods
     function b = isActivable(this)
         b = isActivable@imagem.gui.actions.ScalarImageAction(this);
-        b = b && isLabelImage(this.parent.doc.image);
+        b = b && isLabelImage(this.viewer.doc.image);
     end
 end
 

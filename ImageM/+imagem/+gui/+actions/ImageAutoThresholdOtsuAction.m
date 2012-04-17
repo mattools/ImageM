@@ -16,16 +16,16 @@ classdef ImageAutoThresholdOtsuAction < imagem.gui.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageAutoThresholdOtsuAction(parent, varargin)
+    function this = ImageAutoThresholdOtsuAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'imageOtsuThreshold');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageOtsuThreshold');
     end
 end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % apply 'gradient' operation

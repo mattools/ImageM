@@ -16,9 +16,9 @@ classdef AnalyzeImageParticlesAction < imagem.gui.actions.LabelImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = AnalyzeImageParticlesAction(parent, varargin)
+    function this = AnalyzeImageParticlesAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.LabelImageAction(parent, 'analyzeImageParticles');
+        this = this@imagem.gui.actions.LabelImageAction(viewer, 'analyzeImageParticles');
     end
 end
 
@@ -26,10 +26,10 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('analyze particles');
         
-        % get handle to parent figure
+        % get handle to viewer figure
          
         % apply 'gradient' operation
-        img = this.parent.doc.image;
+        img = this.viewer.doc.image;
         
         props = regionprops(img.data', {...
             'Area', 'Perimeter', 'Centroid', ...
@@ -50,7 +50,7 @@ methods
         show(tab);
         
         ellis = [data(:, 3:4) data(:, 5:6)/2 data(:, 7)];
-        imAxis = this.parent.handles.imageAxis;
+        imAxis = this.viewer.handles.imageAxis;
         set(imAxis, 'NextPlot', 'add');
         drawEllipse(imAxis, ellis);
     end

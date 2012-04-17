@@ -16,18 +16,18 @@ classdef ImageGradientAction < imagem.gui.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageGradientAction(parent, varargin)
+    function this = ImageGradientAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(parent, 'imageGradient');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageGradient');
     end
 end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute norme of gradient');
+        disp('Compute norm of gradient');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % apply 'gradient' operation

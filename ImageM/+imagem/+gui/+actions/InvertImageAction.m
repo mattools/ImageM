@@ -16,9 +16,9 @@ classdef InvertImageAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = InvertImageAction(parent)
+    function this = InvertImageAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'invertImage');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'invertImage');
     end
 end
 
@@ -26,8 +26,8 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Inverts the image');
         
-        % get handle to parent figure, and current doc
-        viewer = this.parent;
+        % get handle to viewer figure, and current doc
+        viewer = this.viewer;
         doc = viewer.doc;
         
         % apply 'invert' operation

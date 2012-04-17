@@ -16,17 +16,17 @@ classdef ZoomOutAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ZoomOutAction(parent)
+    function this = ZoomOutAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(parent, 'zoomOut');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'zoomOut');
     end
 end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         
-        % get handle to parent figure
-        viewer = this.parent;
+        % get handle to viewer figure
+        viewer = this.viewer;
         
         % set up new zoom value
         zoom = getZoom(viewer);
