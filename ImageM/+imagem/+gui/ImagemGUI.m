@@ -221,6 +221,7 @@ methods
         ImagemGUI.addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');    
         
         ImagemGUI.addMenuItem(processMenu, ImageThresholdAction(viewer),  'Threshold...', true);
+        ImagemGUI.addMenuItem(processMenu, ImageAutoThresholdOtsuAction(viewer),  'Threshold (Otsu)');
         ImagemGUI.addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
         ImagemGUI.addMenuItem(processMenu, ImageMorphoGradientAction(viewer), ...
             'Morphological Gradient');
