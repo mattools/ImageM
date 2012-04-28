@@ -198,6 +198,7 @@ methods
         addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
 
         addMenuItem(processMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...', true);
+        addMenuItem(processMenu, ImageExtendedMaximaAction(viewer), 'Extended Maxima...');
         addMenuItem(processMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
         
         addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...', true);
