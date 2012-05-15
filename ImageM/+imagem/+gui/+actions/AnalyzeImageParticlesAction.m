@@ -26,15 +26,15 @@ methods
     function actionPerformed(this, src, event) %#ok<INUSD>
         disp('analyze particles');
         
-        % get handle to viewer figure
-         
-        % apply 'gradient' operation
+        % get current image
         img = this.viewer.doc.image;
         
+        % extract parameters
         props = regionprops(img.data', {...
             'Area', 'Perimeter', 'Centroid', ...
             'MajorAxisLength', 'MinorAxisLength', 'Orientation'});
 
+        % format to column vectors
         areas = [props.Area]';
         perim = [props.Perimeter]';
         centro = reshape([props.Centroid], 2, length(props))';
@@ -42,17 +42,25 @@ methods
         minor = [props.MinorAxisLength]';
         theta = -[props.Orientation]';
         
+        % create data table
         data = [areas perim centro major minor theta];
         tab = Table(data, 'colNames', ...
             {'Area', 'Perimeter', 'CentroidX', 'CentroidY', ...
             'MajorAxisLength', 'MinorAxisLength', 'Orientation'});
 
+        % display data table in its own window
         show(tab);
         
-        ellis = [data(:, 3:4) data(:, 5:6)/2 data(:, 7)];
-        imAxis = this.viewer.handles.imageAxis;
-        set(imAxis, 'NextPlot', 'add');
-        drawEllipse(imAxis, ellis);
+        % display overlay of ellipses
+        ellis = [centro major/2 minor/2 theta];
+        shape = struct(...
+            'type', 'ellipse', ...
+            'data', ellis, ...
+            'style', {{'-b', 'LineWidth', 1}});
+        this.viewer.doc.shapes = {shape};
+        
+        updateDisplay(this.viewer);
+
     end
 end
 

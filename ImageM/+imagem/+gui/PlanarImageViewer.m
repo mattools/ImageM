@@ -88,9 +88,10 @@ methods
                 'resizeFcn', @this.onScrollPanelResized);
           
             % creates an axis that fills the available space
-            ax = axes('parent', scrollPanel, ...
-                'units', 'normalized', ...
-                'position', [0 0 1 1]);
+            ax = axes('Parent', scrollPanel, ...
+                'Units', 'Normalized', ...
+                'NextPlot', 'add', ...
+                'Position', [0 0 1 1]);
             
             % intialize image display with default image. 
             hIm = imshow(ones(10, 10), 'parent', ax);
@@ -214,6 +215,18 @@ methods
             colormap(this.handles.imageAxis, this.doc.lut);
         end
         
+        % remove all axis children that are not image
+        children = get(this.handles.imageAxis, 'Children');
+        for i = 1:length(children)
+            child = children(i);
+            if ~strcmpi(get(child, 'type'), 'image')
+                delete(child);
+            end
+        end
+        
+        % display each shape stored in document
+        drawShapes(this);
+        
         % adjust zoom to view the full image
         api = iptgetapi(this.handles.scrollPanel);
         mag = api.findFitMag();
@@ -265,6 +278,36 @@ methods
         % display new title
         set(this.handles.figure, 'Name', titleString);
     end
+end
+
+%% Shapes and Annotation management
+methods
+        
+    function drawShapes(this)
+        shapes = this.doc.shapes;
+        for i = 1:length(shapes)
+            drawShape(this, shapes{i});
+        end
+    end
+    
+    function h = drawShape(this, shape)
+        
+        % extract current axis
+        ax =this.handles.imageAxis;
+%         axes(this.handles.imageAxis);
+        
+        switch lower(shape.type)
+            case 'polygon'
+                h = drawPolygon(ax, shape.data, shape.style{:});
+            case 'pointset'
+                h = drawPoint(ax, shape.data, shape.style{:});
+            case 'box'
+                h = drawBox(ax, shape.data, shape.style{:});
+            case 'ellipse'
+                h = drawEllipse(ax, shape.data, shape.style{:});
+        end
+    end
+
 end
 
 %% Zoom Management

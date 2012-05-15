@@ -18,17 +18,24 @@ classdef ImagemDoc < handle
 
 %% Properties
 properties
-    % the reference image
+    % the reference image (an instance of Image class)
     image;
     
     % an image used for preview when an action is running, or empty
     previewImage = [];
     
-    % look-up table used for displaying the image. if empty, no lut
+    % look-up table (colormap) used for displaying the image. 
+    % If empty -> no lut
     lut = [];
     
     % name of the current lookup table (used for display in menus)
     lutName = '';
+    
+    
+    % a set of annotations, stored as an array of
+    % structures with fields type, data, style.
+    shapes = {};
+    
     
     % a set of views attached to this doc. Can be image viewer, profiles...
     views = {};
@@ -48,14 +55,25 @@ methods
         if nargin ~= 1
             error('An image must be provided as input');
         end
+        if ~isa(img, 'Image')
+            error('Input argument must be an instance of Image class');
+        end
         
         this.image = img;
+        
+        
+%         poly = circleToPolygon([50 50 40], 120);
+%         shape = struct(...
+%             'type', 'polygon', 'data', poly, ...
+%             'style', {{'-m', 'LineWidth', 2}});
+%         
+%         this.shapes = {shape};
     end
 
 end % end constructors
 
 
-%% Methods
+%% Methods for view management
 methods
     function addView(this, v)
         this.views = [this.views {v}];
@@ -79,6 +97,36 @@ methods
     
     function v = getViews(this)
         v = this.views;
+    end
+    
+end % end methods
+
+
+%% Methods for shapes management
+
+methods
+    function addShape(this, s)
+        this.shapes = [this.shapes {s}];
+    end
+    
+    function removeShape(this, s)
+        ind = -1;
+        for i = 1:length(this.shapes)
+            if this.shapes{i} == s
+                ind = i;
+                break;
+            end
+        end
+        
+        if ind == -1
+            error('could not find the shape to remove');
+        end
+        
+        this.shapes(ind) = [];
+    end
+    
+    function s = getShapes(this)
+        s = this.shapes;
     end
     
 end % end methods
