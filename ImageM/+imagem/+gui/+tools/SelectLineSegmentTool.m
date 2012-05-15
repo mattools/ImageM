@@ -27,9 +27,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SelectLineSegmentTool(parent, varargin)
+    function this = SelectLineSegmentTool(viewer, varargin)
         % Constructor for SelectLineSegmentTool class
-        this = this@imagem.gui.ImagemTool(parent, 'selectLineSegment');
+        this = this@imagem.gui.ImagemTool(viewer, 'selectLineSegment');
     end
 
 end % end constructors
@@ -51,7 +51,7 @@ methods
             return;
         end
         
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         if isempty(ax)
             return;
         end
@@ -61,7 +61,7 @@ methods
     end
     
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         
         if isempty(this.pos1)
@@ -75,7 +75,7 @@ methods
                 'Marker', 's', 'MarkerSize', 3, ...
                 'Color', 'y', 'LineWidth', 1);
             
-            this.parent.selection = [];
+            this.viewer.selection = [];
             return;
         end
         
@@ -86,7 +86,7 @@ methods
         % create new selection object
         positions = [this.pos1 pos(1,1:2)];
         shape = struct('type', 'linesegment', 'data', positions);
-        this.parent.selection = shape;
+        this.viewer.selection = shape;
         
         this.pos1 = [];
     end
@@ -98,7 +98,7 @@ methods
         end
 
         % determine the line current end point
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % update line display

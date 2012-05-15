@@ -18,9 +18,9 @@ classdef ShowCursorPositionTool < imagem.gui.ImagemTool
 
 %% Constructor
 methods
-    function this = ShowCursorPositionTool(parent, varargin)
+    function this = ShowCursorPositionTool(viewer, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(parent, 'showCursorPosition');
+         this = this@imagem.gui.ImagemTool(viewer, 'showCursorPosition');
     end % constructor 
 
 end % construction function
@@ -29,16 +29,16 @@ end % construction function
 methods
     function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
 
-        point = get(this.parent.handles.imageAxis, 'CurrentPoint');
+        point = get(this.viewer.handles.imageAxis, 'CurrentPoint');
         point = point(1, 1:2);
         coord = round(pointToIndex(this, point));
         
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         img = doc.image;
         
         % control on bounds of image
         if any(coord < 1) || any(coord > size(img, [1 2]))
-            set(this.parent.handles.infoPanel, 'string', '');
+            set(this.viewer.handles.infoPanel, 'string', '');
             return;
         end
         
@@ -76,7 +76,7 @@ methods
             end
         end
         
-        set(this.parent.handles.infoPanel, ...
+        set(this.viewer.handles.infoPanel, ...
             'string', [locString '  ' valueString]);
     end
     
@@ -84,8 +84,8 @@ methods
         % Converts coordinates of a point in physical dimension to image index
         % First element is column index, second element is row index, both are
         % given in floating point and no rounding is performed.
-        spacing = this.parent.doc.image.spacing(1:2);
-        origin  = this.parent.doc.image.origin(1:2);
+        spacing = this.viewer.doc.image.spacing(1:2);
+        origin  = this.viewer.doc.image.origin(1:2);
         index   = (point - origin) ./ spacing + 1;
     end
     

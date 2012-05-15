@@ -27,9 +27,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SelectPolylineTool(parent, varargin)
+    function this = SelectPolylineTool(viewer, varargin)
         % Constructor for SelectPolylineTool class
-        this = this@imagem.gui.ImagemTool(parent, 'selectPolyline');
+        this = this@imagem.gui.ImagemTool(viewer, 'selectPolyline');
     end
 
 end % end constructors
@@ -51,7 +51,7 @@ methods
             return;
         end
         
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         if isempty(ax)
             return;
         end
@@ -61,15 +61,15 @@ methods
     end
     
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % check if right-clicked or double-clicked
-        type = get(this.parent.handles.figure, 'SelectionType');
+        type = get(this.viewer.handles.figure, 'SelectionType');
         if ~strcmp(type, 'normal')
             % update viewer's current selection
             shape = struct('type', 'polyline', 'data', this.positions);
-            this.parent.selection = shape;
+            this.viewer.selection = shape;
             
             this.positions = zeros(0, 2);
             return;
@@ -86,7 +86,7 @@ methods
                 'Marker', 's', 'MarkerSize', 3, ...
                 'Color', 'y', 'LineWidth', 1);
             
-            this.parent.selection = [];
+            this.viewer.selection = [];
         else
             % update graphical object
             set(this.lineHandle, 'xdata', this.positions(:,1));
@@ -103,7 +103,7 @@ methods
         end
 
         % determine the line current end point
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % update line display

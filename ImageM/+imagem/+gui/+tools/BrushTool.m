@@ -54,14 +54,14 @@ methods
    end
    
    function processCurrentPosition(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         img = doc.image;
         
         if ~isGrayscaleImage(img)
             return;
         end
         
-        point = get(this.parent.handles.imageAxis, 'CurrentPoint');
+        point = get(this.viewer.handles.imageAxis, 'CurrentPoint');
         coord = round(pointToIndex(this, point(1, 1:2)));
         
         % control on bounds of image
@@ -82,15 +82,15 @@ methods
         
         doc.modified = true;
         
-        updateDisplay(this.parent);
+        updateDisplay(this.viewer);
    end
    
    function index = pointToIndex(this, point)
        % Converts coordinates of a point in physical dimension to image index
        % First element is column index, second element is row index, both are
        % given in floating point and no rounding is performed.
-       spacing = this.parent.doc.image.spacing(1:2);
-       origin  = this.parent.doc.image.origin(1:2);
+       spacing = this.viewer.doc.image.spacing(1:2);
+       origin  = this.viewer.doc.image.origin(1:2);
        index   = (point - origin) ./ spacing + 1;
    end
    
@@ -104,10 +104,10 @@ methods
    end
    
    function drawBrush(this, coord)
-       doc  = this.parent.doc;
+       doc  = this.viewer.doc;
        
        % brush size in each direction
-       bs = this.parent.gui.app.brushSize;
+       bs = this.viewer.gui.app.brushSize;
        bs1 = floor((bs-1) / 2);
        bs2 = ceil((bs-1) / 2);
        
@@ -187,7 +187,7 @@ end % methods
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         b = ~isempty(doc) && ~isempty(doc.image) && isScalarImage(doc.image);
     end
 end

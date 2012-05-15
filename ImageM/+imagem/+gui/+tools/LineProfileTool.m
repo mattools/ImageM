@@ -30,9 +30,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = LineProfileTool(parent, varargin)
+    function this = LineProfileTool(viewer, varargin)
         % Constructor for LineProfileTool class
-        this = this@imagem.gui.ImagemTool(parent, 'lineProfile');
+        this = this@imagem.gui.ImagemTool(viewer, 'lineProfile');
         
         % setup state
         this.state = 1;
@@ -57,7 +57,7 @@ methods
             return;
         end
         
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         if isempty(ax)
             return;
         end
@@ -67,7 +67,7 @@ methods
     end
     
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         fprintf('%f %f\n', pos(1, 1:2));
         
@@ -99,7 +99,7 @@ methods
         % new figure for display
         figure;
         
-        img = this.parent.doc.image;
+        img = this.viewer.doc.image;
         
         % extract corresponding pixel values (nearest-neighbor eval)
         vals = interp(img, pts);
@@ -130,7 +130,7 @@ methods
         end
 
         % determine the line current end point
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % update line display

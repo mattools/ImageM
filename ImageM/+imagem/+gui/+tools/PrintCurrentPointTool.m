@@ -18,9 +18,9 @@ classdef PrintCurrentPointTool < imagem.gui.ImagemTool
 
 %% Constructor
 methods
-    function this = PrintCurrentPointTool(parent, varargin)
+    function this = PrintCurrentPointTool(viewer, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(parent, 'printCurrentPoint');
+         this = this@imagem.gui.ImagemTool(viewer, 'printCurrentPoint');
     end % constructor 
 
 end % construction function
@@ -34,7 +34,7 @@ methods
     end
     
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        pos = get(this.parent.handles.imageAxis, 'CurrentPoint');
+        pos = get(this.viewer.handles.imageAxis, 'CurrentPoint');
         fprintf('%f %f\n', pos(1, 1:2));
     end
     

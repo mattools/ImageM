@@ -30,9 +30,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SelectRectangleTool(parent, varargin)
+    function this = SelectRectangleTool(viewer, varargin)
         % Constructor for SelectRectangleTool class
-        this = this@imagem.gui.ImagemTool(parent, 'selectRectangle');
+        this = this@imagem.gui.ImagemTool(viewer, 'selectRectangle');
         
         % setup state
         this.state = 1;
@@ -45,7 +45,6 @@ end % end constructors
 methods
     function select(this) %#ok<*MANU>
         disp('select rectangle');
-%         this.parent.selection = [];
         this.state = 1;
     end
     
@@ -58,7 +57,7 @@ methods
             return;
         end
         
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         if isempty(ax)
             return;
         end
@@ -68,7 +67,7 @@ methods
     end
     
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
 %         fprintf('%f %f\n', pos(1, 1:2));
         
@@ -81,7 +80,7 @@ methods
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'Marker', 'none', 'color', 'y', 'linewidth', 1);
             
-            this.parent.selection = [];
+            this.viewer.selection = [];
             
             return;
         end
@@ -97,7 +96,7 @@ methods
         boxData = [min(x1,x2) max(x1,x2) min(y1,y2) max(y1,y2)];
         shape = struct('type', 'box', 'data', boxData);
         
-        this.parent.selection = shape;
+        this.viewer.selection = shape;
         
         
         % revert to first state
@@ -111,7 +110,7 @@ methods
         end
 
         % determine the line current end point
-        ax = this.parent.handles.imageAxis;
+        ax = this.viewer.handles.imageAxis;
         pos = get(ax, 'CurrentPoint');
         
         x1 = this.pos1(1, 1);
@@ -128,11 +127,11 @@ methods
         
         % update label of info panel
         
-        locString = sprintf('(x,y) = (%d,%d) px', round(x2), round(y2));
+        locString   = sprintf('(x,y) = (%d,%d) px', round(x2), round(y2));
         boxWidth    = abs(round(x2) - round(x1));
         boxHeight   = abs(round(y2) - round(y1));
-        sizeString = sprintf(', size=(%d,%d) px', boxWidth, boxHeight);
-        set(this.parent.handles.infoPanel, ...
+        sizeString  = sprintf(', size=(%d,%d) px', boxWidth, boxHeight);
+        set(this.viewer.handles.infoPanel, ...
             'string', [locString sizeString]);
         
     end

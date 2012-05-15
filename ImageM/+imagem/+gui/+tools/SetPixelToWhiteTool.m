@@ -22,9 +22,9 @@ end
 
 %% Constructor
 methods
-    function this = SetPixelToWhiteTool(parent, varargin)
+    function this = SetPixelToWhiteTool(viewer, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(parent, 'setPixelToWhite');
+         this = this@imagem.gui.ImagemTool(viewer, 'setPixelToWhite');
     end % constructor 
 
 end % construction function
@@ -48,14 +48,14 @@ methods
    end
    
    function processCurrentPosition(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         img = doc.image;
         
         if ~strcmp(img.type, 'grayscale')
             return;
         end
         
-        point = get(this.parent.handles.imageAxis, 'CurrentPoint');
+        point = get(this.viewer.handles.imageAxis, 'CurrentPoint');
         coord = round(pointToIndex(this, point(1, 1:2)));
         
         % control on bounds of image
@@ -65,15 +65,15 @@ methods
         
         doc.image(coord(1), coord(2)) = 255;
         
-        updateDisplay(this.parent);
+        updateDisplay(this.viewer);
    end
    
    function index = pointToIndex(this, point)
        % Converts coordinates of a point in physical dimension to image index
        % First element is column index, second element is row index, both are
        % given in floating point and no rounding is performed.
-       spacing = this.parent.doc.image.spacing(1:2);
-       origin  = this.parent.doc.image.origin(1:2);
+       spacing = this.viewer.doc.image.spacing(1:2);
+       origin  = this.viewer.doc.image.origin(1:2);
        index   = (point - origin) ./ spacing + 1;
    end
    

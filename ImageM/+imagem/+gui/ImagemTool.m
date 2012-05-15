@@ -20,7 +20,7 @@ classdef ImagemTool < imagem.gui.events.MouseListener
 %% Properties
 properties
     % the parent GUI, that can be ImageDisplay, TableDisplay...
-    parent;
+    viewer;
     
     % the name of this tool, that should be unique for all actions
     name;
@@ -28,9 +28,9 @@ end
 
 %% Constructor
 methods
-    function this = ImagemTool(parent, name)
-        % Creates a new tool using parent gui and a name
-        this.parent = parent;
+    function this = ImagemTool(viewer, name)
+        % Creates a new tool using parent viewer and a name
+        this.viewer = viewer;
         this.name = name;
     end % constructor 
 
@@ -58,7 +58,7 @@ end % general methods
 
 methods
     function b = isActivable(this)
-        doc = this.parent.doc;
+        doc = this.viewer.doc;
         b = ~isempty(doc) && ~isempty(doc.image);
     end
 end
