@@ -146,7 +146,35 @@ methods
         
         imageMenu = uimenu(hf, 'Label', 'Image');
         
-        lutMenu = uimenu(imageMenu, 'Label', 'LUT');
+        
+        ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 1),  'Horizontal Flip');
+        ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 2),  'Vertical Flip');
+        ImagemGUI.addMenuItem(imageMenu, RotateImage90Action(viewer, 1),  'Rotate Right');
+        ImagemGUI.addMenuItem(imageMenu, RotateImage90Action(viewer, -1),  'Rotate Left');
+
+        ImagemGUI.addMenuItem(imageMenu, SplitImageRGBAction(viewer),       'Split RGB', true);
+        ImagemGUI.addMenuItem(imageMenu, SplitImageChannelsAction(viewer),  'Split Channels');
+        item = ImagemGUI.addMenuItem(imageMenu, ...
+            InvertImageAction(viewer), 'Invert Image');
+        set(item, 'Accelerator', 'I');
+        
+        ImagemGUI.addMenuItem(imageMenu, RenameImageAction(viewer),         'Rename', true);
+        item = ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),      'Duplicate');
+        set(item, 'Accelerator', 'D');
+        ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer), 	'Crop Selection');
+        
+        
+        settingsMenu = uimenu(imageMenu, 'Label', 'Settings', 'Separator', 'on');
+        ImagemGUI.addMenuItem(settingsMenu, ...
+            SetDefaultConnectivityAction(viewer), 'Set Connectivity');
+        ImagemGUI.addMenuItem(settingsMenu, ...
+            SetBrushSizeAction(viewer), 'Set Brush Size');
+        
+        
+        % View Menu Definition
+        
+        viewMenu = uimenu(hf, 'Label', 'View');
+        lutMenu = uimenu(viewMenu, 'Label', 'LUT');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'gray'), 'Gray');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'inverted'), 'Inverted');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'blue-gray-red'), 'Blue-Gray-Red');
@@ -175,31 +203,9 @@ methods
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'cyan'), 'Cyan');
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'yellow'), 'Yellow');
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'magenta'), 'Magenta');
+
         
-        ImagemGUI.addMenuItem(imageMenu, SplitImageRGBAction(viewer),       'Split RGB');
-        ImagemGUI.addMenuItem(imageMenu, SplitImageChannelsAction(viewer),  'Split Channels');
-        ImagemGUI.addMenuItem(imageMenu, ImageOverlayAction(viewer),        'Image Overlay');
-        item = ImagemGUI.addMenuItem(imageMenu, ...
-            InvertImageAction(viewer), 'Invert Image');
-        set(item, 'Accelerator', 'I');
-        
-        ImagemGUI.addMenuItem(imageMenu, RenameImageAction(viewer),         'Rename', true);
-        item = ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),      'Duplicate');
-        set(item, 'Accelerator', 'D');
-        ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer), 	'Crop Selection');
-        
-        
-        settingsMenu = uimenu(imageMenu, 'Label', 'Settings', 'Separator', 'on');
-        ImagemGUI.addMenuItem(settingsMenu, ...
-            SetDefaultConnectivityAction(viewer), 'Set Connectivity');
-        ImagemGUI.addMenuItem(settingsMenu, ...
-            SetBrushSizeAction(viewer), 'Set Brush Size');
-        
-        
-        % View Menu Definition
-        
-        viewMenu = uimenu(hf, 'Label', 'View');
-        ImagemGUI.addMenuItem(viewMenu, ZoomInAction(viewer), 'Zoom In');
+        ImagemGUI.addMenuItem(viewMenu, ZoomInAction(viewer), 'Zoom In', true);
         ImagemGUI.addMenuItem(viewMenu, ZoomOutAction(viewer), 'Zoom Out');
         ImagemGUI.addMenuItem(viewMenu, ZoomOneAction(viewer), 'Zoom 1:1');
         ImagemGUI.addMenuItem(viewMenu, ZoomBestAction(viewer), 'Zoom Best');
@@ -249,6 +255,7 @@ methods
         ImagemGUI.addMenuItem(processMenu, LabelBinaryImageAction(viewer), ...
             'Connected Components Labeling');
         
+        ImagemGUI.addMenuItem(processMenu, ImageOverlayAction(viewer),        'Image Overlay');
         
         % Interactive tools
         
