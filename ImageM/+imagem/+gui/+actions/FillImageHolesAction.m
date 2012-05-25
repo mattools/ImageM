@@ -1,10 +1,10 @@
-classdef ImageSkeletonAction < imagem.gui.actions.BinaryImageAction
-%IMAGESKELETONACTION  Computes skeleton of a binary image
+classdef FillImageHolesAction < imagem.gui.actions.BinaryImageAction
+%FILLIMAGEHOLESACTION  Fill holes of a binary image
 %
-%   Class ImageSkeletonAction
+%   Class FillImageHolesAction
 %
 %   Example
-%   ImageSkeletonAction
+%   FillImageHolesAction
 %
 %   See also
 %
@@ -12,7 +12,7 @@ classdef ImageSkeletonAction < imagem.gui.actions.BinaryImageAction
 % ------
 % Author: David Legland
 % e-mail: david.legland@grignon.inra.fr
-% Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
+% Created: 2012-05-25,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageSkeletonAction(viewer)
-    % Constructor for ImageSkeletonAction class
-        this = this@imagem.gui.actions.BinaryImageAction(viewer, 'imageSkeleton');
+    function this = FillImageHolesAction(viewer)
+    % Constructor for FillImageHolesAction class
+        this = this@imagem.gui.actions.BinaryImageAction(viewer, 'imageFillHoles');
     end
 
 end % end constructors
@@ -34,15 +34,14 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute Image skeleton');
+        disp('fill image holes');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         doc = viewer.doc;
         
         % compute Image skeleton
-        img2 = skeleton(doc.image);
-%         img2.name = [doc.image.name '-skeleton'];
+        img2 = fillHoles(doc.image);
         
         % add image to application, and create new display
         addImageDocument(viewer.gui, img2);

@@ -246,6 +246,11 @@ methods
         
         ImagemGUI.addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...');
         
+        ImagemGUI.addMenuItem(processMenu, KillImageBordersAction(viewer), ...
+            'Kill Borders', true);
+        ImagemGUI.addMenuItem(processMenu, FillImageHolesAction(viewer), ...
+            'Fill Holes');
+
         ImagemGUI.addMenuItem(processMenu, ...
             ApplyImageFunctionAction(viewer, 'distanceMap'), ...
             'Distance Map');
@@ -255,7 +260,8 @@ methods
         ImagemGUI.addMenuItem(processMenu, LabelBinaryImageAction(viewer), ...
             'Connected Components Labeling');
         
-        ImagemGUI.addMenuItem(processMenu, ImageOverlayAction(viewer),        'Image Overlay');
+        ImagemGUI.addMenuItem(processMenu, ImageOverlayAction(viewer), ...
+            'Image Overlay', true);
         
         % Interactive tools
         
