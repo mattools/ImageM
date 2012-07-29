@@ -111,16 +111,19 @@ methods
         demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
         
         action = OpenDemoImageAction(viewer, 'openDemoCameraman', 'cameraman.tif');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Cameraman');
+        ImagemGUI.addMenuItem(demoMenu, action, 'Cameraman (grayscale)');
         
         action = OpenDemoImageAction(viewer, 'openDemoRice', 'rice.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Rice');
+        ImagemGUI.addMenuItem(demoMenu, action, 'Rice (grayscale)');
         
         action = OpenDemoImageAction(viewer, 'openDemoPeppers', 'peppers.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Peppers');
+        ImagemGUI.addMenuItem(demoMenu, action, 'Peppers (RGB)');
         
         action = OpenDemoImageAction(viewer, 'openDemoCircles', 'circles.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Circles');
+        ImagemGUI.addMenuItem(demoMenu, action, 'Circles (binary)');
+        
+        action = OpenDemoImageAction(viewer, 'openDemoText', 'text.png');
+        ImagemGUI.addMenuItem(demoMenu, action, 'Text (binary)');
         
         ImagemGUI.addMenuItem(fileMenu, ImportImageFromWorkspaceAction(viewer), 'Import From Workspace...');
         
@@ -246,21 +249,25 @@ methods
         
         ImagemGUI.addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...');
         
-        ImagemGUI.addMenuItem(processMenu, KillImageBordersAction(viewer), ...
-            'Kill Borders', true);
-        ImagemGUI.addMenuItem(processMenu, FillImageHolesAction(viewer), ...
+        
+        binaryMenu = uimenu(processMenu, 'Label', 'Binary / Labels', 'Separator', 'on');
+        ImagemGUI.addMenuItem(binaryMenu, KillImageBordersAction(viewer), ...
+            'Kill Borders');
+        ImagemGUI.addMenuItem(binaryMenu, KeepLargestRegionAction(viewer), ...
+            'Keep Largest Region');
+        ImagemGUI.addMenuItem(binaryMenu, FillImageHolesAction(viewer), ...
             'Fill Holes');
 
-        ImagemGUI.addMenuItem(processMenu, ...
+        ImagemGUI.addMenuItem(binaryMenu, ...
             ApplyImageFunctionAction(viewer, 'distanceMap'), ...
             'Distance Map');
 
-        ImagemGUI.addMenuItem(processMenu, ImageSkeletonAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, ImageSkeletonAction(viewer), ...
             'Skeleton');
-        ImagemGUI.addMenuItem(processMenu, LabelBinaryImageAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, LabelBinaryImageAction(viewer), ...
             'Connected Components Labeling');
         
-        ImagemGUI.addMenuItem(processMenu, ImageOverlayAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, ImageOverlayAction(viewer), ...
             'Image Overlay', true);
         
         % Interactive tools
