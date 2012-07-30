@@ -248,11 +248,15 @@ methods
         ImagemGUI.addMenuItem(minimaMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
         
         ImagemGUI.addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...');
+        ImagemGUI.addMenuItem(processMenu, ImageExtendedMinWatershedAction(viewer), ...
+            'Extended Min Watershed...');
         
         
         binaryMenu = uimenu(processMenu, 'Label', 'Binary / Labels', 'Separator', 'on');
         ImagemGUI.addMenuItem(binaryMenu, KillImageBordersAction(viewer), ...
             'Kill Borders');
+        ImagemGUI.addMenuItem(binaryMenu, ImageAreaOpeningAction(viewer), ...
+            'Area Opening');
         ImagemGUI.addMenuItem(binaryMenu, KeepLargestRegionAction(viewer), ...
             'Keep Largest Region');
         ImagemGUI.addMenuItem(binaryMenu, FillImageHolesAction(viewer), ...
@@ -318,9 +322,6 @@ methods
             ShowImageHistogramAction(viewer), 'Histogram');
         set(item, 'Accelerator', 'H');
 
-%         ImagemGUI.addMenuItem(analyzeMenu, ...
-%             SelectToolAction(viewer, LineProfileTool(viewer)), ...
-%             'Plot Line Profile');
         item = ImagemGUI.addMenuItem(analyzeMenu, ...
             ImageSelectionLineProfileAction(viewer), ...
             'Plot Line Profile');
@@ -394,13 +395,13 @@ methods (Static)
 end
 
 methods
-    function h = addInputTextLine(this, parent, label, text, cb)
+    function [h ht] = addInputTextLine(this, parent, label, text, cb)
         
         hLine = uiextras.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
-        uicontrol('Style', 'Text', ...
+        ht = uicontrol('Style', 'Text', ...
             'Parent', hLine, ...
             'String', label, ...
             'FontWeight', 'Normal', ...
@@ -419,16 +420,16 @@ methods
         end
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-6 -4]);
+        set(hLine, 'Sizes', [-5 -5]);
     end
     
-    function h = addComboBoxLine(this, parent, label, choices, cb)
+    function [h ht] = addComboBoxLine(this, parent, label, choices, cb)
         
         hLine = uiextras.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
-        uicontrol('Style', 'Text', ...
+        ht = uicontrol('Style', 'Text', ...
             'Parent', hLine, ...
             'String', label, ...
             'FontWeight', 'Normal', ...
@@ -447,7 +448,7 @@ methods
         end
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-6 -4]);
+        set(hLine, 'Sizes', [-5 -5]);
     end
     
 end

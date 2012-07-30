@@ -204,7 +204,8 @@ methods
     end
     
     function updateWidgets(this)
-%         this.value
+
+        % update widget values
         set(this.handles.valueEdit, 'String', num2str(this.value))
         set(this.handles.valueSlider, 'Value', this.value);
         
