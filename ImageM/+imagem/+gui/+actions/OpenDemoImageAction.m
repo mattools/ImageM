@@ -40,8 +40,6 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp(['Open demo Image: ' this.imageName]);
-        
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         gui = viewer.gui;
@@ -50,7 +48,13 @@ methods
         img = Image.read(this.imageName);
         
         % add image to application, and create new display
-        addImageDocument(gui, img);
+        doc = addImageDocument(gui, img);
+        
+        tag = doc.tag;
+                
+        % history
+        string = sprintf('%s = Image.read(''%s'');\n', tag, this.imageName);
+        addToHistory(gui, string);        
     end
 end % end methods
 

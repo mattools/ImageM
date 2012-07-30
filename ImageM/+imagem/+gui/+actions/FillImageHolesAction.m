@@ -34,8 +34,7 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('fill image holes');
-        
+       
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         doc = viewer.doc;
@@ -44,7 +43,13 @@ methods
         img2 = fillHoles(doc.image);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+        
+        % add history
+        string = sprintf('%s = fillHoles(%s, %d);\n', ...
+             newDoc.tag, this.viewer.doc.tag, ...
+             getDefaultConnectivity(viewer.gui.app, ndims(img2)));
+        addToHistory(viewer.gui, string);
     end
 end % end methods
 

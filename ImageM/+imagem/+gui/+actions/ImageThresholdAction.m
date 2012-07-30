@@ -34,8 +34,6 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply Threshold to current image');
-        
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         doc = viewer.doc;
@@ -234,7 +232,22 @@ methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
         bin = computeThresholdedImage(this);
-        addImageDocument(this.viewer.gui, bin);
+        newDoc = addImageDocument(this.viewer.gui, bin);
+        
+        % compute all string patterns used for history
+        tag = this.viewer.doc.tag;
+        newTag = newDoc.tag;
+        if this.inverted
+            op = '<';
+        else
+            op = '>';
+        end
+        val = num2str(this.value);
+        
+        % history
+        string = sprintf('%s = %s %s %s;\n', newTag, tag, op, val);
+        addToHistory(this.viewer.gui, string);
+        
         closeFigure(this);
     end
     

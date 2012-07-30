@@ -24,19 +24,23 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute Image dilation');
+        % apply 'gradient' operation
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         doc = viewer.doc;
         
+        % compute dilation
         se = ones(3, 3);
-        
-        % apply 'gradient' operation
         img2 = dilation(doc.image, se);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+        
+        % add history
+        string = sprintf('%s = dilation(%s, ones(3,3));\n', ...
+            newDoc.tag, doc.tag);
+        addToHistory(this.viewer.gui, string);
     end
 end
 

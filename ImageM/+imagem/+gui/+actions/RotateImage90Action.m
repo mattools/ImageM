@@ -38,7 +38,6 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('rotate image');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -48,7 +47,12 @@ methods
         res = rotate90(doc.image, this.number);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, res);
+        newDoc = addImageDocument(viewer.gui, res);
+        
+        % history
+        string = sprintf('%s = rotate90(%s, %d);\n', ...
+            newDoc.tag, doc.tag, this.number);
+        addToHistory(this.viewer.gui, string);
     end
 end
 

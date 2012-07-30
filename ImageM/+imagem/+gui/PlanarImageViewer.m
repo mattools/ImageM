@@ -379,9 +379,14 @@ end
 %% Figure management
 methods
     function close(this, varargin)
-        disp('Close image viewer');
+%         disp('Close image viewer');
         if ~isempty(this.doc)
-            removeView(this.doc, this);
+            try
+                removeView(this.doc, this);
+            catch ME %#ok<NASGU>
+                warning('PlanarImageViewer:close', ...
+                    'Current view is not referenced in document...');
+            end
         end
         delete(this.handles.figure);
     end

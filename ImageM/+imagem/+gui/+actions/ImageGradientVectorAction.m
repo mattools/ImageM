@@ -24,8 +24,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute Image gradient vector');
-        
+
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         doc = viewer.doc;
@@ -34,7 +33,11 @@ methods
         grad = gradient(doc.image);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, grad);
+        newDoc = addImageDocument(viewer.gui, grad);
+        
+        % add history
+        string = sprintf('%s = gradient(%s);\n', newDoc.tag, doc.tag);
+        addToHistory(viewer.gui, string);
     end
 end
 

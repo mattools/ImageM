@@ -40,7 +40,7 @@ end % construction function
 
 %% General methods
 methods
-    function addImageDocument(this, image)
+    function [doc viewer] = addImageDocument(this, image, newName, refTag)
         % Create a new document from image, add it to app, and display img
         
         if isempty(image)
@@ -49,12 +49,24 @@ methods
             return;
         end
         
-        % find a 'free' name for image
-        newName = createDocumentName(this.app, image.name);
+        if nargin < 3 || isempty(newName)
+            % find a 'free' name for image
+            newName = createDocumentName(this.app, image.name);
+        end
         image.name = newName;
         
         % creates new instance of ImageDoc
         doc = imagem.app.ImagemDoc(image);
+        
+        % setup document tag
+        if nargin < 4
+            tag = createImageTag(this.app, image);
+        else
+            tag = createImageTag(this.app, image, refTag);
+        end
+        doc.tag = tag;
+        
+        % display settings
         if ~isempty(image)
             if isLabelImage(image)
                 doc.lut = 'jet';
@@ -65,9 +77,13 @@ methods
         addDocument(this.app, doc);
         
         % creates a display for the new image
-        view = imagem.gui.PlanarImageViewer(this, doc);
-        addView(doc, view);
-        
+        viewer = imagem.gui.PlanarImageViewer(this, doc);
+        addView(doc, viewer);
+    end
+    
+    function addToHistory(this, string) %#ok<MANU>
+        % Add the specified string to gui history
+        fprintf(string);
     end
     
     function exit(this)
@@ -81,7 +97,7 @@ methods
             views = getViews(doc);
             for v = 1:length(views)
                 view = views{v};
-                %removeView(doc, view);
+                removeView(doc, view);
                 close(view);
             end
         

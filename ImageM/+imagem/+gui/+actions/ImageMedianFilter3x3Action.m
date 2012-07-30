@@ -41,7 +41,12 @@ methods
         img2 = medianFilter(doc.image, se);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+
+        % add history
+        string = sprintf('%s = medianFilter(%s, ones(3,3));\n', ...
+            newDoc.tag, doc.tag);
+        addToHistory(this.viewer.gui, string);
     end
 end % end methods
 

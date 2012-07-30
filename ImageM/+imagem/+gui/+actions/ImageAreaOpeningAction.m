@@ -35,7 +35,6 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply area opening to current image');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -170,7 +169,19 @@ methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
         res = computeResultImage(this);
-        addImageDocument(this.viewer.gui, res);
+        newDoc = addImageDocument(this.viewer.gui, res);
+            
+        % add history
+        strValue = num2str(this.minAreaValue);
+        if isLabelImage(this.viewer.doc.image)
+            string = sprintf('%s = areaOpening(%s, %s);\n', ...
+                newDoc.tag, this.viewer.doc.tag, strValue);
+        elseif isBinaryImage(this.viewer.doc.image)
+            string = sprintf('%s = areaOpening(%s, %s, %d);\n', ...
+                newDoc.tag, this.viewer.doc.tag, strValue, this.conn);
+        end
+        addToHistory(this.viewer.gui, string);
+        
         closeFigure(this);
     end
     

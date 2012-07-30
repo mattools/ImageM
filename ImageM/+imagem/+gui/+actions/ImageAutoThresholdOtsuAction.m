@@ -32,7 +32,12 @@ methods
         bin = otsuThreshold(doc.image);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, bin);
+        newDoc = addImageDocument(viewer.gui, bin);
+        
+        % add history
+        string = sprintf('%s = otsuThreshold(%s);\n', newDoc.tag, doc.tag);
+        addToHistory(viewer.gui, string);
+
     end
 end
 

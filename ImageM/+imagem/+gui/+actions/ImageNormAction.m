@@ -24,7 +24,6 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute image norm');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -34,7 +33,12 @@ methods
         img2 = norm(doc.image);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+
+        % add history
+        string = sprintf('%s = norm(%s);\n', newDoc.tag, doc.tag);
+        addToHistory(viewer.gui, string);
+
     end
 end
 

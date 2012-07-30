@@ -24,7 +24,6 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute norm of gradient');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -34,7 +33,11 @@ methods
         gradn = norm(gradient(doc.image));
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, gradn);
+        newDoc = addImageDocument(viewer.gui, gradn);
+        
+        % add history
+        string = sprintf('%s = norm(gradient(%s));\n', newDoc.tag, doc.tag);
+        addToHistory(viewer.gui, string);
     end
 end
 

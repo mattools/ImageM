@@ -33,8 +33,6 @@ end % end constructors
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('binary overlay');
-        
         createFigure(this);
     end
     
@@ -53,7 +51,7 @@ methods
         this.handles.figure = hf;
         
         imageNames = getImageNames(this.viewer.gui.app);
-        colorNames = {'Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow'};
+        colorNames = {'Red', 'Green', 'Blue', 'Yellow', 'Magenta', 'Cyan'};
         
         % compute background color of most widgets
         if ispc
@@ -133,11 +131,11 @@ methods
         
         gui = this.viewer.gui;
         
-        doc = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
-        refImg = doc.image;
+        refDoc = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
+        refImg = refDoc.image;
 
-        doc = getDocument(gui.app, get(this.handles.imageList2, 'Value'));
-        binImg = doc.image;
+        binDoc = getDocument(gui.app, get(this.handles.imageList2, 'Value'));
+        binImg = binDoc.image;
         
         % check inputs
         if ~isBinaryImage(binImg)
@@ -151,13 +149,21 @@ methods
         end
         
         colors = [1 0 0;0 1 0;0 0 1;1 1 0;1 0 1;0 1 1];
-        color = colors(get(this.handles.colorList, 'Value'), :);
+        colorCodes = {'r', 'g', 'b', 'y', 'm', 'c'};
+        
+        indColor = get(this.handles.colorList, 'Value');
+        color = colors(indColor, :);
         
         ovr = overlay(refImg, binImg, color);
         
         % add image to application, and create new display
-        addImageDocument(gui, ovr);
+        newDoc = addImageDocument(gui, ovr, [], 'ovr');
         
+        % add history
+        string = sprintf('%s = overlay(%s, %s, ''%c'');\n', ...
+            newDoc.tag, refDoc.tag, binDoc.tag, colorCodes{indColor});
+        addToHistory(this.viewer.gui, string);
+
         closeFigure(this);
     end
     

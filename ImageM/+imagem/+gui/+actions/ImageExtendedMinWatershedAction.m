@@ -180,11 +180,17 @@ methods
         % apply the threshold operation
         wat = computeWatershedImage(this);
         if this.computeWatershed
-            addImageDocument(this.viewer.gui, wat == 0);
+            newDoc = addImageDocument(this.viewer.gui, wat == 0);
         end
         if this.computeBasins
-            addImageDocument(this.viewer.gui, uint16(wat));
+            newDoc = addImageDocument(this.viewer.gui, uint16(wat));
         end
+        
+        % add history
+        string = sprintf('%s = watershed(%s, ''dynamic'', %f, ''conn'', %d));\n', ...
+            newDoc.tag, refDoc.tag, this.extendedMinimaValue, this.conn);
+        addToHistory(viewer.gui, string);
+        
         closeFigure(this);
     end
     

@@ -43,11 +43,16 @@ methods
         
         % depending on result type, should do different processes
         if isa(res, 'Image')
-            addImageDocument(viewer.gui, res);
+            newDoc = addImageDocument(viewer.gui, res);
         else
             error('Image expected');
         end
         
+        % add history
+        string = sprintf('%s = %s(%s);\n', ...
+            newDoc.tag, this.methodName, doc.tag);
+        addToHistory(this.viewer.gui, string);
+
     end
 end
 

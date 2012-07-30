@@ -33,7 +33,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply extended maxima to current image');
+        % apply extended maxima to current image
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -176,8 +176,13 @@ methods
         updateDisplay(this.viewer);
 
         bin = computeMaximaImage(this);
-        addImageDocument(this.viewer.gui, bin);
+        newDoc = addImageDocument(this.viewer.gui, bin, [], 'emax');
         
+        % add history
+        string = sprintf('%s = extendedMaxima(%s, %f, %d);\n', ...
+            newDoc.tag, this.viewer.doc.tag, this.value, this.conn);
+        addToHistory(this.viewer.gui, string);
+
         closeFigure(this);
     end
     

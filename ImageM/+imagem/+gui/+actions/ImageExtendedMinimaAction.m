@@ -33,7 +33,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply extended minima to current image');
+        % apply extended minima to current image
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -180,7 +180,13 @@ methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
         bin = computeMinimaImage(this);
-        addImageDocument(this.viewer.gui, bin);
+        newDoc = addImageDocument(this.viewer.gui, bin, [], 'emin');
+        
+        % add history
+        string = sprintf('%s = extendedMinima(%s, %f, %d);\n', ...
+            newDoc.tag, this.viewer.doc.tag, this.value, this.conn);
+        addToHistory(this.viewer.gui, string);
+
         closeFigure(this);
     end
     

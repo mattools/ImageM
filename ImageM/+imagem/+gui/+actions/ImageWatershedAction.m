@@ -34,7 +34,6 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply watershed to current image');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -119,11 +118,17 @@ methods
         % apply the threshold operation
         wat = computeWatershedImage(this);
         if this.computeWatershed
-            addImageDocument(this.viewer.gui, wat == 0);
+            newDoc = addImageDocument(this.viewer.gui, wat == 0);
         end
         if this.computeBasins
-            addImageDocument(this.viewer.gui, uint16(wat));
+            newDoc = addImageDocument(this.viewer.gui, uint16(wat));
         end
+        
+        % add history
+        string = sprintf('%s = watershed(%s, %d);\n', ...
+            newDoc.tag, this.viewer.doc.tag, this.conn);
+        addToHistory(this.viewer.gui, string);
+
         closeFigure(this);
     end
     

@@ -34,7 +34,6 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply labelling to current image');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -42,7 +41,11 @@ methods
         
         lbl = labeling(doc.image);
         
-        addImageDocument(viewer.gui, lbl);
+        newDoc = addImageDocument(viewer.gui, lbl);
+        
+        % history
+        string = sprintf('%s = labeling(%s);\n', newDoc.tag, doc.tag);
+        addToHistory(this.viewer.gui, string);
     end
     
 end % end methods

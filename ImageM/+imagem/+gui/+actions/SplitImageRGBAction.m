@@ -28,7 +28,6 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Split RGB channels');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -43,9 +42,14 @@ methods
         [red green blue] = splitChannels(doc.image);
         
         % add new images to application, and create new displays
-        addImageDocument(viewer.gui, red);
-        addImageDocument(viewer.gui, green);
-        addImageDocument(viewer.gui, blue);
+        docR = addImageDocument(viewer.gui, red, [], 'red');
+        docG = addImageDocument(viewer.gui, green, [], 'green');
+        docB = addImageDocument(viewer.gui, blue, [], 'blue');
+        
+        % add history
+        string = sprintf('[%s %s %s] = splitChannels(%s);\n', ...
+            docR.tag, docG.tag, docB.tag, doc.tag);
+        addToHistory(viewer.gui, string);
         
     end
 end % end methods

@@ -36,7 +36,7 @@ end % end constructors
 %% Methods
 methods
      function actionPerformed(this, src, event) %#ok<INUSD>
-  
+         
          selection = this.viewer.selection;
          if isempty(selection)
              warndlg('Requires a non empty selection', ...
@@ -50,13 +50,22 @@ methods
                  'Invalid Selection', createmode);
              return;
          end
-
+         
          box = selection.data;
          box = round(box);
          cropped = crop(this.viewer.doc.image, box);
          
          % add image to application, and create new display
-         addImageDocument(this.viewer.gui, cropped);
+         newDoc = addImageDocument(this.viewer.gui, cropped);
+         
+         tag = this.viewer.doc.tag;
+         newTag = newDoc.tag;
+         
+         % history
+         nd = ndims(this.viewer.doc.image);
+         pattern = ['%s = crop(%s, [' repmat(' %d %d', 1, nd) ']);\n'];
+         string = sprintf(pattern, newTag, tag, box);
+         addToHistory(this.viewer.gui, string);
          
      end
 end % end methods

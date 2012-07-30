@@ -38,8 +38,7 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('flip image');
-        
+         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         doc = viewer.doc;
@@ -48,7 +47,12 @@ methods
         res = flip(doc.image, this.axis);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, res);
+        newDoc = addImageDocument(viewer.gui, res);
+        
+        % add history
+        string = sprintf('%s = flip(%s, %d);\n', ...
+             newDoc.tag, this.viewer.doc.tag, this.axis);
+        addToHistory(viewer.gui, string);
     end
 end
 

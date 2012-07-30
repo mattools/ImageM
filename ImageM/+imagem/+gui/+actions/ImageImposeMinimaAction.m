@@ -131,11 +131,11 @@ methods
         
         gui = this.viewer.gui;
         
-        doc = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
-        refImg = doc.image;
+        refDoc = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
+        refImg = refDoc.image;
 
-        doc = getDocument(gui.app, get(this.handles.imageList2, 'Value'));
-        binImg = doc.image;
+        binDoc = getDocument(gui.app, get(this.handles.imageList2, 'Value'));
+        binImg = binDoc.image;
         
         % check inputs
         if ~isBinaryImage(binImg)
@@ -159,8 +159,13 @@ methods
         imp = imposeMinima(refImg, binImg, conn);
         
         % add image to application, and create new display
-        addImageDocument(gui, imp);
+        newDoc = addImageDocument(gui, imp);
         
+        % add history
+        string = sprintf('%s = imposeMinima(%s, %s, %d));\n', ...
+            newDoc.tag, refDoc.tag, binDoc.tag, conn);
+        addToHistory(gui, string);
+
         closeFigure(this);
     end
     

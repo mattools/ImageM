@@ -21,6 +21,9 @@ properties
     % the reference image (an instance of Image class)
     image;
     
+    % the name used to identify image on command-line arguments
+    tag;
+    
     % an image used for preview when an action is running, or empty
     previewImage = [];
     

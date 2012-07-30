@@ -27,7 +27,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('apply regional maxima to current image');
+        % apply regional maxima to current image
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -43,8 +43,13 @@ methods
         conn = getDefaultConnectivity(app, ndims(img));
         bin = regionalMaxima(img, conn);
         
-        addImageDocument(this.viewer.gui, bin);
+        newDoc = addImageDocument(this.viewer.gui, bin, [], 'rmax');
         
+        % add history
+        string = sprintf('%s = regionalMaxima(%s, %d);\n', ...
+            newDoc.tag, this.viewer.doc.tag, conn);
+        addToHistory(this.viewer.gui, string);
+
     end    
 end
 

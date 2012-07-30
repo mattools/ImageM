@@ -24,7 +24,6 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Inverts the image');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -34,7 +33,12 @@ methods
         img2 = invert(doc.image);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+        
+        % history
+        string = sprintf('%s = invert(%s);\n', newDoc.tag, doc.tag);
+        addToHistory(this.viewer.gui, string);
+
     end
 end
 

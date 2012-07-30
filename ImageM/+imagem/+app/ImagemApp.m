@@ -170,7 +170,58 @@ methods
             end
         end
     end
-     
+    
+    function newTag = createImageTag(this, image, baseName)
+        % finds a name that can be used as tag for this image
+
+        % If no tag is specified, choose a base name that describe image
+        % type
+        if nargin < 3 || isempty(baseName)
+            % try to use a more specific tag depending on image type
+            if isBinaryImage(image)
+                baseName = 'bin';
+            elseif isLabelImage(image)
+                baseName = 'lbl';
+            else
+                % default tag for any type of image
+                baseName = 'img';
+            end
+        end
+               
+        % if the name is free, no problem
+        if isFreeTag(this, baseName)
+            newTag = baseName;
+            return;
+        end
+        
+        % iterate on indices until we find a free tag
+        index = 1;
+        while true
+            newTag = [baseName num2str(index)];
+            if isFreeTag(this, newTag)
+                return;
+            end
+            index = index + 1;
+        end
+    end
+    
+    function b = isFreeTag(this, tag)
+        % returns true if the app contains a doc/image with the given tag
+        
+        b = true;
+        for i = 1:length(this.docList)
+            doc = this.docList{i};
+            if isempty(doc.image)
+                continue;
+            end
+            
+            if strcmp(doc.tag, tag)
+                b = false;
+                return;
+            end
+        end
+    end
+
 end
 
 %% Method for local settings

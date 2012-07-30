@@ -34,7 +34,6 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute Image skeleton');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -42,10 +41,14 @@ methods
         
         % compute Image skeleton
         img2 = skeleton(doc.image);
-%         img2.name = [doc.image.name '-skeleton'];
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+
+        % history
+        string = sprintf('%s = skeleton(%s);\n', newDoc.tag, doc.tag);
+        addToHistory(this.viewer.gui, string);
+
     end
 end % end methods
 

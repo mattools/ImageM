@@ -34,7 +34,6 @@ end % end constructors
 %% Methods
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('keep largest region');
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -44,7 +43,11 @@ methods
         img2 = largestRegion(doc.image);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+        
+        % history
+        string = sprintf('%s = largestRegion(%s);\n', newDoc.tag, doc.tag);
+        addToHistory(this.viewer.gui, string);
     end
 end % end methods
 

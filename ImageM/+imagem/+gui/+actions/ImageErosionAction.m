@@ -24,7 +24,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        disp('Compute Image erosion');
+        % Compute Image erosion
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
@@ -32,11 +32,16 @@ methods
         
         se = ones(3, 3);
         
-        % apply 'gradient' operation
+        % compute result image
         img2 = erosion(doc.image, se);
         
         % add image to application, and create new display
-        addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.gui, img2);
+        
+        % add history
+        string = sprintf('%s = erosion(%s, ones(3,3));\n', ...
+            newDoc.tag, doc.tag);
+        addToHistory(this.viewer.gui, string);
     end
 end
 
