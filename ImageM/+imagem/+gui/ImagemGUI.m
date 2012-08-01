@@ -132,6 +132,9 @@ methods
         action = OpenDemoImageAction(viewer, 'openDemoRice', 'rice.png');
         ImagemGUI.addMenuItem(demoMenu, action, 'Rice (grayscale)');
         
+        action = OpenDemoImageAction(viewer, 'openDemoCoins', 'coins.png');
+        ImagemGUI.addMenuItem(demoMenu, action, 'Coins (grayscale)');
+        
         action = OpenDemoImageAction(viewer, 'openDemoPeppers', 'peppers.png');
         ImagemGUI.addMenuItem(demoMenu, action, 'Peppers (RGB)');
         
@@ -238,8 +241,10 @@ methods
         
         processMenu = uimenu(hf, 'Label', 'Process');
         
-        ImagemGUI.addMenuItem(processMenu, ImageAdjustDynamicAction(viewer),  'Adjust Dynamic');
-        ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),  'Mean', true);
+        ImagemGUI.addMenuItem(processMenu, ImageAdjustDynamicAction(viewer),    'Adjust Dynamic');
+        ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(viewer),       'Label To RGB...');
+
+        ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
         ImagemGUI.addMenuItem(processMenu, ImageMedianFilter3x3Action(viewer),  'Median');
                 
         morphoMenu = uimenu(processMenu, 'Label', 'Morphology');
@@ -248,9 +253,12 @@ methods
         ImagemGUI.addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening');
         ImagemGUI.addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');    
         
-        ImagemGUI.addMenuItem(processMenu, ImageThresholdAction(viewer),  'Threshold...', true);
+        item = ImagemGUI.addMenuItem(processMenu, ImageThresholdAction(viewer),  ...
+            'Threshold...', true);
+        set(item, 'Accelerator', 'T');
         ImagemGUI.addMenuItem(processMenu, ImageAutoThresholdOtsuAction(viewer),  'Threshold (Otsu)');
-        ImagemGUI.addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
+        item = ImagemGUI.addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
+        set(item, 'Accelerator', 'G');
         ImagemGUI.addMenuItem(processMenu, ImageMorphoGradientAction(viewer), ...
             'Morphological Gradient');
         ImagemGUI.addMenuItem(processMenu, ImageGradientVectorAction(viewer),   'Gradient Vector');
@@ -467,6 +475,25 @@ methods
         set(hLine, 'Sizes', [-5 -5]);
     end
     
+    function h = addCheckBox(this, parent, label, state, cb) %#ok<MANU>
+        
+        hLine = uiextras.HBox('Parent', parent, ...
+            'Spacing', 5, 'Padding', 5);
+        
+        % default value if not specified
+        if nargin < 4 || isempty(state)
+            state = false;
+        end
+        
+        % creates the new widget
+        h = uicontrol('Style', 'CheckBox', ...
+            'Parent', hLine, ...
+            'String', label, ...
+            'Value', state);
+        if nargin > 4
+            set(h, 'Callback', cb);
+        end
+    end
 end
 
 

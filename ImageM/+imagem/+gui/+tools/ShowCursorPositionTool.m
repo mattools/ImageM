@@ -62,7 +62,7 @@ methods
             
         elseif strcmp(img.type, 'vector')
             % case of vector image: compute norm of the pixel
-            values  = this.parent.doc.image(coord(1), coord(2), :);
+            values  = this.viewer.doc.image(coord(1), coord(2), :);
             norm    = sqrt(sum(double(values(:)) .^ 2));
             valueString = sprintf('  value = %g', norm);
             
