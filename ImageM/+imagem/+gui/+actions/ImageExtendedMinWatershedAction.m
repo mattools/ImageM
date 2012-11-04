@@ -78,8 +78,9 @@ methods
             sliderStep2 = .1;
         end
         
-        % startup threshold value
-        sliderValue = minVal + valExtent / 2;
+        % startup dynamic value
+        sliderValue = valExtent / 2;
+        
 
         % background color of most widgets
         bgColor = getWidgetBackgroundColor(this.viewer.gui);
@@ -113,7 +114,7 @@ methods
         this.handles.valueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
-            'Min', minVal, 'Max', maxVal, ...
+            'Min', 1, 'Max', valExtent, ...
             'Value', sliderValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
@@ -178,7 +179,9 @@ end
 methods
     function onButtonOK(this, varargin)        
         % apply the threshold operation
+        
         wat = computeWatershedImage(this);
+        refDoc = this.viewer.doc;
         if this.computeWatershed
             newDoc = addImageDocument(this.viewer.gui, wat == 0);
         end
@@ -189,7 +192,7 @@ methods
         % add history
         string = sprintf('%s = watershed(%s, ''dynamic'', %f, ''conn'', %d));\n', ...
             newDoc.tag, refDoc.tag, this.extendedMinimaValue, this.conn);
-        addToHistory(viewer.gui, string);
+        addToHistory(this.viewer.gui, string);
         
         closeFigure(this);
     end
