@@ -65,11 +65,11 @@ methods
         
         % compute slider steps
         valExtent = maxVal - minVal;
-        if minVal == 0
-            valExtent = valExtent + 1;
-        end
         
         if isGrayscaleImage(img)
+            if minVal == 0
+                valExtent = valExtent + 1;
+            end
             % set unit step equal to 1 grayscale unit
             sliderStep1 = 1 / valExtent;
             sliderStep2 = 10 / valExtent;
