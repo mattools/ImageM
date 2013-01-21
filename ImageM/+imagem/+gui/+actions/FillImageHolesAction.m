@@ -1,4 +1,4 @@
-classdef FillImageHolesAction < imagem.gui.actions.BinaryImageAction
+classdef FillImageHolesAction < imagem.gui.actions.ScalarImageAction
 %FILLIMAGEHOLESACTION  Fill holes of a binary image
 %
 %   Class FillImageHolesAction
@@ -25,7 +25,7 @@ end % end properties
 methods
     function this = FillImageHolesAction(viewer)
     % Constructor for FillImageHolesAction class
-        this = this@imagem.gui.actions.BinaryImageAction(viewer, 'imageFillHoles');
+        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageFillHoles');
     end
 
 end % end constructors

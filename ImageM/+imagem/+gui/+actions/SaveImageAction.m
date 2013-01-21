@@ -67,7 +67,7 @@ methods
         % add history
         string = sprintf('write(%s, ''%s'');\n', ...
             this.viewer.doc.tag, fullfile(pathName, fileName));
-        addToHistory(viewer.gui, string);
+        addToHistory(this.viewer.gui, string);
         
     end % end actionPerformed
     
