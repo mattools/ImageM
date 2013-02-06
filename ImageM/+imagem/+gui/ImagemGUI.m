@@ -116,15 +116,17 @@ methods
                 
         % File Menu Definition
         
-        fileMenu = uimenu(hf, 'Label', 'Files');
+        fileMenu = ImagemGUI.addMenu(hf, 'Files');
         
-        ImagemGUI.addMenuItem(fileMenu, CreateImageAction(viewer), 'New...');
+        item = ImagemGUI.addMenuItem(fileMenu, CreateImageAction(viewer), 'New...');
+        set(item, 'Accelerator', 'N');
+        
         item = ImagemGUI.addMenuItem(fileMenu, ...
             OpenImageAction(viewer), 'Open...');
         set(item, 'Accelerator', 'O');
 
 
-        demoMenu = uimenu(fileMenu, 'Label', 'Open Demo');
+        demoMenu = ImagemGUI.addMenu(fileMenu, 'Open Demo');
         
         action = OpenDemoImageAction(viewer, 'openDemoCameraman', 'cameraman.tif');
         ImagemGUI.addMenuItem(demoMenu, action, 'Cameraman (grayscale)');
@@ -166,7 +168,7 @@ methods
         
         % Image Menu Definition
         
-        imageMenu = uimenu(hf, 'Label', 'Image');
+        imageMenu = ImagemGUI.addMenu(hf, 'Image');
         
         
         ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 1),  'Horizontal Flip');
@@ -186,7 +188,7 @@ methods
         ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer), 	'Crop Selection');
         
         
-        settingsMenu = uimenu(imageMenu, 'Label', 'Settings', 'Separator', 'on');
+        settingsMenu = ImagemGUI.addMenu(imageMenu, 'Settings', 'Separator', 'on');
         ImagemGUI.addMenuItem(settingsMenu, ...
             SetDefaultConnectivityAction(viewer), 'Set Connectivity');
         ImagemGUI.addMenuItem(settingsMenu, ...
@@ -195,8 +197,9 @@ methods
         
         % View Menu Definition
         
-        viewMenu = uimenu(hf, 'Label', 'View');
-        lutMenu = uimenu(viewMenu, 'Label', 'LUT');
+        viewMenu = ImagemGUI.addMenu(hf, 'View');
+        
+        lutMenu = ImagemGUI.addMenu(viewMenu, 'LUT');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'gray'), 'Gray');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'inverted'), 'Inverted');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'blue-gray-red'), 'Blue-Gray-Red');
@@ -206,7 +209,7 @@ methods
         ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(viewer, 'colorcube'), 'Color Cube');
         ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(viewer, 'prism'), 'Prism');
         
-        matlabLutMenu = uimenu(lutMenu, 'Label', 'Matlab''s');
+        matlabLutMenu = ImagemGUI.addMenu(lutMenu, 'Matlab''s');
         ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'hot'), 'Hot');
         ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'cool'), 'Cool');
         ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'spring'), 'Spring');
@@ -218,7 +221,7 @@ methods
         ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'pink'), 'Pink');
         ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'lines'), 'Lines');
         
-        colorLutMenu = uimenu(lutMenu, 'Label', 'Simple Colors');
+        colorLutMenu = ImagemGUI.addMenu(lutMenu, 'Simple Colors');
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'blue'), 'Blue');
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'red'), 'Red');
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'green'), 'Green');
@@ -227,9 +230,13 @@ methods
         ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'magenta'), 'Magenta');
 
         
-        ImagemGUI.addMenuItem(viewMenu, ZoomInAction(viewer), 'Zoom In', true);
-        ImagemGUI.addMenuItem(viewMenu, ZoomOutAction(viewer), 'Zoom Out');
-        ImagemGUI.addMenuItem(viewMenu, ZoomOneAction(viewer), 'Zoom 1:1');
+        ImagemGUI.addMenuItem(viewMenu, ...
+            ZoomInAction(viewer), 'Zoom In', true);
+        ImagemGUI.addMenuItem(viewMenu, ...
+            ZoomOutAction(viewer), 'Zoom Out');
+        ImagemGUI.addMenuItem(viewMenu, ...
+            ZoomOneAction(viewer), 'Zoom 1:1');
+
         ImagemGUI.addMenuItem(viewMenu, ZoomBestAction(viewer), 'Zoom Best');
         
         
@@ -239,7 +246,7 @@ methods
         
         % Process Menu Definition
         
-        processMenu = uimenu(hf, 'Label', 'Process');
+        processMenu = ImagemGUI.addMenu(hf, 'Process');
         
         ImagemGUI.addMenuItem(processMenu, ImageAdjustDynamicAction(viewer),    'Adjust Dynamic');
         ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(viewer),       'Label To RGB...');
@@ -247,7 +254,7 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
         ImagemGUI.addMenuItem(processMenu, ImageMedianFilter3x3Action(viewer),  'Median');
                 
-        morphoMenu = uimenu(processMenu, 'Label', 'Morphology');
+        morphoMenu = ImagemGUI.addMenu(processMenu, 'Morphology');
         ImagemGUI.addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion');
         ImagemGUI.addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation');
         ImagemGUI.addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening');
@@ -264,7 +271,7 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageGradientVectorAction(viewer),   'Gradient Vector');
         ImagemGUI.addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
 
-        minimaMenu = uimenu(processMenu, 'Label', 'Minima / Maxima', 'Separator', 'on');
+        minimaMenu = ImagemGUI.addMenu(processMenu, 'Minima / Maxima', 'Separator', 'on');
         ImagemGUI.addMenuItem(minimaMenu, ImageRegionalMinimaAction(viewer), 'Regional Minima');
         ImagemGUI.addMenuItem(minimaMenu, ImageRegionalMaximaAction(viewer), 'Regional Maxima');
         ImagemGUI.addMenuItem(minimaMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...');
@@ -280,7 +287,7 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageMathematicAction(viewer), ...
             'Image Mathematic...');
         
-        binaryMenu = uimenu(processMenu, 'Label', 'Binary / Labels', 'Separator', 'on');
+        binaryMenu = ImagemGUI.addMenu(processMenu, 'Binary / Labels', 'Separator', 'on');
         ImagemGUI.addMenuItem(binaryMenu, KillImageBordersAction(viewer), ...
             'Kill Borders');
         ImagemGUI.addMenuItem(binaryMenu, ImageAreaOpeningAction(viewer), ...
@@ -306,7 +313,7 @@ methods
         
         % Interactive tools
         
-        toolsMenu = uimenu(hf, 'Label', 'Tools');
+        toolsMenu = ImagemGUI.addMenu(hf, 'Tools');
         
         tool = PrintCurrentPointTool(viewer);
         ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
@@ -341,7 +348,7 @@ methods
         
         % Analyze Menu Definition
         
-        analyzeMenu = uimenu(hf, 'Label', 'Analyze');
+        analyzeMenu = ImagemGUI.addMenu(hf, 'Analyze');
         
         ImagemGUI.addMenuItem(analyzeMenu, ...
             SetImageScaleAction(viewer), 'Set Image Scale');
@@ -370,12 +377,54 @@ methods
 end
 
 methods (Static)
+    
+    function menu = addMenu(parent, label, varargin)
+        % Add a new menu to the given figure or menu
+        % Computes the new level of the menu
+
+        parentType = get(parent, 'type');
+        if strcmp(parentType, 'figure')
+            % counts the number of menus in the parent figure
+            children = get(parent, 'children');
+            children = children(strcmp(get(children, 'type'), 'uimenu'));
+            inds = length(children) + 1;
+            
+        elseif strcmp(parentType, 'uimenu')
+            % counts the number of sub-menus in the parent menu, and add
+            % new position to the set of indices of parent menu
+            children = get(parent, 'children');
+            children = children(strcmp(get(children, 'type'), 'uimenu'));
+            ind = length(children) + 1;
+            data = get(parent, 'userdata');
+            inds = [data.inds ind];
+            
+        else
+            error(['Can not manage parent of type ' parentType]);
+        end
+        
+        menu = uimenu(parent, 'Label', label, varargin{:});
+        data = struct('inds', inds);
+        set(menu, 'userdata', data);
+        
+    end
+    
     function item = addMenuItem(menu, action, label, varargin)
+        
+        % Compute menu position as a set of recursive index positions
+        children = get(menu, 'children');
+        children = children(strcmp(get(children, 'type'), 'uimenu'));
+        ind = length(children) + 1;
+        data = get(menu, 'userdata');
+        inds = [data.inds ind];
+        
+        % create user data associated with this menu
+        data = struct('action', action, 'inds', inds);
         
         % creates new item
         item = uimenu(menu, 'Label', label, ...
-            'UserData', action, ...
+            'UserData', data, ...
             'Callback', @action.actionPerformed);
+        
         
         % eventually add separator above item
         if ~isempty(varargin)
@@ -384,7 +433,37 @@ methods (Static)
                 set(item, 'Separator', 'On');
             end
         end
+        
     end
+    
+    
+%     function addMenuAccelerator(hFig, menuItem, accelerator)
+%         
+%         % find menu bar
+%         jFrame = get(handle(hFig),'JavaFrame');
+%         try
+%             % R2008a and later
+%             jMenuBar = jFrame.fHG1Client.getMenuBar;
+%         catch %#ok<CTCH>
+%             % R2007b and earlier
+%             jMenuBar = jFrame.fFigureClient.getMenuBar;
+%         end
+%         
+%         % get set of recursice indices to access menu item
+%         data = get(menuItem, 'userdata');
+%         inds = data.inds;
+% 
+%         % find the java menu corresponding to current item
+%         jMenu = jMenuBar.getComponent(inds(1)-1);
+%         for i = 2:length(inds)
+%             jMenu = jMenu.getMenuComponent(inds(i)-1);
+%         end
+%         
+%         % setup accelerator
+%         jAccelerator = javax.swing.KeyStroke.getKeyStroke(accelerator);
+%         jMenu.setAccelerator(jAccelerator);
+%         
+%     end
     
     function enable = updateMenuEnable(menu)
         % Enables/Disable a menu item or a menu
@@ -399,7 +478,7 @@ methods (Static)
         children = get(menu, 'children');
         if ~isempty(children)
             % process menu with submenus:
-            % menu is active if at east one subitem is active
+            % menu is active if at least one sub-item is active
             for i = 1:length(children)
                 en = imagem.gui.ImagemGUI.updateMenuEnable(children(i));
                 enable = enable || en;
@@ -407,9 +486,9 @@ methods (Static)
             
         else
             % process final menu item
-            action = get(menu, 'userdata');
-            if ~isempty(action)
-                enable = isActivable(action);
+            data = get(menu, 'userdata');
+            if ~isempty(data) && isstruct(data) && isfield(data, 'action') && ~isempty(data.action)
+                enable = isActivable(data.action);
             end
         end
         

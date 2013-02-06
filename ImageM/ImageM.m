@@ -28,11 +28,18 @@ import imagem.gui.ImagemGUI;
 img = [];
 if ~isempty(varargin)
     img = varargin{1};
+    
+    % check input is an image. Otherwise, try to convert to image
+    if ~isa(img, 'Image') && isnumeric(img)
+        img = Image(img);
+        img.name = inputname(1);
+    end
 end
 
 % create the application, and a GUI
 app = ImagemApp;
 gui = ImagemGUI(app);
+
 
 % use the GUI to create a new image display
 addImageDocument(gui, img);
