@@ -81,11 +81,13 @@ methods
         
 
         % new figure for display
-        figure;
+        hf = figure;
+        set(hf, 'NumberTitle', 'off');
         
         % display resulting curve(s)
         if isScalarImage(img)
             plot(dists, vals);
+            ylabel('Intensity');
             
         elseif isColorImage(img)
             % display each color histogram as stairs, to see the 3 curves
@@ -95,12 +97,19 @@ methods
             set(hh(1), 'color', [1 0 0]); % red
             set(hh(2), 'color', [0 1 0]); % green
             set(hh(3), 'color', [0 0 1]); % blue
+            ylabel('Color intensity');
             
         else
             warning('LineProfileTool:UnsupportedImageImageType', ...
                 ['Can not manage images of type ' img.type]);
         end
+
+        xlabel('Position on line');
         
+        if ~isempty(img.name)
+            title(img.name);
+            set(gcf, 'name', ['Profile of ' img.name]);
+        end
     end
 end % end methods
 
