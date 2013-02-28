@@ -143,7 +143,7 @@ methods
         bin = extendedMaxima(this.viewer.doc.image, this.value, this.conn);
     end
     
-    function closeFigure(this)
+    function closeFigure(this, varargin)
         % clean up viewer figure
         this.viewer.doc.previewImage = [];
         updateDisplay(this.viewer);
@@ -209,7 +209,7 @@ methods
             return;
         end
         
-        setMinimaValue(this, val);
+        setMaximaValue(this, val);
         updateWidgets(this);
     end
     
