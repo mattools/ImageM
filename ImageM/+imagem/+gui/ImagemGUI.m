@@ -239,6 +239,14 @@ methods
 
         ImagemGUI.addMenuItem(viewMenu, ZoomBestAction(viewer), 'Zoom Best');
         
+        zoomsMenu = ImagemGUI.addMenu(viewMenu, 'Others');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 8), 'Zoom 8:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 4), 'Zoom 4:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 2), 'Zoom 2:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1), 'Zoom 1:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/2), 'Zoom 1:2');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/4), 'Zoom 1:4');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/8), 'Zoom 1:8');
         
         ImagemGUI.addMenuItem(viewMenu, ...
             PrintImageDocListAction(viewer), 'Print Image List', true);

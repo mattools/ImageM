@@ -30,7 +30,7 @@ if ~isempty(varargin)
     img = varargin{1};
     
     % check input is an image. Otherwise, try to convert to image
-    if ~isa(img, 'Image') && isnumeric(img)
+    if ~isa(img, 'Image') && (isnumeric(img) ||islogical(img))
         img = Image(img);
         img.name = inputname(1);
     end
