@@ -247,6 +247,22 @@ methods
         ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/2), 'Zoom 1:2');
         ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/4), 'Zoom 1:4');
         ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/8), 'Zoom 1:8');
+
+        zoomModesMenu = ImagemGUI.addMenu(viewMenu, 'Zoom Mode');
+        adjustZoomAction = ZoomSetModeAction(viewer, 'adjust');
+        mi1 = ImagemGUI.addMenuItem(zoomModesMenu, adjustZoomAction, 'Adjust');
+        setMenuItem(adjustZoomAction, mi1);
+        
+        fixedZoomAction = ZoomSetModeAction(viewer, 'fixed');
+        mi2 = ImagemGUI.addMenuItem(zoomModesMenu, fixedZoomAction, 'Fixed');
+        setMenuItem(fixedZoomAction, mi2);
+
+        actionGroup = [adjustZoomAction fixedZoomAction];
+        for iAction = 1:2
+            action = actionGroup(iAction);
+            setActionGroup(action, actionGroup);
+        end
+%         createCheckedMenuGroup([mi1 mi2], mi1);
         
         ImagemGUI.addMenuItem(viewMenu, ...
             PrintImageDocListAction(viewer), 'Print Image List', true);
@@ -380,8 +396,24 @@ methods
         ImagemGUI.updateMenuEnable(toolsMenu);
         ImagemGUI.updateMenuEnable(analyzeMenu);
         
-
+%         function createCheckedMenuGroup(itemList, initialMenu)
+%             disp('init check boxes');
+%             set(itemList, 'Checked', 'off');
+%             set(initialMenu, 'Checked', 'on');
+%             
+%             disp('init action listeners');
+%             manager = imagem.gui.MenuItemGroup(itemList);
+%             for i = 1:length(itemList)
+%                 item = itemList(i);
+%                 cb = get(item, 'Callback');
+%                 set(item, 'Callback', {cb @manager.actionPerformed});
+%             end
+%             
+%             disp('check box ground initialized');
+%         end
     end
+    
+
 end
 
 methods (Static)

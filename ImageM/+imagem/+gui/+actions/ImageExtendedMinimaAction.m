@@ -155,8 +155,10 @@ methods
         this.viewer.doc.previewImage = [];
         updateDisplay(this.viewer);
         
-        % close the current fig
-        close(this.handles.figure);
+        % close the current figure
+        if ~isempty(this.handles.figure);
+            close(this.handles.figure);
+        end
     end
     
     function setMinimaValue(this, newValue)

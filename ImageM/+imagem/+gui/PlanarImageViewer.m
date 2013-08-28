@@ -26,6 +26,11 @@ properties
     % the image document
     doc;
     
+    % specify how to change the zoom when figure is resized. Can be one of:
+    % 'adjust'  -> find best zoom (default)
+    % 'fixed'   -> keep previous zoom factor
+    zoomMode = 'adjust';
+    
     % the set of mouse listeners, stored as a cell array 
     mouseListeners = [];
     
@@ -326,6 +331,21 @@ methods
         api = iptgetapi(this.handles.scrollPanel);
         zoom = api.findFitMag();
     end
+    
+    function mode = getZoomMode(this)
+        mode = this.zoomMode;
+    end
+    
+    function setZoomMode(this, mode)
+        switch lower(mode)
+            case 'adjust'
+                this.zoomMode = 'adjust';
+            case 'fixed'
+                this.zoomMode = 'fixed';
+            otherwise
+                error(['Unrecognized zoom mode option: ' mode]);
+        end
+    end
 end
 
 
@@ -394,11 +414,13 @@ methods
     function onScrollPanelResized(this, varargin)
         % function called when the Scroll panel has been resized
         
-        scroll = this.handles.scrollPanel;
-        api = iptgetapi(scroll);
-        mag = api.findFitMag();
-        api.setMagnification(mag);
-        updateTitle(this);
+       if strcmp(this.zoomMode, 'adjust')
+            scroll = this.handles.scrollPanel;
+            api = iptgetapi(scroll);
+            mag = api.findFitMag();
+            api.setMagnification(mag);
+            updateTitle(this);
+        end
     end
     
 end
