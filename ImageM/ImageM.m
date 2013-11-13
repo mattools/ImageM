@@ -8,6 +8,15 @@ function varargout = ImageM(varargin)
 %   Creates a new ImagM window initialized with the given image. IMG should
 %   be an instance of Image Object.
 %
+%   IMV = ImageM(IMG);
+%   Returns the ImageM Viewer object created for the input image.
+%   The viewer has several fields, amoung them:
+%   * gui:  the global GUI that manages the set of frames/viewers
+%   * doc:  an ImagemDoc object that encapsulates the image together with
+%           useful information
+%   * handles: a set of handles to the widgets that constitute this viewer.
+%
+%
 %   Example
 %     img = Image.read('cameraman.tif');
 %     ImageM(img);
@@ -42,8 +51,8 @@ gui = ImagemGUI(app);
 
 
 % use the GUI to create a new image display
-addImageDocument(gui, img);
+[doc viewer] = addImageDocument(gui, img); %#ok<ASGLU>
 
 if nargout > 0
-    varargout = {gui};
+    varargout = {viewer};
 end

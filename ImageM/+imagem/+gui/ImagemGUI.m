@@ -251,6 +251,7 @@ methods
         zoomModesMenu = ImagemGUI.addMenu(viewMenu, 'Zoom Mode');
         adjustZoomAction = ZoomSetModeAction(viewer, 'adjust');
         mi1 = ImagemGUI.addMenuItem(zoomModesMenu, adjustZoomAction, 'Adjust');
+        set(mi1, 'Checked', 'on');
         setMenuItem(adjustZoomAction, mi1);
         
         fixedZoomAction = ZoomSetModeAction(viewer, 'fixed');
