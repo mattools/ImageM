@@ -45,7 +45,8 @@ methods
         
         if isempty(image)
             % in case of empty image, create an "empty view"
-            imagem.gui.PlanarImageViewer(this, []);
+            doc = [];
+            viewer = imagem.gui.PlanarImageViewer(this, doc);
             return;
         end
         
@@ -83,7 +84,7 @@ methods
     
     function addToHistory(this, string) %#ok<MANU>
         % Add the specified string to gui history
-        fprintf(string);
+%         fprintf(string);
     end
     
     function exit(this)

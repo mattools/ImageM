@@ -45,9 +45,19 @@ methods
     function this = PlanarImageViewer(gui, doc)
         this.gui = gui;
         this.doc = doc;
-        
-        % create default figure
-        fig = figure(...
+
+        % computes a new handle index large enough not to collide with
+        % common figure handles
+        while true
+            newFigHandle = 23000 + randi(10000);
+            if ~ishandle(newFigHandle)
+                break;
+            end
+        end
+
+        % create the figure that will contains the display
+        fig = figure(newFigHandle);
+        set(fig, ...
             'MenuBar', 'none', ...
             'NumberTitle', 'off', ...
             'NextPlot', 'new', ...
