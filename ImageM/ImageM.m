@@ -10,7 +10,7 @@ function varargout = ImageM(varargin)
 %
 %   IMV = ImageM(IMG);
 %   Returns the ImageM Viewer object created for the input image.
-%   The viewer has several fields, amoung them:
+%   The viewer has several fields, among them:
 %   * gui:  the global GUI that manages the set of frames/viewers
 %   * doc:  an ImagemDoc object that encapsulates the image together with
 %           useful information
@@ -23,7 +23,7 @@ function varargout = ImageM(varargin)
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
 % e-mail: david.legland@grignon.inra.fr
@@ -36,11 +36,19 @@ import imagem.gui.ImagemGUI;
 % check if image is present, or create one
 img = [];
 if ~isempty(varargin)
-    img = varargin{1};
+    var = varargin{1};
     
-    % check input is an image. Otherwise, try to convert to image
-    if ~isa(img, 'Image') && (isnumeric(img) ||islogical(img))
-        img = Image(img);
+    if isa(var, 'Image')
+        % if first argument is an image object, keep it
+        img = var;
+        
+    elseif ischar(var)
+        % if first input is a string, use it to open an image        
+        img = Image.read(var);
+        
+    elseif isnumeric(var) || islogical(var)
+        % if input is numerical array, convert to image and keep input name
+        img = Image(var);
         img.name = inputname(1);
     end
 end

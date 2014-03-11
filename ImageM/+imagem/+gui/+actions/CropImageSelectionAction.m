@@ -40,14 +40,14 @@ methods
          selection = this.viewer.selection;
          if isempty(selection)
              warndlg('Requires a non empty selection', ...
-                 'Empty Selection', createmode);
+                 'Empty Selection', 'modal');
              return;
          end
          
          type = selection.type;
          if ~ismember(lower(type), {'box'})
              warndlg('Current selection must be a box', ...
-                 'Invalid Selection', createmode);
+                 'Invalid Selection', 'modal');
              return;
          end
          
