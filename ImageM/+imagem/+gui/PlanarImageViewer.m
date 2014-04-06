@@ -83,6 +83,10 @@ methods
             % setup mouse listener for display of mouse coordinates
             tool = imagem.gui.tools.ShowCursorPositionTool(this, 'showMousePosition');
             addMouseListener(this, tool);
+            
+            % setup key listener
+            set(fig, 'KeyPressFcn',     @this.onKeyPressed);
+            set(fig, 'KeyReleaseFcn',   @this.onKeyReleased);
         end
         
         set(fig, 'UserData', this);
@@ -404,6 +408,36 @@ methods
             onMouseMoved(this.mouseListeners{i}, hObject, eventdata);
         end
     end
+end
+
+%% Mouse listeners management
+methods
+    function onKeyPressed(this, hObject, eventdata)
+%         disp(['key pressed: ' eventdata.Character]);
+        
+        key = eventdata.Character;
+        switch key
+        case '+'
+            zoom = getZoom(this);
+            setZoom(this, zoom * sqrt(2));
+            updateTitle(this);
+            
+        case '-'
+            zoom = getZoom(this);
+            setZoom(this, zoom / sqrt(2));
+            updateTitle(this);
+            
+        case '='
+            setZoom(this, 1);
+            updateTitle(this);
+            
+        end
+    end
+    
+    function onKeyReleased(this, hObject, eventdata)
+%         disp(['key relased: ' eventdata.Character]);
+    end
+    
 end
 
 %% Figure management
