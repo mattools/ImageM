@@ -74,6 +74,11 @@ methods
         updateDisplay(this);
         updateTitle(this);
         
+        % adjust zoom to view the full image
+        api = iptgetapi(this.handles.scrollPanel);
+        mag = api.findFitMag();
+        api.setMagnification(mag);
+
         % setup listeners associated to the figure
         if ~isempty(doc) && ~isempty(doc.image)
             set(fig, 'WindowButtonDownFcn',     @this.processMouseButtonPressed);
@@ -205,7 +210,8 @@ methods
         
         % changes current display data
         api = iptgetapi(this.handles.scrollPanel);
-        api.replaceImage(cdata);
+%         loc = api.getVisibleLocation();
+        api.replaceImage(cdata, 'PreserveView', true);
         
         % extract calibration data
         spacing = img.spacing;
@@ -223,6 +229,7 @@ methods
         extent = physicalExtent(img);
         set(this.handles.imageAxis, 'XLim', extent(1:2));
         set(this.handles.imageAxis, 'YLim', extent(3:4));
+%         api.setVisibleLocation(loc);
         
         % for vector images, adjust displayrange
         if isVectorImage(img) || isIntensityImage(img)
@@ -246,10 +253,10 @@ methods
         % display each shape stored in document
         drawShapes(this);
         
-        % adjust zoom to view the full image
-        api = iptgetapi(this.handles.scrollPanel);
-        mag = api.findFitMag();
-        api.setMagnification(mag);
+%         % adjust zoom to view the full image
+%         api = iptgetapi(this.handles.scrollPanel);
+%         mag = api.findFitMag();
+%         api.setMagnification(mag);
     end
     
 
