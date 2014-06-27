@@ -282,7 +282,6 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(viewer),       'Label To RGB...');
 
         ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
-        ImagemGUI.addMenuItem(processMenu, ImageMedianFilter3x3Action(viewer),  'Median 3x3');
         ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(viewer),     'Median');
                 
         morphoMenu = ImagemGUI.addMenu(processMenu, 'Morphology');
@@ -290,6 +289,8 @@ methods
         ImagemGUI.addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation');
         ImagemGUI.addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening');
         ImagemGUI.addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');    
+        ImagemGUI.addMenuItem(morphoMenu, ImageMorphologicalFilterAction(viewer), ...
+            'Morphological Filter', true);    
         
         item = ImagemGUI.addMenuItem(processMenu, ImageThresholdAction(viewer),  ...
             'Threshold...', true);

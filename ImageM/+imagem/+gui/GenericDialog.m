@@ -308,6 +308,15 @@ methods
         end
     end
     
+    function index = getNextChoiceIndex(this)
+        h = getNextControlHandle(this);
+        
+        if ~strcmp(get(h, 'style'), 'popupmenu')
+            error('Next control must be a popup menu');
+        end
+        index = get(h, 'value');
+    end
+    
     function value = getNextNumber(this)
         h = getNextControlHandle(this);
         
