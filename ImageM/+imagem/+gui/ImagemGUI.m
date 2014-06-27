@@ -82,9 +82,13 @@ methods
         addView(doc, viewer);
     end
     
-    function addToHistory(this, string) %#ok<MANU>
+    function addToHistory(this, string)
         % Add the specified string to gui history
-%         fprintf(string);
+        
+        warning('ImageM:ImagemGUI:deprecated', ...
+            'deprecated, should add to app history directly');
+        addToHistory(this.app, string);
+        fprintf(string);
     end
     
     function exit(this)
@@ -278,7 +282,8 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(viewer),       'Label To RGB...');
 
         ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
-        ImagemGUI.addMenuItem(processMenu, ImageMedianFilter3x3Action(viewer),  'Median');
+        ImagemGUI.addMenuItem(processMenu, ImageMedianFilter3x3Action(viewer),  'Median 3x3');
+        ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(viewer),     'Median');
                 
         morphoMenu = ImagemGUI.addMenu(processMenu, 'Morphology');
         ImagemGUI.addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion');
@@ -389,6 +394,16 @@ methods
             ImageSelectionLineProfileAction(viewer), ...
             'Plot Line Profile');
         set(item, 'Accelerator', 'K');
+        
+        
+        % Help menu definition
+        helpMenu = ImagemGUI.addMenu(hf, 'Help');
+        
+        ImagemGUI.addMenuItem(helpMenu, ...
+            GenericAction(viewer, 'printHistory', ...
+            @(src, evt) viewer.gui.app.printHistory), ...
+            'Print History');
+        
         
         % check which menu items are selected or not
         ImagemGUI.updateMenuEnable(fileMenu);

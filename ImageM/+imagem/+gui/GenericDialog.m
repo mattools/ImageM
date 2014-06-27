@@ -338,6 +338,10 @@ methods
         h = this.controlHandles(this.currentIndex);
         this.currentIndex = this.currentIndex + 1;
     end
+    
+    function resetCounter(this)
+        this.currentIndex = 1;
+    end
 end
 
 

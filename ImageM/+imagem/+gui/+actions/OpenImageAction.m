@@ -56,10 +56,16 @@ methods
 
 
         % read the demo image
-        img = Image.read(fullfile(pathName, fileName));
+        imagePath = fullfile(pathName, fileName);
+        img = Image.read(imagePath);
         
         % add image to application, and create new display
-        addImageDocument(gui, img);
+        doc = addImageDocument(gui, img);
+
+        % history
+        tag = doc.tag;
+        string = sprintf('%s = Image.read(''%s'');\n', tag, imagePath);
+        addToHistory(gui.app, string);
     end
 end % end methods
 

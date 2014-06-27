@@ -54,7 +54,7 @@ methods
                 
         % history
         string = sprintf('%s = Image.read(''%s'');\n', tag, this.imageName);
-        addToHistory(gui, string);        
+        addToHistory(gui.app, string);        
     end
 end % end methods
 

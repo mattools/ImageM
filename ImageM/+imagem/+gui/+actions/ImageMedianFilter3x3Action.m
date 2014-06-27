@@ -20,7 +20,7 @@ classdef ImageMedianFilter3x3Action < imagem.gui.actions.CurrentImageAction
 methods
     function this = ImageMedianFilter3x3Action(viewer)
     % Constructor for the parent class
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'medianFilter');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'medianFilter3x3');
     end
 
 end % end constructors
@@ -46,7 +46,7 @@ methods
         % add history
         string = sprintf('%s = medianFilter(%s, ones(3,3));\n', ...
             newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
     end
 end % end methods
 

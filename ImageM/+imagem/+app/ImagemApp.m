@@ -29,6 +29,8 @@ properties
     % the size (diameter) of the brush (in pixels)
     brushSize = 3;
     
+    % history of user commands, as a cell array of strings
+    history = cell(0, 1);
 end 
 
 %% Constructor
@@ -219,6 +221,25 @@ methods
                 b = false;
                 return;
             end
+        end
+    end
+
+end
+
+
+%% App global variables
+methods
+    function addToHistory(this, string)
+        % Add the specified string to app history
+        this.history = [this.history ; {string}];
+        fprintf(string);
+    end
+
+    function printHistory(this)
+        % display stored history
+        fprintf('Command history:\n');
+        for i = 1:length(this.history)
+            fprintf(this.history{i});
         end
     end
 
