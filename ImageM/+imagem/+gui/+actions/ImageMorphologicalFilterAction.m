@@ -44,7 +44,7 @@ methods
         
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
-        doc = viewer.doc;
+%         doc = viewer.doc;
         
         % creates a new dialog, and populates it with some fields
         gd = imagem.gui.GenericDialog('Morphological Filter');
@@ -81,7 +81,8 @@ methods
         img2 = updatePreviewImage(this);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+%         newDoc = addImageDocument(viewer.gui, img2);
+        addImageDocument(viewer.gui, img2);
         
 %         % add history
 %         string = sprintf('%s = medianFilter(%s, ones(%d,%d));\n', ...
@@ -124,23 +125,43 @@ methods
         gd = this.handles.dialog;
         opIndex = getNextChoiceIndex(gd);
         shapeIndex = getNextChoiceIndex(gd);
+        strelShape = this.shapeList{shapeIndex};
         radius = getNextNumber(gd);
         resetCounter(this.handles.dialog);
         
-        diam = 2 * radius + 1;
-        se = ones(diam, diam);
+%         diam = 2 * radius + 1;
+%         se = ones(diam, diam);
+        se = createStrel(strelShape, radius); %#ok<NASGU>
         
         % apply filtering operation
         command = this.commandList{opIndex};
-        img = this.viewer.doc.image;
+        img = this.viewer.doc.image; %#ok<NASGU>
         img2 = eval(sprintf('%s(img,se)', command));
         this.previewImage = img2;
         
         % reset state of update
         this.needUpdate = false;
     end
-
+    
 end % end methods
 
 end % end classdef
+
+function se = createStrel(strelShape, strelRadius)
+
+switch strelShape
+    case 'Square'
+        diam = 2 * strelRadius + 1;
+        se = strel('square', diam);
+    case 'Diamond'
+        se = strel('diamond', strelRadius);
+    case 'Octogon'
+        size = round(strelRadius / 3) * 3;
+        se = strel('octagon', size);
+    case 'Disk'
+        se = strel('disk', strelRadius);
+    otherwise
+        error(['Unknown strel shape: ' strelShape]);
+end
+end
 
