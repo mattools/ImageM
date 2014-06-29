@@ -45,7 +45,7 @@ methods
         
         % history
         string = sprintf('%s = labeling(%s);\n', newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
     end
     
 end % end methods

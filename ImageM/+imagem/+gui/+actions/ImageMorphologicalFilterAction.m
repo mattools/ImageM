@@ -16,10 +16,10 @@ classdef ImageMorphologicalFilterAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    operationList = {'Dilation', 'Erosion', 'Closing', 'Opening'};
-    commandList = {'dilation', 'erosion', 'closing', 'opening'};
+    operationList = {'Dilation', 'Erosion', 'Closing', 'Opening', 'Gradient', 'Black Top Hat', 'White Top Hat'};
+    commandList = {'dilation', 'erosion', 'closing', 'opening', 'morphoGradient', 'blackTopHat', 'whiteTopHat'};
     
-    shapeList = {'Square', 'Diamond', 'Octogon', 'Disk'};
+    shapeList = {'Square', 'Diamond', 'Octogon', 'Disk', 'Horizontal Line', 'Vertical Line', 'Line 45°', 'Line 135°'};
     
     previewImage = [];
     needUpdate = true;
@@ -31,7 +31,7 @@ end
 methods
     function this = ImageMorphologicalFilterAction(viewer)
     % Constructor for the parent class
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'medianFilter');
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'morphologicalFilter');
     end
 
 end % end constructors
@@ -50,35 +50,47 @@ methods
         gd = imagem.gui.GenericDialog('Morphological Filter');
         this.handles.dialog = gd;
         
+        % add a combo box for the type of operation to perform
         hOperation = addChoice(gd, 'Operation: ', this.operationList, ...
             this.operationList{1});
         set(hOperation, 'CallBack', @this.onWidgetUpdated);
         this.handles.operationPopup = hOperation;
 
+        % add a combo box for the shape of structuring element
         hShape = addChoice(gd, 'Shape: ', this.shapeList, ...
             this.shapeList{1});
         set(hShape, 'CallBack', @this.onWidgetUpdated);
         this.handles.shapePopup = hShape;
         
-        hRadius = addNumericField(gd, 'Box Width: ', 3, 0);
+        % add a numeric field for the size of structuring element
+        hRadius = addNumericField(gd, 'Radius: ', 3, 0);
         set(hRadius, 'CallBack', @this.onWidgetUpdated);
+        set(hRadius, 'KeyPressFcn', @this.onWidgetUpdated);
         this.handles.radiusTextField = hRadius;
-        
+
+        % add a preview checkbox
         hPreview = addCheckBox(gd, 'Preview', false);
         set(hPreview, 'CallBack', @this.onPreviewCheckBoxChanged);
         this.handles.previewCheckBox = hPreview;
         
-        % displays the dialog, and waits for user
+        % displays the dialog, and waits for user response
         showDialog(gd);
+        
+        % clear preview of original viewer
+        this.viewer.doc.previewImage = [];
+        updateDisplay(this.viewer);
         
         % check if ok or cancel was clicked
         if wasCanceled(gd)
-            this.viewer.doc.previewImage = [];
-            updateDisplay(this.viewer);
             return;
         end
-        
+
+        % compute result image
         img2 = updatePreviewImage(this);
+        
+        if isempty(img2)
+            return;
+        end
         
         % add image to application, and create new display
 %         newDoc = addImageDocument(viewer.gui, img2);
@@ -127,6 +139,10 @@ methods
         shapeIndex = getNextChoiceIndex(gd);
         strelShape = this.shapeList{shapeIndex};
         radius = getNextNumber(gd);
+        if isnan(radius)
+            img2 = [];
+            return;
+        end
         resetCounter(this.handles.dialog);
         
 %         diam = 2 * radius + 1;
@@ -149,9 +165,9 @@ end % end classdef
 
 function se = createStrel(strelShape, strelRadius)
 
+diam = 2 * strelRadius + 1;
 switch strelShape
     case 'Square'
-        diam = 2 * strelRadius + 1;
         se = strel('square', diam);
     case 'Diamond'
         se = strel('diamond', strelRadius);
@@ -160,6 +176,14 @@ switch strelShape
         se = strel('octagon', size);
     case 'Disk'
         se = strel('disk', strelRadius);
+    case 'Horizontal Line'
+        se = strel('line', diam, 0);
+    case 'Vertical Line'
+        se = strel('line', diam, 90);
+    case 'Line 45°', 
+        se = strel('line', diam, 45);
+    case 'Line 135°'
+        se = strel('line', diam, 135);
     otherwise
         error(['Unknown strel shape: ' strelShape]);
 end

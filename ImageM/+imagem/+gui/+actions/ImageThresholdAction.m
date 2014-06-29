@@ -246,7 +246,7 @@ methods
         
         % history
         string = sprintf('%s = %s %s %s;\n', newTag, tag, op, val);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
         
         closeFigure(this);
     end
