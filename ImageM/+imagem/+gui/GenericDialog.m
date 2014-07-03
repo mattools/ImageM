@@ -200,7 +200,14 @@ methods
             'BackgroundColor', bgColor);
         if isa('cb', 'var')
             set(h, 'Callback', cb);
+            set(h, 'KeyPressFcn', cb);
         end
+        
+%         % try to add a key press listener
+%         jtf = findjobj(h);
+%         jtfh = handle(jtf, 'callbackproperties');
+%         set(jtfh, 'KeyPressedCallback', 'disp(''text modified'')')
+%         h2 = uicontrol('style', 'edit', 'string', 'Hello!');
         
         % keep widget handle for future use
         this.controlHandles = [this.controlHandles h];

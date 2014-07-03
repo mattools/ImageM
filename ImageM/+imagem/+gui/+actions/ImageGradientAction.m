@@ -153,7 +153,7 @@ methods
         
         % add history
         string = sprintf('%s = norm(gradient(%s));\n', newDoc.tag, this.viewer.doc.tag);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
         
         closeFigure(this);
     end

@@ -102,7 +102,7 @@ methods
 %         addToHistory(viewer.gui.app, string);
     end
     
-    function onWidgetUpdated(this, src, event) %#ok<INUSD>
+    function onWidgetUpdated(this, varargin)
         % update preview image of the document
         
         this.needUpdate = true;
