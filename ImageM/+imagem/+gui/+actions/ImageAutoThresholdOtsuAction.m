@@ -36,7 +36,7 @@ methods
         
         % add history
         string = sprintf('%s = otsuThreshold(%s);\n', newDoc.tag, doc.tag);
-        addToHistory(viewer.gui, string);
+        addToHistory(viewer.gui.app, string);
 
     end
 end

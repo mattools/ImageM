@@ -52,7 +52,7 @@ methods
         % add history
         string = sprintf('%s = flip(%s, %d);\n', ...
              newDoc.tag, this.viewer.doc.tag, this.axis);
-        addToHistory(viewer.gui, string);
+        addToHistory(viewer.gui.app, string);
     end
 end
 

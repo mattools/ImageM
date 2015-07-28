@@ -51,7 +51,7 @@ methods
         % add history
         string = sprintf('%s = %s(%s);\n', ...
             newDoc.tag, this.methodName, doc.tag);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
 
     end
 end

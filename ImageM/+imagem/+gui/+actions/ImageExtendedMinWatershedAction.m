@@ -192,7 +192,7 @@ methods
         % add history
         string = sprintf('%s = watershed(%s, ''dynamic'', %f, ''conn'', %d));\n', ...
             newDoc.tag, refDoc.tag, this.extendedMinimaValue, this.conn);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
         
         closeFigure(this);
     end

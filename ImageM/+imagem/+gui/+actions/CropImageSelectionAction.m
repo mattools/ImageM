@@ -65,7 +65,7 @@ methods
          nd = ndims(this.viewer.doc.image);
          pattern = ['%s = crop(%s, [' repmat(' %d %d', 1, nd) ']);\n'];
          string = sprintf(pattern, newTag, tag, box);
-         addToHistory(this.viewer.gui, string);
+         addToHistory(this.viewer.gui.app, string);
          
      end
 end % end methods

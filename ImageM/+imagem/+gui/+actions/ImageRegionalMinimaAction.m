@@ -48,7 +48,7 @@ methods
         % add history
         string = sprintf('%s = regionalMinima(%s, %d);\n', ...
             newDoc.tag, this.viewer.doc.tag, conn);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
     end    
 end
 

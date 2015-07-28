@@ -162,7 +162,7 @@ methods
         % add history
         string = sprintf('%s = overlay(%s, %s, ''%c'');\n', ...
             newDoc.tag, refDoc.tag, binDoc.tag, colorCodes{indColor});
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
 
         closeFigure(this);
     end

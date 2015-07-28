@@ -37,8 +37,7 @@ methods
         
         % history
         string = sprintf('%s = invert(%s);\n', newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui, string);
-
+        addToHistory(this.viewer.gui.app, string);
     end
 end
 

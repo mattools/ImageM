@@ -135,7 +135,7 @@ methods
         % add history
         string = sprintf('%s = %s(%s, %s));\n', ...
             newDoc.tag, opName, doc1.tag, doc2.tag);
-        addToHistory(gui, string);
+        addToHistory(gui.app, string);
 
         closeFigure(this);
     end

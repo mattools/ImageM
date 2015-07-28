@@ -49,7 +49,7 @@ methods
         % add history
         string = sprintf('[%s %s %s] = splitChannels(%s);\n', ...
             docR.tag, docG.tag, docB.tag, doc.tag);
-        addToHistory(viewer.gui, string);
+        addToHistory(viewer.gui.app, string);
         
     end
 end % end methods

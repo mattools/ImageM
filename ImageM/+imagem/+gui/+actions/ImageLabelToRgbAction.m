@@ -144,7 +144,7 @@ methods
         % add history
         string = sprintf('%s = label2rgb(%s, ''%s'', ''%s''));\n', ...
             newDoc.tag, refDoc.tag, this.mapName, this.bgColorName);
-        addToHistory(gui, string);
+        addToHistory(gui.app, string);
         
         closeFigure(this);
     end

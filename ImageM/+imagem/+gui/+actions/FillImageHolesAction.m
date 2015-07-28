@@ -49,7 +49,7 @@ methods
         string = sprintf('%s = fillHoles(%s, %d);\n', ...
              newDoc.tag, this.viewer.doc.tag, ...
              getDefaultConnectivity(viewer.gui.app, ndims(img2)));
-        addToHistory(viewer.gui, string);
+        addToHistory(viewer.gui.app, string);
     end
 end % end methods
 

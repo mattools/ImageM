@@ -183,7 +183,7 @@ methods
         % add history
         string = sprintf('%s = extendedMaxima(%s, %f, %d);\n', ...
             newDoc.tag, this.viewer.doc.tag, this.value, this.conn);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
 
         closeFigure(this);
     end

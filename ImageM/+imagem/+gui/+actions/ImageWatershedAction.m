@@ -127,7 +127,7 @@ methods
         % add history
         string = sprintf('%s = watershed(%s, %d);\n', ...
             newDoc.tag, this.viewer.doc.tag, this.conn);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
 
         closeFigure(this);
     end

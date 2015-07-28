@@ -180,7 +180,7 @@ methods
             string = sprintf('%s = areaOpening(%s, %s, %d);\n', ...
                 newDoc.tag, this.viewer.doc.tag, strValue, this.conn);
         end
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
         
         closeFigure(this);
     end

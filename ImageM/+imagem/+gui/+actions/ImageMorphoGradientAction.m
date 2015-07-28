@@ -51,7 +51,7 @@ methods
         % add history
         string = sprintf('%s = morphoGradient(%s, ones(3,3));\n', ...
             newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
     end
 end % end methods
 

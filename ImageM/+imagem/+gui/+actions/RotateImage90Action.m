@@ -52,7 +52,7 @@ methods
         % history
         string = sprintf('%s = rotate90(%s, %d);\n', ...
             newDoc.tag, doc.tag, this.number);
-        addToHistory(this.viewer.gui, string);
+        addToHistory(this.viewer.gui.app, string);
     end
 end
 

@@ -164,7 +164,7 @@ methods
         % add history
         string = sprintf('%s = imposeMinima(%s, %s, %d));\n', ...
             newDoc.tag, refDoc.tag, binDoc.tag, conn);
-        addToHistory(gui, string);
+        addToHistory(gui.app, string);
 
         closeFigure(this);
     end
