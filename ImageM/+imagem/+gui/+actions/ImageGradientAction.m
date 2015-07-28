@@ -60,13 +60,17 @@ methods
         bgColor = getWidgetBackgroundColor(this.viewer.gui);
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
+        vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
 
         % widget panel
-        mainPanel = uiextras.VBox('Parent', vb);
+        mainPanel = uix.VBox('Parent', vb, ...
+            'Spacing', 5, 'Padding', 5, ...
+            'Units', 'normalized', ...
+            'Position', [0 0 1 1] );
 
         % one panel for value text input
-        line1 = uiextras.HBox('Parent', mainPanel, 'Padding', 5);
+        line1 = uix.HBox('Parent', mainPanel, ...
+            'Spacing', 5, 'Padding', 5);
         uicontrol(...
             'Style', 'Text', ...
             'Parent', line1, ...
@@ -77,7 +81,7 @@ methods
             'String', num2str(this.sigma), ...
             'BackgroundColor', bgColor, ...
             'Callback', @this.onTextValueChanged);
-        set(line1, 'Sizes', [-1 -1]);
+        set(line1, 'Widths', [-1 -1]);
         
         % one slider for changing value
         this.handles.sigmaSlider = uicontrol(...
@@ -90,14 +94,16 @@ methods
             'Callback', @this.onSliderValueChanged);
         
         % setup listeners for slider continuous changes
-        listener = handle.listener(this.handles.sigmaSlider, 'ActionEvent', ...
-            @this.onSliderValueChanged);
-        setappdata(this.handles.sigmaSlider, 'sliderListeners', listener);
+        addlistener(this.handles.sigmaSlider, ...
+                        'ContinuousValueChange', @this.onSliderValueChanged);
+%         listener = handle.listener(this.handles.sigmaSlider, 'ActionEvent', ...
+%             @this.onSliderValueChanged);
+%         setappdata(this.handles.sigmaSlider, 'sliderListeners', listener);
 
-        set(mainPanel, 'Sizes', [35 25]);
+        set(mainPanel, 'Heights', [35 25]);
         
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -105,7 +111,7 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
         
     end
     
