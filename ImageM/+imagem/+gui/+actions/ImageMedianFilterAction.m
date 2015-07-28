@@ -60,10 +60,12 @@ methods
         % displays the dialog, and waits for user
         showDialog(gd);
         
+        % refresh display of main figure
+        this.viewer.doc.previewImage = [];
+        updateDisplay(this.viewer);
+            
         % check if ok or cancel was clicked
         if wasCanceled(gd)
-            this.viewer.doc.previewImage = [];
-            updateDisplay(this.viewer);
             return;
         end
         
