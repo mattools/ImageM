@@ -95,7 +95,7 @@ methods
    end
    
    function drawBrushLine(this, coord1, coord2)
-       [x, y] = intline(coord1(1), coord1(2), coord2(1), coord2(2));
+       [x, y] = imagem.gui.tools.BrushTool.intline(coord1(1), coord1(2), coord2(1), coord2(2));
        
        % iterate on current line
        for i = 1 : length(x)
