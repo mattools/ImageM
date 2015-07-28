@@ -23,7 +23,7 @@ methods
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD,MANU>
+    function actionPerformed(this, src, event) %#ok<INUSD>
         disp('Hello !');
     end
 end

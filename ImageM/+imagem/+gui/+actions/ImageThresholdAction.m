@@ -55,7 +55,7 @@ methods
         img = this.viewer.doc.image;
 
         % compute initial image histogram
-        [histo x] = histogram(img);
+        [histo, x] = histogram(img);
         this.imageHistogram = histo;
         this.xHistogram = x;
         

@@ -131,7 +131,7 @@ methods
         
         % otherwise, we first check if name contains an "index"
         % here: the number at the end of the name, separated by a minus
-        [path name ext] = fileparts(baseName);
+        [path, name, ext] = fileparts(baseName);
         isDigit = ismember(name, '1234567890');
         numDigits = length(name) - find(~isDigit, 1, 'last');
         if numDigits > 0 && numDigits < length(name) && name(end-numDigits) == '-'
@@ -150,7 +150,7 @@ methods
         % inner function
         function name = createIndexedName(baseName, index)
             % add the given number to the name of the document
-            [path name ext] = fileparts(baseName);
+            [path, name, ext] = fileparts(baseName);
             name = [name '-' num2str(index) ext];
         end
 

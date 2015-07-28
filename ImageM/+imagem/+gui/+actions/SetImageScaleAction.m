@@ -104,7 +104,7 @@ methods
         end
     end
     
-    function updateWidgets(this)
+    function updateWidgets(this) %#ok<MANU>
         
 %         % update preview image of the document
 %         bin = computeWatershedImage(this) == 0;

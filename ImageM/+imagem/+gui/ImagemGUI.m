@@ -40,7 +40,7 @@ end % construction function
 
 %% General methods
 methods
-    function [doc viewer] = addImageDocument(this, image, newName, refTag)
+    function [doc, viewer] = addImageDocument(this, image, newName, refTag)
         % Create a new document from image, add it to app, and display img
         
         if isempty(image)
@@ -113,7 +113,7 @@ end % general methods
 
 %% GUI Creation methods
 methods
-    function createFigureMenu(this, hf, viewer) %#ok<MANU>
+    function createFigureMenu(this, hf, viewer) %#ok<INUSL>
         
         import imagem.gui.ImagemGUI;
         import imagem.gui.actions.*;
@@ -481,8 +481,7 @@ methods (Static)
         % creates new item
         item = uimenu(menu, 'Label', label, ...
             'UserData', data, ...
-            'Callback', @action.actionPerformed);
-        
+            'Callback', @action.actionPerformed);        
         
         % eventually add separator above item
         if ~isempty(varargin)
@@ -562,7 +561,7 @@ methods (Static)
 end
 
 methods
-    function [h ht] = addInputTextLine(this, parent, label, text, cb)
+    function [h, ht] = addInputTextLine(this, parent, label, text, cb)
         
         hLine = uiextras.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
@@ -590,7 +589,7 @@ methods
         set(hLine, 'Sizes', [-5 -5]);
     end
     
-    function [h ht] = addComboBoxLine(this, parent, label, choices, cb)
+    function [h, ht] = addComboBoxLine(this, parent, label, choices, cb)
         
         hLine = uiextras.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
@@ -618,7 +617,7 @@ methods
         set(hLine, 'Sizes', [-5 -5]);
     end
     
-    function h = addCheckBox(this, parent, label, state, cb) %#ok<MANU>
+    function h = addCheckBox(this, parent, label, state, cb) %#ok<INUSL>
         
         hLine = uiextras.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);

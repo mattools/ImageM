@@ -38,8 +38,8 @@ methods
             return;
         end
         
-        % extract the ifferent channels
-        [red green blue] = splitChannels(doc.image);
+        % extract the different channels in three image instances
+        [red, green, blue] = splitChannels(doc.image);
         
         % add new images to application, and create new displays
         docR = addImageDocument(viewer.gui, red, [], 'red');

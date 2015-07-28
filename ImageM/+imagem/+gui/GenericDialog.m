@@ -139,7 +139,7 @@ end
 
 %% Methods
 methods
-    function [h ht] = addTextField(this, label, text, cb)
+    function [h, ht] = addTextField(this, label, text, cb)
         % Add a text field to this diaolg
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
@@ -174,7 +174,7 @@ methods
         set(this.handles.mainPanel, 'Sizes', this.boxSizes);
     end
     
-    function [h ht] = addNumericField(this, label, value, nDigits, cb)
+    function [h, ht] = addNumericField(this, label, value, nDigits, cb)
         % Add a text field to this diaolg
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
@@ -252,7 +252,7 @@ methods
         set(this.handles.mainPanel, 'Sizes', this.boxSizes);
     end
     
-    function [h ht] = addChoice(this, label, choiceLabels, initialValue, cb)
+    function [h, ht] = addChoice(this, label, choiceLabels, initialValue, cb)
         % Add choice as a popupmenu
         % usage:
         %   addChoice(GD, LABEL, CHOICES, INITIALVALUE);

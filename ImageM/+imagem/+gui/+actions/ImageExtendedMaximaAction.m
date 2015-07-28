@@ -54,7 +54,7 @@ methods
         
         % compute intensity bounds, based either on type or on image data
         img = this.viewer.doc.image;
-        [minVal maxVal] = grayscaleExtent(img);
+        [minVal, maxVal] = grayscaleExtent(img);
 
         % compute slider steps
         valExtent = maxVal - minVal;
