@@ -18,14 +18,22 @@ classdef ImageExtendedMinWatershedAction < imagem.gui.actions.ScalarImageAction
 properties
     handles;
     
+    % the min and max of values present in image. Default is [0 255]
     imageExtent = [0 255];
     
+    % the value of dynamic used to pre-filter images
     extendedMinimaValue = 10;
+    
+    % the connectivity of the regions
     conn = 4;
     
+    % the list of available connectivity values
     connValues = [4, 8];
     
+    % boolean flag indicating is binary image of watershed should be created
     computeWatershed = true;
+    
+    % boolean flag indicating if label image of basins should be created
     computeBasins = false;
 end
 
@@ -101,8 +109,8 @@ methods
         this.handles.figure = hf;
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
-        mainPanel = uiextras.VBox('Parent', vb);
+        vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
+        mainPanel = uix.VBox('Parent', vb);
         
         gui = this.viewer.gui;
         
@@ -121,10 +129,11 @@ methods
             'Callback', @this.onSliderValueChanged);
         
         % setup listeners for slider continuous changes
-        listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
-            @this.onSliderValueChanged);
-        setappdata(this.handles.valueSlider, 'sliderListeners', listener);
-
+        addlistener(this.handles.valueSlider, ...
+                        'ContinuousValueChange', @this.onSliderValueChanged);
+%         listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
+%             @this.onSliderValueChanged);
+%         setappdata(this.handles.valueSlider, 'sliderListeners', listener);
         
         this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
@@ -134,10 +143,10 @@ methods
             'ResultType:', {'Watershed', 'Basins', 'Both'}, ...
             @this.onResultTypeChanged);
         
-        set(mainPanel, 'Sizes', [35 25 35 35]);
+        set(mainPanel, 'Heights', [35 25 35 35]);
         
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -145,7 +154,7 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
     end
         
     function closeFigure(this, varargin)

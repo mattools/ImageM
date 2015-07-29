@@ -189,7 +189,9 @@ methods
             
         elseif isLabelImage(img)
             % replace label image by rgb image
-            rgb = label2rgb(img);
+%             cmap = jet(double(max(img.data(:)))+1);
+%             rgb = label2rgb(img, cmap, 'w', 'shuffle');
+            rgb = label2rgb(img, this.doc.lut, 'w');
             cdata = permute(rgb.data, [2 1 4 3]);
             maxi = 255;
             mini = 0;
