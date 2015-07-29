@@ -563,7 +563,7 @@ end
 methods
     function [h, ht] = addInputTextLine(this, parent, label, text, cb)
         
-        hLine = uiextras.HBox('Parent', parent, ...
+        hLine = uix.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
@@ -586,12 +586,12 @@ methods
         end
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-5 -5]);
+        set(hLine, 'Widths', [-5 -5]);
     end
     
     function [h, ht] = addComboBoxLine(this, parent, label, choices, cb)
         
-        hLine = uiextras.HBox('Parent', parent, ...
+        hLine = uix.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
@@ -614,12 +614,12 @@ methods
         end
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-5 -5]);
+        set(hLine, 'Widths', [-5 -5]);
     end
     
     function h = addCheckBox(this, parent, label, state, cb) %#ok<INUSL>
         
-        hLine = uiextras.HBox('Parent', parent, ...
+        hLine = uix.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
         
         % default value if not specified

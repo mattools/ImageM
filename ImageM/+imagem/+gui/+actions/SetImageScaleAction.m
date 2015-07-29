@@ -57,8 +57,8 @@ methods
         this.handles.figure = hf;
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
-        mainPanel = uiextras.VBox('Parent', vb);
+        vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
+        mainPanel = uix.VBox('Parent', vb);
         
         gui = this.viewer.gui;
         this.handles.distancePixelsText = addInputTextLine(gui, mainPanel, ...
@@ -80,7 +80,7 @@ methods
         
         
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -88,7 +88,7 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
         
     end
     
@@ -134,6 +134,16 @@ methods
         disp(distCalib);
         disp(unit);
         
+        if isnan(distPx)
+            errordlg(['Could not interpret the string: ' textPixels],...
+                'Input Interpretation Error', 'modal');
+            return;
+        end
+        if isnan(distCalib)
+            errordlg(['Could not interpret the string: ' textDistance],...
+                'Input Interpretation Error', 'modal');
+            return;
+        end
         
         resol = distCalib / distPx;
         img.origin      = [0 0];
