@@ -232,7 +232,7 @@ methods
     function addToHistory(this, string)
         % Add the specified string to app history
         this.history = [this.history ; {string}];
-        fprintf(string);
+        fprintf('%s', string);
     end
 
     function printHistory(this)
