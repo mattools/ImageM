@@ -20,8 +20,8 @@ classdef ImageMathematicAction < imagem.gui.actions.ScalarImageAction
 properties
     handles;
     
-    opList = {@plus, @minus, @times, @rdivide, @power};
-    opNames = {'Plus', 'Minus', 'Times', 'Divides', 'power'};
+    opList = {@plus, @minus, @times, @rdivide, @power, @min, @max};
+    opNames = {'Plus', 'Minus', 'Times', 'Divides', 'power', 'min', 'max'};
     
 end % end properties
 

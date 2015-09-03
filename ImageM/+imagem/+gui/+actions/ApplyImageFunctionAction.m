@@ -39,7 +39,7 @@ methods
         doc = viewer.doc;
         
         % apply the given operation
-        res = feval(this.methodName, doc.image);
+        res = feval(this.methodName, doc.image ~= 0);
         
         % depending on result type, should do different processes
         if isa(res, 'Image')
