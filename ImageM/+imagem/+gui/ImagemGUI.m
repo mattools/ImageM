@@ -183,6 +183,8 @@ methods
 
         ImagemGUI.addMenuItem(imageMenu, SplitImageRGBAction(viewer),       'Split RGB', true);
         ImagemGUI.addMenuItem(imageMenu, SplitImageChannelsAction(viewer),  'Split Channels');
+        ImagemGUI.addMenuItem(imageMenu, MergeChannelsAction(viewer),       'Merge Channels...');
+
         item = ImagemGUI.addMenuItem(imageMenu, ...
             InvertImageAction(viewer), 'Invert Image');
         set(item, 'Accelerator', 'I');

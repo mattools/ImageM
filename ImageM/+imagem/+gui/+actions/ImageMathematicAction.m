@@ -8,10 +8,10 @@ classdef ImageMathematicAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2012-11-04,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -56,8 +56,6 @@ methods
         
         this.handles.figure = hf;
         
-%         imageNames = getImageNames(this.viewer.gui.app);
-        
         % vertical layout
         vb  = uiextras.VBox('Parent', hf, ...
             'Spacing', 5, 'Padding', 5);
@@ -67,10 +65,6 @@ methods
         % one panel for value text input
         mainPanel = uiextras.VBox('Parent', vb);
 
-%         % combo box for the first image
-%         this.handles.imageList1 = addComboBoxLine(gui, mainPanel, ...
-%             'Input image:', imageNames);
-        
         % combo box for the operation name
         this.handles.operationList = addComboBoxLine(gui, mainPanel, ...
             'Operation:', this.opNames);
@@ -107,8 +101,6 @@ methods
         
         gui = this.viewer.gui;
         
-%         doc1 = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
-%         img1 = doc1.image;
         % get handle to viewer figure, and current doc
         viewer = this.viewer;
         refDoc = viewer.doc;
