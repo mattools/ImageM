@@ -16,9 +16,13 @@ classdef ImageExtendedMaximaAction < imagem.gui.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
+    % the value of dynamic, between 0 and image grayscale extent
     value = 0;
+    
     inverted = false;
     handles;
+    
+    imageExtent;
     
     conn = 4;
     connValues = [4, 8];
@@ -55,6 +59,9 @@ methods
         % compute intensity bounds, based either on type or on image data
         img = this.viewer.doc.image;
         [minVal, maxVal] = grayscaleExtent(img);
+        minVal = double(minVal);
+        maxVal = double(maxVal);
+        this.imageExtent = [minVal maxVal];
 
         % compute slider steps
         valExtent = maxVal - minVal;
@@ -64,13 +71,13 @@ methods
         sliderStep1 = 1 / valExtent;
         sliderStep2 = 10 / valExtent;
         
-        % startup threshold value
-        sliderValue = minVal + valExtent / 2;
-        this.value = sliderValue;
+        % initial value of maxima dynamic
+        dynValue = valExtent / 4;
+        this.value = dynValue;
         
         % action figure
         hf = figure(...
-            'Name', 'Image Threshold', ...
+            'Name', 'Extended Maxima', ...
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
@@ -94,11 +101,11 @@ methods
         uicontrol(...
             'Style', 'Text', ...
             'Parent', line1, ...
-            'String', 'Threshold Value:');
+            'String', 'Dynamic Value:');
         this.handles.valueEdit = uicontrol(...
             'Style', 'Edit', ...
             'Parent', line1, ...
-            'String', '50', ...
+            'String', num2str(dynValue), ...
             'BackgroundColor', bgColor, ...
             'Callback', @this.onTextValueChanged, ...
             'KeyPressFcn', @this.onTextValueChanged);
@@ -108,18 +115,20 @@ methods
         this.handles.valueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
-            'Min', minVal, 'Max', maxVal, ...
-            'Value', sliderValue, ...
+            'Min', 0, 'Max', valExtent, ...
+            'Value', dynValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
             'Callback', @this.onSliderValueChanged);
         set(mainPanel, 'Sizes', [35 25]);
         
         % setup listeners for slider continuous changes
-        listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
-            @this.onSliderValueChanged);
-        setappdata(this.handles.valueSlider, 'sliderListeners', listener);
-
+%         listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
+%             @this.onSliderValueChanged);
+%         setappdata(this.handles.valueSlider, 'sliderListeners', listener);
+        addlistener(this.handles.valueSlider, ...
+            'ContinuousValueChange', @this.onSliderValueChanged);
+        
         % combo box for the connectivity
         gui = this.viewer.gui;
         this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
@@ -149,11 +158,12 @@ methods
         updateDisplay(this.viewer);
         
         % close the current fig
-        close(this.handles.figure);
+        delete(this.handles.figure);
     end
     
     function setMaximaValue(this, newValue)
-        this.value = max(min(round(newValue), 255), 1);
+        imgDyn = this.imageExtent(2) - this.imageExtent(1);
+        this.value = max(min(round(newValue), imgDyn), 0);
     end
     
     function updateWidgets(this)
