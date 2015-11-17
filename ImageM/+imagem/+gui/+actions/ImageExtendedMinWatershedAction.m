@@ -16,6 +16,7 @@ classdef ImageExtendedMinWatershedAction < imagem.gui.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
+    % the set of handles to dialog widgets, indexed by their name
     handles;
     
     % the min and max of values present in image. Default is [0 255]
@@ -87,12 +88,10 @@ methods
         end
         
         % startup dynamic value
-        sliderValue = valExtent / 2;
+        sliderValue = valExtent / 4;
         
-
         % background color of most widgets
         bgColor = getWidgetBackgroundColor(this.viewer.gui);
-        
         
         % creates the figure
         hf = figure(...
@@ -130,11 +129,8 @@ methods
         
         % setup listeners for slider continuous changes
         addlistener(this.handles.valueSlider, ...
-                        'ContinuousValueChange', @this.onSliderValueChanged);
-%         listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
-%             @this.onSliderValueChanged);
-%         setappdata(this.handles.valueSlider, 'sliderListeners', listener);
-        
+            'ContinuousValueChange', @this.onSliderValueChanged);
+       
         this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
             @this.onConnectivityChanged);

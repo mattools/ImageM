@@ -11,20 +11,24 @@ classdef ImageExtendedMaximaAction < imagem.gui.actions.ScalarImageAction
 %
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2011-11-11,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
+    % the set of handles to dialog widgets, indexed by their name
+    handles;
+
     % the value of dynamic, between 0 and image grayscale extent
     value = 0;
     
-    inverted = false;
-    handles;
-    
+    % the min and max of values present in image.
     imageExtent;
     
+    % the connectivity of the regions. Default value is 4.
     conn = 4;
+    
+    % the list of available connectivity values
     connValues = [4, 8];
 end
 
@@ -58,9 +62,14 @@ methods
         
         % compute intensity bounds, based either on type or on image data
         img = this.viewer.doc.image;
-        [minVal, maxVal] = grayscaleExtent(img);
-        minVal = double(minVal);
-        maxVal = double(maxVal);
+        if isinteger(img.data)
+            type = class(img.data);
+            minVal = double(intmin(type));
+            maxVal = double(intmax(type));
+        else
+            minVal = double(min(img.data(:)));
+            maxVal = double(max(img.data(:)));
+        end
         this.imageExtent = [minVal maxVal];
 
         % compute slider steps
@@ -96,8 +105,8 @@ methods
         vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         
         % one panel for value text input
-        mainPanel = uiextras.VBox('Parent', vb);
-        line1 = uiextras.HBox('Parent', mainPanel, 'Padding', 5);
+        mainPanel = uix.VBox('Parent', vb);
+        line1 = uix.HBox('Parent', mainPanel, 'Padding', 5);
         uicontrol(...
             'Style', 'Text', ...
             'Parent', line1, ...
@@ -109,7 +118,7 @@ methods
             'BackgroundColor', bgColor, ...
             'Callback', @this.onTextValueChanged, ...
             'KeyPressFcn', @this.onTextValueChanged);
-        set(line1, 'Sizes', [-1 -1]);
+        set(line1, 'Widths', [-1 -1]);
 
         % one slider for changing value
         this.handles.valueSlider = uicontrol(...
@@ -120,12 +129,9 @@ methods
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
             'Callback', @this.onSliderValueChanged);
-        set(mainPanel, 'Sizes', [35 25]);
+        set(mainPanel, 'Heights', [35 25]);
         
         % setup listeners for slider continuous changes
-%         listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
-%             @this.onSliderValueChanged);
-%         setappdata(this.handles.valueSlider, 'sliderListeners', listener);
         addlistener(this.handles.valueSlider, ...
             'ContinuousValueChange', @this.onSliderValueChanged);
         
@@ -136,7 +142,7 @@ methods
             @this.onConnectivityChanged);
            
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -144,7 +150,7 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
     end
     
     function bin = computeMaximaImage(this)
