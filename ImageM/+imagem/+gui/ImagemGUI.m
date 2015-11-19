@@ -287,17 +287,17 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(viewer),     'Median');
                 
         morphoMenu = ImagemGUI.addMenu(processMenu, 'Morphology');
-        ImagemGUI.addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion');
-        ImagemGUI.addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation');
-        ImagemGUI.addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening');
-        ImagemGUI.addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing');    
+        ImagemGUI.addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion 3x3');
+        ImagemGUI.addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation 3x3');
+        ImagemGUI.addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening 3x3');
+        ImagemGUI.addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing 3x3');    
         ImagemGUI.addMenuItem(morphoMenu, ImageMorphologicalFilterAction(viewer), ...
             'Morphological Filter', true);    
         
         item = ImagemGUI.addMenuItem(processMenu, ImageThresholdAction(viewer),  ...
             'Threshold...', true);
         set(item, 'Accelerator', 'T');
-        ImagemGUI.addMenuItem(processMenu, ImageAutoThresholdOtsuAction(viewer),  'Threshold (Otsu)');
+        ImagemGUI.addMenuItem(processMenu, ImageAutoThresholdOtsuAction(viewer),  'Auto Threshold (Otsu)');
         item = ImagemGUI.addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
         set(item, 'Accelerator', 'G');
         ImagemGUI.addMenuItem(processMenu, ImageMorphoGradientAction(viewer), ...
