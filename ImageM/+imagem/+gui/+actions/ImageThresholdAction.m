@@ -135,9 +135,8 @@ methods
             'Callback', @this.onSliderValueChanged);
         
         % setup listeners for slider continuous changes
-        listener = handle.listener(this.handles.valueSlider, 'ActionEvent', ...
-            @this.onSliderValueChanged);
-        setappdata(this.handles.valueSlider, 'sliderListeners', listener);
+        addlistener(this.handles.valueSlider, ...
+            'ContinuousValueChange', @this.onSliderValueChanged);
 
         % one checkbox to decide the threshold side
         this.handles.sideCheckBox = uicontrol(...
