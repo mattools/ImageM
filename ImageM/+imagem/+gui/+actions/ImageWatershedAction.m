@@ -66,8 +66,8 @@ methods
         this.handles.figure = hf;
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
-        mainPanel = uiextras.VBox('Parent', vb);
+        vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
+        mainPanel = uix.VBox('Parent', vb);
         
         gui = this.viewer.gui;
         this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
@@ -79,7 +79,7 @@ methods
             @this.onResultTypeChanged);
         
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -87,7 +87,7 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
     end
         
     function closeFigure(this, varargin)

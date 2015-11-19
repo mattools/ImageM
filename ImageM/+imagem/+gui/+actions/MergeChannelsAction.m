@@ -79,16 +79,8 @@ methods
         this.handles.blueChannelList = addComboBoxLine(gui, mainPanel, ...
             'Blue Channel:', imageNames);
         
-%         % combo box for the operation name
-%         this.handles.operationList = addComboBoxLine(gui, mainPanel, ...
-%             'Operation:', this.opNames);
-%         
-%         % combo box for the second image
-%         this.handles.imageList2 = addComboBoxLine(gui, mainPanel, ...
-%             'Second image:', imageNames);
-        
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -96,7 +88,7 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
     end
     
 

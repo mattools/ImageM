@@ -51,7 +51,7 @@ methods
             'MenuBar', 'none', 'Toolbar', 'none');
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
-        pos(3:4) = 200;
+        pos(3:4) = [250 200];
         set(hf, 'Position', pos);
         
         this.handles.figure = hf;
@@ -59,13 +59,13 @@ methods
         imageNames = getImageNames(this.viewer.gui.app);
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', hf, ...
+        vb  = uix.VBox('Parent', hf, ...
             'Spacing', 5, 'Padding', 5);
         
         gui = this.viewer.gui;
         
         % one panel for value text input
-        mainPanel = uiextras.VBox('Parent', vb);
+        mainPanel = uix.VBox('Parent', vb);
 
         % combo box for the first image
         this.handles.imageList1 = addComboBoxLine(gui, mainPanel, ...
@@ -80,15 +80,15 @@ methods
             'Second image:', imageNames);
         
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
-        uicontrol( 'Parent', buttonsPanel, ...
+        buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
+        uicontrol('Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
-        uicontrol( 'Parent', buttonsPanel, ...
+        uicontrol('Parent', buttonsPanel, ...
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
     end
     
 

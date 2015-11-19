@@ -56,9 +56,9 @@ methods
         bgColor = getWidgetBackgroundColor(this.viewer.gui);
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', f, 'Spacing', 5, 'Padding', 5);
+        vb  = uix.VBox('Parent', f, 'Spacing', 5, 'Padding', 5);
         
-        g = uiextras.Grid( 'Parent', vb, 'Spacing', 5 );
+        g = uix.Grid( 'Parent', vb, 'Spacing', 5 );
         uicontrol(...
             'Style', 'Text', ...
             'Parent', g, ...
@@ -83,7 +83,7 @@ methods
             'Value', 1, ...
             'BackgroundColor', bgColor, ...
             'Callback', @this.onConn3dChanged);
-        set(g, 'ColumnSizes', [-1 -1], 'RowSizes', [-1 -1]);
+        set(g, 'Widths', [-1 -1], 'Heights', [-1 -1]);
         
         % select current state of popup menus
         switch this.conn2d
@@ -96,7 +96,7 @@ methods
         end
             
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox('Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -104,11 +104,11 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
 
         set(f, 'units', 'pixels');
         pos = get(f, 'position');
-        set(f, 'position', [pos(1:2) 200 100]);
+        set(f, 'position', [pos(1:2) 250 150]);
 
     end
     

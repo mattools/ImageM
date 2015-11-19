@@ -95,7 +95,7 @@ methods
         
         % setup listeners for slider continuous changes
         addlistener(this.handles.sigmaSlider, ...
-                        'ContinuousValueChange', @this.onSliderValueChanged);
+            'ContinuousValueChange', @this.onSliderValueChanged);
 
         set(mainPanel, 'Heights', [35 25]);
         

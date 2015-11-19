@@ -61,11 +61,11 @@ methods
         end
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', hf, ...
+        vb  = uix.VBox('Parent', hf, ...
             'Spacing', 5, 'Padding', 5);
         
         % one panel for value text input
-        mainPanel = uiextras.VBox('Parent', vb);
+        mainPanel = uix.VBox('Parent', vb);
         uicontrol(...
             'Style', 'Text', ...
             'Parent', mainPanel, ...
@@ -104,7 +104,7 @@ methods
 
 
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -112,15 +112,14 @@ methods
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
     end
-    
 
     function closeFigure(this)
         % clean up viewer figure
         
         % close the current fig
-        close(this.handles.figure);
+        delete(this.handles.figure);
     end
     
 end
