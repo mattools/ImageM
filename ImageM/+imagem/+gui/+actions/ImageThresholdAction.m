@@ -146,7 +146,7 @@ methods
             'Value', 1, ...
             'Callback', @this.onSideChanged);
             
-        set(mainPanel, 'Sizes', [-1 35 25 25]);
+        set(mainPanel, 'Heights', [-1 35 25 25]);
         
         % button for control panel
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
