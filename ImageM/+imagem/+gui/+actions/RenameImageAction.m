@@ -1,5 +1,5 @@
 classdef RenameImageAction < imagem.gui.actions.CurrentImageAction
-%RENAMEIMAGEACTION  One-line description here, please.
+%RENAMEIMAGEACTION  Rename the current image
 %
 %   Class RenameImageAction
 %
@@ -8,7 +8,7 @@ classdef RenameImageAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
 % e-mail: david.legland@grignon.inra.fr
@@ -37,32 +37,35 @@ end % end constructors
 methods
      function actionPerformed(this, src, event) %#ok<INUSD>
          
+         % extract app data
          image = this.viewer.doc.image;
          app = this.viewer.gui.app;
          
+         % setup widget options
          prompt = {'New image name:'};
          name = 'Rename current image';
          numLines = 1;
          defaultAnswer = {image.name};
          
          while true
+             % ask for a new image name
              answer = inputdlg(prompt, name, numLines, defaultAnswer);
              if isempty(answer)
                  return;
              end
-             
              newName = answer{1};
+             
+             % if new name is valid, update title and escape
              if ~hasDocumentWithName(app, newName)
                  image.name = newName;
-                 updateDisplay(this.viewer);
                  updateTitle(this.viewer);
                  return;
              end
              
+             % if name already exists, re-display dialog until valid name
              h = errordlg('An image with this name already exists', ...
                  'Image Name error', 'modal');
              uiwait(h);
-             
              defaultAnswer = {newName};
          end
          

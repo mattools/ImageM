@@ -59,7 +59,7 @@ gui = ImagemGUI(app);
 
 
 % use the GUI to create a new image display
-[doc viewer] = addImageDocument(gui, img); %#ok<ASGLU>
+[doc, viewer] = addImageDocument(gui, img); %#ok<ASGLU>
 
 if nargout > 0
     varargout = {viewer};
