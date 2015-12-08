@@ -18,8 +18,10 @@ classdef SelectPointsTool < imagem.gui.ImagemTool
 
 %% Properties
 properties
+    % the list of point positions, as a N-by-2 array
     positions;
     
+    % handle to the graphical item
     pointsHandle;
         
 end % end properties
@@ -38,7 +40,7 @@ end % end constructors
 %% ImagemTool Methods
 methods
     function select(this) %#ok<*MANU>
-        disp('select points');
+        disp('select tool: "point selection"');
         this.positions = zeros(0, 2);
     end
     
@@ -57,7 +59,6 @@ methods
         end
        
         delete(this.pointsHandle);
-        
     end
     
     function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
@@ -96,11 +97,11 @@ methods
             
         end
         
-%         % update viewer's current selection
-%         shape = struct('type', 'pointset', 'data', this.positions, ...
-%             'style', {{'Marker', 'o', 'MarkerSize', 6, 'LineWidth', 1, ...
-%                 'Color', 'r', 'MarkerFaceColor', 'r'}});
-%         this.viewer.selection = shape;
+        % update viewer's current selection
+        shape = struct('type', 'pointset', 'data', this.positions, ...
+            'style', {{'Marker', 'o', 'MarkerSize', 6, 'LineWidth', 1, ...
+                'Color', 'r', 'MarkerFaceColor', 'r'}});
+        this.viewer.selection = shape;
     end
     
 %     function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
