@@ -51,7 +51,7 @@ methods
             'MenuBar', 'none', 'Toolbar', 'none');
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
-        pos(3:4) = [200 60];
+        pos(3:4) = [200 160];
         set(hf, 'Position', pos);
         
         this.handles.figure = hf;
@@ -115,7 +115,7 @@ methods
         
         % add history
         string = sprintf('%s = %s(%s));\n', ...
-            newDoc.tag, opName, refDoc.tag, strValue);
+            newDoc.tag, opName, refDoc.tag);
         addToHistory(gui.app, string);
 
         closeFigure(this);
