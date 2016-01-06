@@ -27,6 +27,11 @@ properties
     % an image used for preview when an action is running, or empty
     previewImage = [];
     
+%     % a row vector of two values indicating minimal and maximal displayable
+%     % values for grayscale and intensity images.
+%     % (for the moment, this is managed in the PlanarImageViewer class)
+%     displayRange = [];
+    
     % look-up table (colormap) used for displaying the image. 
     % If empty -> no lut
     lut = [];

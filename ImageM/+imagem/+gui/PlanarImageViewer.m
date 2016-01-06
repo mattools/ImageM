@@ -26,6 +26,10 @@ properties
     % the image document
     doc;
     
+    % a row vector of two values indicating minimal and maximal displayable
+    % values for grayscale and intensity images.
+    displayRange;
+    
     % specify how to change the zoom when figure is resized. Can be one of:
     % 'adjust'  -> find best zoom (default)
     % 'fixed'   -> keep previous zoom factor

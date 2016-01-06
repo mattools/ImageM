@@ -210,8 +210,10 @@ methods
         % View Menu Definition
         
         viewMenu = ImagemGUI.addMenu(hf, 'View');
-        
-        lutMenu = ImagemGUI.addMenu(viewMenu, 'LUT');
+
+        ImagemGUI.addMenuItem(viewMenu, ImageSetDisplayRangeAction(viewer), 'Set Display Range...');
+
+        lutMenu = ImagemGUI.addMenu(viewMenu, 'Look-Up Table');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'gray'), 'Gray');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'inverted'), 'Inverted');
         ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'blue-gray-red'), 'Blue-Gray-Red');
