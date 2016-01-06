@@ -175,8 +175,13 @@ methods
         
         imageMenu = ImagemGUI.addMenu(hf, 'Image');
         
+        convertTypeMenu = ImagemGUI.addMenu(imageMenu, 'Convert Type');
+        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'binary'),  'Binary');
+        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'grayscale'),  'Grayscale');
+        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'intensity'),  'Intensity');
+        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'label'),  'Label');
         
-        ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 1),  'Horizontal Flip');
+        ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 1),  'Horizontal Flip', true);
         ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 2),  'Vertical Flip');
         ImagemGUI.addMenuItem(imageMenu, RotateImage90Action(viewer, 1),  'Rotate Right');
         ImagemGUI.addMenuItem(imageMenu, RotateImage90Action(viewer, -1),  'Rotate Left');
