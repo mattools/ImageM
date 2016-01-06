@@ -42,11 +42,10 @@ methods
         if strcmp(this.lutName, 'none')
             doc.lut = [];
         else
-            
             if isempty(this.lut)
                 this.lut = computeLutFromName(this);
-                doc.lut = this.lut;
             end
+            doc.lut = this.lut;
         end
         
         doc.lutName = this.lutName;
@@ -56,10 +55,22 @@ methods
     end
     
     function lut = computeLutFromName(this)
+        
+        % get LUT name
         name = this.lutName;
+        
+        % compute number of grayscale levels. 256 by default, but use label
+        % number for label images
         nGrays = 256;
+        img = this.viewer.doc.image;
+        if isLabelImage(img)
+            nGrays = double(round(max(img)));
+        end
+        
+        % create the appropriate LUT array depending on LUT name and on
+        % number of levels
         if strcmp(name, 'inverted')
-            lut = repmat((255:-1:0)', 1, 3) / 255;
+            lut = repmat(((nGrays-1):-1:0)', 1, 3) / (nGrays-1);
             
         elseif strcmp(name, 'blue-gray-red')
             lut = gray(nGrays);
@@ -67,12 +78,7 @@ methods
             lut(end,:) = [1 0 0];
             
         elseif strcmp(name, 'colorcube')
-            img = this.viewer.doc.image;
-            nLabels = max(img);
-            if isfloat(nLabels)
-                nLabels = round(nLabels);
-            end
-            map = colorcube(double(nLabels) + 2);
+            map = colorcube(double(nGrays) + 2);
             lut = [0 0 0; map(sum(map==0, 2)~=3 & sum(map==1, 2)~=3, :)];
             
         elseif strcmp(name, 'red')
