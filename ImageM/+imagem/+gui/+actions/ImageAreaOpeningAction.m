@@ -1,31 +1,40 @@
 classdef ImageAreaOpeningAction < imagem.gui.actions.ScalarImageAction
-%IMAGEIMPOSEDWATERSHEDACTION Apply imposed watershed to an intensity image
+%IMAGEAREAOPENINGACTION Keep only particles larger than a given area
 %
-%   output = ImageWatershedAction(input)
+%   output = ImageAreaOpeningAction(input)
 %
 %   Example
-%   ImageWatershedAction
+%   ImageAreaOpeningAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2012-02-27,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
+    % liste of handles to widgets
     handles;
     
+    % the number of individual particles in original image
     labelMax = 255;
     
+    % image of labeled particles (either original image, or result of labeling)
+    labelImage;
+    
+    % the list of precomputed areas
+    particleAreas;
+    
+    % the selected value for minimum area
     minAreaValue = 10;
 
     % the connectivity of the regions
     conn = 4;
     
-    % the list of available connectivity values
+    % the list of available connectivity values (constant)
     connValues = [4, 8];
 end
 
@@ -45,23 +54,25 @@ methods
         
         if ~isScalarImage(doc.image)
             warning('ImageM:WrongImageType', ...
-                'Watershed can be applied only on scalar images');
+                'Area opening can only be applied on label or binary images');
             return;
         end
         
+        % update inner state of the tool
+        updateLabelImage(this);
+        updateParticleAreaList(this);
+        
+        % setup display
         createFigure(this);
         updateWidgets(this);
     end
     
     function hf = createFigure(this)
         
-        % range of grayscale values
-        img = this.viewer.doc.image;
-        if isBinaryImage(img)
-            img = labeling(img);
-        end
+        % range of particle areas
+        areas = this.particleAreas;
         minVal = 0;
-        maxVal = double(max(img));
+        maxVal = double(max(areas));
         this.labelMax = maxVal;
         
         % compute slider steps
@@ -195,6 +206,39 @@ methods
 end
 
 
+%% Methods specific to the operator
+methods
+    function updateLabelImage(this)
+        % ensure the image of labels is valid
+        img = this.viewer.doc.image;
+        if isLabelImage(img)
+            this.labelImage = img;
+        elseif isBinaryImage(img)
+            this.labelImage = labeling(img, this.conn);
+        else 
+            error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
+        end
+    end
+    
+    function updateParticleAreaList(this)
+        % update the list of areas for each particle in the label image
+        lbl = this.labelImage;
+        this.particleAreas = imArea(lbl);
+    end
+    
+    function res = computeResultImage(this)
+        img = this.viewer.doc.image;
+        if isLabelImage(img)
+            res = areaOpening(img, this.minAreaValue);
+        elseif isBinaryImage(img)
+            res = areaOpening(img, this.minAreaValue, this.conn);
+        else 
+            error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
+        end
+    end
+end
+
+
 %% GUI Items Callback
 methods
     function onMinAreaTextChanged(this, varargin)
@@ -216,6 +260,7 @@ methods
     function onSliderValueChanged(this, varargin)
         val = get(this.handles.valueSlider, 'Value');
         this.minAreaValue = val;
+        
         updateWidgets(this);
     end
     
@@ -223,8 +268,11 @@ methods
         index = get(this.handles.connectivityPopup, 'Value');
         this.conn = this.connValues(index);
         
-        img = labeling(this.viewer.doc.image);
-        maxVal = double(max(img));
+        % update inner state of the tool
+        updateLabelImage(this);
+        updateParticleAreaList(this);
+        
+        maxVal = double(max(this.particleAreas));
         this.labelMax = maxVal;
         
         % compute slider steps
@@ -237,17 +285,6 @@ methods
         
         this.minAreaValue = min(this.minAreaValue, maxVal);
         updateWidgets(this);
-    end
-    
-    function res = computeResultImage(this)
-        img = this.viewer.doc.image;
-        if isLabelImage(img)
-            res = areaOpening(img, this.minAreaValue);
-        elseif isBinaryImage(img)
-            res = areaOpening(img, this.minAreaValue, this.conn);
-        else 
-            error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
-        end
     end
 end
 
