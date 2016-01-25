@@ -1,6 +1,9 @@
 classdef ImagemGUI < handle
 %IMAGEMGUI GUI manager for the ImageM application
 %
+%   This class manages the list of opens documents, and creates appropriate
+%   menus for viewers.
+%
 %   output = ImagemGUI(input)
 %
 %   Example
@@ -8,10 +11,10 @@ classdef ImagemGUI < handle
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -290,7 +293,8 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageAdjustDynamicAction(viewer),    'Adjust Dynamic');
         ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(viewer),       'Label To RGB...');
 
-        ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
+%         ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
+        ImagemGUI.addMenuItem(processMenu, ImageBoxMeanFilterAction(viewer),    'Box Mean', true);
         ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(viewer),     'Median');
                 
         morphoMenu = ImagemGUI.addMenu(processMenu, 'Morphology');

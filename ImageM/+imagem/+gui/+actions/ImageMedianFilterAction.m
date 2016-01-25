@@ -8,10 +8,10 @@ classdef ImageMedianFilterAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2011-12-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -19,6 +19,7 @@ properties
     previewImage = [];
     needUpdate = true;
     
+    % list of handles on the dialog widgets
     handles;
 end
 
@@ -42,7 +43,7 @@ methods
         doc = viewer.doc;
         
         % creates a new dialog, and populates it with some fields
-        gd = imagem.gui.GenericDialog('Create Image');
+        gd = imagem.gui.GenericDialog('Median Filter');
         this.handles.dialog = gd;
         
         hWidth = addNumericField(gd, 'Box Width: ', 3, 0);

@@ -1,7 +1,7 @@
 classdef ImageMeanFilter3x3Action < imagem.gui.actions.CurrentImageAction
 %IMAGEMEDIANFILTER3X3  Apply a simple filter on current image
 %
-%   Class ImageMeanFilter3x3Action
+%   Deprecated, see the class "ImagBoxMeanFilterAction"
 %
 %   Example
 %   ImageMeanFilter3x3Action
