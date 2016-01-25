@@ -294,8 +294,9 @@ methods
         ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(viewer),       'Label To RGB...');
 
 %         ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
-        ImagemGUI.addMenuItem(processMenu, ImageBoxMeanFilterAction(viewer),    'Box Mean', true);
-        ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(viewer),     'Median');
+        ImagemGUI.addMenuItem(processMenu, ImageBoxMeanFilterAction(viewer),    'Box Mean Filter', true);
+        ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(viewer),     'Median Filter');
+        ImagemGUI.addMenuItem(processMenu, ImageGaussianFilterAction(viewer),     'Gaussian Filter');
                 
         morphoMenu = ImagemGUI.addMenu(processMenu, 'Morphology');
         ImagemGUI.addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion 3x3');

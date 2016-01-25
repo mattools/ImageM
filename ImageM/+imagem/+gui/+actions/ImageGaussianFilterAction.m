@@ -1,10 +1,10 @@
-classdef ImageBoxMeanFilterAction < imagem.gui.actions.CurrentImageAction
-%IMAGEBOXMEANFILTERACTION  Apply a simple box-mean filter on current image
+classdef ImageGaussianFilterAction < imagem.gui.actions.CurrentImageAction
+%IMAGEGAUSSIANFILTERACTION  Apply gaussian filter on current image
 %
-%   Class ImageBoxMeanFilterAction
+%   Class ImageGaussianFilterAction
 %
 %   Example
-%   ImageBoxMeanFilterAction
+%   ImageGaussianFilterAction
 %
 %   See also
 %
@@ -26,9 +26,9 @@ end
 
 %% Constructor
 methods
-    function this = ImageBoxMeanFilterAction(viewer)
-    % Constructor for ImageBoxMeanFilterAction class
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'boxMeanFilter');
+    function this = ImageGaussianFilterAction(viewer)
+    % Constructor for ImageGaussianFilterAction class
+        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'gaussianFilter');
     end
 
 end % end constructors
@@ -44,14 +44,14 @@ methods
         doc = viewer.doc;
         
         % creates a new dialog, and populates it with some fields
-        gd = imagem.gui.GenericDialog('Box Mean Filter');
+        gd = imagem.gui.GenericDialog('Gaussian Filter');
         this.handles.dialog = gd;
         
-        hWidth = addNumericField(gd, 'Box Width: ', 3, 0);
+        hWidth = addNumericField(gd, 'Sigma X: ', 3, 0);
         set(hWidth, 'CallBack', @this.onNumericFieldModified);
         this.handles.widthTextField = hWidth;
         
-        hHeight = addNumericField(gd, 'Box Height: ', 3, 0);
+        hHeight = addNumericField(gd, 'Sigma Y: ', 3, 0);
         set(hHeight, 'CallBack', @this.onNumericFieldModified);
         this.handles.heightTextField = hHeight;
         
@@ -72,19 +72,20 @@ methods
         end
         
         % get dialog options
-        width = getNextNumber(gd);
-        height = getNextNumber(gd);
+        sigmaX = getNextNumber(gd);
+        sigmaY = getNextNumber(gd);
         
         % apply 'mean' operation
-        se = ones(width, height);
-        img2 = meanFilter(doc.image, se);
+        sigma = [sigmaX sigmaY];
+        size = 2 * round(sigma * 1.25) + 1;
+        img2 = gaussianFilter(doc.image, size, sigma);
         
         % add image to application, and create new display
         newDoc = addImageDocument(viewer.gui, img2);
 
         % add history
-        string = sprintf('%s = meanFilter(%s, ones(%d, %d));\n', ...
-            newDoc.tag, doc.tag, width, height);
+        string = sprintf('%s = gaussianFilter(%s, [%g %g], [%g %g]);\n', ...
+            newDoc.tag, doc.tag, size, sigma);
         addToHistory(viewer.gui.app, string);
 
     end
@@ -119,13 +120,14 @@ methods
     
     function updatePreviewImage(this)
         % update preview image from dialog options, and toggle update flag
-        width = getNextNumber(this.handles.dialog);
-        height = getNextNumber(this.handles.dialog);
+        sigmaX = getNextNumber(this.handles.dialog);
+        sigmaY = getNextNumber(this.handles.dialog);
         resetCounter(this.handles.dialog);
-
-        % apply 'median' operation
-        se = ones(width, height);
-        this.previewImage = meanFilter(this.viewer.doc.image, se);
+        
+        % apply 'mean' operation
+        sigma = [sigmaX sigmaY];
+        size = 2 * round(sigma * 1.25) + 1;
+        this.previewImage = gaussianFilter(this.viewer.doc.image, size, sigma);
         
         % reset state of update
         this.needUpdate = false;
