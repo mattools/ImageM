@@ -213,6 +213,11 @@ methods
             maxi = max(cdata(:));
             
         end
+
+        % ensure maxi > mini
+        if maxi <= mini
+            maxi = mini + 1;
+        end
         
         % changes current display data
         api = iptgetapi(this.handles.scrollPanel);
