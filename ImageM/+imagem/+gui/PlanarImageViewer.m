@@ -195,12 +195,13 @@ methods
             % replace label image by rgb image
 %             cmap = jet(double(max(img.data(:)))+1);
 %             rgb = label2rgb(img, cmap, 'w', 'shuffle');
-            rgb = label2rgb(img, this.doc.lut, 'w');
+            rgb = label2rgb(img, this.doc.lut, this.doc.backgroundColor);
             cdata = permute(rgb.data, [2 1 4 3]);
             maxi = 255;
             mini = 0;
         
-        elseif isVectorImage(img) 
+        elseif isVectorImage(img)
+            % in case of vector images, display the norm
             imgNorm = norm(img);
             cdata = permute(imgNorm.data, [2 1 4 3]);
             mini = min(cdata(:));

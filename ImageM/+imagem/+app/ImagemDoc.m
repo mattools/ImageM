@@ -39,6 +39,8 @@ properties
     % name of the current lookup table (used for display in menus)
     lutName = '';
     
+    % background color used for display of label images
+    backgroundColor = 'w';
     
     % a set of annotations, stored as an array of
     % structures with fields type, data, style.
