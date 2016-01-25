@@ -38,7 +38,7 @@ classdef GenericDialog < handle
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2014-04-18,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2014 INRA - Cepia Software Platform.
 
@@ -79,13 +79,13 @@ methods (Access = private)
         this.handles.figure = hf;
         
         % vertical layout for widgets and control panels
-        vb  = uiextras.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
+        vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         
         % create an empty panel that will contain widgets
-        this.handles.mainPanel = uiextras.VBox('Parent', vb);
+        this.handles.mainPanel = uix.VBox('Parent', vb);
         
         % button for control panel
-        buttonsPanel = uiextras.HButtonBox( 'Parent', vb, 'Padding', 5);
+        buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
             'Callback', @this.onButtonOK);
@@ -93,7 +93,7 @@ methods (Access = private)
             'String', 'Cancel', ...
             'Callback', @this.onButtonCancel);
         
-        set(vb, 'Sizes', [-1 40] );
+        set(vb, 'Heights', [-1 40] );
 
     end
     
@@ -141,11 +141,12 @@ end
 methods
     function [h, ht] = addTextField(this, label, text, cb)
         % Add a text field to this diaolg
+        %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
         
         
-        hLine = uiextras.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
@@ -167,20 +168,21 @@ methods
         this.controlHandles = [this.controlHandles h];
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-5 -5]);
+        set(hLine, 'Widths', [-5 -5]);
         
         % update vertical size of widgets
         this.boxSizes = [this.boxSizes 35];
-        set(this.handles.mainPanel, 'Sizes', this.boxSizes);
+        set(this.handles.mainPanel, 'Heights', this.boxSizes);
     end
     
     function [h, ht] = addNumericField(this, label, value, nDigits, cb)
         % Add a text field to this diaolg
+        %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
         
         % create horizontal box
-        hLine = uiextras.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
@@ -213,20 +215,21 @@ methods
         this.controlHandles = [this.controlHandles h];
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-5 -5]);
+        set(hLine, 'Widths', [-5 -5]);
         
         % update vertical size of widgets
         this.boxSizes = [this.boxSizes 35];
-        set(this.handles.mainPanel, 'Sizes', this.boxSizes);
+        set(this.handles.mainPanel, 'Heights', this.boxSizes);
     end
     
     function h = addCheckBox(this, label, checked, cb)
         % Add  text field to this diaolg
+        %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
         
         % create horizontal box
-        hLine = uiextras.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
             'Spacing', 5, 'Padding', 5);
       
         % creates the new control
@@ -245,20 +248,21 @@ methods
         this.controlHandles = [this.controlHandles h];
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', -5);
+        set(hLine, 'Widths', -5);
         
         % update vertical size of widgets
         this.boxSizes = [this.boxSizes 25];
-        set(this.handles.mainPanel, 'Sizes', this.boxSizes);
+        set(this.handles.mainPanel, 'Heights', this.boxSizes);
     end
     
     function [h, ht] = addChoice(this, label, choiceLabels, initialValue, cb)
         % Add choice as a popupmenu
+        %
         % usage:
         %   addChoice(GD, LABEL, CHOICES, INITIALVALUE);
         
         
-        hLine = uiextras.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
@@ -291,11 +295,11 @@ methods
         this.controlHandles = [this.controlHandles h];
         
         % setup size in horizontal direction
-        set(hLine, 'Sizes', [-5 -5]);
+        set(hLine, 'Widths', [-5 -5]);
         
         % update vertical size of widgets
         this.boxSizes = [this.boxSizes 35];
-        set(this.handles.mainPanel, 'Sizes', this.boxSizes);
+        set(this.handles.mainPanel, 'Heights', this.boxSizes);
     end
     
    
