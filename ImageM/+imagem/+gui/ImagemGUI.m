@@ -402,7 +402,7 @@ methods
             SetImageScaleAction(viewer), 'Set Image Scale');
 
         ImagemGUI.addMenuItem(analyzeMenu, ...
-            AnalyzeImageParticlesAction(viewer), 'Analyze Particles');
+            ImageAnalyzeParticlesAction(viewer), 'Analyze Particles');
         item = ImagemGUI.addMenuItem(analyzeMenu, ...
             ShowImageHistogramAction(viewer), 'Histogram');
         set(item, 'Accelerator', 'H');
