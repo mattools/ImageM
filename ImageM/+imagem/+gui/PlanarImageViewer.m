@@ -8,10 +8,10 @@ classdef PlanarImageViewer < handle
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -331,7 +331,7 @@ methods
     function h = drawShape(this, shape)
         
         % extract current axis
-        ax =this.handles.imageAxis;
+        ax = this.handles.imageAxis;
 %         axes(this.handles.imageAxis);
         
         switch lower(shape.type)

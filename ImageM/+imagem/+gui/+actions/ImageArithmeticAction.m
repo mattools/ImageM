@@ -1,5 +1,5 @@
 classdef ImageArithmeticAction < imagem.gui.ImagemAction
-%IMAGEOVERLAYACTION Open a dialog to compute imposed minima
+%IMAGEOVERLAYACTION Arithmetic operation operated on two images
 %
 %   Class ImageArithmeticAction
 %
@@ -8,10 +8,10 @@ classdef ImageArithmeticAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@nantes.inra.fr
 % Created: 2012-11-04,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 

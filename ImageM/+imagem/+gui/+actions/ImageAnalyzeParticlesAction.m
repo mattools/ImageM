@@ -19,14 +19,14 @@ properties
     % liste of handles to widgets
     handles;
     
-    % the name of the image to draw overlay
-    overlayImageName = '';
-    
-    % the type of overlay to display
-    overlayType = 'Ellipses';
+%     % the name of the image to draw overlay
+%     overlayImageName = '';
+%     
+%     % the type of overlay to display
+%     overlayType = 'Ellipses';
     
     % the list of available overlay types
-    overlayValues = {'None', 'Ellipses', 'Boxes'};
+    overlayTypeValues = {'None', 'Ellipses', 'Boxes'};
 end
 
 
@@ -43,11 +43,10 @@ methods
         
         % setup display
         createFigure(this);
-%         updateWidgets(this);
     end
     
-    function process(this)
-        % run the selected features on the current image
+    function tab = computeFeatures(this)
+        % compute the selected features on the current image and return table 
         
         % get current image
         img = this.viewer.doc.image;
@@ -206,7 +205,11 @@ methods
         
         this.handles.figure = hf;
         gui = this.viewer.gui;
+
+        % the list of images for choosing the overlay
+        imageNames = getImageNames(gui.app);
         
+
         % vertical layout, containing main panel and buttons panel
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         
@@ -327,13 +330,22 @@ methods
         set(featuresPanel, 'Heights', [20 20 20 20 20 20 20 20 20]);
         
         
-        % add combo box for choosing region connectivity
-        [this.handles.connectivityPopup] = addComboBoxLine(gui, mainPanel, ...
-            'Overlay:', {'Nothing', 'Ellipse', 'Box'}, ...
-            @this.onOverlayTypeChanged);
+        % add combo box for choosing region overlay options
+        this.handles.overlayTypePopup = addComboBoxLine(gui, mainPanel, ...
+            'Overlay:', this.overlayTypeValues);
+        set(this.handles.overlayTypePopup, 'Value', 2);
+        
+        % add combo box for choosing the image to overlay 
+        this.handles.overlayImagePopup = addComboBoxLine(gui, mainPanel, ...
+            'Image to overlay:', imageNames);
+        
+        % setup image to overlay with current image index
+        name = this.viewer.doc.image.name;
+        index = find(strcmp(name, imageNames));
+        set(this.handles.overlayImagePopup, 'Value', index);
         
         % setup layout for all widgets but control panel
-        set(mainPanel, 'Heights', [-1 40] );
+        set(mainPanel, 'Heights', [-1 35 35] );
         
         % button for control panel
         buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
@@ -350,23 +362,73 @@ methods
     end
 end
 
-%% Widgets Callback
-methods
-    function onOverlayTypeChanged(this, varargin)
-        disp('change overlay type...');
-    end
-    
-    function onOverlayImageChanged(this, varargin)
-        disp('change overlay image...');
-    end
-end
-
 
 %% Control buttons Callback
 methods
     function onButtonOK(this, varargin)
-        process(this);
+        
+        % compute morphological features
+        tab = computeFeatures(this);
+        
+%         % display overlay of ellipses
+%         ellis = [centro major/2 minor/2 theta];
+%         shape = struct(...
+%             'type', 'ellipse', ...
+%             'data', ellis, ...
+%             'style', {{'-b', 'LineWidth', 1}});
+%         this.viewer.doc.shapes = {shape};
+
+        % extract type of overlay
+        overlayTypeIndex = get(this.handles.overlayTypePopup, 'Value');
+        overlayType = this.overlayTypeValues{overlayTypeIndex};
+        
+        
+        % get document on which add annotations
+        gui = this.viewer.gui;
+        imageName = get(this.handles.overlayImagePopup, 'Value');
+        docToOverlay = getDocument(gui.app, imageName);
+
+        
         closeFigure(this);
+
+        % display data table in its own window
+        show(tab);
+        
+        doc = this.viewer.doc;
+        nLabels = max(doc.image.data(:));
+        switch lower(overlayType)
+            case 'none'
+                
+            case 'boxes'
+                boxes = imBoundingBox(doc.image.data');
+                for i = 1:nLabels
+                    shape = struct(...
+                        'type', 'box', ...
+                        'data', boxes(i,:), ...
+                        'style', {{'color', 'g'}});
+                    addShape(docToOverlay, shape);
+                end
+                
+            case 'ellipses'
+                elli = imInertiaEllipse(doc.image.data');
+                for i = 1:nLabels
+                    shape = struct(...
+                        'type', 'ellipse', ...
+                        'data', elli(i,:), ...
+                        'style', {{'color', 'g'}});
+                    addShape(docToOverlay, shape);
+                end
+               
+            otherwise
+                error(['Unable to process overlay type: ' overlayType]);
+        end
+                
+        % update all the views referenced by the document with overlay
+        viewList = getViews(docToOverlay);
+        for i = 1:length(viewList)
+            updateDisplay(viewList{i});
+        end
+
     end
     
     function onButtonCancel(this, varargin)
