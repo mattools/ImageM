@@ -80,7 +80,9 @@ methods
         img2 = meanFilter(doc.image, se);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        [newDoc, newViewer] = addImageDocument(viewer.gui, img2);
+        copySettings(newViewer, this.viewer);
+        updateDisplay(newViewer);
 
         % add history
         string = sprintf('%s = meanFilter(%s, ones(%d, %d));\n', ...

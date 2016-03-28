@@ -211,7 +211,7 @@ methods
 %         api.setVisibleLocation(loc);
         
         % for vector images, adjust displayrange
-        if isVectorImage(img) || isIntensityImage(img)
+        if isGrayscaleImage(img) || isIntensityImage(img) || isVectorImage(img)
             set(this.handles.imageAxis, 'CLim', [mini maxi]);
         end
         
@@ -282,6 +282,12 @@ methods
 
         % display new title
         set(this.handles.figure, 'Name', titleString);
+    end
+    
+    function copySettings(this, that)
+        % copy display settings from another viewer
+        this.displayRange = that.displayRange;
+        this.zoomMode = that.zoomMode;
     end
 end
 
