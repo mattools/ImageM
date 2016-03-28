@@ -176,50 +176,17 @@ methods
             img = this.doc.previewImage;
         end
         
+        % compute display data
+        % TODO: label image need to use LUT and BGCOLOR
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(img);
         
-        % extract or compute display data
-        if isGrayscaleImage(img) || isColorImage(img)
-            cdata = permute(img.data, [2 1 4 3]);
-            mini = 0;
-            if islogical(cdata)
-                maxi = 1;
-            elseif isinteger(cdata)
-                maxi = intmax(class(cdata));
-            else
-                warning('ImageM:Display', ...
-                    'Try to display a grayscale image with float data');
-                maxi = max(cdata(:));
-            end
-            
-        elseif isLabelImage(img)
-            % replace label image by rgb image
-%             cmap = jet(double(max(img.data(:)))+1);
-%             rgb = label2rgb(img, cmap, 'w', 'shuffle');
-            rgb = label2rgb(img, this.doc.lut, this.doc.backgroundColor);
-            cdata = permute(rgb.data, [2 1 4 3]);
-            maxi = 255;
-            mini = 0;
-        
-        elseif isVectorImage(img)
-            % in case of vector images, display the norm
-            imgNorm = norm(img);
-            cdata = permute(imgNorm.data, [2 1 4 3]);
-            mini = min(cdata(:));
-            maxi = max(cdata(:));
-
+        % comptue dispay range, or keep the previously computed one
+        if isempty(this.displayRange) && ~isLabelImage(img)
+            [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(img);
         else
-            % intensity or unknown type
-            cdata = permute(img.data, [2 1 4 3]);
-            mini = min(cdata(:));
-            maxi = max(cdata(:));
-            
+            mini = this.displayRange(1);
+            maxi = this.displayRange(2);
         end
-
-        % ensure maxi > mini
-        if maxi <= mini
-            maxi = mini + 1;
-        end
-        
         % changes current display data
         api = iptgetapi(this.handles.scrollPanel);
 %         loc = api.getVisibleLocation();

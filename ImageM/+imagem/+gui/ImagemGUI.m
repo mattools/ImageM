@@ -41,6 +41,56 @@ methods
 end % construction function
 
 
+%% Methods for managing images
+
+methods
+    function range = computeDisplayRange(this, image)
+        % compute best display range for an image according to its type
+        
+        % extract or compute display data
+        if isGrayscaleImage(image) || isColorImage(image)
+            cdata = permute(image.data, [2 1 4 3]);
+            mini = 0;
+            if islogical(cdata)
+                maxi = 1;
+            elseif isinteger(cdata)
+                maxi = intmax(class(cdata));
+            else
+                warning('ImageM:Display', ...
+                    'Try to display a grayscale image with float data');
+                maxi = max(cdata(:));
+            end
+            
+        elseif isLabelImage(image)
+            % label image will be replaced by RGB image
+            maxi = 255;
+            mini = 0;
+        
+        elseif isVectorImage(image)
+            % in case of vector images, display the norm
+            imgNorm = norm(image);
+            cdata = permute(imgNorm.data, [2 1 4 3]);
+            mini = min(cdata(:));
+            maxi = max(cdata(:));
+
+        else
+            % intensity or unknown type
+            cdata = permute(image.data, [2 1 4 3]);
+            mini = min(cdata(:));
+            maxi = max(cdata(:));
+            
+        end
+
+        % ensure maxi > mini
+        if maxi <= mini
+            maxi = mini + 1;
+        end
+        
+        range = [mini maxi];
+    end
+end
+
+
 %% General methods
 methods
     function [doc, viewer] = addImageDocument(this, image, newName, refTag)
