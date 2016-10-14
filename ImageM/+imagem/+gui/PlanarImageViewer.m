@@ -1,17 +1,25 @@
 classdef PlanarImageViewer < handle
 %PLANARIMAGEVIEWER  A viewer for planar images
 %
-%   output = PlanarImageViewer(input)
+%   VIEWER = PlanarImageViewer(GUI, DOC)
+%   Creates a VIEWER for an ImageM document.
+%   GUI: the instance of ImagemGUI that manages all frames
+%   DOC: the instance of ImagemDoc that contains the data to display.
 %
 %   Example
-%   PlanarImageViewer
+%     app = imagem.app.ImagemApp;
+%     gui = imagem.gui.ImagemGUI(app);
+%     img = Image.read('cameraman.tif');
+%     doc = imagem.app.ImagemDoc(image);
+%     addDocument(app, doc);
+%     viewer = imagem.gui.PlanarImageViewer(this, doc);
 %
 %   See also
-%
+%     imagem.gui.ImagemGUI, imagem.app.ImagemDoc
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -66,6 +74,7 @@ methods
             'NumberTitle', 'off', ...
             'NextPlot', 'new', ...
             'Name', 'ImageM Main Figure', ...
+            'Visible', 'Off', ...
             'CloseRequestFcn', @this.close);
         this.handles.figure = fig;
         
@@ -99,6 +108,7 @@ methods
         end
         
         set(fig, 'UserData', this);
+        set(fig, 'Visible', 'On');
         
         
         function setupLayout(hf)
@@ -451,6 +461,9 @@ methods
         % function called when the Scroll panel has been resized
         
        if strcmp(this.zoomMode, 'adjust')
+            if ~isfield(this.handles, 'scrollPanel')
+                return;
+            end
             scroll = this.handles.scrollPanel;
             api = iptgetapi(scroll);
             mag = api.findFitMag();
