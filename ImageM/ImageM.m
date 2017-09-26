@@ -8,9 +8,9 @@ function varargout = ImageM(varargin)
 %   Creates a new ImagM window initialized with the given image. IMG should
 %   be an instance of Image Object.
 %
-%   IMV = ImageM(IMG);
+%   IV = ImageM(IMG);
 %   Returns the ImageM Viewer object created for the input image.
-%   The viewer has several fields, among them:
+%   The viewer contains several fields, among them:
 %   * gui:  the global GUI that manages the set of frames/viewers
 %   * doc:  an ImagemDoc object that encapsulates the image together with
 %           useful information
@@ -22,11 +22,11 @@ function varargout = ImageM(varargin)
 %     ImageM(img);
 %
 %   See also
-%
+%     Image
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -41,6 +41,11 @@ if ~isempty(varargin)
     if isa(var, 'Image')
         % if first argument is an image object, keep it
         img = var;
+        
+        % if image has no name, use the name of the variable
+        if isempty(img.name)
+            img.name = inputname(1);
+        end
         
     elseif ischar(var)
         % if first input is a string, use it to open an image        
@@ -57,10 +62,11 @@ end
 app = ImagemApp;
 gui = ImagemGUI(app);
 
-
 % use the GUI to create a new image display
 [doc, viewer] = addImageDocument(gui, img); %#ok<ASGLU>
 
+
+% returns handle to viewer if requested
 if nargout > 0
     varargout = {viewer};
 end
