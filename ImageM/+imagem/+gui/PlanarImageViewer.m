@@ -189,14 +189,7 @@ methods
         % compute display data
         % TODO: label image need to use LUT and BGCOLOR
         cdata = imagem.gui.ImageUtils.computeDisplayImage(img);
-        
-        % comptue dispay range, or keep the previously computed one
-        if isempty(this.displayRange) && ~isLabelImage(img)
-            [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(img);
-        else
-            mini = this.displayRange(1);
-            maxi = this.displayRange(2);
-        end
+       
         % changes current display data
         api = iptgetapi(this.handles.scrollPanel);
 %         loc = api.getVisibleLocation();
@@ -220,8 +213,16 @@ methods
         set(this.handles.imageAxis, 'YLim', extent(3:4));
 %         api.setVisibleLocation(loc);
         
-        % for vector images, adjust displayrange
+        % eventually adjust displayrange
         if isGrayscaleImage(img) || isIntensityImage(img) || isVectorImage(img)
+            % get min and max display values, or recompute them
+            if isempty(this.displayRange)
+                [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(img);
+            else
+                mini = this.displayRange(1);
+                maxi = this.displayRange(2);
+            end
+            
             set(this.handles.imageAxis, 'CLim', [mini maxi]);
         end
         

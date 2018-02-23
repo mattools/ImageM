@@ -11,7 +11,7 @@ classdef ImageUtils < handle
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2016-03-28,    using Matlab 8.6.0.267246 (R2015b)
 % Copyright 2016 INRA - BIA-BIBS.
 
@@ -31,7 +31,7 @@ methods (Static)
              
         elseif isLabelImage(image)
             % label image will be replaced by RGB image
-            rgb = label2rgb(img);
+            rgb = label2rgb(image);
             cdata = permute(rgb.data, [2 1 4 3]);
         
         elseif isVectorImage(image)
