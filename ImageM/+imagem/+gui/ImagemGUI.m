@@ -365,7 +365,12 @@ methods
         
         tool = PrintCurrentPointTool(viewer);
         ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
-            'Print Current Point', true);
+            'Print Current Point');
+
+        tool = ScrollImagePositionTool(viewer);
+        ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
+            'Scroll Image');
+        
         
         
         ImagemGUI.addMenuItem(toolsMenu, ...
