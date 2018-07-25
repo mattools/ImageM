@@ -114,12 +114,12 @@ methods
         function setupLayout(hf)
             
             % vertical layout: image display and status bar
-            mainPanel = uiextras.VBox('Parent', hf, ...
+            mainPanel = uix.VBox('Parent', hf, ...
                 'Units', 'normalized', ...
                 'Position', [0 0 1 1]);
             
             % panel for image display
-            displayPanel = uiextras.VBox('Parent', mainPanel);
+            displayPanel = uix.VBox('Parent', mainPanel);
             
             % scrollable panel for image display
             scrollPanel = uipanel('Parent', displayPanel, ...
@@ -153,7 +153,7 @@ methods
                 'HorizontalAlignment', 'left');
                         
             % set up relative sizes of layouts
-            mainPanel.Sizes = [-1 20];
+            mainPanel.Heights = [-1 20];
 
             % once each panel has been resized, setup image magnification
             api = iptgetapi(this.handles.scrollPanel);
