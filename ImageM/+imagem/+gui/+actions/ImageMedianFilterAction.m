@@ -1,5 +1,5 @@
 classdef ImageMedianFilterAction < imagem.gui.actions.CurrentImageAction
-%IMAGEMEDIANFILTER Apply median filtering with box strel on current image
+% Apply median filtering with box neighborhood on current image.
 %
 %   Class ImageMedianFilterAction
 %
@@ -11,23 +11,23 @@ classdef ImageMedianFilterAction < imagem.gui.actions.CurrentImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    previewImage = [];
-    needUpdate = true;
+    PreviewImage = [];
+    NeedUpdate = true;
     
     % list of handles on the dialog widgets
-    handles;
+    Handles;
 end
 
 %% Constructor
 methods
-    function this = ImageMedianFilterAction(viewer)
+    function obj = ImageMedianFilterAction(viewer)
     % Constructor for the parent class
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'medianFilter');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'medianFilter');
     end
 
 end % end constructors
@@ -35,35 +35,33 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
 %         disp('Compute Image median filter');
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        % get handle to current doc
+        doc = currentDoc(obj);
         
         % creates a new dialog, and populates it with some fields
         gd = imagem.gui.GenericDialog('Median Filter');
-        this.handles.dialog = gd;
+        obj.Handles.Dialog = gd;
         
         hWidth = addNumericField(gd, 'Box Width: ', 3, 0);
-        set(hWidth, 'CallBack', @this.onNumericFieldModified);
-        this.handles.widthTextField = hWidth;
+        set(hWidth, 'CallBack', @obj.onNumericFieldModified);
+        obj.Handles.WidthTextField = hWidth;
         
         hHeight = addNumericField(gd, 'Box Height: ', 3, 0);
-        set(hHeight, 'CallBack', @this.onNumericFieldModified);
-        this.handles.heightTextField = hHeight;
+        set(hHeight, 'CallBack', @obj.onNumericFieldModified);
+        obj.Handles.HeightTextField = hHeight;
         
         hPreview = addCheckBox(gd, 'Preview', false);
-        set(hPreview, 'CallBack', @this.onPreviewCheckBoxChanged);
-        this.handles.previewCheckBox = hPreview;
+        set(hPreview, 'CallBack', @obj.onPreviewCheckBoxChanged);
+        obj.Handles.PreviewCheckBox = hPreview;
         
         % displays the dialog, and waits for user
         showDialog(gd);
         
         % refresh display of main figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        clearPreviewImage(obj);
             
         % check if ok or cancel was clicked
         if wasCanceled(gd)
@@ -74,62 +72,58 @@ methods
         width = getNextNumber(gd);
         height = getNextNumber(gd);
         
-        se = ones(width, height);
-        
         % apply 'median' operation
-        img2 = medianFilter(doc.image, se);
+        se = ones(width, height);
+        img2 = medianFilter(currentImage(obj), se);
         
         % add image to application, and create new display
-        [newDoc, newViewer] = addImageDocument(viewer.gui, img2);
-        copySettings(newViewer, this.viewer);
+        [newDoc, newViewer] = addImageDocument(obj, img2);
+        copySettings(newViewer, obj.Viewer);
         updateDisplay(newViewer);
 
         % add history
         string = sprintf('%s = medianFilter(%s, ones(%d,%d));\n', ...
-            newDoc.tag, doc.tag, width, height);
-        addToHistory(viewer.gui.app, string);
+            newDoc.Tag, doc.Tag, width, height);
+        addToHistory(obj, string);
     end
     
-    function onNumericFieldModified(this, src, event) %#ok<INUSD>
+    function onNumericFieldModified(obj, src, event) %#ok<INUSD>
         % update preview image of the document
         
-        this.needUpdate = true;
+        obj.NeedUpdate = true;
         
-        hPreview = this.handles.previewCheckBox;
+        hPreview = obj.Handles.PreviewCheckBox;
         if get(hPreview, 'Value') == get(hPreview, 'Max')
-            updatePreviewImage(this);
-            this.viewer.doc.previewImage = this.previewImage;
-            updateDisplay(this.viewer);
+            recomputePreviewImage(obj);
+            updatePreviewImage(obj, obj.PreviewImage);
         end
 
     end
     
-    function onPreviewCheckBoxChanged(this, src, event) %#ok<INUSD>
-        hPreview = this.handles.previewCheckBox;
+    function onPreviewCheckBoxChanged(obj, src, event) %#ok<INUSD>
+        hPreview = obj.Handles.PreviewCheckBox;
         if get(hPreview, 'Value') == get(hPreview, 'Max')
-            if this.needUpdate
-                updatePreviewImage(this);
+            if obj.NeedUpdate
+                recomputePreviewImage(obj);
+                updatePreviewImage(obj, obj.PreviewImage);
             end
-            this.viewer.doc.previewImage = this.previewImage;
         else
-            this.viewer.doc.previewImage = [];
+            clearPreviewImage(obj);
         end
-        
-        updateDisplay(this.viewer);
     end
     
-    function updatePreviewImage(this)
+    function recomputePreviewImage(obj)
         % update preview image from dialog options, and toggle update flag
-        width = getNextNumber(this.handles.dialog);
-        height = getNextNumber(this.handles.dialog);
-        resetCounter(this.handles.dialog);
+        width = getNextNumber(obj.Handles.Dialog);
+        height = getNextNumber(obj.Handles.Dialog);
+        resetCounter(obj.Handles.Dialog);
 
         % apply 'median' operation
         se = ones(width, height);
-        this.previewImage = medianFilter(this.viewer.doc.image, se);
+        obj.PreviewImage = medianFilter(currentImage(obj), se);
         
         % reset state of update
-        this.needUpdate = false;
+        obj.NeedUpdate = false;
     end
 
 end % end methods

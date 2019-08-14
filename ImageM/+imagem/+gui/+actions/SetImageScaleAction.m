@@ -1,5 +1,5 @@
 classdef SetImageScaleAction < imagem.gui.actions.CurrentImageAction
-%SETIMAGESCALEACTION  One-line description here, please.
+% Set image scale.
 %
 %   Class SetImageScaleAction
 %
@@ -8,25 +8,25 @@ classdef SetImageScaleAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-04-06,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2012 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    handles;
+    Handles;
 end % end properties
 
 
 %% Constructor
 methods
-    function this = SetImageScaleAction(viewer)
+    function obj = SetImageScaleAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'setImageScale');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'setImageScale');
     end
 
 end % end constructors
@@ -34,48 +34,48 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('set image scale');
         
-        createFigure(this);
-        updateWidgets(this);
+        createFigure(obj);
+        updateWidgets(obj);
     end
     
-    function hf = createFigure(this)
+    function hf = createFigure(obj)
         % creates the figure
         hf = figure(...
             'Name', 'Set Image Scale', ...
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [250 230];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uix.VBox('Parent', vb);
         
-        gui = this.viewer.gui;
-        this.handles.distancePixelsText = addInputTextLine(gui, mainPanel, ...
+        gui = obj.Viewer.Gui;
+        obj.Handles.DistancePixelsText = addInputTextLine(gui, mainPanel, ...
             'Distance in pixels:', '');
-        this.handles.distanceUserUnitText = addInputTextLine(gui, mainPanel, ...
+        obj.Handles.DistanceUserUnitText = addInputTextLine(gui, mainPanel, ...
             'Known distance:', '');
-        this.handles.pixelAspectRatioText = addInputTextLine(gui, mainPanel, ...
+        obj.Handles.pixelAspectRatioText = addInputTextLine(gui, mainPanel, ...
             'Pixel Aspect Ratio:', '');
-        this.handles.unitText = addInputTextLine(gui, mainPanel, ...
+        obj.Handles.UnitText = addInputTextLine(gui, mainPanel, ...
             'Unit:', '');
 
 
         % calibrate from current selection
-        shape = this.viewer.selection;
-        if ~isempty(shape) && strcmpi(shape.type, 'linesegment')
-            len = edgeLength(shape.data);
-            set(this.handles.distancePixelsText, 'String', num2str(len));
+        shape = obj.Viewer.Selection;
+        if ~isempty(shape) && strcmpi(shape.Type, 'linesegment')
+            len = edgeLength(shape.Data);
+            set(obj.Handles.DistancePixelsText, 'String', num2str(len));
         end
         
         
@@ -83,51 +83,50 @@ methods
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
         
     end
     
     
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        clearPreviewImage(obj);
         
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function updateWidgets(this) %#ok<MANU>
+    function updateWidgets(obj) %#ok<MANU>
         
 %         % update preview image of the document
-%         bin = computeWatershedImage(this) == 0;
-%         doc = this.viewer.doc;
+%         bin = computeWatershedImage(obj) == 0;
+%         doc = obj.viewer.doc;
 %         doc.previewImage = overlay(doc.image, bin);
-%         updateDisplay(this.viewer);
+%         updateDisplay(obj.viewer);
     end
 
 end % end methods
 
 %% Control buttons Callback
 methods
-    function onButtonOK(this, varargin)
+    function onButtonOK(obj, varargin)
         
-        textPixels = get(this.handles.distancePixelsText, 'String');
+        textPixels = get(obj.Handles.DistancePixelsText, 'String');
         distPx = str2double(textPixels);
         
-        textDistance = get(this.handles.distanceUserUnitText, 'String');
+        textDistance = get(obj.Handles.DistanceUserUnitText, 'String');
         distCalib = str2double(textDistance);
         
-        unit = get(this.handles.unitText, 'String');
+        unit = get(obj.Handles.UnitText, 'String');
         
-        img = this.viewer.doc.image;
+        img = currentImage(obj);
         
         
         disp(distPx);
@@ -146,16 +145,16 @@ methods
         end
         
         resol = distCalib / distPx;
-        img.origin      = [0 0];
-        img.spacing     = [resol resol];
-        img.unitName    = unit;
-        img.calibrated  = true;
+        img.Origin      = [0 0];
+        img.Spacing     = [resol resol];
+        img.UnitName    = unit;
+        img.Calibrated  = true;
         
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
 end
 

@@ -1,5 +1,5 @@
 classdef FlipImageAction < imagem.gui.actions.CurrentImageAction
-%IMAGEFLIPACTION  Flip current image
+% Flip current image.
 %
 %   Class FlipImageAction
 %
@@ -8,7 +8,7 @@ classdef FlipImageAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
 % e-mail: david.legland@grignon.inra.fr
@@ -18,17 +18,17 @@ classdef FlipImageAction < imagem.gui.actions.CurrentImageAction
 
 %% Properties
 properties
-    axis = 3;
+    Axis = 3;
 end % end properties
 
 
 %% Constructor
 methods
-    function this = FlipImageAction(viewer, axis, varargin)
+    function obj = FlipImageAction(viewer, axis, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'flipImage');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'flipImage');
         if nargin > 1
-            this.axis = axis;
+            obj.Axis = axis;
         end
     end
 
@@ -37,22 +37,19 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
          
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
-        
         % flip image
-        res = flip(doc.image, this.axis);
+        doc = currentDoc(obj);
+        res = flip(doc.Image, obj.Axis);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, res);
+        newDoc = addImageDocument(obj, res);
         
         % add history
         string = sprintf('%s = flip(%s, %d);\n', ...
-             newDoc.tag, this.viewer.doc.tag, this.axis);
-        addToHistory(viewer.gui.app, string);
+             newDoc.Tag, doc.Tag, obj.Axis);
+        addToHistory(obj, string);
     end
 end
 

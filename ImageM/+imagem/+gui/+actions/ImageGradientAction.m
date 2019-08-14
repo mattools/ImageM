@@ -1,5 +1,5 @@
 classdef ImageGradientAction < imagem.gui.actions.ScalarImageAction
-%IMAGEGRADIENTACTION Compute gradient norm of current image
+% Compute gradient norm of current image.
 %
 %   output = ImageGradientAction(input)
 %
@@ -8,39 +8,39 @@ classdef ImageGradientAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-11,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    sigma = 3;
-    handles;
+    Sigma = 3;
+    Handles;
 end
 
 methods
-    function this = ImageGradientAction(viewer, varargin)
+    function obj = ImageGradientAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageGradient');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'imageGradient');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
-        createGradientFigure(this);
-        updateWidgets(this);
+        createGradientFigure(obj);
+        updateWidgets(obj);
     end
     
     
-    function hf = createGradientFigure(this)
+    function hf = createGradientFigure(obj)
         % Creates a new dialog with all necessary widgets
          
         % startup sigma value
         sliderValue = 3;
-        this.sigma = sliderValue;
+        obj.Sigma = sliderValue;
         
         % action figure
         hf = figure(...
@@ -48,16 +48,16 @@ methods
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [200 250];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         % background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.viewer.gui);
+        bgColor = getWidgetBackgroundColor(obj.Viewer.Gui);
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
@@ -75,27 +75,27 @@ methods
             'Style', 'Text', ...
             'Parent', line1, ...
             'String', 'Sigma:');
-        this.handles.sigmaEdit = uicontrol(...
+        obj.Handles.SigmaEdit = uicontrol(...
             'Style', 'Edit', ...
             'Parent', line1, ...
-            'String', num2str(this.sigma), ...
+            'String', num2str(obj.Sigma), ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onTextValueChanged);
+            'Callback', @obj.onTextValueChanged);
         set(line1, 'Widths', [-1 -1]);
         
         % one slider for changing value
-        this.handles.sigmaSlider = uicontrol(...
+        obj.Handles.SigmaSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
             'Min', 0, 'Max', 50, ...
             'Value', sliderValue, ...
             'SliderStep', [.002 .02], ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onSliderValueChanged);
+            'Callback', @obj.onSliderValueChanged);
         
         % setup listeners for slider continuous changes
-        addlistener(this.handles.sigmaSlider, ...
-            'ContinuousValueChange', @this.onSliderValueChanged);
+        addlistener(obj.Handles.SigmaSlider, ...
+            'ContinuousValueChange', @obj.onSliderValueChanged);
 
         set(mainPanel, 'Heights', [35 25]);
         
@@ -103,82 +103,82 @@ methods
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
         
     end
     
-    function grad = computeGradientImage(this)
+    function grad = computeGradientImage(obj)
         % Compute the result of gradient
-        grad = norm(gradient(this.viewer.doc.image, this.sigma));
+        grad = norm(gradient(currentImage(obj), obj.Sigma));
     end
     
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        obj.Viewer.Doc.PreviewImage = [];
+        updateDisplay(obj.Viewer);
         
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function updateWidgets(this)
+    function updateWidgets(obj)
         % update widget values depending on dialog inner state
         
         % update value widgets
-        set(this.handles.sigmaEdit, 'String', num2str(this.sigma))
-        set(this.handles.sigmaSlider, 'Value', this.sigma);
+        set(obj.Handles.SigmaEdit, 'String', num2str(obj.Sigma))
+        set(obj.Handles.SigmaSlider, 'Value', obj.Sigma);
         
         % update preview image of the document
-        grad = computeGradientImage(this);
-        doc = this.viewer.doc;
-        doc.previewImage = grad;
-        updateDisplay(this.viewer);
+        grad = computeGradientImage(obj);
+        doc = currentDoc(obj);
+        doc.PreviewImage = grad;
+        updateDisplay(obj.Viewer);
     end
     
 end
 
 %% GUI Items Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         % When OK button is clicked, operation is performed, new image is
         % created, history updated, and dialog closed
         
         % apply the gradient operation
-        grad = computeGradientImage(this);
-        newDoc = addImageDocument(this.viewer.gui, grad);
+        grad = computeGradientImage(obj);
+        newDoc = addImageDocument(obj, grad);
         
         % add history
-        string = sprintf('%s = norm(gradient(%s));\n', newDoc.tag, this.viewer.doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+        string = sprintf('%s = norm(gradient(%s));\n', newDoc.Tag, obj.Viewer.Doc.Tag);
+        addToHistory(obj, string);
         
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
+    function onButtonCancel(obj, varargin)
         % When cancel button is clicked, figure is closed
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onSliderValueChanged(this, varargin)
-        this.sigma = get(this.handles.sigmaSlider, 'Value');
-        updateWidgets(this);
+    function onSliderValueChanged(obj, varargin)
+        obj.Sigma = get(obj.Handles.SigmaSlider, 'Value');
+        updateWidgets(obj);
     end
     
-    function onTextValueChanged(this, varargin)
-        val = str2double(get(this.handles.sigmaEdit, 'String'));
+    function onTextValueChanged(obj, varargin)
+        val = str2double(get(obj.Handles.SigmaEdit, 'String'));
         if ~isfinite(val)
             return;
         end
         
-        this.sigma = val;
-        updateWidgets(this);
+        obj.Sigma = val;
+        updateWidgets(obj);
     end
 end
 

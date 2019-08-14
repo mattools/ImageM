@@ -1,5 +1,5 @@
 classdef ImageSelectionLineProfileAction < imagem.gui.actions.CurrentImageAction
-%RENAMEIMAGEACTION  Plot line profile of current selection
+% Plot line profile of current selection.
 %
 %   Class ImageSelectionLineProfileAction
 %
@@ -8,10 +8,10 @@ classdef ImageSelectionLineProfileAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageSelectionLineProfileAction(viewer)
+    function obj = ImageSelectionLineProfileAction(viewer)
     % Constructor for ImageSelectionLineProfileAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'selectionLineProfile');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'selectionLineProfile');
     end
 
 end % end constructors
@@ -35,19 +35,19 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
-        viewer = this.viewer;
-        selection = viewer.selection;
+        viewer = obj.Viewer;
+        selection = viewer.Selection;
         if isempty(selection)
             return;
         end
         
-        switch lower(selection.type)
+        switch lower(selection.Type)
             case 'linesegment'
                 % determine the line end point
-                pos1 = selection.data(1, 1:2);
-                pos2 = selection.data(1, 3:4);
+                pos1 = selection.Data(1, 1:2);
+                pos2 = selection.Data(1, 3:4);
                 len = hypot(pos1(1) - pos2(1), pos1(2) - pos2(2));
                 
                 nValues = ceil(len) + 1;
@@ -58,25 +58,25 @@ methods
                 pts = [x' y'];
                 
             case 'polyline'
-                dx = diff(selection.data(:,1));
-                dy = diff(selection.data(:,2));
+                dx = diff(selection.Data(:,1));
+                dy = diff(selection.Data(:,2));
                 len = sum(hypot(dx, dy));
                 
                 nValues = ceil(len) + 1;
-                pts = resamplePolyline(selection.data, nValues);
+                pts = resamplePolyline(selection.Data, nValues);
                 
                 dx = diff(pts(:,1));
                 dy = diff(pts(:,2));
                 dists = [0 cumsum(hypot(dx, dy))'];
                 
             otherwise
-                errordlg('Impossible to create line profile for %s selections', selection.type);
+                errordlg('Impossible to create line profile for %s selections', selection.Type);
                 return;
         end
         
         
         % extract corresponding pixel values (nearest-neighbor eval)
-        img = viewer.doc.image;
+        img = currentImage(obj);
         vals = interp(img, pts);
         
 
@@ -101,14 +101,14 @@ methods
             
         else
             warning('LineProfileTool:UnsupportedImageImageType', ...
-                ['Can not manage images of type ' img.type]);
+                ['Can not manage images of type ' img.Type]);
         end
 
         xlabel('Position on line');
         
-        if ~isempty(img.name)
-            title(img.name);
-            set(gcf, 'name', ['Profile of ' img.name]);
+        if ~isempty(img.Name)
+            title(img.Name);
+            set(gcf, 'name', ['Profile of ' img.Name]);
         end
     end
 end % end methods

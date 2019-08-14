@@ -1,5 +1,5 @@
 classdef ImageAnalyzeParticlesAction < imagem.gui.actions.LabelImageAction
-%IMAGEANALYZEPARTICLESACTION Compute geometrical descriptors of particles
+% Compute geometrical descriptors of particles.
 %
 %   output = ImageAnalyzeParticlesAction(input)
 %
@@ -11,13 +11,13 @@ classdef ImageAnalyzeParticlesAction < imagem.gui.actions.LabelImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-11,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
     % liste of handles to widgets
-    handles;
+    Handles;
     
 %     % the name of the image to draw overlay
 %     overlayImageName = '';
@@ -26,49 +26,49 @@ properties
 %     overlayType = 'Ellipses';
     
     % the list of available overlay types
-    overlayTypeValues = {'None', 'Ellipses', 'Boxes'};
+    OverlayTypeValues = {'None', 'Ellipses', 'Boxes'};
 end
 
 
 methods
-    function this = ImageAnalyzeParticlesAction(viewer, varargin)
+    function obj = ImageAnalyzeParticlesAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.LabelImageAction(viewer, 'imageAnalyzeParticles');
+        obj = obj@imagem.gui.actions.LabelImageAction(viewer, 'imageAnalyzeParticles');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('analyze particles');
         
         % setup display
-        createFigure(this);
+        createFigure(obj);
     end
     
-    function tab = computeFeatures(this)
+    function tab = computeFeatures(obj)
         % compute the selected features on the current image and return table 
         
         % get current image
-        img = this.viewer.doc.image;
+        img = currentImage(obj);
         
         % identify features to compute
-        areaFlag        = get(this.handles.areaCheckBox, 'Value');
-        perimeterFlag   = get(this.handles.perimeterCheckBox, 'Value');
-        eulerFlag       = get(this.handles.eulerCheckBox, 'Value');
-        shapeFactorFlag = get(this.handles.shapeFactorCheckBox, 'Value');
+        areaFlag        = get(obj.Handles.AreaCheckBox, 'Value');
+        perimeterFlag   = get(obj.Handles.PerimeterCheckBox, 'Value');
+        eulerFlag       = get(obj.Handles.EulerCheckBox, 'Value');
+        shapeFactorFlag = get(obj.Handles.ShapeFactorCheckBox, 'Value');
         
-        centroidFlag    = get(this.handles.centroidCheckBox, 'Value');
-        ellipseFlag     = get(this.handles.inertiaEllipseCheckBox, 'Value');
-        ellipseElongFlag    = get(this.handles.ellipseElongationCheckBox, 'Value');
+        centroidFlag    = get(obj.Handles.CentroidCheckBox, 'Value');
+        ellipseFlag     = get(obj.Handles.InertiaEllipseCheckBox, 'Value');
+        ellipseElongFlag    = get(obj.Handles.EllipseElongationCheckBox, 'Value');
         
-        feretDiameterFlag   = get(this.handles.feretDiameterCheckBox, 'Value');
-        orientedBoxFlag = get(this.handles.orientedBoxCheckBox, 'Value');
-        boxElongFlag    = get(this.handles.boxElongationCheckBox, 'Value');
+        feretDiameterFlag   = get(obj.Handles.FeretDiameterCheckBox, 'Value');
+        orientedBoxFlag = get(obj.Handles.OrientedBoxCheckBox, 'Value');
+        boxElongFlag    = get(obj.Handles.BoxElongationCheckBox, 'Value');
         
-        geodDiamFlag    = get(this.handles.geodesicDiameterCheckBox, 'Value');
-        maxInnerRadiusFlag    = get(this.handles.maxInnerRadiusCheckBox, 'Value');
-        geodElongFlag   = get(this.handles.geodesicElongationCheckBox, 'Value');
-        tortuosityFlag  = get(this.handles.tortuosityCheckBox, 'Value');
+        geodDiamFlag    = get(obj.Handles.GeodesicDiameterCheckBox, 'Value');
+        maxInnerRadiusFlag    = get(obj.Handles.MaxInnerRadiusCheckBox, 'Value');
+        geodElongFlag   = get(obj.Handles.GeodesicElongationCheckBox, 'Value');
+        tortuosityFlag  = get(obj.Handles.TortuosityCheckBox, 'Value');
         
         % TODO: use spatial resolution
         resol = [1 1];
@@ -79,15 +79,15 @@ methods
         
         % process global size features
         if areaFlag || shapeFactorFlag
-            areaList = imArea(img.data', resol);
+            areaList = imArea(img.Data, resol);
             tab = [tab Table(areaList, {'Area'})];
         end
         if perimeterFlag || shapeFactorFlag
-            perimeterList = imPerimeter(img.data', resol);
+            perimeterList = imPerimeter(img.Data', resol);
             tab = [tab Table(perimeterList, {'Perimeter'})];
         end
         if eulerFlag
-            tab = [tab Table(imEuler2d(img.data'), {'EulerNumber'})];
+            tab = [tab Table(imEuler2d(img.Data'), {'EulerNumber'})];
         end
         if shapeFactorFlag
             shapeFactor = 4 * pi * areaList ./ perimeterList .^2;
@@ -96,7 +96,7 @@ methods
 
         % process inertia-based features
         if centroidFlag || ellipseFlag || ellipseElongationFlag
-            elli = imInertiaEllipse(img.data', resol);
+            elli = imEquivalentEllipse(img.Data', resol);
             
             if centroidFlag || ellipseFlag
                 tab = [tab Table(elli(:,1:2), {'CentroidX', 'CentroidY'})];
@@ -113,12 +113,12 @@ methods
         
         % process feret diameter and oriented box features
         if feretDiameterFlag || tortuosityFlag
-            feretDiams = imMaxFeretDiameter(img.data') * resol(1);
+            feretDiams = imMaxFeretDiameter(img.Data') * resol(1);
             tab = [tab Table(feretDiams, {'FeretDiameter'})];
         end
         
         if orientedBoxFlag || boxElongFlag
-            boxes = imOrientedBox(img.data', 'spacing', resol);
+            boxes = imOrientedBox(img.Data', 'spacing', resol);
             colNames = {'BoxCenterX', 'BoxCenterY', 'BoxLength', 'BoxWidth', 'BoxOrientation'};
             tab = [tab Table(boxes, colNames)];
             
@@ -130,7 +130,7 @@ methods
         
         % process geodesic diamter based features
         if geodDiamFlag || geodElongFlag || tortuosityFlag
-            geodDiams = imGeodesicDiameter(img.data');
+            geodDiams = imGeodesicDiameter(img.Data');
             tab = [tab Table(geodDiams, {'GeodesicDiameter'})];
         end
         
@@ -140,7 +140,7 @@ methods
         end
         
         if maxInnerRadiusFlag || geodElongFlag
-            discs = imInscribedCircle(img.data');
+            discs = imInscribedCircle(img.Data');
             
             if maxInnerRadiusFlag
                 colNames = {'InnerDiscCenterX', 'InnerDiscCenterY', 'InnerDiscRadius'};
@@ -152,9 +152,9 @@ methods
             end
         end
         
-        tab.name = [img.name '-features'];
+        tab.Name = [img.Name '-features'];
 %         % extract parameters
-%         props = regionprops(img.data', {...
+%         props = regionprops(img.Data', {...
 %             'Area', 'Perimeter', 'Centroid', ...
 %             'MajorAxisLength', 'MinorAxisLength', 'Orientation'});
 % 
@@ -181,15 +181,15 @@ methods
 %             'type', 'ellipse', ...
 %             'data', ellis, ...
 %             'style', {{'-b', 'LineWidth', 1}});
-%         this.viewer.doc.shapes = {shape};
+%         obj.Viewer.doc.shapes = {shape};
         
-        updateDisplay(this.viewer);
+        updateDisplay(obj.Viewer);
         
     end
 end
 
 methods
-    function hf = createFigure(this)
+    function hf = createFigure(obj)
         % creates the figure
         
         hf = figure(...
@@ -197,17 +197,17 @@ methods
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [250 300];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
-        gui = this.viewer.gui;
+        obj.Handles.Figure = hf;
+        gui = obj.Viewer.Gui;
 
         % the list of images for choosing the overlay
-        imageNames = getImageNames(gui.app);
+        imageNames = getImageNames(gui.App);
         
 
         % vertical layout, containing main panel and buttons panel
@@ -221,22 +221,22 @@ methods
         % First column
         
         % global morphometry
-        this.handles.areaCheckBox = uicontrol(...
+        obj.Handles.AreaCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Area', ...
             'Value', 1);
-        this.handles.perimeterCheckBox = uicontrol(...
+        obj.Handles.PerimeterCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Perimeter', ...
             'Value', 1);
-        this.handles.eulerCheckBox = uicontrol(...
+        obj.Handles.EulerCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Euler Number', ...
             'Value', 0);
-        this.handles.shapeFactorCheckBox = uicontrol(...
+        obj.Handles.ShapeFactorCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Shape Factor', ...
@@ -249,17 +249,17 @@ methods
             'Parent', featuresPanel, ...
             'Visible', 'Off');
         
-        this.handles.geodesicDiameterCheckBox = uicontrol(...
+        obj.Handles.GeodesicDiameterCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Geodesic Diameter');
         
-        this.handles.maxInnerRadiusCheckBox = uicontrol(...
+        obj.Handles.MaxInnerRadiusCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Max. Inner Radius');
         
-        this.handles.geodesicElongationCheckBox = uicontrol(...
+        obj.Handles.GeodesicElongationCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Geodesic Elongation');
@@ -275,20 +275,20 @@ methods
         % Second column
         
         % inertia-based  parameters
-        this.handles.centroidCheckBox = uicontrol(...
+        obj.Handles.CentroidCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Centroid', ...
             'Value', 1);
         
-        this.handles.inertiaEllipseCheckBox = uicontrol(...
+        obj.Handles.InertiaEllipseCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Inertia Ellipse', ...
             'Value', 1);
         
         
-        this.handles.ellipseElongationCheckBox = uicontrol(...
+        obj.Handles.EllipseElongationCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Ellipse Elongation', ...
@@ -301,25 +301,25 @@ methods
             'Parent', featuresPanel, ...
             'Visible', 'Off');
         
-        this.handles.feretDiameterCheckBox = uicontrol(...
+        obj.Handles.FeretDiameterCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Feret Diameter', ...
             'Value', 1);
         
-        this.handles.orientedBoxCheckBox = uicontrol(...
+        obj.Handles.OrientedBoxCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Oriented Box', ...
             'Value', 1);
           
-        this.handles.boxElongationCheckBox = uicontrol(...
+        obj.Handles.BoxElongationCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Box Elongation', ...
             'Value', 1);
         
-         this.handles.tortuosityCheckBox = uicontrol(...
+         obj.Handles.TortuosityCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Tortuosity');
@@ -331,18 +331,18 @@ methods
         
         
         % add combo box for choosing region overlay options
-        this.handles.overlayTypePopup = addComboBoxLine(gui, mainPanel, ...
-            'Overlay:', this.overlayTypeValues);
-        set(this.handles.overlayTypePopup, 'Value', 2);
+        obj.Handles.OverlayTypePopup = addComboBoxLine(gui, mainPanel, ...
+            'Overlay:', obj.OverlayTypeValues);
+        set(obj.Handles.OverlayTypePopup, 'Value', 2);
         
         % add combo box for choosing the image to overlay 
-        this.handles.overlayImagePopup = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.OverlayImagePopup = addComboBoxLine(gui, mainPanel, ...
             'Image to overlay:', imageNames);
         
         % setup image to overlay with current image index
-        name = this.viewer.doc.image.name;
+        name = obj.Viewer.Doc.Image.Name;
         index = find(strcmp(name, imageNames));
-        set(this.handles.overlayImagePopup, 'Value', index);
+        set(obj.Handles.OverlayImagePopup, 'Value', index);
         
         % setup layout for all widgets but control panel
         set(mainPanel, 'Heights', [-1 35 35] );
@@ -351,10 +351,10 @@ methods
         buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
         uicontrol('Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol('Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1  40] );
 
@@ -365,10 +365,10 @@ end
 
 %% Control buttons Callback
 methods
-    function onButtonOK(this, varargin)
+    function onButtonOK(obj, varargin)
         
         % compute morphological features
-        tab = computeFeatures(this);
+        tab = computeFeatures(obj);
         
 %         % display overlay of ellipses
 %         ellis = [centro major/2 minor/2 theta];
@@ -376,46 +376,48 @@ methods
 %             'type', 'ellipse', ...
 %             'data', ellis, ...
 %             'style', {{'-b', 'LineWidth', 1}});
-%         this.viewer.doc.shapes = {shape};
+%         obj.Viewer.doc.shapes = {shape};
 
         % extract type of overlay
-        overlayTypeIndex = get(this.handles.overlayTypePopup, 'Value');
-        overlayType = this.overlayTypeValues{overlayTypeIndex};
+        overlayTypeIndex = get(obj.Handles.OverlayTypePopup, 'Value');
+        overlayType = obj.OverlayTypeValues{overlayTypeIndex};
         
         
         % get document on which add annotations
-        gui = this.viewer.gui;
-        imageName = get(this.handles.overlayImagePopup, 'Value');
-        docToOverlay = getDocument(gui.app, imageName);
+        gui = obj.Viewer.Gui;
+        imageName = get(obj.Handles.OverlayImagePopup, 'Value');
+        docToOverlay = getDocument(gui.App, imageName);
 
         
-        closeFigure(this);
+        closeFigure(obj);
 
         % display data table in its own window
         show(tab);
         
-        doc = this.viewer.doc;
-        nLabels = max(doc.image.data(:));
+        img = currentImage(obj);
+        
         switch lower(overlayType)
             case 'none'
                 
             case 'boxes'
-                boxes = imBoundingBox(doc.image.data');
+                boxes = imBoundingBox(img.Data');
+                nLabels = size(boxes, 1);
                 for i = 1:nLabels
                     shape = struct(...
-                        'type', 'box', ...
-                        'data', boxes(i,:), ...
-                        'style', {{'color', 'g'}});
+                        'Type', 'Box', ...
+                        'Data', boxes(i,:), ...
+                        'Style', {{'color', 'g'}});
                     addShape(docToOverlay, shape);
                 end
                 
             case 'ellipses'
-                elli = imInertiaEllipse(doc.image.data');
+                elli = imEquivalentEllipse(img.Data');
+                nLabels = size(elli, 1);
                 for i = 1:nLabels
                     shape = struct(...
-                        'type', 'ellipse', ...
-                        'data', elli(i,:), ...
-                        'style', {{'color', 'g'}});
+                        'Type', 'Ellipse', ...
+                        'Data', elli(i,:), ...
+                        'Style', {{'color', 'g'}});
                     addShape(docToOverlay, shape);
                 end
                
@@ -431,14 +433,14 @@ methods
 
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
     
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
  end

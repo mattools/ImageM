@@ -1,5 +1,5 @@
 classdef RenameImageAction < imagem.gui.actions.CurrentImageAction
-%RENAMEIMAGEACTION  Rename the current image
+% Rename the current image.
 %
 %   Class RenameImageAction
 %
@@ -11,7 +11,7 @@ classdef RenameImageAction < imagem.gui.actions.CurrentImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = RenameImageAction(viewer)
+    function obj = RenameImageAction(viewer)
     % Constructor for RenameImageAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'renameImage');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'renameImage');
     end
 
 end % end constructors
@@ -35,17 +35,17 @@ end % end constructors
 
 %% Methods
 methods
-     function actionPerformed(this, src, event) %#ok<INUSD>
+     function actionPerformed(obj, src, event) %#ok<INUSD>
          
          % extract app data
-         image = this.viewer.doc.image;
-         app = this.viewer.gui.app;
+         image = currentImage(obj);
+         app = obj.Viewer.Gui.App;
          
          % setup widget options
          prompt = {'New image name:'};
          name = 'Rename current image';
          numLines = 1;
-         defaultAnswer = {image.name};
+         defaultAnswer = {image.Name};
          
          while true
              % ask for a new image name
@@ -56,14 +56,14 @@ methods
              newName = answer{1};
              
              % if new name is valid, update title and escape
-             if ~hasDocumentWithName(app, newName)
-                 image.name = newName;
-                 updateTitle(this.viewer);
+             if ~hasDocumentWithName(app, newName) || strcmp(newName, image.Name)
+                 image.Name = newName;
+                 updateTitle(obj.Viewer);
                  return;
              end
              
              % if name already exists, re-display dialog until valid name
-             h = errordlg('An image with this name already exists', ...
+             h = errordlg('An image with obj name already exists', ...
                  'Image Name error', 'modal');
              uiwait(h);
              defaultAnswer = {newName};

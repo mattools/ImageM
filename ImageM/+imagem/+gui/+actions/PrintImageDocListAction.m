@@ -1,5 +1,5 @@
 classdef PrintImageDocListAction < imagem.gui.ImagemAction
-%PRINTIMAGEDOCLISTACTION  One-line description here, please.
+% Print the list of open documents.
 %
 %   output = PrintImageDocListAction(input)
 %
@@ -8,34 +8,32 @@ classdef PrintImageDocListAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-07,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
  
 methods
-    function this = PrintImageDocListAction(viewer, varargin)
+    function obj = PrintImageDocListAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(viewer, 'printImageDocList');
+        obj = obj@imagem.gui.ImagemAction(viewer, 'printImageDocList');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('print image list');
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        gui = viewer.gui;
-        app = gui.app;
+        app = obj.Viewer.Gui.App;
 
-        docList =getDocuments(app);
+        docList = getDocuments(app);
         for i = 1:length(docList)
             doc = docList{i};
-            if ~isempty(doc.image)
-                disp(doc.image.name);
+            if ~isempty(doc.Image)
+                disp(doc.Image.Name);
             end
         end
     end

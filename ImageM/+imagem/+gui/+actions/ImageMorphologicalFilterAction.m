@@ -1,5 +1,5 @@
 classdef ImageMorphologicalFilterAction < imagem.gui.actions.CurrentImageAction
-%IMAGEMORPHOLOGICALFILTERACTION Apply morphological filtering on current image
+% Apply morphological filtering on current image.
 %
 %   Class ImageMorphologicalFilterAction
 %
@@ -8,30 +8,30 @@ classdef ImageMorphologicalFilterAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    operationList = {'Dilation', 'Erosion', 'Closing', 'Opening', 'Gradient', 'Black Top Hat', 'White Top Hat'};
-    commandList = {'dilation', 'erosion', 'closing', 'opening', 'morphoGradient', 'blackTopHat', 'whiteTopHat'};
+    OperationList = {'Dilation', 'Erosion', 'Closing', 'Opening', 'Gradient', 'Black Top Hat', 'White Top Hat'};
+    CommandList = {'dilation', 'erosion', 'closing', 'opening', 'morphoGradient', 'blackTopHat', 'whiteTopHat'};
     
-    shapeList = {'Square', 'Diamond', 'Octogon', 'Disk', 'Horizontal Line', 'Vertical Line', 'Line 45°', 'Line 135°'};
+    ShapeList = {'Square', 'Diamond', 'Octogon', 'Disk', 'Horizontal Line', 'Vertical Line', 'Line 45°', 'Line 135°'};
     
-    previewImage = [];
-    needUpdate = true;
+    PreviewImage = [];
+    NeedUpdate = true;
     
-    handles;
+    Handles;
 end
 
 %% Constructor
 methods
-    function this = ImageMorphologicalFilterAction(viewer)
+    function obj = ImageMorphologicalFilterAction(viewer)
     % Constructor for the parent class
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'morphologicalFilter');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'morphologicalFilter');
     end
 
 end % end constructors
@@ -39,46 +39,43 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
-%         disp('Compute Image median filter');
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-%         doc = viewer.doc;
+        viewer = obj.Viewer;
         
         % creates a new dialog, and populates it with some fields
         gd = imagem.gui.GenericDialog('Morphological Filter');
-        this.handles.dialog = gd;
+        obj.Handles.Dialog = gd;
         
         % add a combo box for the type of operation to perform
-        hOperation = addChoice(gd, 'Operation: ', this.operationList, ...
-            this.operationList{1});
-        set(hOperation, 'CallBack', @this.onWidgetUpdated);
-        this.handles.operationPopup = hOperation;
+        hOperation = addChoice(gd, 'Operation: ', obj.OperationList, ...
+            obj.OperationList{1});
+        set(hOperation, 'CallBack', @obj.onWidgetUpdated);
+        obj.Handles.OperationPopup = hOperation;
 
         % add a combo box for the shape of structuring element
-        hShape = addChoice(gd, 'Shape: ', this.shapeList, ...
-            this.shapeList{1});
-        set(hShape, 'CallBack', @this.onWidgetUpdated);
-        this.handles.shapePopup = hShape;
+        hShape = addChoice(gd, 'Shape: ', obj.ShapeList, ...
+            obj.ShapeList{1});
+        set(hShape, 'CallBack', @obj.onWidgetUpdated);
+        obj.Handles.ShapePopup = hShape;
         
         % add a numeric field for the size of structuring element
         hRadius = addNumericField(gd, 'Radius: ', 3, 0);
-        set(hRadius, 'CallBack', @this.onWidgetUpdated);
-        set(hRadius, 'KeyPressFcn', @this.onWidgetUpdated);
-        this.handles.radiusTextField = hRadius;
+        set(hRadius, 'CallBack', @obj.onWidgetUpdated);
+        set(hRadius, 'KeyPressFcn', @obj.onWidgetUpdated);
+        obj.Handles.RadiusTextField = hRadius;
 
         % add a preview checkbox
         hPreview = addCheckBox(gd, 'Preview', false);
-        set(hPreview, 'CallBack', @this.onPreviewCheckBoxChanged);
-        this.handles.previewCheckBox = hPreview;
+        set(hPreview, 'CallBack', @obj.onPreviewCheckBoxChanged);
+        obj.Handles.PreviewCheckBox = hPreview;
         
         % displays the dialog, and waits for user response
         showDialog(gd);
         
         % clear preview of original viewer
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        clearPreviewImage(obj);
         
         % check if ok or cancel was clicked
         if wasCanceled(gd)
@@ -86,15 +83,14 @@ methods
         end
 
         % compute result image
-        img2 = updatePreviewImage(this);
+        img2 = recomputePreviewImage(obj);
         
         if isempty(img2)
             return;
         end
         
         % add image to application, and create new display
-%         newDoc = addImageDocument(viewer.gui, img2);
-        addImageDocument(viewer.gui, img2);
+        addImageDocument(obj, img2);
         
 %         % add history
 %         string = sprintf('%s = medianFilter(%s, ones(%d,%d));\n', ...
@@ -102,61 +98,57 @@ methods
 %         addToHistory(viewer.gui.app, string);
     end
     
-    function onWidgetUpdated(this, varargin)
+    function onWidgetUpdated(obj, varargin)
         % update preview image of the document
         
-        this.needUpdate = true;
+        obj.NeedUpdate = true;
         
-        hPreview = this.handles.previewCheckBox;
+        hPreview = obj.Handles.PreviewCheckBox;
         if get(hPreview, 'Value') == get(hPreview, 'Max')
-            updatePreviewImage(this);
-            this.viewer.doc.previewImage = this.previewImage;
-            updateDisplay(this.viewer);
+            preview = recomputePreviewImage(obj);
+            updatePreviewImage(obj, preview);
         end
 
     end
     
-    function onPreviewCheckBoxChanged(this, src, event) %#ok<INUSD>
-        hPreview = this.handles.previewCheckBox;
+    function onPreviewCheckBoxChanged(obj, src, event) %#ok<INUSD>
+        hPreview = obj.Handles.PreviewCheckBox;
         if get(hPreview, 'Value') == get(hPreview, 'Max')
-            if this.needUpdate
-                updatePreviewImage(this);
+            if obj.NeedUpdate
+                updatePreviewImage(obj, recomputePreviewImage(obj));
             end
-            this.viewer.doc.previewImage = this.previewImage;
         else
-            this.viewer.doc.previewImage = [];
+            clearPreviewImage(obj);
         end
-        
-        updateDisplay(this.viewer);
     end 
     
-    function img2 = updatePreviewImage(this)
+    function img2 = recomputePreviewImage(obj)
         % update preview image from dialog options, and toggle update flag
         
         % get dialog options
-        gd = this.handles.dialog;
+        gd = obj.Handles.Dialog;
         opIndex = getNextChoiceIndex(gd);
         shapeIndex = getNextChoiceIndex(gd);
-        strelShape = this.shapeList{shapeIndex};
+        strelShape = obj.ShapeList{shapeIndex};
         radius = getNextNumber(gd);
         if isnan(radius)
             img2 = [];
             return;
         end
-        resetCounter(this.handles.dialog);
+        resetCounter(obj.Handles.Dialog);
         
 %         diam = 2 * radius + 1;
 %         se = ones(diam, diam);
         se = createStrel(strelShape, radius); %#ok<NASGU>
         
         % apply filtering operation
-        command = this.commandList{opIndex};
-        img = this.viewer.doc.image; %#ok<NASGU>
+        command = obj.CommandList{opIndex};
+        img = currentImage(obj); %#ok<NASGU>
         img2 = eval(sprintf('%s(img,se)', command));
-        this.previewImage = img2;
+        obj.PreviewImage = img2;
         
         % reset state of update
-        this.needUpdate = false;
+        obj.NeedUpdate = false;
     end
     
 end % end methods
@@ -180,7 +172,7 @@ switch strelShape
         se = strel('line', diam, 0);
     case 'Vertical Line'
         se = strel('line', diam, 90);
-    case 'Line 45°', 
+    case 'Line 45°' 
         se = strel('line', diam, 45);
     case 'Line 135°'
         se = strel('line', diam, 135);

@@ -1,5 +1,5 @@
 classdef ImageOpeningAction < imagem.gui.actions.CurrentImageAction
-%IMAGEOPENINGACTION  One-line description here, please.
+% Apply morphological opening on current image.
 %
 %   output = ImageOpeningAction(input)
 %
@@ -8,40 +8,38 @@ classdef ImageOpeningAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-09,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageOpeningAction(viewer, varargin)
+    function obj = ImageOpeningAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'imageOpening');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'imageOpening');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         % Compute Image opening
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
-        
-        se = ones(3, 3);
+        % get handle to current doc
+        doc = currentDoc(obj);
         
         % compute result image
-        img2 = opening(doc.image, se);
+        se = ones(3, 3);
+        img2 = opening(doc.Image, se);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(obj, img2);
         
         % add history
         string = sprintf('%s = opening(%s, ones(3,3));\n', ...
-            newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, doc.Tag);
+        addToHistory(obj, string);
     end
 end
 

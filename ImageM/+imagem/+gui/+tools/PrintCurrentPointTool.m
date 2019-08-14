@@ -1,5 +1,5 @@
 classdef PrintCurrentPointTool < imagem.gui.ImagemTool
-%PRINTCURRENTPOINTTOOL  One-line description here, please.
+% Print position of current point.
 %
 %   output = PrintCurrentPointTool(input)
 %
@@ -8,40 +8,40 @@ classdef PrintCurrentPointTool < imagem.gui.ImagemTool
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Constructor
 methods
-    function this = PrintCurrentPointTool(viewer, varargin)
+    function obj = PrintCurrentPointTool(viewer, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(viewer, 'printCurrentPoint');
+         obj = obj@imagem.gui.ImagemTool(viewer, 'printCurrentPoint');
     end % constructor 
 
 end % construction function
 
 %% General methods
 methods
-    function select(this) %#ok<*MANU>
+    function select(obj) %#ok<*MANU>
     end
     
-    function deselect(this)
+    function deselect(obj)
     end
     
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        pos = get(this.viewer.handles.imageAxis, 'CurrentPoint');
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
+        pos = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
         fprintf('%f %f\n', pos(1, 1:2));
     end
     
-    function onMouseButtonReleased(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseButtonReleased(obj, hObject, eventdata) %#ok<INUSD>
     end
     
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
     end
     
 end % general methods

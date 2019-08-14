@@ -1,5 +1,5 @@
 classdef ImageThresholdAction < imagem.gui.actions.ScalarImageAction
-%IMAGETHRESHOLDACTION Apply a threshold operation to current image
+% Apply a threshold operation to current image.
 %
 %   output = ImageThresholdAction(input)
 %
@@ -8,56 +8,52 @@ classdef ImageThresholdAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-11,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    value = 0;
-    inverted = false;
+    Value = 0;
+    Inverted = false;
     
-    imageHistogram;
-    xHistogram;
+    ImageHistogram;
+    XHistogram;
     
-    handles;
+    Handles;
 end
 
 methods
-    function this = ImageThresholdAction(viewer)
+    function obj = ImageThresholdAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'thresholdImage');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'thresholdImage');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
-        if ~isScalarImage(doc.image)
-            warning('ImageM:WrongImageType', ...
-                'Threshold can be applied only on scalar images');
-            return;
+        if ~isScalarImage(currentImage(obj))
+            error('ImageM:WrongImageType', ...
+                'Threshold can not be applied only on a color image');
         end
         
-        createThresholdFigure(this);
-        setThresholdValue(this, this.value);
-        updateWidgets(this);
+        createThresholdFigure(obj);
+        setThresholdValue(obj, obj.Value);
+        updateWidgets(obj);
     end
     
-    function hf = createThresholdFigure(this)
+    function hf = createThresholdFigure(obj)
         
         % compute intensity bounds, based either on type or on image data
-        img = this.viewer.doc.image;
+        img = currentImage(obj);
 
         % compute initial image histogram
         [histo, x] = histogram(img);
-        this.imageHistogram = histo;
-        this.xHistogram = x;
+        obj.ImageHistogram = histo;
+        obj.XHistogram = x;
         
         % range of grayscale values
         minVal = double(x(1));
@@ -81,7 +77,8 @@ methods
         
         % startup threshold value
         sliderValue = minVal + valExtent / 2;
-        this.value = sliderValue;
+        obj.Value = sliderValue;
+        
         
         % action figure
         hf = figure(...
@@ -89,17 +86,17 @@ methods
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [200 250];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         
         % background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.viewer.gui);
+        bgColor = getWidgetBackgroundColor(obj.Viewer.Gui);
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
@@ -108,43 +105,43 @@ methods
         mainPanel = uix.VBox('Parent', vb);
 
         % one axis for displaying image histogram
-        this.handles.histogramAxis = axes('Parent', mainPanel);
+        obj.Handles.HistogramAxis = axes('Parent', mainPanel);
         
         % one panel for value text input
-        line1 = uiextras.HBox('Parent', mainPanel, 'Padding', 5);
+        line1 = uix.HBox('Parent', mainPanel, 'Padding', 5);
         uicontrol(...
             'Style', 'Text', ...
             'Parent', line1, ...
             'String', 'Threshold Value:');
-        this.handles.valueEdit = uicontrol(...
+        obj.Handles.ValueEdit = uicontrol(...
             'Style', 'Edit', ...
             'Parent', line1, ...
             'String', '50', ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onTextValueChanged);
-        set(line1, 'Sizes', [-1 -1]);
+            'Callback', @obj.onTextValueChanged);
+        set(line1, 'Widths', [-1 -1]);
         
         % one slider for changing value
-        this.handles.valueSlider = uicontrol(...
+        obj.Handles.ValueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
             'Min', minVal, 'Max', maxVal, ...
             'Value', sliderValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onSliderValueChanged);
+            'Callback', @obj.onSliderValueChanged);
         
         % setup listeners for slider continuous changes
-        addlistener(this.handles.valueSlider, ...
-            'ContinuousValueChange', @this.onSliderValueChanged);
+        addlistener(obj.Handles.ValueSlider, ...
+            'ContinuousValueChange', @obj.onSliderValueChanged);
 
         % one checkbox to decide the threshold side
-        this.handles.sideCheckBox = uicontrol(...
+        obj.Handles.SideCheckBox = uicontrol(...
             'Style', 'CheckBox', ...
             'Parent', mainPanel, ...
             'String', 'Bright Threshold', ...
             'Value', 1, ...
-            'Callback', @this.onSideChanged);
+            'Callback', @obj.onSideChanged);
             
         set(mainPanel, 'Heights', [-1 35 25 25]);
         
@@ -152,131 +149,131 @@ methods
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
         
         % display full histogram and 
-        bar(this.handles.histogramAxis, x, histo, 1, 'k', ...
+        bar(obj.Handles.HistogramAxis, x, histo, 1, 'k', ...
             'LineStyle', 'none');
         % hold on;
-        set(this.handles.histogramAxis, 'NextPlot', 'Add');
-        set(this.handles.histogramAxis, ...
+        set(obj.Handles.HistogramAxis, 'NextPlot', 'Add');
+        set(obj.Handles.HistogramAxis, ...
             'YTickLabelMode', 'Manual', 'YTickLabel', '');
-        this.handles.thresholdedHistogramBar = ...
-            bar(this.handles.histogramAxis, x, histo, 1, 'r', ...
+        obj.Handles.ThresholdedHistogramBar = ...
+            bar(obj.Handles.HistogramAxis, x, histo, 1, 'r', ...
             'LineStyle', 'none');
         
         % setup histogram bounds
         w = x(2) - x(1);
-        set(this.handles.histogramAxis, 'xlim', [minVal-w/2 maxVal+w/2]);
+        set(obj.Handles.HistogramAxis, 'xlim', [minVal-w/2 maxVal+w/2]);
     end
     
-    function bin = computeThresholdedImage(this)
+    function bin = computeThresholdedImage(obj)
         % Compute the result of threshold
-        if this.inverted
-            bin = this.viewer.doc.image < this.value;
+        
+        if obj.Inverted
+            bin = currentImage(obj) < obj.Value;
         else
-            bin = this.viewer.doc.image > this.value;
+            bin = currentImage(obj) > obj.Value;
         end
 
     end
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        clearPreviewImage(obj);
         
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function setThresholdValue(this, newValue)
-        values = this.xHistogram;
-        if isGrayscaleImage(this.viewer.doc.image)
+    function setThresholdValue(obj, newValue)
+        values = obj.XHistogram;
+        if isGrayscaleImage(currentImage(obj))
             newValue = round(newValue);
         end
-        this.value = max(min(newValue, values(end)), values(1));
+        obj.Value = max(min(newValue, values(end)), values(1));
     end
     
-    function updateWidgets(this)
+    function updateWidgets(obj)
 
         % update widget values
-        set(this.handles.valueEdit, 'String', num2str(this.value))
-        set(this.handles.valueSlider, 'Value', this.value);
+        set(obj.Handles.ValueEdit, 'String', num2str(obj.Value))
+        set(obj.Handles.ValueSlider, 'Value', obj.Value);
         
         % Update histogram preview
-        histo2 = this.imageHistogram;
-        if this.inverted
-            ind = find(this.xHistogram < this.value, 1, 'last');
+        histo2 = obj.ImageHistogram;
+        if obj.Inverted
+            ind = find(obj.XHistogram < obj.Value, 1, 'last');
             histo2(ind+1:end) = 0;
         else
-            ind = find(this.xHistogram > this.value, 1, 'first');
+            ind = find(obj.XHistogram > obj.Value, 1, 'first');
             histo2(1:ind-1) = 0;
         end
-        set(this.handles.thresholdedHistogramBar, 'YData', histo2);
+        set(obj.Handles.ThresholdedHistogramBar, 'YData', histo2);
         
         % update preview image of the document
-        bin = computeThresholdedImage(this);
-        doc = this.viewer.doc;
-        doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.viewer);
+        bin = computeThresholdedImage(obj);
+        img = overlay(currentImage(obj), bin);
+        updatePreviewImage(obj, img);
     end
     
 end
 
 %% GUI Items Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         % apply the threshold operation
-        bin = computeThresholdedImage(this);
-        newDoc = addImageDocument(this.viewer.gui, bin);
+        bin = computeThresholdedImage(obj);
+        newDoc = addImageDocument(obj, bin);
         
         % compute all string patterns used for history
-        tag = this.viewer.doc.tag;
-        newTag = newDoc.tag;
-        if this.inverted
+        doc = currentDoc(obj);
+        tag = doc.Tag;
+        newTag = newDoc.Tag;
+        if obj.Inverted
             op = '<';
         else
             op = '>';
         end
-        val = num2str(this.value);
+        val = num2str(obj.Value);
         
         % history
         string = sprintf('%s = %s %s %s;\n', newTag, tag, op, val);
-        addToHistory(this.viewer.gui.app, string);
+        addToHistory(obj, string);
         
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
     
-    function onSliderValueChanged(this, varargin)
-        val = get(this.handles.valueSlider, 'Value');
+    function onSliderValueChanged(obj, varargin)
+        val = get(obj.Handles.ValueSlider, 'Value');
         
-        setThresholdValue(this, val);
-        updateWidgets(this);
+        setThresholdValue(obj, val);
+        updateWidgets(obj);
     end
     
-    function onTextValueChanged(this, varargin)
-        val = str2double(get(this.handles.valueEdit, 'String'));
+    function onTextValueChanged(obj, varargin)
+        val = str2double(get(obj.Handles.ValueEdit, 'String'));
         if ~isfinite(val)
             return;
         end
         
-        setThresholdValue(this, val);
-        updateWidgets(this);
+        setThresholdValue(obj, val);
+        updateWidgets(obj);
     end
     
-    function onSideChanged(this, varargin)
-        this.inverted = ~get(this.handles.sideCheckBox, 'Value');
-        updateWidgets(this);
+    function onSideChanged(obj, varargin)
+        obj.Inverted = ~get(obj.Handles.SideCheckBox, 'Value');
+        updateWidgets(obj);
     end
 end
 

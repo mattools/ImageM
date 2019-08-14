@@ -1,5 +1,5 @@
 classdef LabelBinaryImageAction < imagem.gui.actions.BinaryImageAction
-%LABELBINARYIMAGEACTION  One-line description here, please.
+% Connected Components Labeling of binary image
 %
 %   Class LabelBinaryImageAction
 %
@@ -8,10 +8,10 @@ classdef LabelBinaryImageAction < imagem.gui.actions.BinaryImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-18,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = LabelBinaryImageAction(viewer)
+    function obj = LabelBinaryImageAction(viewer)
     % Constructor for LabelBinaryImageAction class
-        this = this@imagem.gui.actions.BinaryImageAction(viewer, 'labelBinaryImage');
+        obj = obj@imagem.gui.actions.BinaryImageAction(viewer, 'labelBinaryImage');
     end
 
 end % end constructors
@@ -33,19 +33,18 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        % get handle to current doc
+        doc = currentDoc(obj);
         
-        lbl = labeling(doc.image);
+        lbl = labeling(doc.Image);
         
-        newDoc = addImageDocument(viewer.gui, lbl);
+        newDoc = addImageDocument(obj, lbl);
         
         % history
-        string = sprintf('%s = labeling(%s);\n', newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+        string = sprintf('%s = labeling(%s);\n', newDoc.Tag, doc.Tag);
+        addToHistory(obj, string);
     end
     
 end % end methods

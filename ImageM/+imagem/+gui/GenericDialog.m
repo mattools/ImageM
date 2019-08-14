@@ -1,5 +1,5 @@
 classdef GenericDialog < handle
-%GENERICDIALOG A generic dialog, similar to ImageJ's
+% A generic dialog, similar to ImageJ's.
 %
 %   Class GenericDialog
 %
@@ -38,66 +38,66 @@ classdef GenericDialog < handle
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2014-04-18,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2014 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    handles;
+    Handles;
     
-    controlHandles = [];
-    currentIndex = 1;
+    ControlHandles = [];
+    CurrentIndex = 1;
     
-    boxSizes = [];
+    BoxSizes = [];
     
     % a list of answers (one cell for each item that was added).
-    answers = {};
+    Answers = {};
     
     % the string corresponding to the button used to close the dialog.
     % can be one of 'ok', 'cancel'.
-    closingButton = '';
+    ClosingButton = '';
     
 end % end properties
 
 
 %% Constructor
 methods
-    function this = GenericDialog(varargin)
+    function obj = GenericDialog(varargin)
     % Constructor for GenericDialog class
 
-        createLayout(this, varargin{:});
+        createLayout(obj, varargin{:});
     end
 
 end % end constructors
 
 methods (Access = private)
-    function createLayout(this, varargin)
+    function createLayout(obj, varargin)
         % initialize the layout (figure and widgets)
-        hf = createFigure(this, varargin{:});
-        this.handles.figure = hf;
+        hf = createFigure(obj, varargin{:});
+        obj.Handles.Figure = hf;
         
         % vertical layout for widgets and control panels
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         
         % create an empty panel that will contain widgets
-        this.handles.mainPanel = uix.VBox('Parent', vb);
+        obj.Handles.MainPanel = uix.VBox('Parent', vb);
         
         % button for control panel
         buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
 
     end
     
-     function hf = createFigure(this, varargin)
+     function hf = createFigure(obj, varargin)
         % create new figure and return its handle
         
         % parse dialog title
@@ -133,27 +133,27 @@ methods (Access = private)
         pos(3:4) = [200 250];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
      end
 end
 
 %% Methods
 methods
-    function [h, ht] = addTextField(this, label, text, cb)
-        % Add a text field to this diaolg
+    function [h, ht] = addTextField(obj, label, text, cb)
+        % Add a text field to obj diaolg
         %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
         
         
-        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', obj.Handles.MainPanel, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
         ht = addLabel(hLine, label);
         
         % creates the new control
-        %         bgColor = getWidgetBackgroundColor(this);
+        %         bgColor = getWidgetBackgroundColor(obj);
         bgColor = [1 1 1];
         h = uicontrol(...
             'Style', 'Edit', ...
@@ -165,24 +165,24 @@ methods
         end
         
         % keep widget handle for future use
-        this.controlHandles = [this.controlHandles h];
+        obj.ControlHandles = [obj.ControlHandles h];
         
         % setup size in horizontal direction
         set(hLine, 'Widths', [-5 -5]);
         
         % update vertical size of widgets
-        this.boxSizes = [this.boxSizes 35];
-        set(this.handles.mainPanel, 'Heights', this.boxSizes);
+        obj.BoxSizes = [obj.BoxSizes 35];
+        set(obj.Handles.MainPanel, 'Heights', obj.BoxSizes);
     end
     
-    function [h, ht] = addNumericField(this, label, value, nDigits, cb)
-        % Add a text field to this diaolg
+    function [h, ht] = addNumericField(obj, label, value, nDigits, cb)
+        % Add a text field to obj diaolg
         %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
         
         % create horizontal box
-        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', obj.Handles.MainPanel, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
@@ -193,7 +193,7 @@ methods
         text = sprintf(pattern, value);
         
         % creates the new control
-        %         bgColor = getWidgetBackgroundColor(this);
+        %         bgColor = getWidgetBackgroundColor(obj);
         bgColor = [1 1 1];
         h = uicontrol(...
             'Style', 'Edit', ...
@@ -212,28 +212,28 @@ methods
 %         h2 = uicontrol('style', 'edit', 'string', 'Hello!');
         
         % keep widget handle for future use
-        this.controlHandles = [this.controlHandles h];
+        obj.ControlHandles = [obj.ControlHandles h];
         
         % setup size in horizontal direction
         set(hLine, 'Widths', [-5 -5]);
         
         % update vertical size of widgets
-        this.boxSizes = [this.boxSizes 35];
-        set(this.handles.mainPanel, 'Heights', this.boxSizes);
+        obj.BoxSizes = [obj.BoxSizes 35];
+        set(obj.Handles.MainPanel, 'Heights', obj.BoxSizes);
     end
     
-    function h = addCheckBox(this, label, checked, cb)
-        % Add  text field to this diaolg
+    function h = addCheckBox(obj, label, checked, cb)
+        % Add  text field to obj diaolg
         %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
         
         % create horizontal box
-        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', obj.Handles.MainPanel, ...
             'Spacing', 5, 'Padding', 5);
       
         % creates the new control
-        %         bgColor = getWidgetBackgroundColor(this);
+        %         bgColor = getWidgetBackgroundColor(obj);
 %         bgColor = [1 1 1];
         h = uicontrol(...
             'Style', 'Checkbox ', ...
@@ -245,24 +245,24 @@ methods
         end
         
         % keep widget handle for future use
-        this.controlHandles = [this.controlHandles h];
+        obj.ControlHandles = [obj.ControlHandles h];
         
         % setup size in horizontal direction
         set(hLine, 'Widths', -5);
         
         % update vertical size of widgets
-        this.boxSizes = [this.boxSizes 25];
-        set(this.handles.mainPanel, 'Heights', this.boxSizes);
+        obj.BoxSizes = [obj.BoxSizes 25];
+        set(obj.Handles.MainPanel, 'Heights', obj.BoxSizes);
     end
     
-    function [h, ht] = addChoice(this, label, choiceLabels, initialValue, cb)
+    function [h, ht] = addChoice(obj, label, choiceLabels, initialValue, cb)
         % Add choice as a popupmenu
         %
         % usage:
         %   addChoice(GD, LABEL, CHOICES, INITIALVALUE);
         
         
-        hLine = uix.HBox('Parent', this.handles.mainPanel, ...
+        hLine = uix.HBox('Parent', obj.Handles.MainPanel, ...
             'Spacing', 5, 'Padding', 5);
         
         % Label of the widget
@@ -279,7 +279,7 @@ methods
         end
         
         % creates the new control
-        %         bgColor = getWidgetBackgroundColor(this);
+        %         bgColor = getWidgetBackgroundColor(obj);
         bgColor = [1 1 1];
         h = uicontrol(...
             'Style', 'PopupMenu', ...
@@ -292,14 +292,14 @@ methods
         end
         
         % keep widget handle for future use
-        this.controlHandles = [this.controlHandles h];
+        obj.ControlHandles = [obj.ControlHandles h];
         
         % setup size in horizontal direction
         set(hLine, 'Widths', [-5 -5]);
         
         % update vertical size of widgets
-        this.boxSizes = [this.boxSizes 35];
-        set(this.handles.mainPanel, 'Heights', this.boxSizes);
+        obj.BoxSizes = [obj.BoxSizes 35];
+        set(obj.Handles.MainPanel, 'Heights', obj.BoxSizes);
     end
     
    
@@ -308,8 +308,8 @@ end % end methods
 
 %% get widget results
 methods
-    function string = getNextString(this)
-        h = getNextControlHandle(this);
+    function string = getNextString(obj)
+        h = getNextControlHandle(obj);
         
         string = get(h, 'String');
         
@@ -319,8 +319,8 @@ methods
         end
     end
     
-    function index = getNextChoiceIndex(this)
-        h = getNextControlHandle(this);
+    function index = getNextChoiceIndex(obj)
+        h = getNextControlHandle(obj);
         
         if ~strcmp(get(h, 'style'), 'popupmenu')
             error('Next control must be a popup menu');
@@ -328,8 +328,8 @@ methods
         index = get(h, 'value');
     end
     
-    function value = getNextNumber(this)
-        h = getNextControlHandle(this);
+    function value = getNextNumber(obj)
+        h = getNextControlHandle(obj);
         
         string = get(h, 'String');
         value = str2double(string);
@@ -338,8 +338,8 @@ methods
         end
     end
     
-    function value = getNextBoolean(this)
-        h = getNextControlHandle(this);
+    function value = getNextBoolean(obj)
+        h = getNextControlHandle(obj);
         
         type = get(h, 'style');
         if ~strcmp(type, 'checkbox')
@@ -348,67 +348,67 @@ methods
         value = get(h, 'value');
     end
     
-    function h = getNextControlHandle(this)
+    function h = getNextControlHandle(obj)
         % iterate along the widgets, and returns the next handle.
         % throw an error if no more 
-        if this.currentIndex > length(this.controlHandles)
+        if obj.CurrentIndex > length(obj.ControlHandles)
             error('No more widget to process');
         end
         
-        h = this.controlHandles(this.currentIndex);
-        this.currentIndex = this.currentIndex + 1;
+        h = obj.ControlHandles(obj.CurrentIndex);
+        obj.CurrentIndex = obj.CurrentIndex + 1;
     end
     
-    function resetCounter(this)
-        this.currentIndex = 1;
+    function resetCounter(obj)
+        obj.CurrentIndex = 1;
     end
 end
 
 
 %% Figure and control Callback
 methods
-    function onButtonOK(this, varargin)
-        this.closingButton = 'ok';
-        set(this.handles.figure, 'Visible', 'off');
+    function onButtonOK(obj, varargin)
+        obj.ClosingButton = 'ok';
+        set(obj.Handles.Figure, 'Visible', 'off');
     end
     
-    function onButtonCancel(this, varargin)
-        this.closingButton = 'cancel';
-        set(this.handles.figure, 'Visible', 'off');
+    function onButtonCancel(obj, varargin)
+        obj.ClosingButton = 'cancel';
+        set(obj.Handles.Figure, 'Visible', 'off');
     end
     
-    function showDialog(this)
+    function showDialog(obj)
         % makes the dialog visible, and waits for user validation
-        setVisible(this, true);
-        waitForUser(this);
+        setVisible(obj, true);
+        waitForUser(obj);
     end
     
-    function setVisible(this, value)
+    function setVisible(obj, value)
         if value
-            set(this.handles.figure, 'Visible', 'on');
-            set(this.handles.figure, 'WindowStyle', 'modal');
+            set(obj.Handles.Figure, 'Visible', 'on');
+            set(obj.Handles.Figure, 'WindowStyle', 'modal');
         else
-            set(this.handles.figure, 'Visible', 'off');
+            set(obj.Handles.Figure, 'Visible', 'off');
         end
     end
     
-    function b = wasOked(this)
-        b = strcmp(this.closingButton, 'ok');
+    function b = wasOked(obj)
+        b = strcmp(obj.ClosingButton, 'ok');
     end
     
-    function b = wasCanceled(this)
-        b = strcmp(this.closingButton, 'cancel');
+    function b = wasCanceled(obj)
+        b = strcmp(obj.ClosingButton, 'cancel');
     end
     
-    function button = waitForUser(this)
-        waitfor(this.handles.figure, 'Visible', 'off');
-        button = this.closingButton;
+    function button = waitForUser(obj)
+        waitfor(obj.Handles.Figure, 'Visible', 'off');
+        button = obj.ClosingButton;
     end
     
-    function closeFigure(this)
+    function closeFigure(obj)
         % close the current figure
-        if ~isempty(this.handles.figure);
-            close(this.handles.figure);
+        if ~isempty(obj.Handles.Figure)
+            close(obj.Handles.Figure);
         end
     end
     

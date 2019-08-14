@@ -1,5 +1,5 @@
 classdef SetDefaultConnectivityAction < imagem.gui.ImagemAction
-%CREATEIMAGEACTION  Changes defualt connectivity in App
+% Changes default connectivity in App.
 %
 %   Class SetDefaultConnectivityAction
 %
@@ -8,52 +8,52 @@ classdef SetDefaultConnectivityAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    handles;
+    Handles;
     
-    conn2d;
-    conn3d;
+    Conn2d;
+    Conn3d;
     
-    conn2dValues = [4 8];
-    conn3dValues = [6 26];
+    Conn2dValues = [4 8];
+    Conn3dValues = [6 26];
 end % end properties
 
 
 %% Constructor
 methods
-    function this = SetDefaultConnectivityAction(viewer)
+    function obj = SetDefaultConnectivityAction(viewer)
     % Constructor for SetDefaultConnectivityAction class
-        this = this@imagem.gui.ImagemAction(viewer, 'setDefaultConnectivity');
+        obj = obj@imagem.gui.ImagemAction(viewer, 'setDefaultConnectivity');
         
-        app = viewer.gui.app;
-        this.conn2d = getDefaultConnectivity(app, 2);
-        this.conn3d = getDefaultConnectivity(app, 3);
+        app = viewer.Gui.App;
+        obj.Conn2d = getDefaultConnectivity(app, 2);
+        obj.Conn3d = getDefaultConnectivity(app, 3);
     end
 
 end % end constructors
 
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('set connectivity');
 
         f = figure(...
             'Name', 'Set Connectivity', ...
             'NumberTitle', 'off', ...
             'MenuBar', 'none', 'Toolbar', 'none');
-        this.handles.figure = f;
+        obj.Handles.Figure = f;
         
         % compute background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.viewer.gui);
+        bgColor = getWidgetBackgroundColor(obj.Viewer.Gui);
         
         % vertical layout
         vb  = uix.VBox('Parent', f, 'Spacing', 5, 'Padding', 5);
@@ -69,40 +69,40 @@ methods
             'Parent', g, ...
             'String', '3D Images:', ...
             'HorizontalAlignment', 'right');
-        this.handles.conn2dPopup = uicontrol(...
+        obj.Handles.Conn2dPopup = uicontrol(...
             'Style', 'PopupMenu', ...
             'Parent', g, ...
             'String', {'4', '8'}, ...
             'Value', 1, ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onConn2dChanged);
-        this.handles.conn3dPopup = uicontrol(...
+            'Callback', @obj.onConn2dChanged);
+        obj.Handles.Conn3dPopup = uicontrol(...
             'Style', 'PopupMenu', ...
             'Parent', g, ...
             'String', {'6', '26'}, ...
             'Value', 1, ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onConn3dChanged);
+            'Callback', @obj.onConn3dChanged);
         set(g, 'Widths', [-1 -1], 'Heights', [-1 -1]);
         
         % select current state of popup menus
-        switch this.conn2d
-            case 4, set(this.handles.conn2dPopup, 'value', 1);
-            case 8, set(this.handles.conn2dPopup, 'value', 2);
+        switch obj.Conn2d
+            case 4, set(obj.Handles.Conn2dPopup, 'value', 1);
+            case 8, set(obj.Handles.Conn2dPopup, 'value', 2);
         end
-        switch this.conn3d
-            case 6, set(this.handles.conn3dPopup, 'value', 1);
-            case 26, set(this.handles.conn3dPopup, 'value', 2);
+        switch obj.Conn3d
+            case 6, set(obj.Handles.Conn3dPopup, 'value', 1);
+            case 26, set(obj.Handles.Conn3dPopup, 'value', 2);
         end
             
         % button for control panel
         buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
 
@@ -116,27 +116,27 @@ end
 
 %% GUI Items Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         % apply the threshold operation
-        app = this.viewer.gui.app;
-        setDefaultConnectivity(app, 2, this.conn2d);
-        setDefaultConnectivity(app, 3, this.conn3d);
-        close(this.handles.figure);
+        app = obj.Viewer.Gui.App;
+        setDefaultConnectivity(app, 2, obj.Conn2d);
+        setDefaultConnectivity(app, 3, obj.Conn3d);
+        close(obj.Handles.Figure);
     end
     
-    function onButtonCancel(this, varargin)
-        close(this.handles.figure);
+    function onButtonCancel(obj, varargin)
+        close(obj.Handles.Figure);
     end
     
-    function onConn2dChanged(this, varargin)
-        index = get(this.handles.conn2dPopup, 'Value');
-        this.conn2d = this.conn2dValues(index);
+    function onConn2dChanged(obj, varargin)
+        index = get(obj.Handles.Conn2dPopup, 'Value');
+        obj.Conn2d = obj.Conn2dValues(index);
         
     end
     
-    function onConn3dChanged(this, varargin)
-        index = get(this.handles.conn3dPopup, 'Value');
-        this.conn3d = this.conn3dValues(index);
+    function onConn3dChanged(obj, varargin)
+        index = get(obj.Handles.Conn3dPopup, 'Value');
+        obj.Conn3d = obj.Conn3dValues(index);
         
     end
 end

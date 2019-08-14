@@ -1,5 +1,5 @@
 classdef LineProfileTool < imagem.gui.ImagemTool
-%LINEPROFILETOOL  One-line description here, please.
+% Draw linear profile.
 %
 %   Class LineProfileTool
 %
@@ -7,35 +7,36 @@ classdef LineProfileTool < imagem.gui.ImagemTool
 %   LineProfileTool
 %
 %   See also
-%   ImageSelectionLineProfile
+%     ImageSelectionLineProfile
 %
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-16,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    pos1;
+    Pos1;
     
-    lineHandle;
+    LineHandle;
     
     % the current step, can be 1 or 2
-    state = 0;
+    State = 0;
     
 end % end properties
 
 
 %% Constructor
 methods
-    function this = LineProfileTool(viewer, varargin)
+    function obj = LineProfileTool(viewer, varargin)
         % Constructor for LineProfileTool class
-        this = this@imagem.gui.ImagemTool(viewer, 'lineProfile');
+        obj = obj@imagem.gui.ImagemTool(viewer, 'lineProfile');
         
         % setup state
-        this.state = 1;
+        obj.State = 1;
     end
 
 end % end constructors
@@ -43,40 +44,40 @@ end % end constructors
 
 %% ImagemTool Methods
 methods
-    function select(this) %#ok<*MANU>
+    function select(obj) %#ok<*MANU>
         disp('select line profile');
-        this.state = 1;
+        obj.State = 1;
     end
     
-    function deselect(this)
-        removeLineHandle(this);
+    function deselect(obj)
+        removeLineHandle(obj);
     end
     
-    function removeLineHandle(this)
-        if ~ishandle(this.lineHandle)
+    function removeLineHandle(obj)
+        if ~ishandle(obj.LineHandle)
             return;
         end
         
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         if isempty(ax)
             return;
         end
        
-        delete(this.lineHandle);
+        delete(obj.LineHandle);
         
     end
     
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.viewer.handles.imageAxis;
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         fprintf('%f %f\n', pos(1, 1:2));
         
-        if this.state == 1
+        if obj.State == 1
             % determines the starting point of next line
-            this.pos1 = pos(1, 1:2);
-            this.state = 2;
-            removeLineHandle(this);
-            this.lineHandle = line(...
+            obj.Pos1 = pos(1, 1:2);
+            obj.State = 2;
+            removeLineHandle(obj);
+            obj.LineHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'Marker', '+', 'color', 'y', 'linewidth', 1);
             return;
@@ -89,8 +90,8 @@ methods
         
         % distribute points along the line
         nValues = 100;
-        x = linspace(this.pos1(1), pos2(1), nValues);
-        y = linspace(this.pos1(2), pos2(2), nValues);
+        x = linspace(obj.Pos1(1), pos2(1), nValues);
+        y = linspace(obj.Pos1(2), pos2(2), nValues);
         dists = [0 cumsum(hypot(diff(x), diff(y)))];
         
         % convert point to image indices
@@ -99,7 +100,7 @@ methods
         % new figure for display
         figure;
         
-        img = this.viewer.doc.image;
+        img = obj.Viewer.Doc.Image;
         
         % extract corresponding pixel values (nearest-neighbor eval)
         vals = interp(img, pts);
@@ -121,21 +122,21 @@ methods
         end
         
         % revert to first state
-        this.state = 1;
+        obj.State = 1;
     end
     
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
-        if this.state ~= 2 || ~ishandle(this.lineHandle)
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
+        if obj.State ~= 2 || ~ishandle(obj.LineHandle)
             return;
         end
 
         % determine the line current end point
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % update line display
-        set(this.lineHandle, 'XData', [this.pos1(1) pos(1, 1)]);
-        set(this.lineHandle, 'YData', [this.pos1(2) pos(1, 2)]);
+        set(obj.LineHandle, 'XData', [obj.Pos1(1) pos(1, 1)]);
+        set(obj.LineHandle, 'YData', [obj.Pos1(2) pos(1, 2)]);
     end
     
 end % end methods

@@ -1,5 +1,5 @@
 classdef CreateImageAction < imagem.gui.ImagemAction
-%CREATEIMAGEACTION Open a dialog to create a new image
+% Open a dialog to create a new image.
 %
 %   Class CreateImageAction
 %
@@ -8,10 +8,10 @@ classdef CreateImageAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,16 +23,16 @@ end % end properties
 
 %% Constructor
 methods
-    function this = CreateImageAction(viewer)
+    function obj = CreateImageAction(viewer)
     % Constructor for CreateImageAction class
-        this = this@imagem.gui.ImagemAction(viewer, 'createImage');
+        obj = obj@imagem.gui.ImagemAction(viewer, 'createImage');
     end
 
 end % end constructors
 
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('create a new image');
         
 
@@ -73,7 +73,7 @@ methods
         img = Image.create([dimX dimY], dataType);
         img(:) = fillValue;
         
-        addImageDocument(this.viewer.gui, img);
+        addImageDocument(obj, img);
     end
     
     

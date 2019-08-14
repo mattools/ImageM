@@ -1,5 +1,5 @@
 classdef SetBrushSizeAction < imagem.gui.ImagemAction
-%CREATEIMAGEACTION  Changes defualt connectivity in App
+% Changes the size of the brush.
 %
 %   Class SetBrushSizeAction
 %
@@ -8,45 +8,45 @@ classdef SetBrushSizeAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    handles;
+    Handles;
     
-    conn2d;
-    conn3d;
+    Conn2d;
+    Conn3d;
     
-    conn2dValues = [4 8];
-    conn3dValues = [6 26];
+    Conn2dValues = [4 8];
+    Conn3dValues = [6 26];
     
 end % end properties
 
 
 %% Constructor
 methods
-    function this = SetBrushSizeAction(viewer)
+    function obj = SetBrushSizeAction(viewer)
     % Constructor for SetBrushSizeAction class
-        this = this@imagem.gui.ImagemAction(viewer, 'setBrushSize');
+        obj = obj@imagem.gui.ImagemAction(viewer, 'setBrushSize');
     end
 
 end % end constructors
 
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('set brush size');
 
         answer = inputdlg(...
             'Enter the brush size (in pixels):', ...
             'Input Brush size', ...
-            1, {num2str(this.viewer.gui.app.brushSize)});
+            1, {num2str(obj.Viewer.Gui.App.BrushSize)});
         
         if isempty(answer)
             return;
@@ -57,7 +57,7 @@ methods
             errordlg('Could not understand brush size');
         end
         
-        this.viewer.gui.app.brushSize = size;
+        obj.Viewer.Gui.App.BrushSize = size;
         
     end
     

@@ -1,5 +1,5 @@
-classdef CurrentImageAction < imagem.gui.ImagemAction
-%INVERTIMAGEACTION Superclass for actions that require a current image
+classdef CurrentImageAction < imagem.gui.actions.CurrentDocAction
+% Superclass for actions that require a current image.
 %
 %   output = CurrentImageAction(input)
 %
@@ -8,24 +8,60 @@ classdef CurrentImageAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
+
+%% Constructors
 methods
-    function this = CurrentImageAction(viewer, varargin)
+    function obj = CurrentImageAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(viewer, varargin{:});
+        obj = obj@imagem.gui.actions.CurrentDocAction(viewer, varargin{:});
     end
 end
 
+
+%% New methods
 methods
-    function b = isActivable(this)
-        doc = this.viewer.doc;
-        b = ~isempty(doc) && ~isempty(doc.image);
+    function img = currentImage(obj)
+        % Return the current image (may be empty)
+        
+        img = [];
+        doc = obj.Viewer.Doc;
+        if ~isempty(doc)
+            img = doc.Image;
+        end
+    end
+    
+    function updatePreviewImage(obj, image)
+        % Update preview image of document and refresh display
+        
+        doc = currentDoc(obj);
+        doc.PreviewImage = image;
+        updateDisplay(obj.Viewer);
+    end
+    
+    function clearPreviewImage(obj)
+        % Clear preview image of document and refresh display
+        
+        doc = currentDoc(obj);
+        doc.PreviewImage = [];
+        updateDisplay(obj.Viewer);
+    end
+end
+
+
+%% Specialisation of ImageMAction superclass
+methods
+    function b = isActivable(obj)
+        b = isActivable@imagem.gui.actions.CurrentDocAction(obj);
+        if b
+            b = ~isempty(currentImage(obj));
+        end
     end
 end
 

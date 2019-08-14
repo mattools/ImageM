@@ -1,5 +1,5 @@
 classdef ApplyImageFunctionAction < imagem.gui.actions.CurrentImageAction
-%APPLYIMAGEFUNCTIONACTION  Apply a function to Image object, and display result 
+% Apply a function to Image object, and display result.
 %
 %   output = ApplyImageFunctionAction(input)
 %
@@ -8,50 +8,49 @@ classdef ApplyImageFunctionAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-22,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    methodName;
+    MethodName;
 end
 
 methods
-    function this = ApplyImageFunctionAction(viewer, methodName)
+    function obj = ApplyImageFunctionAction(viewer, methodName)
         % calls the parent constructor
         name = ['applyImageMethod-' methodName];
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, name);
-        this.methodName = methodName;
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, name);
+        obj.MethodName = methodName;
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
-        if isempty(this.methodName)
+    function actionPerformed(obj, src, event) %#ok<INUSD>
+        if isempty(obj.MethodName)
             return;
         end
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        % get handle to current doc
+        doc = obj.Viewer.Doc;
         
         % apply the given operation
-        res = feval(this.methodName, doc.image ~= 0);
+        res = feval(obj.MethodName, doc.Image ~= 0);
         
         % depending on result type, should do different processes
         if isa(res, 'Image')
-            newDoc = addImageDocument(viewer.gui, res);
+            newDoc = addImageDocument(obj, res);
         else
             error('Image expected');
         end
         
         % add history
         string = sprintf('%s = %s(%s);\n', ...
-            newDoc.tag, this.methodName, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, obj.MethodName, doc.Tag);
+        addToHistory(obj, string);
 
     end
 end

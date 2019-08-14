@@ -1,0 +1,44 @@
+classdef CurrentDocAction < imagem.gui.ImagemAction
+% Superclass for actions that require a current document.
+%
+%   output = CurrentImageAction(input)
+%
+%   Example
+%   CurrentImageAction
+%
+%   See also
+%     ImgemAction, CurrentImageAction
+%
+
+% ------
+% Author: David Legland
+% e-mail: david.legland@inra.fr
+% Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
+% Copyright 2011 INRA - Cepia Software Platform.
+
+
+%% Constructors
+methods
+    function obj = CurrentDocAction(viewer, varargin)
+        % calls the parent constructor
+        obj = obj@imagem.gui.ImagemAction(viewer, varargin{:});
+    end
+end
+
+
+%% New methods
+methods
+    function doc = currentDoc(obj)
+        doc = obj.Viewer.Doc;
+    end
+end
+
+
+%% Specialisation of ImageMAction superclass
+methods
+    function b = isActivable(obj)
+        b = ~isempty(obj.Viewer.Doc);
+    end
+end
+
+end

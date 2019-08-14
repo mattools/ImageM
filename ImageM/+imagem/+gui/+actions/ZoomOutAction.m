@@ -1,5 +1,5 @@
 classdef ZoomOutAction < imagem.gui.actions.CurrentImageAction
-%ZOOMINACTION Zoom out the current figure
+% Zoom out the current figure.
 %
 %   output = ZoomOutAction(input)
 %
@@ -8,25 +8,25 @@ classdef ZoomOutAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-02,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ZoomOutAction(viewer)
+    function obj = ZoomOutAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'zoomOut');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'zoomOut');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
         % get handle to viewer figure
-        viewer = this.viewer;
+        viewer = obj.Viewer;
         
         % set up new zoom value
         zoom = getZoom(viewer);

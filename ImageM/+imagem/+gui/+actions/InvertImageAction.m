@@ -1,5 +1,5 @@
 classdef InvertImageAction < imagem.gui.actions.CurrentImageAction
-%INVERTIMAGEACTION  Invert the current image
+% Invert the current image.
 %
 %   output = InvertImageAction(input)
 %
@@ -8,36 +8,35 @@ classdef InvertImageAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = InvertImageAction(viewer)
+    function obj = InvertImageAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'invertImage');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'invertImage');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        doc = currentDoc(obj);
         
         % apply 'invert' operation
-        img2 = invert(doc.image);
+        img2 = invert(currentImage(obj));
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(obj, img2);
         
         % history
-        string = sprintf('%s = invert(%s);\n', newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+        string = sprintf('%s = invert(%s);\n', newDoc.Tag, doc.Tag);
+        addToHistory(obj, string);
     end
 end
 

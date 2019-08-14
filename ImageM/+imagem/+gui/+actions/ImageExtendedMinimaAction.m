@@ -1,5 +1,5 @@
 classdef ImageExtendedMinimaAction < imagem.gui.actions.ScalarImageAction
-%IMAGEEXTENDEDMINIMAACTION Extract extended minima in a grayscale image
+% Extract extended minima in a grayscale image.
 %
 %   output = ImageExtendedMinimaAction(input)
 %
@@ -8,69 +8,65 @@ classdef ImageExtendedMinimaAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-11,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
     % the set of handles to dialog widgets, indexed by their name
-    handles;
+    Handles;
 
     % the value of dynamic, between 0 and image grayscale extent
-    value = 0;
+    Value = 0;
     
     % the min and max of values present in image.
-    imageExtent;
+    ImageExtent;
     
     % the connectivity of the regions. Default value is 4.
-    conn = 4;
+    Conn = 4;
     
     % the list of available connectivity values
-    connValues = [4, 8];
+    ConnValues = [4, 8];
 end
 
 methods
-    function this = ImageExtendedMinimaAction(viewer)
+    function obj = ImageExtendedMinimaAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'extendedMinima');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'extendedMinima');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         % apply extended minima to current image
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
-        
-        if ~isScalarImage(doc.image)
+        if ~isScalarImage(currentImage(obj))
             warning('ImageM:WrongImageType', ...
                 'Extended minima can be applied only on scalar images');
             return;
         end
         
-        createExtendedMinimaFigure(this);
-        setMinimaValue(this, this.value);
-        updateWidgets(this);
+        createExtendedMinimaFigure(obj);
+        setMinimaValue(obj, obj.Value);
+        updateWidgets(obj);
     end
     
-    function hf = createExtendedMinimaFigure(this)
+    function hf = createExtendedMinimaFigure(obj)
         
         % compute intensity bounds, based either on type or on image data
-        img = this.viewer.doc.image;
-        if isinteger(img.data)
-            type = class(img.data);
+        img = currentImage(obj);
+        if isinteger(img.Data)
+            type = class(img.Data);
             minVal = double(intmin(type));
             maxVal = double(intmax(type));
         else
-            minVal = double(min(img.data(:)));
-            maxVal = double(max(img.data(:)));
+            minVal = double(min(img.Data(:)));
+            maxVal = double(max(img.Data(:)));
         end
-        this.imageExtent = [minVal maxVal];
+        obj.ImageExtent = [minVal maxVal];
 
         % compute slider steps
         valExtent = maxVal - minVal;
@@ -82,7 +78,10 @@ methods
         
         % initial value of minima dynamic
         dynValue = valExtent / 4;
-        this.value = dynValue;
+        obj.Value = dynValue;
+
+        
+        gui = obj.Viewer.Gui;
         
         % action figure
         hf = figure(...
@@ -90,16 +89,16 @@ methods
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = 200;
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         % background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.viewer.gui);
+        bgColor = getWidgetBackgroundColor(gui);
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
@@ -111,124 +110,122 @@ methods
             'Style', 'Text', ...
             'Parent', line1, ...
             'String', 'Dynamic Value:');
-        this.handles.valueEdit = uicontrol(...
+        obj.Handles.ValueEdit = uicontrol(...
             'Style', 'Edit', ...
             'Parent', line1, ...
             'String', num2str(dynValue), ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onTextValueChanged, ...
-            'KeyPressFcn', @this.onTextValueChanged);
+            'Callback', @obj.onTextValueChanged, ...
+            'KeyPressFcn', @obj.onTextValueChanged);
         set(line1, 'Widths', [-1 -1]);
 
         % one slider for changing value
-        this.handles.valueSlider = uicontrol(...
+        obj.Handles.ValueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
             'Min', 0, 'Max', valExtent, ...
             'Value', dynValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onSliderValueChanged);
+            'Callback', @obj.onSliderValueChanged);
         set(mainPanel, 'Heights', [35 25]);
         
         % setup listeners for slider continuous changes
-        addlistener(this.handles.valueSlider, ...
-            'ContinuousValueChange', @this.onSliderValueChanged);
+        addlistener(obj.Handles.ValueSlider, ...
+            'ContinuousValueChange', @obj.onSliderValueChanged);
 
         % combo box for the connectivity
-        gui = this.viewer.gui;
-        this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.ConnectivityPopup = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
-            @this.onConnectivityChanged);
+            @obj.onConnectivityChanged);
         
         % button for control panel
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
     end
     
-    function bin = computeMinimaImage(this)
+    function bin = computeMinimaImage(obj)
         % Compute the result of threshold
-        bin = extendedMinima(this.viewer.doc.image, this.value, this.conn);
+        bin = extendedMinima(currentImage(obj), obj.Value, obj.Conn);
     end
     
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        clearPreviewImage(obj);
+        updateDisplay(obj.Viewer);
         
         % close the current figure
-        if ~isempty(this.handles.figure);
-            delete(this.handles.figure);
+        if ~isempty(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function setMinimaValue(this, newValue)
-        imgDyn = this.imageExtent(2) - this.imageExtent(1);
-        this.value = max(min(round(newValue), imgDyn), 0);
+    function setMinimaValue(obj, newValue)
+        imgDyn = obj.ImageExtent(2) - obj.ImageExtent(1);
+        obj.Value = max(min(round(newValue), imgDyn), 0);
     end
     
-    function updateWidgets(this)
+    function updateWidgets(obj)
         
-        set(this.handles.valueEdit, 'String', num2str(this.value))
-        set(this.handles.valueSlider, 'Value', this.value);
+        set(obj.Handles.ValueEdit, 'String', num2str(obj.Value))
+        set(obj.Handles.ValueSlider, 'Value', obj.Value);
         
         % update preview image of the document
-        bin = computeMinimaImage(this);
-        doc = this.viewer.doc;
-        doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.viewer);
+        bin = computeMinimaImage(obj);
+        updatePreviewImage(obj, bin);
     end
     
 end
 
 %% GUI Items Callback
 methods
-    function onButtonOK(this, varargin)        
-        % apply the threshold operation
-        bin = computeMinimaImage(this);
-        newDoc = addImageDocument(this.viewer.gui, bin, [], 'emin');
+    function onButtonOK(obj, varargin)
+        
+        % computes minima
+        bin = computeMinimaImage(obj);
+        newDoc = addImageDocument(obj, bin, [], 'emin');
         
         % add history
         string = sprintf('%s = extendedMinima(%s, %f, %d);\n', ...
-            newDoc.tag, this.viewer.doc.tag, this.value, this.conn);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, obj.Viewer.Doc.Tag, obj.Value, obj.Conn);
+        addToHistory(obj, string);
 
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
     
-    function onSliderValueChanged(this, varargin)
-        val = get(this.handles.valueSlider, 'Value');
+    function onSliderValueChanged(obj, varargin)
+        val = get(obj.Handles.ValueSlider, 'Value');
         
-        setMinimaValue(this, val);
-        updateWidgets(this);
+        setMinimaValue(obj, val);
+        updateWidgets(obj);
     end
     
-    function onTextValueChanged(this, varargin)
-        val = str2double(get(this.handles.valueEdit, 'String'));
+    function onTextValueChanged(obj, varargin)
+        val = str2double(get(obj.Handles.ValueEdit, 'String'));
         if ~isfinite(val)
             return;
         end
         
-        setMinimaValue(this, val);
-        updateWidgets(this);
+        setMinimaValue(obj, val);
+        updateWidgets(obj);
     end
     
-    function onConnectivityChanged(this, varargin)
-        index = get(this.handles.connectivityPopup, 'Value');
-        this.conn = this.connValues(index);
+    function onConnectivityChanged(obj, varargin)
+        index = get(obj.Handles.ConnectivityPopup, 'Value');
+        obj.Conn = obj.ConnValues(index);
         
-        updateWidgets(this);
+        updateWidgets(obj);
     end
 end
 

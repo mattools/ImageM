@@ -1,5 +1,5 @@
 classdef ImageRegionalMinimaAction < imagem.gui.actions.ScalarImageAction
-%IMAGEEXTENDEDMINIMAACTION Extract extended minima in a grayscale image
+% Extract regional minima in a grayscale image
 %
 %   output = ImageRegionalMinimaAction(input)
 %
@@ -8,10 +8,10 @@ classdef ImageRegionalMinimaAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-11,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -19,36 +19,36 @@ properties
 end
 
 methods
-    function this = ImageRegionalMinimaAction(viewer)
+    function obj = ImageRegionalMinimaAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'regionalMinima');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'regionalMinima');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         % apply regional minima to current image
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        img = viewer.doc.image;
+        viewer = obj.Viewer;
         
+        img = currentImage(obj);
         if ~isScalarImage(img)
             warning('ImageM:WrongImageType', ...
                 'Regional minima can be applied only on scalar images');
             return;
         end
         
-        app = viewer.gui.app;
+        app = viewer.Gui.App;
         conn = getDefaultConnectivity(app, ndims(img));
 
         bin = regionalMinima(img, conn);
-        newDoc = addImageDocument(this.viewer.gui, bin, [], 'rmin');
+        newDoc = addImageDocument(obj, bin, [], 'rmin');
         
         % add history
         string = sprintf('%s = regionalMinima(%s, %d);\n', ...
-            newDoc.tag, this.viewer.doc.tag, conn);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, obj.Viewer.Doc.Tag, conn);
+        addToHistory(obj, string);
     end    
 end
 

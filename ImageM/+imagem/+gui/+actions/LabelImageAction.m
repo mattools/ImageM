@@ -1,5 +1,5 @@
 classdef LabelImageAction < imagem.gui.actions.ScalarImageAction
-%LABELIMAGEACTION Superclass for actions that require a label image
+% Superclass for actions that require a label image.
 %
 %   output = LabelImageAction(input)
 %
@@ -8,24 +8,26 @@ classdef LabelImageAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-30,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = LabelImageAction(viewer, varargin)
+    function obj = LabelImageAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, varargin{:});
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, varargin{:});
     end
 end
 
 methods
-    function b = isActivable(this)
-        b = isActivable@imagem.gui.actions.ScalarImageAction(this);
-        b = b && isLabelImage(this.viewer.doc.image);
+    function b = isActivable(obj)
+        b = isActivable@imagem.gui.actions.ScalarImageAction(obj);
+        if b
+            b = isLabelImage(currentImage(obj));
+        end
     end
 end
 

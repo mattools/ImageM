@@ -1,5 +1,5 @@
 classdef ImageAreaOpeningAction < imagem.gui.actions.ScalarImageAction
-%IMAGEAREAOPENINGACTION Keep only particles larger than a given area
+% Keep only particles larger than a given area.
 %
 %   output = ImageAreaOpeningAction(input)
 %
@@ -11,69 +11,68 @@ classdef ImageAreaOpeningAction < imagem.gui.actions.ScalarImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-02-27,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
     % liste of handles to widgets
-    handles;
+    Handles;
     
     % the number of individual particles in original image
-    labelMax = 255;
+    LabelMax = 255;
     
     % image of labeled particles (either original image, or result of labeling)
-    labelImage;
+    LabelImage;
     
     % the list of precomputed areas
-    particleAreas;
+    ParticleAreas;
     
     % the selected value for minimum area
-    minAreaValue = 10;
+    MinAreaValue = 10;
 
     % the connectivity of the regions
-    conn = 4;
+    Conn = 4;
     
     % the list of available connectivity values (constant)
-    connValues = [4, 8];
+    ConnValues = [4, 8];
 end
 
 methods
-    function this = ImageAreaOpeningAction(viewer)
+    function obj = ImageAreaOpeningAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'areaOpening');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'areaOpening');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        % get handle to current doc
+        doc = currentDoc(obj);
         
-        if ~isScalarImage(doc.image)
+        if ~isScalarImage(doc.Image)
             warning('ImageM:WrongImageType', ...
                 'Area opening can only be applied on label or binary images');
             return;
         end
         
         % update inner state of the tool
-        updateLabelImage(this);
-        updateParticleAreaList(this);
+        updateLabelImage(obj);
+        updateParticleAreaList(obj);
         
         % setup display
-        createFigure(this);
-        updateWidgets(this);
+        createFigure(obj);
+        updateWidgets(obj);
     end
     
-    function hf = createFigure(this)
+    function hf = createFigure(obj)
         
         % range of particle areas
-        areas = this.particleAreas;
+        areas = obj.ParticleAreas;
         minVal = 0;
         maxVal = double(max(areas));
-        this.labelMax = maxVal;
+        obj.LabelMax = maxVal;
         
         % compute slider steps
         valExtent = maxVal + 1;
@@ -86,7 +85,7 @@ methods
         sliderValue = minVal + valExtent / 2;
 
         % background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.viewer.gui);
+        bgColor = getWidgetBackgroundColor(obj.Viewer.Gui);
         
         
         % creates the figure
@@ -95,46 +94,46 @@ methods
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [250 200];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uix.VBox('Parent', vb);
         
-        gui = this.viewer.gui;
+        gui = obj.Viewer.Gui;
         
-        this.handles.minAreaText = addInputTextLine(gui, mainPanel, ...
+        obj.Handles.MinAreaText = addInputTextLine(gui, mainPanel, ...
             'Minimum area:', '10', ...
-            @this.onMinAreaTextChanged);
+            @obj.onMinAreaTextChanged);
         
         % one slider for changing value
-        this.handles.valueSlider = uicontrol(...
+        obj.Handles.ValueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
             'Min', minVal, 'Max', maxVal, ...
             'Value', sliderValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onSliderValueChanged);
+            'Callback', @obj.onSliderValueChanged);
         
         % setup listener for slider continuous changes
-        addlistener(this.handles.valueSlider, ...
-            'ContinuousValueChange', @this.onSliderValueChanged);
+        addlistener(obj.Handles.ValueSlider, ...
+            'ContinuousValueChange', @obj.onSliderValueChanged);
         
         % add combo box for choosing region connectivity
-        [this.handles.connectivityPopup, ht] = addComboBoxLine(gui, mainPanel, ...
+        [obj.Handles.ConnectivityPopup, ht] = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
-            @this.onConnectivityChanged);
+            @obj.onConnectivityChanged);
         
         % disable choice of connectivity for label images
-        if isLabelImage(this.viewer.doc.image)
-            set(this.handles.connectivityPopup, 'Enable', 'off');
+        if isLabelImage(obj.Viewer.Doc.Image)
+            set(obj.Handles.ConnectivityPopup, 'Enable', 'off');
             set(ht, 'Enable', 'off');
         end
             
@@ -144,94 +143,94 @@ methods
         buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
     end
         
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        obj.Viewer.Doc.PreviewImage = [];
+        updateDisplay(obj.Viewer);
         
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function updateWidgets(this)
+    function updateWidgets(obj)
         
         % update widget values
-        val = this.minAreaValue;
-        set(this.handles.minAreaText, 'String', num2str(val))
-        set(this.handles.valueSlider, 'Value', val);
+        val = obj.MinAreaValue;
+        set(obj.Handles.MinAreaText, 'String', num2str(val))
+        set(obj.Handles.ValueSlider, 'Value', val);
         
         % update preview image of the document
-        bin = computeResultImage(this);
-        doc = this.viewer.doc;
-        doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.viewer);
+        bin = computeResultImage(obj);
+        img = overlay(currentImage(obj), bin);
+        updatePreviewImage(obj, img);
     end
     
 end
 
 %% Control buttons Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         % apply the threshold operation
-        res = computeResultImage(this);
-        newDoc = addImageDocument(this.viewer.gui, res);
+        res = computeResultImage(obj);
+        doc = currentDoc(obj);
+        newDoc = addImageDocument(obj, res);
             
         % add history
-        strValue = num2str(this.minAreaValue);
-        if isLabelImage(this.viewer.doc.image)
+        strValue = num2str(obj.MinAreaValue);
+        if isLabelImage(doc.Image)
             string = sprintf('%s = areaOpening(%s, %s);\n', ...
-                newDoc.tag, this.viewer.doc.tag, strValue);
-        elseif isBinaryImage(this.viewer.doc.image)
+                newDoc.Tag, doc.Tag, strValue);
+        elseif isBinaryImage(doc.Image)
             string = sprintf('%s = areaOpening(%s, %s, %d);\n', ...
-                newDoc.tag, this.viewer.doc.tag, strValue, this.conn);
+                newDoc.Tag, doc.Tag, strValue, obj.Conn);
         end
-        addToHistory(this.viewer.gui.app, string);
+        addToHistory(obj, string);
         
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
 end
 
 
 %% Methods specific to the operator
 methods
-    function updateLabelImage(this)
+    function updateLabelImage(obj)
         % ensure the image of labels is valid
-        img = this.viewer.doc.image;
+        img = currentImage(obj);
         if isLabelImage(img)
-            this.labelImage = img;
+            obj.LabelImage = img;
         elseif isBinaryImage(img)
-            this.labelImage = labeling(img, this.conn);
+            obj.LabelImage = labeling(img, obj.Conn);
         else 
             error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
         end
     end
     
-    function updateParticleAreaList(this)
+    function updateParticleAreaList(obj)
         % update the list of areas for each particle in the label image
-        lbl = this.labelImage;
-        this.particleAreas = imArea(lbl);
+        lbl = obj.LabelImage;
+        obj.ParticleAreas = imArea(lbl);
     end
     
-    function res = computeResultImage(this)
-        img = this.viewer.doc.image;
+    function res = computeResultImage(obj)
+        img = currentImage(obj);
         if isLabelImage(img)
-            res = areaOpening(img, this.minAreaValue);
+            res = areaOpening(img, obj.MinAreaValue);
         elseif isBinaryImage(img)
-            res = areaOpening(img, this.minAreaValue, this.conn);
+            res = areaOpening(img, obj.MinAreaValue, obj.Conn);
         else 
             error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
         end
@@ -241,50 +240,50 @@ end
 
 %% GUI Items Callback
 methods
-    function onMinAreaTextChanged(this, varargin)
-        text = get(this.handles.minAreaText, 'String');
+    function onMinAreaTextChanged(obj, varargin)
+        text = get(obj.Handles.MinAreaText, 'String');
         val = str2double(text);
         if ~isfinite(val)
             return;
         end
         
         % check value is within bounds
-        if val < 0 || val > this.labelMax
+        if val < 0 || val > obj.LabelMax
             return;
         end
         
-        this.minAreaValue = val;
-        updateWidgets(this);
+        obj.MinAreaValue = val;
+        updateWidgets(obj);
     end
     
-    function onSliderValueChanged(this, varargin)
-        val = get(this.handles.valueSlider, 'Value');
-        this.minAreaValue = val;
+    function onSliderValueChanged(obj, varargin)
+        val = get(obj.Handles.ValueSlider, 'Value');
+        obj.MinAreaValue = val;
         
-        updateWidgets(this);
+        updateWidgets(obj);
     end
     
-    function onConnectivityChanged(this, varargin)
-        index = get(this.handles.connectivityPopup, 'Value');
-        this.conn = this.connValues(index);
+    function onConnectivityChanged(obj, varargin)
+        index = get(obj.Handles.ConnectivityPopup, 'Value');
+        obj.Conn = obj.ConnValues(index);
         
         % update inner state of the tool
-        updateLabelImage(this);
-        updateParticleAreaList(this);
+        updateLabelImage(obj);
+        updateParticleAreaList(obj);
         
-        maxVal = double(max(this.particleAreas));
-        this.labelMax = maxVal;
+        maxVal = double(max(obj.ParticleAreas));
+        obj.LabelMax = maxVal;
         
         % compute slider steps
         valExtent = maxVal + 1;
         sliderStep1 = 1 / valExtent;
         sliderStep2 = 10 / valExtent;
 
-        set(this.handles.valueSlider, 'Max', maxVal);
-        set(this.handles.valueSlider, 'SliderStep', [sliderStep1 sliderStep2]); 
+        set(obj.Handles.ValueSlider, 'Max', maxVal);
+        set(obj.Handles.ValueSlider, 'SliderStep', [sliderStep1 sliderStep2]); 
         
-        this.minAreaValue = min(this.minAreaValue, maxVal);
-        updateWidgets(this);
+        obj.MinAreaValue = min(obj.MinAreaValue, maxVal);
+        updateWidgets(obj);
     end
 end
 

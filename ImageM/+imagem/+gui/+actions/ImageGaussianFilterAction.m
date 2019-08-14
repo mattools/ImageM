@@ -1,5 +1,5 @@
 classdef ImageGaussianFilterAction < imagem.gui.actions.CurrentImageAction
-%IMAGEGAUSSIANFILTERACTION  Apply gaussian filter on current image
+% Apply gaussian filter on current image.
 %
 %   Class ImageGaussianFilterAction
 %
@@ -11,24 +11,24 @@ classdef ImageGaussianFilterAction < imagem.gui.actions.CurrentImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2016-01-25,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    previewImage = [];
-    needUpdate = true;
+    PreviewImage = [];
+    NeedUpdate = true;
     
     % list of handles on the dialog widgets
-    handles;
+    Handles;
 end
 
 
 %% Constructor
 methods
-    function this = ImageGaussianFilterAction(viewer)
+    function obj = ImageGaussianFilterAction(viewer)
     % Constructor for ImageGaussianFilterAction class
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'gaussianFilter');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'gaussianFilter');
     end
 
 end % end constructors
@@ -36,35 +36,35 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
 %         disp('Compute Image box mean filter');
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        viewer = obj.Viewer;
+        doc = viewer.Doc;
         
         % creates a new dialog, and populates it with some fields
         gd = imagem.gui.GenericDialog('Gaussian Filter');
-        this.handles.dialog = gd;
+        obj.Handles.Dialog = gd;
         
         hWidth = addNumericField(gd, 'Sigma X: ', 3, 0);
-        set(hWidth, 'CallBack', @this.onNumericFieldModified);
-        this.handles.widthTextField = hWidth;
+        set(hWidth, 'CallBack', @obj.onNumericFieldModified);
+        obj.Handles.WidthTextField = hWidth;
         
         hHeight = addNumericField(gd, 'Sigma Y: ', 3, 0);
-        set(hHeight, 'CallBack', @this.onNumericFieldModified);
-        this.handles.heightTextField = hHeight;
+        set(hHeight, 'CallBack', @obj.onNumericFieldModified);
+        obj.Handles.HeightTextField = hHeight;
         
         hPreview = addCheckBox(gd, 'Preview', false);
-        set(hPreview, 'CallBack', @this.onPreviewCheckBoxChanged);
-        this.handles.previewCheckBox = hPreview;
+        set(hPreview, 'CallBack', @obj.onPreviewCheckBoxChanged);
+        obj.Handles.PreviewCheckBox = hPreview;
         
         % displays the dialog, and waits for user
         showDialog(gd);
         
         % refresh display of main figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        doc.PreviewImage = [];
+        updateDisplay(obj.Viewer);
             
         % check if ok or cancel was clicked
         if wasCanceled(gd)
@@ -78,59 +78,59 @@ methods
         % apply 'mean' operation
         sigma = [sigmaX sigmaY];
         size = 2 * round(sigma * 1.25) + 1;
-        img2 = gaussianFilter(doc.image, size, sigma);
+        img2 = gaussianFilter(doc.Image, size, sigma);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(obj, img2);
 
         % add history
         string = sprintf('%s = gaussianFilter(%s, [%g %g], [%g %g]);\n', ...
-            newDoc.tag, doc.tag, size, sigma);
-        addToHistory(viewer.gui.app, string);
+            newDoc.Tag, doc.Tag, size, sigma);
+        addToHistory(obj, string);
 
     end
     
-    function onNumericFieldModified(this, src, event) %#ok<INUSD>
+    function onNumericFieldModified(obj, src, event) %#ok<INUSD>
         % update preview image of the document
         
-        this.needUpdate = true;
+        obj.NeedUpdate = true;
         
-        hPreview = this.handles.previewCheckBox;
+        hPreview = obj.Handles.PreviewCheckBox;
         if get(hPreview, 'Value') == get(hPreview, 'Max')
-            updatePreviewImage(this);
-            this.viewer.doc.previewImage = this.previewImage;
-            updateDisplay(this.viewer);
+            updatePreviewImage(obj);
+            obj.Viewer.Doc.PreviewImage = obj.PreviewImage;
+            updateDisplay(obj.Viewer);
         end
 
     end
     
-    function onPreviewCheckBoxChanged(this, src, event) %#ok<INUSD>
-        hPreview = this.handles.previewCheckBox;
+    function onPreviewCheckBoxChanged(obj, src, event) %#ok<INUSD>
+        hPreview = obj.Handles.PreviewCheckBox;
         if get(hPreview, 'Value') == get(hPreview, 'Max')
-            if this.needUpdate
-                updatePreviewImage(this);
+            if obj.NeedUpdate
+                updatePreviewImage(obj);
             end
-            this.viewer.doc.previewImage = this.previewImage;
+            obj.Viewer.Doc.PreviewImage = obj.PreviewImage;
         else
-            this.viewer.doc.previewImage = [];
+            obj.Viewer.Doc.PreviewImage = [];
         end
         
-        updateDisplay(this.viewer);
+        updateDisplay(obj.Viewer);
     end
     
-    function updatePreviewImage(this)
+    function updatePreviewImage(obj)
         % update preview image from dialog options, and toggle update flag
-        sigmaX = getNextNumber(this.handles.dialog);
-        sigmaY = getNextNumber(this.handles.dialog);
-        resetCounter(this.handles.dialog);
+        sigmaX = getNextNumber(obj.Handles.Dialog);
+        sigmaY = getNextNumber(obj.Handles.Dialog);
+        resetCounter(obj.Handles.Dialog);
         
         % apply 'mean' operation
         sigma = [sigmaX sigmaY];
         size = 2 * round(sigma * 1.25) + 1;
-        this.previewImage = gaussianFilter(this.viewer.doc.image, size, sigma);
+        obj.PreviewImage = gaussianFilter(currentImage(obj), size, sigma);
         
         % reset state of update
-        this.needUpdate = false;
+        obj.NeedUpdate = false;
     end
 
 end % end methods

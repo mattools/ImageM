@@ -1,5 +1,5 @@
 classdef ImageLabelToRgbAction < imagem.gui.actions.LabelImageAction
-%IMAGEIMPOSEDWATERSHEDACTION Apply imposed watershed to an intensity image
+% Convert label image to RGB image.
 %
 %   output = ImageWatershedAction(input)
 %
@@ -8,54 +8,50 @@ classdef ImageLabelToRgbAction < imagem.gui.actions.LabelImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-02-27,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    handles;
+    Handles;
     
-    mapNames = {'Jet', 'ColorCube', 'HSV'};
-    mapFuns = {'jet', 'colorcube', 'hsv'};
-    mapName = 'jet';
+    MapNames = {'Jet', 'ColorCube', 'HSV'};
+    MapFuns = {'jet', 'colorcube', 'hsv'};
+    MapName = 'jet';
     
-    colorNames = {'White', 'Black', 'Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow'};
-    colorChars = {'w', 'k', 'r', 'g', 'b', 'c', 'm', 'y'};
-    bgColorName = 'w';
+    ColorNames = {'White', 'Black', 'Red', 'Green', 'Blue', 'Cyan', 'Magenta', 'Yellow'};
+    ColorChars = {'w', 'k', 'r', 'g', 'b', 'c', 'm', 'y'};
+    BgColorName = 'w';
     
-    shuffleString = 'shuffle';
+    ShuffleString = 'shuffle';
     
 end
 
 methods
-    function this = ImageLabelToRgbAction(viewer)
+    function obj = ImageLabelToRgbAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.LabelImageAction(viewer, 'labelToRgb');
+        obj = obj@imagem.gui.actions.LabelImageAction(viewer, 'labelToRgb');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         % Convert a label image to RGB image
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
-        
-        if ~isLabelImage(doc.image)
+        if ~isLabelImage(currentImage(obj))
             warning('ImageM:WrongImageType', ...
-                'Can be applied only on label images');
+                'Can only be applied on label images');
             return;
         end
         
-        createFigure(this);
-        updatePreviewImage(this);
+        createFigure(obj);
+        updatePreviewImage(obj);
     end
     
-    function hf = createFigure(this)
+    function hf = createFigure(obj)
         
         % creates the figure
         hf = figure(...
@@ -63,31 +59,31 @@ methods
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [250 200];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uiextras.VBox('Parent', vb);
         
-        gui = this.viewer.gui;
+        gui = obj.Viewer.Gui;
 
-        this.handles.colorMapCombo = addComboBoxLine(gui, mainPanel, ...
-            'Colormap:', this.mapNames, ...
-            @this.onColorMapChanged);
+        obj.Handles.ColorMapCombo = addComboBoxLine(gui, mainPanel, ...
+            'Colormap:', obj.MapNames, ...
+            @obj.onColorMapChanged);
 
-        this.handles.bgColorCombo = addComboBoxLine(gui, mainPanel, ...
-            'Background Color:', this.colorNames, ...
-            @this.onBgColorChanged);
+        obj.Handles.BgColorCombo = addComboBoxLine(gui, mainPanel, ...
+            'Background Color:', obj.ColorNames, ...
+            @obj.onBgColorChanged);
 
-        this.handles.shuffleMapCheckbox = addCheckBox(gui, mainPanel, ...
+        obj.Handles.shuffleMapCheckbox = addCheckBox(gui, mainPanel, ...
             'Shuffle map', true, ...
-            @this.onShuffleMapChanged);
+            @obj.onShuffleMapChanged);
 
         
         set(mainPanel, 'Sizes', [35 25 35]);
@@ -96,61 +92,58 @@ methods
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
     end
         
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        obj.Viewer.Doc.PreviewImage = [];
+        updateDisplay(obj.Viewer);
         
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function updatePreviewImage(this)
+    function updatePreviewImage(obj)
         % update preview image of the document
-        img = computePreviewImage(this);
-        this.viewer.doc.previewImage = img;
-        updateDisplay(this.viewer);
+        img = computePreviewImage(obj);
+        obj.Viewer.Doc.PreviewImage = img;
+        updateDisplay(obj.Viewer);
     end
     
-    function rgb = computePreviewImage(this)
-        rgb = label2rgb(this.viewer.doc.image, this.mapName, ...
-            this.bgColorName, this.shuffleString);
+    function rgb = computePreviewImage(obj)
+        rgb = label2rgb(currentImage(obj), obj.MapName, ...
+            obj.BgColorName, obj.ShuffleString);
     end
 end
 
 %% Control buttons Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         
         % apply the threshold operation
-        res = computePreviewImage(this);
-        
-        gui = this.viewer.gui;
-        refDoc = this.viewer.doc;
-        
+        res = computePreviewImage(obj);
+
         % create document containing the new image
-        newDoc = addImageDocument(gui, res);
+        newDoc = addImageDocument(obj, res);
         
         % add history
         string = sprintf('%s = label2rgb(%s, ''%s'', ''%s''));\n', ...
-            newDoc.tag, refDoc.tag, this.mapName, this.bgColorName);
-        addToHistory(gui.app, string);
+            newDoc.Tag, obj.Viewer.Doc.Tag, obj.MapName, obj.BgColorName);
+        addToHistory(obj, string);
         
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
 end
 
@@ -158,25 +151,25 @@ end
 %% GUI Items Callback
 methods
     
-    function onColorMapChanged(this, varargin)
-        ind = get(this.handles.colorMapCombo, 'Value');
-        this.mapName = this.mapFuns{ind};
-        updatePreviewImage(this);
+    function onColorMapChanged(obj, varargin)
+        ind = get(obj.Handles.ColorMapCombo, 'Value');
+        obj.MapName = obj.MapFuns{ind};
+        updatePreviewImage(obj);
     end
 
-    function onBgColorChanged(this, varargin)
-        ind = get(this.handles.bgColorCombo, 'Value');
-        this.bgColorName = this.colorNames{ind};
-        updatePreviewImage(this);
+    function onBgColorChanged(obj, varargin)
+        ind = get(obj.Handles.BgColorCombo, 'Value');
+        obj.BgColorName = obj.ColorNames{ind};
+        updatePreviewImage(obj);
     end
     
-    function onShuffleMapChanged(this, varargin)
-        if get(this.handles.shuffleMapCheckbox, 'Value')
-            this.shuffleString = 'shuffle';
+    function onShuffleMapChanged(obj, varargin)
+        if get(obj.Handles.ShuffleMapCheckbox, 'Value')
+            obj.ShuffleString = 'shuffle';
         else
-            this.shuffleString = 'noshuffle';
+            obj.ShuffleString = 'noshuffle';
         end
-        updatePreviewImage(this);
+        updatePreviewImage(obj);
     end
     
 end

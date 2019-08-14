@@ -1,5 +1,5 @@
 classdef MergeChannelsAction < imagem.gui.ImagemAction
-%MERGECHANNELSACTION Merge three images to create a color one
+% Merge three grayscale images to create a color image.
 %
 %   Class ImageArithmeticAction
 %
@@ -11,38 +11,40 @@ classdef MergeChannelsAction < imagem.gui.ImagemAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@nantes.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-11-04,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    handles;
+    Handles;
     
-    opList = {@plus, @minus, @times, @rdivide};
-    opNames = {'Plus', 'Minus', 'Times', 'Divides'};
+    OpList = {@plus, @minus, @times, @rdivide};
+    OpNames = {'Plus', 'Minus', 'Times', 'Divides'};
     
 end % end properties
 
 
 %% Constructor
 methods
-    function this = MergeChannelsAction(viewer)
+    function obj = MergeChannelsAction(viewer)
     % Constructor for MergeChannelsAction class
-        this = this@imagem.gui.ImagemAction(viewer, 'mergeChannels');
+        obj = obj@imagem.gui.ImagemAction(viewer, 'mergeChannels');
     end
 
 end % end constructors
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('merge channels');
         
-        createFigure(this);
+        createFigure(obj);
     end
     
-    function hf = createFigure(this)
+    function hf = createFigure(obj)
+        
+        gui = obj.Viewer.Gui;
         
         % action figure
         hf = figure(...
@@ -54,67 +56,65 @@ methods
         pos(3:4) = 200;
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
-        imageNames = getImageNames(this.viewer.gui.app);
+        imageNames = getImageNames(gui.App);
         
         % vertical layout
-        vb  = uiextras.VBox('Parent', hf, ...
+        vb  = uix.VBox('Parent', hf, ...
             'Spacing', 5, 'Padding', 5);
         
-        gui = this.viewer.gui;
-        
         % one panel for value text input
-        mainPanel = uiextras.VBox('Parent', vb);
+        mainPanel = uix.VBox('Parent', vb);
 
         % combo box for the first image
-        this.handles.redChannelList = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.RedChannelList = addComboBoxLine(gui, mainPanel, ...
             'Red Channel:', imageNames);
         
         % combo box for the first image
-        this.handles.greenChannelList = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.GreenChannelList = addComboBoxLine(gui, mainPanel, ...
             'Green Channel:', imageNames);
         
         % combo box for the first image
-        this.handles.blueChannelList = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.BlueChannelList = addComboBoxLine(gui, mainPanel, ...
             'Blue Channel:', imageNames);
         
         % button for control panel
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
     end
     
 
-    function closeFigure(this)
+    function closeFigure(obj)
         % clean up viewer figure
         
         % close the current fig
-        close(this.handles.figure);
+        close(obj.Handles.Figure);
     end
     
 end
 
 %% GUI Items Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         
-        gui = this.viewer.gui;
+        app = obj.Viewer.Gui.App;
         
-        doc1 = getDocument(gui.app, get(this.handles.redChannelList, 'Value'));
-        img1 = doc1.image;
+        doc1 = getDocument(app, get(obj.Handles.RedChannelList, 'Value'));
+        img1 = doc1.Image;
 
-        doc2 = getDocument(gui.app, get(this.handles.greenChannelList, 'Value'));
-        img2 = doc2.image;
+        doc2 = getDocument(app, get(obj.Handles.GreenChannelList, 'Value'));
+        img2 = doc2.Image;
         
-        doc3 = getDocument(gui.app, get(this.handles.blueChannelList, 'Value'));
-        img3 = doc3.image;
+        doc3 = getDocument(app, get(obj.Handles.BlueChannelList, 'Value'));
+        img3 = doc3.Image;
         
        
         % TODO: should manage case of empty image
@@ -130,18 +130,18 @@ methods
         res = Image.createRGB(img1, img2, img3);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(gui, res);
+        newDoc = addImageDocument(obj, res);
         
         % add history
         string = sprintf('%s = Image.createRGB(%s, %s, %s));\n', ...
-            newDoc.tag, doc1.tag, doc2.tag, doc3.tag);
-        addToHistory(gui.app, string);
+            newDoc.Tag, doc1.Tag, doc2.Tag, doc3.Tag);
+        addToHistory(app, string);
 
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
     
 end

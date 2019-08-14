@@ -1,5 +1,5 @@
 function varargout = ImageM(varargin)
-%IMAGEM Run a new instance of ImageM application
+% Run a new instance of ImageM application.
 %
 %   ImageM
 %   Creates a new ImageM window, with a menu and without image.
@@ -23,6 +23,7 @@ function varargout = ImageM(varargin)
 %
 %   See also
 %     Image
+%
 
 % ------
 % Author: David Legland
@@ -43,8 +44,8 @@ if ~isempty(varargin)
         img = var;
         
         % if image has no name, use the name of the variable
-        if isempty(img.name)
-            img.name = inputname(1);
+        if isempty(img.Name)
+            img.Name = inputname(1);
         end
         
     elseif ischar(var)
@@ -54,7 +55,7 @@ if ~isempty(varargin)
     elseif isnumeric(var) || islogical(var)
         % if input is numerical array, convert to image and keep input name
         img = Image(var);
-        img.name = inputname(1);
+        img.Name = inputname(1);
     end
 end
 

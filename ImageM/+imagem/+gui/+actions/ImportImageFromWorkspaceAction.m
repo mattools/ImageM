@@ -42,7 +42,7 @@ methods
         viewer = this.viewer;
         gui = viewer.gui;
         
-         % open dialog to input image name
+        % open dialog to input image name
         prompt = {'Enter Variable Name:'};
         title = 'Import From Workspace';
         lines = 1;

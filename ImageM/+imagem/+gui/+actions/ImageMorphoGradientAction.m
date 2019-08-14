@@ -1,5 +1,5 @@
 classdef ImageMorphoGradientAction < imagem.gui.actions.ScalarImageAction
-%IMAGEMORPHOGRADIENTACTION  One-line description here, please.
+% Apply morphological gradient (Beucher Gradient) on current image
 %
 %   Class ImageMorphoGradientAction
 %
@@ -8,10 +8,10 @@ classdef ImageMorphoGradientAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageMorphoGradientAction(viewer)
+    function obj = ImageMorphoGradientAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageMorphoGradient');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'imageMorphoGradient');
     end
 
 end % end constructors
@@ -33,25 +33,23 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('Compute Image morphological gradient');
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
-        
-        se = ones(3, 3);
+        % get handle to current doc
+        doc = currentDoc(obj);
         
         % apply 'gradient' operation
-        img2 = morphoGradient(doc.image, se);
+        se = ones(3, 3);
+        img2 = morphoGradient(doc.Image, se);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(obj, img2);
         
         % add history
         string = sprintf('%s = morphoGradient(%s, ones(3,3));\n', ...
-            newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, doc.Tag);
+        addToHistory(obj, string);
     end
 end % end methods
 

@@ -1,5 +1,5 @@
 classdef BrushTool < imagem.gui.ImagemTool
-%BRUSHTOOL Draw on current image using current brush and 'color'
+% Draw on current image using current brush and 'color'.
 %
 %   output = BrushTool(input)
 %
@@ -8,61 +8,61 @@ classdef BrushTool < imagem.gui.ImagemTool
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-21,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 %% Properties
 properties
-    buttonPressed = false;
+    ButtonPressed = false;
     
     % the current drawing 'color', initialized to white
-    color = 255;
+    Color = 255;
     
-    previousPoint;
+    PreviousPoint;
 end
 
 %% Constructor
 methods
-    function this = BrushTool(parent, varargin)
+    function obj = BrushTool(parent, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(parent, 'brush');
+         obj = obj@imagem.gui.ImagemTool(parent, 'brush');
     end % constructor 
 
 end % construction function
 
 %% General methods
 methods
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        processCurrentPosition(this);
-        this.buttonPressed = true;
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
+        processCurrentPosition(obj);
+        obj.ButtonPressed = true;
     end
     
-    function onMouseButtonReleased(this, hObject, eventdata) %#ok<INUSD>
-        this.previousPoint = [];
-        this.buttonPressed = false;
+    function onMouseButtonReleased(obj, hObject, eventdata) %#ok<INUSD>
+        obj.PreviousPoint = [];
+        obj.ButtonPressed = false;
     end
     
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
-        if ~this.buttonPressed
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
+        if ~obj.ButtonPressed
             return;
         end
-        processCurrentPosition(this);
+        processCurrentPosition(obj);
    end
    
-   function processCurrentPosition(this)
-        doc = this.viewer.doc;
-        img = doc.image;
+   function processCurrentPosition(obj)
+        doc = obj.Viewer.Doc;
+        img = doc.Image;
         
         if ~isGrayscaleImage(img)
             return;
         end
         
-        point = get(this.viewer.handles.imageAxis, 'CurrentPoint');
-        coord = round(pointToIndex(this, point(1, 1:2)));
+        point = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
+        coord = round(pointToIndex(obj, point(1, 1:2)));
         
         % control on bounds of image
         dim = size(img);
@@ -70,49 +70,51 @@ methods
             return;
         end
 
-        if ~isempty(this.previousPoint)
+        if ~isempty(obj.PreviousPoint)
             % mouse moved from a previous position
-            drawBrushLine(this, coord, this.previousPoint);
+            drawBrushLine(obj, coord, obj.PreviousPoint);
         else
             % respond to mouse button pressed, mouse hasn't moved yet
-            drawBrush(this, coord);
+            drawBrush(obj, coord);
         end
         
-        this.previousPoint = coord;
+        obj.PreviousPoint = coord;
         
-        doc.modified = true;
+        doc.Modified = true;
         
-        updateDisplay(this.viewer);
+        updateDisplay(obj.Viewer);
    end
    
-   function index = pointToIndex(this, point)
+   function index = pointToIndex(obj, point)
        % Converts coordinates of a point in physical dimension to image index
        % First element is column index, second element is row index, both are
        % given in floating point and no rounding is performed.
-       spacing = this.viewer.doc.image.spacing(1:2);
-       origin  = this.viewer.doc.image.origin(1:2);
+       doc = currentDoc(obj);
+       img = doc.Image;
+       spacing = img.Spacing(1:2);
+       origin  = img.Origin(1:2);
        index   = (point - origin) ./ spacing + 1;
    end
    
-   function drawBrushLine(this, coord1, coord2)
+   function drawBrushLine(obj, coord1, coord2)
        [x, y] = imagem.gui.tools.BrushTool.intline(coord1(1), coord1(2), coord2(1), coord2(2));
        
        % iterate on current line
        for i = 1 : length(x)
-           drawBrush(this, [x(i) y(i)]);
+           drawBrush(obj, [x(i) y(i)]);
        end
    end
    
-   function drawBrush(this, coord)
-       doc  = this.viewer.doc;
+   function drawBrush(obj, coord)
+       doc  = obj.Viewer.Doc;
        
        % brush size in each direction
-       bs = this.viewer.gui.app.brushSize;
+       bs = obj.Viewer.Gui.App.BrushSize;
        bs1 = floor((bs-1) / 2);
        bs2 = ceil((bs-1) / 2);
        
        % compute bounds
-       dim = size(doc.image);
+       dim = size(doc.Image);
        x1 = max(coord(1)-bs1, 1);
        y1 = max(coord(2)-bs1, 1);
        x2 = min(coord(1)+bs2, dim(1));
@@ -121,7 +123,7 @@ methods
        % iterate on brush pixels
        for i = x1:x2
            for j = y1:y2
-               doc.image(i, j) = this.color;
+               doc.Image(i, j) = obj.Color;
            end
        end
    end
@@ -186,9 +188,9 @@ methods (Static, Access = private)
 end
 
 methods
-    function b = isActivable(this)
-        doc = this.viewer.doc;
-        b = ~isempty(doc) && ~isempty(doc.image) && isScalarImage(doc.image);
+    function b = isActivable(obj)
+        doc = obj.Viewer.Doc;
+        b = ~isempty(doc) && ~isempty(doc.Image) && isScalarImage(doc.Image);
     end
 end
 

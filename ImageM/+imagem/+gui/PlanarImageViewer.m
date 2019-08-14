@@ -1,5 +1,5 @@
 classdef PlanarImageViewer < handle
-%PLANARIMAGEVIEWER  A viewer for planar images
+% A viewer for planar images.
 %
 %   VIEWER = PlanarImageViewer(GUI, DOC)
 %   Creates a VIEWER for an ImageM document.
@@ -12,10 +12,11 @@ classdef PlanarImageViewer < handle
 %     img = Image.read('cameraman.tif');
 %     doc = imagem.app.ImagemDoc(image);
 %     addDocument(app, doc);
-%     viewer = imagem.gui.PlanarImageViewer(this, doc);
+%     viewer = imagem.gui.PlanarImageViewer(obj, doc);
 %
 %   See also
-%     imagem.gui.ImagemGUI, imagem.app.ImagemDoc
+%     ImagemGUI, ImagemDoc
+%
 
 % ------
 % Author: David Legland
@@ -26,37 +27,37 @@ classdef PlanarImageViewer < handle
 
 properties
     % reference to the main GUI
-    gui;
+    Gui;
    
     % list of handles to the various gui items
-    handles;
+    Handles;
     
     % the image document
-    doc;
+    Doc;
     
     % a row vector of two values indicating minimal and maximal displayable
     % values for grayscale and intensity images.
-    displayRange;
+    DisplayRange;
     
     % specify how to change the zoom when figure is resized. Can be one of:
     % 'adjust'  -> find best zoom (default)
     % 'fixed'   -> keep previous zoom factor
-    zoomMode = 'adjust';
+    ZoomMode = 'adjust';
     
     % the set of mouse listeners, stored as a cell array 
-    mouseListeners = [];
+    MouseListeners = [];
     
     % the currently selected tool
-    currentTool = [];
+    CurrentTool = [];
     
     % a selected shape
-    selection = [];
+    Selection = [];
 end
 
 methods
-    function this = PlanarImageViewer(gui, doc)
-        this.gui = gui;
-        this.doc = doc;
+    function obj = PlanarImageViewer(gui, doc)
+        obj.Gui = gui;
+        obj.Doc = doc;
 
         % computes a new handle index large enough not to collide with
         % common figure handles
@@ -75,39 +76,39 @@ methods
             'NextPlot', 'new', ...
             'Name', 'ImageM Main Figure', ...
             'Visible', 'Off', ...
-            'CloseRequestFcn', @this.close);
-        this.handles.figure = fig;
+            'CloseRequestFcn', @obj.close);
+        obj.Handles.Figure = fig;
         
         % create main figure menu
-        createFigureMenu(gui, fig, this);
+        createFigureMenu(gui, fig, obj);
         
         % creates the layout
         setupLayout(fig);
         
-        updateDisplay(this);
-        updateTitle(this);
+        updateDisplay(obj);
+        updateTitle(obj);
         
         % adjust zoom to view the full image
-        api = iptgetapi(this.handles.scrollPanel);
+        api = iptgetapi(obj.Handles.ScrollPanel);
         mag = api.findFitMag();
         api.setMagnification(mag);
 
         % setup listeners associated to the figure
-        if ~isempty(doc) && ~isempty(doc.image)
-            set(fig, 'WindowButtonDownFcn',     @this.processMouseButtonPressed);
-            set(fig, 'WindowButtonUpFcn',       @this.processMouseButtonReleased);
-            set(fig, 'WindowButtonMotionFcn',   @this.processMouseMoved);
+        if ~isempty(doc) && ~isempty(doc.Image)
+            set(fig, 'WindowButtonDownFcn',     @obj.processMouseButtonPressed);
+            set(fig, 'WindowButtonUpFcn',       @obj.processMouseButtonReleased);
+            set(fig, 'WindowButtonMotionFcn',   @obj.processMouseMoved);
 
             % setup mouse listener for display of mouse coordinates
-            tool = imagem.gui.tools.ShowCursorPositionTool(this, 'showMousePosition');
-            addMouseListener(this, tool);
+            tool = imagem.gui.tools.ShowCursorPositionTool(obj, 'showMousePosition');
+            addMouseListener(obj, tool);
             
             % setup key listener
-            set(fig, 'KeyPressFcn',     @this.onKeyPressed);
-            set(fig, 'KeyReleaseFcn',   @this.onKeyReleased);
+            set(fig, 'KeyPressFcn',     @obj.onKeyPressed);
+            set(fig, 'KeyReleaseFcn',   @obj.onKeyReleased);
         end
         
-        set(fig, 'UserData', this);
+        set(fig, 'UserData', obj);
         set(fig, 'Visible', 'On');
         
         
@@ -123,7 +124,7 @@ methods
             
             % scrollable panel for image display
             scrollPanel = uipanel('Parent', displayPanel, ...
-                'resizeFcn', @this.onScrollPanelResized);
+                'resizeFcn', @obj.onScrollPanelResized);
           
             % creates an axis that fills the available space
             ax = axes('Parent', scrollPanel, ...
@@ -133,20 +134,20 @@ methods
             
             % intialize image display with default image. 
             hIm = imshow(ones(10, 10), 'parent', ax);
-            this.handles.scrollPanel = imscrollpanel(scrollPanel, hIm);
+            obj.Handles.ScrollPanel = imscrollpanel(scrollPanel, hIm);
 
             % keep widgets handles
-            this.handles.imageAxis = ax;
-            this.handles.image = hIm;
+            obj.Handles.ImageAxis = ax;
+            obj.Handles.Image = hIm;
 
             % in case of empty doc, hides the axis
-            if isempty(this.doc) || isempty(this.doc.image)
+            if isempty(obj.Doc) || isempty(obj.Doc.Image)
                 set(ax, 'Visible', 'off');
                 set(hIm, 'Visible', 'off');
             end
 
             % info panel for cursor position and value
-            this.handles.infoPanel = uicontrol(...
+            obj.Handles.InfoPanel = uicontrol(...
                 'Parent', mainPanel, ...
                 'Style', 'text', ...
                 'String', ' x=    y=     I=', ...
@@ -156,7 +157,7 @@ methods
             mainPanel.Heights = [-1 20];
 
             % once each panel has been resized, setup image magnification
-            api = iptgetapi(this.handles.scrollPanel);
+            api = iptgetapi(obj.Handles.ScrollPanel);
             mag = api.findFitMag();
             api.setMagnification(mag);
         end
@@ -166,24 +167,24 @@ end
 
 methods
     
-    function updateDisplay(this)
+    function updateDisplay(obj)
         % Refresh image display of the current slice
 
         % basic check up to avoid problems when display is already closed
-        if ~ishandle(this.handles.scrollPanel)
+        if ~ishandle(obj.Handles.ScrollPanel)
             return;
         end
         
         % check up doc validity
-        if isempty(this.doc) || isempty(this.doc.image)
+        if isempty(obj.Doc) || isempty(obj.Doc.Image)
             return;
         end
         
         % current image is either the document image, or the preview image
         % if there is one
-        img = this.doc.image;
-        if ~isempty(this.doc.previewImage)
-            img = this.doc.previewImage;
+        img = obj.Doc.Image;
+        if ~isempty(obj.Doc.PreviewImage)
+            img = obj.Doc.PreviewImage;
         end
         
         % compute display data
@@ -191,48 +192,48 @@ methods
         cdata = imagem.gui.ImageUtils.computeDisplayImage(img);
        
         % changes current display data
-        api = iptgetapi(this.handles.scrollPanel);
+        api = iptgetapi(obj.Handles.ScrollPanel);
 %         loc = api.getVisibleLocation();
         api.replaceImage(cdata, 'PreserveView', true);
         
         % extract calibration data
-        spacing = img.spacing;
-        origin  = img.origin;
+        spacing = img.Spacing;
+        origin  = img.Origin;
         
         % set up spatial calibration
         dim     = size(img);
         xdata   = ([0 dim(1)-1] * spacing(1) + origin(1));
         ydata   = ([0 dim(2)-1] * spacing(2) + origin(2));
         
-        set(this.handles.image, 'XData', xdata);
-        set(this.handles.image, 'YData', ydata);
+        set(obj.Handles.Image, 'XData', xdata);
+        set(obj.Handles.Image, 'YData', ydata);
         
         % setup axis extent from image extent
         extent = physicalExtent(img);
-        set(this.handles.imageAxis, 'XLim', extent(1:2));
-        set(this.handles.imageAxis, 'YLim', extent(3:4));
+        set(obj.Handles.ImageAxis, 'XLim', extent(1:2));
+        set(obj.Handles.ImageAxis, 'YLim', extent(3:4));
 %         api.setVisibleLocation(loc);
         
         % eventually adjust displayrange
         if isGrayscaleImage(img) || isIntensityImage(img) || isVectorImage(img)
             % get min and max display values, or recompute them
-            if isempty(this.displayRange)
+            if isempty(obj.DisplayRange)
                 [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(img);
             else
-                mini = this.displayRange(1);
-                maxi = this.displayRange(2);
+                mini = obj.DisplayRange(1);
+                maxi = obj.DisplayRange(2);
             end
             
-            set(this.handles.imageAxis, 'CLim', [mini maxi]);
+            set(obj.Handles.ImageAxis, 'CLim', [mini maxi]);
         end
         
         % set up lookup table (if not empty)
-        if ~isColorImage(img) && ~isempty(this.doc.lut)
-            colormap(this.handles.imageAxis, this.doc.lut);
+        if ~isColorImage(img) && ~isempty(obj.Doc.Lut)
+            colormap(obj.Handles.ImageAxis, obj.Doc.Lut);
         end
         
         % remove all axis children that are not image
-        children = get(this.handles.imageAxis, 'Children');
+        children = get(obj.Handles.ImageAxis, 'Children');
         for i = 1:length(children)
             child = children(i);
             if ~strcmpi(get(child, 'type'), 'image')
@@ -241,92 +242,87 @@ methods
         end
         
         % display each shape stored in document
-        drawShapes(this);
+        drawShapes(obj);
         
 %         % adjust zoom to view the full image
-%         api = iptgetapi(this.handles.scrollPanel);
+%         api = iptgetapi(obj.Handles.ScrollPanel);
 %         mag = api.findFitMag();
 %         api.setMagnification(mag);
     end
     
 
-    function updateTitle(this)
+    function updateTitle(obj)
         % set up title of the figure, containing name of figure and current zoom
         
         % small checkup, because function can be called before figure was
         % initialised
-        if ~isfield(this.handles, 'figure')
+        if ~isfield(obj.Handles, 'Figure')
             return;
         end
         
-        if isempty(this.doc) || isempty(this.doc.image)
+        if isempty(obj.Doc) || isempty(obj.Doc.Image)
             return;
         end
         
-        % setup name
-        if isempty(this.doc.image.name)
-            imgName = 'Unknown Image';
-        else
-            imgName = this.doc.image.name;
-        end
+        % setup name to display
+        imgName = imageNameForDisplay(obj.Doc);
     
         % determine the type to display:
         % * data type for intensity / grayscale image
         % * type of image otherwise
-        switch this.doc.image.type
+        switch obj.Doc.Image.Type
             case 'grayscale'
-                type = class(this.doc.image.data);
+                type = class(obj.Doc.Image.Data);
             case 'color'
                 type = 'color';
             otherwise
-                type = this.doc.image.type;
+                type = obj.Doc.Image.Type;
         end
         
         % compute image zoom
-        api = iptgetapi(this.handles.scrollPanel);
+        api = iptgetapi(obj.Handles.ScrollPanel);
         zoom = api.getMagnification();
         
         % compute new title string 
         titlePattern = 'ImageM - %s [%d x %d %s] - %g:%g';
         titleString = sprintf(titlePattern, imgName, ...
-            size(this.doc.image), type, max(1, zoom), max(1, 1/zoom));
+            size(obj.Doc.Image), type, max(1, zoom), max(1, 1/zoom));
 
         % display new title
-        set(this.handles.figure, 'Name', titleString);
+        set(obj.Handles.Figure, 'Name', titleString);
     end
     
-    function copySettings(this, that)
+    function copySettings(obj, that)
         % copy display settings from another viewer
-        this.displayRange = that.displayRange;
-        this.zoomMode = that.zoomMode;
+        obj.DisplayRange = that.DisplayRange;
+        obj.ZoomMode = that.ZoomMode;
     end
 end
 
 %% Shapes and Annotation management
 methods
         
-    function drawShapes(this)
-        shapes = this.doc.shapes;
+    function drawShapes(obj)
+        shapes = obj.Doc.Shapes;
         for i = 1:length(shapes)
-            drawShape(this, shapes{i});
+            drawShape(obj, shapes{i});
         end
     end
     
-    function h = drawShape(this, shape)
+    function h = drawShape(obj, shape)
         
         % extract current axis
-        ax = this.handles.imageAxis;
-%         axes(this.handles.imageAxis);
+        ax = obj.Handles.ImageAxis;
         
-        switch lower(shape.type)
+        switch lower(shape.Type)
             case 'polygon'
-                h = drawPolygon(ax, shape.data, shape.style{:});
+                h = drawPolygon(ax, shape.Data, shape.Style{:});
             case 'pointset'
-                h = drawPoint(ax, shape.data, shape.style{:});
+                h = drawPoint(ax, shape.Data, shape.Style{:});
             case 'box'
-                h = drawBox(ax, shape.data, shape.style{:});
+                h = drawBox(ax, shape.Data, shape.Style{:});
             case 'ellipse'
-                h = drawEllipse(ax, shape.data, shape.style{:});
+                h = drawEllipse(ax, shape.Data, shape.Style{:});
         end
     end
 
@@ -334,31 +330,31 @@ end
 
 %% Zoom Management
 methods
-    function zoom = getZoom(this)
-        api = iptgetapi(this.handles.scrollPanel);
+    function zoom = getZoom(obj)
+        api = iptgetapi(obj.Handles.ScrollPanel);
         zoom = api.getMagnification();
     end
     
-    function setZoom(this, newZoom)
-        api = iptgetapi(this.handles.scrollPanel);
+    function setZoom(obj, newZoom)
+        api = iptgetapi(obj.Handles.ScrollPanel);
         api.setMagnification(newZoom);
     end
     
-    function zoom = findBestZoom(this)
-        api = iptgetapi(this.handles.scrollPanel);
+    function zoom = findBestZoom(obj)
+        api = iptgetapi(obj.Handles.ScrollPanel);
         zoom = api.findFitMag();
     end
     
-    function mode = getZoomMode(this)
-        mode = this.zoomMode;
+    function mode = getZoomMode(obj)
+        mode = obj.ZoomMode;
     end
     
-    function setZoomMode(this, mode)
+    function setZoomMode(obj, mode)
         switch lower(mode)
             case 'adjust'
-                this.zoomMode = 'adjust';
+                obj.ZoomMode = 'adjust';
             case 'fixed'
-                this.zoomMode = 'fixed';
+                obj.ZoomMode = 'fixed';
             otherwise
                 error(['Unrecognized zoom mode option: ' mode]);
         end
@@ -368,18 +364,18 @@ end
 
 %% Mouse listeners management
 methods
-    function addMouseListener(this, listener)
-        % Add a mouse listener to this viewer
-        this.mouseListeners = [this.mouseListeners {listener}];
+    function addMouseListener(obj, listener)
+        % Add a mouse listener to obj viewer
+        obj.MouseListeners = [obj.MouseListeners {listener}];
     end
     
-    function removeMouseListener(this, listener)
-        % Remove a mouse listener from this viewer
+    function removeMouseListener(obj, listener)
+        % Remove a mouse listener from obj viewer
         
         % find which listeners are the same as the given one
-        inds = false(size(this.mouseListeners));
-        for i = 1:numel(this.mouseListeners)
-            if this.mouseListeners{i} == listener
+        inds = false(size(obj.MouseListeners));
+        for i = 1:numel(obj.MouseListeners)
+            if obj.MouseListeners{i} == listener
                 inds(i) = true;
             end
         end
@@ -387,57 +383,57 @@ methods
         % remove first existing listener
         inds = find(inds);
         if ~isempty(inds)
-            this.mouseListeners(inds(1)) = [];
+            obj.MouseListeners(inds(1)) = [];
         end
     end
     
-    function processMouseButtonPressed(this, hObject, eventdata)
+    function processMouseButtonPressed(obj, hObject, eventdata)
         % propagates mouse event to all listeners
-        for i = 1:length(this.mouseListeners)
-            onMouseButtonPressed(this.mouseListeners{i}, hObject, eventdata);
+        for i = 1:length(obj.MouseListeners)
+            onMouseButtonPressed(obj.MouseListeners{i}, hObject, eventdata);
         end
     end
     
-    function processMouseButtonReleased(this, hObject, eventdata)
+    function processMouseButtonReleased(obj, hObject, eventdata)
         % propagates mouse event to all listeners
-        for i = 1:length(this.mouseListeners)
-            onMouseButtonReleased(this.mouseListeners{i}, hObject, eventdata);
+        for i = 1:length(obj.MouseListeners)
+            onMouseButtonReleased(obj.MouseListeners{i}, hObject, eventdata);
         end
     end
     
-    function processMouseMoved(this, hObject, eventdata)
+    function processMouseMoved(obj, hObject, eventdata)
         % propagates mouse event to all listeners
-        for i = 1:length(this.mouseListeners)
-            onMouseMoved(this.mouseListeners{i}, hObject, eventdata);
+        for i = 1:length(obj.MouseListeners)
+            onMouseMoved(obj.MouseListeners{i}, hObject, eventdata);
         end
     end
 end
 
 %% Mouse listeners management
 methods
-    function onKeyPressed(this, hObject, eventdata) %#ok<INUSL>
+    function onKeyPressed(obj, hObject, eventdata) %#ok<INUSL>
 %         disp(['key pressed: ' eventdata.Character]);
         
         key = eventdata.Character;
         switch key
         case '+'
-            zoom = getZoom(this);
-            setZoom(this, zoom * sqrt(2));
-            updateTitle(this);
+            zoom = getZoom(obj);
+            setZoom(obj, zoom * sqrt(2));
+            updateTitle(obj);
             
         case '-'
-            zoom = getZoom(this);
-            setZoom(this, zoom / sqrt(2));
-            updateTitle(this);
+            zoom = getZoom(obj);
+            setZoom(obj, zoom / sqrt(2));
+            updateTitle(obj);
             
         case '='
-            setZoom(this, 1);
-            updateTitle(this);
+            setZoom(obj, 1);
+            updateTitle(obj);
             
         end
     end
     
-    function onKeyReleased(this, hObject, eventdata) %#ok<INUSD>
+    function onKeyReleased(obj, hObject, eventdata) %#ok<INUSD>
 %         disp(['key relased: ' eventdata.Character]);
     end
     
@@ -445,31 +441,31 @@ end
 
 %% Figure management
 methods
-    function close(this, varargin)
+    function close(obj, varargin)
 %         disp('Close image viewer');
-        if ~isempty(this.doc)
+        if ~isempty(obj.Doc)
             try
-                removeView(this.doc, this);
+                removeView(obj.Doc, obj);
             catch ME %#ok<NASGU>
                 warning('PlanarImageViewer:close', ...
                     'Current view is not referenced in document...');
             end
         end
-        delete(this.handles.figure);
+        delete(obj.Handles.Figure);
     end
     
-    function onScrollPanelResized(this, varargin)
+    function onScrollPanelResized(obj, varargin)
         % function called when the Scroll panel has been resized
         
-       if strcmp(this.zoomMode, 'adjust')
-            if ~isfield(this.handles, 'scrollPanel')
+       if strcmp(obj.ZoomMode, 'adjust')
+            if ~isfield(obj.Handles, 'scrollPanel')
                 return;
             end
-            scroll = this.handles.scrollPanel;
+            scroll = obj.Handles.ScrollPanel;
             api = iptgetapi(scroll);
             mag = api.findFitMag();
             api.setMagnification(mag);
-            updateTitle(this);
+            updateTitle(obj);
         end
     end
     

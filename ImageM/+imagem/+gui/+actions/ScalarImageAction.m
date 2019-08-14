@@ -1,5 +1,5 @@
 classdef ScalarImageAction < imagem.gui.actions.CurrentImageAction
-%INVERTIMAGEACTION Superclass for actions that require a current image
+% Superclass for actions that require a scalar image.
 %
 %   output = ScalarImageAction(input)
 %
@@ -7,11 +7,12 @@ classdef ScalarImageAction < imagem.gui.actions.CurrentImageAction
 %   ScalarImageAction
 %
 %   See also
+%     CurrentImageAction, BinaryImageAction
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,9 +24,9 @@ methods
 end
 
 methods
-    function b = isActivable(this)
-        b = isActivable@imagem.gui.actions.CurrentImageAction(this);
-        b = b && isScalarImage(this.viewer.doc.image);
+    function b = isActivable(obj)
+        b = isActivable@imagem.gui.actions.CurrentImageAction(obj);
+        b = b && isScalarImage(currentImage(obj));
     end
 end
 

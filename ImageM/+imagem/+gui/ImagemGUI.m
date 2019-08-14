@@ -1,5 +1,5 @@
 classdef ImagemGUI < handle
-%IMAGEMGUI GUI manager for the ImageM application
+% GUI manager for the ImageM application.
 %
 %   This class manages the list of opens documents, and creates appropriate
 %   menus for viewers.
@@ -10,6 +10,7 @@ classdef ImagemGUI < handle
 %   ImagemGUI
 %
 %   See also
+%     PlanarImageViewer
 %
 
 % ------
@@ -21,20 +22,20 @@ classdef ImagemGUI < handle
 %% Properties
 properties
     % application
-    app;
+    App;
     
 end 
 
 %% Constructor
 methods
-    function this = ImagemGUI(appli, varargin)
+    function obj = ImagemGUI(appli, varargin)
         % IMAGEM constructor
         %
         % IM = ImageM(APP)
         % where APP is an instance of ImagemApp
         %
         
-        this.app = appli;
+        obj.App = appli;
         
     end % constructor 
 
@@ -43,64 +44,64 @@ end % construction function
 
 %% General methods
 methods
-    function [doc, viewer] = addImageDocument(this, image, newName, refTag)
+    function [doc, viewer] = addImageDocument(obj, image, newName, refTag)
         % Create a new document from image, add it to app, and display img
         
         if isempty(image)
             % in case of empty image, create an "empty view"
             doc = [];
-            viewer = imagem.gui.PlanarImageViewer(this, doc);
+            viewer = imagem.Gui.PlanarImageViewer(obj, doc);
             return;
         end
         
         if nargin < 3 || isempty(newName)
             % find a 'free' name for image
-            newName = createDocumentName(this.app, image.name);
+            newName = createDocumentName(obj.App, image.Name);
         end
-        image.name = newName;
+        image.Name = newName;
         
         % creates new instance of ImageDoc
         doc = imagem.app.ImagemDoc(image);
         
         % setup document tag
         if nargin < 4
-            tag = createImageTag(this.app, image);
+            tag = createImageTag(obj.App, image);
         else
-            tag = createImageTag(this.app, image, refTag);
+            tag = createImageTag(obj.App, image, refTag);
         end
-        doc.tag = tag;
+        doc.Tag = tag;
         
         % display settings
         if ~isempty(image)
             if isLabelImage(image)
-                doc.lut = 'jet';
+                doc.Lut = 'jet';
             end
         end
         
         % add ImageDoc to the application
-        addDocument(this.app, doc);
+        addDocument(obj.App, doc);
         
         % creates a display for the new image
-        viewer = imagem.gui.PlanarImageViewer(this, doc);
+        viewer = imagem.gui.PlanarImageViewer(obj, doc);
         addView(doc, viewer);
     end
     
-    function addToHistory(this, string)
+    function addToHistory(obj, string)
         % Add the specified string to gui history
         
         warning('ImageM:ImagemGUI:deprecated', ...
             'deprecated, should add to app history directly');
-        addToHistory(this.app, string);
+        addToHistory(obj.App, string);
         fprintf(string);
     end
     
-    function exit(this)
+    function exit(obj)
         % EXIT Close all viewers
         
-        docList = getDocuments(this.app);
+        docList = getDocuments(obj.App);
         for d = 1:length(docList)
             doc = docList{d};
-%             disp(['closing doc: ' doc.image.name]);
+%             disp(['closing doc: ' doc.image.Name]);
             
             views = getViews(doc);
             for v = 1:length(views)
@@ -116,7 +117,7 @@ end % general methods
 
 %% GUI Creation methods
 methods
-    function createFigureMenu(this, hf, viewer) %#ok<INUSL>
+    function createFigureMenu(obj, hf, viewer) %#ok<INUSL>
         
         import imagem.gui.ImagemGUI;
         import imagem.gui.actions.*;
@@ -423,17 +424,17 @@ methods
         
         ImagemGUI.addMenuItem(helpMenu, ...
             GenericAction(viewer, 'printHistory', ...
-            @(src, evt) viewer.gui.app.printHistory), ...
+            @(src, evt) viewer.Gui.App.printHistory), ...
             'Print History');
         
         
-        % check which menu items are selected or not
-        ImagemGUI.updateMenuEnable(fileMenu);
-        ImagemGUI.updateMenuEnable(imageMenu);
-        ImagemGUI.updateMenuEnable(viewMenu);
-        ImagemGUI.updateMenuEnable(processMenu);
-        ImagemGUI.updateMenuEnable(toolsMenu);
-        ImagemGUI.updateMenuEnable(analyzeMenu);
+%         % check which menu items are selected or not
+%         ImagemGUI.updateMenuEnable(fileMenu);
+%         ImagemGUI.updateMenuEnable(imageMenu);
+%         ImagemGUI.updateMenuEnable(viewMenu);
+%         ImagemGUI.updateMenuEnable(processMenu);
+%         ImagemGUI.updateMenuEnable(toolsMenu);
+%         ImagemGUI.updateMenuEnable(analyzeMenu);
         
 %         function createCheckedMenuGroup(itemList, initialMenu)
 %             disp('init check boxes');
@@ -475,15 +476,15 @@ methods (Static)
             children = children(strcmp(get(children, 'type'), 'uimenu'));
             ind = length(children) + 1;
             data = get(parent, 'userdata');
-            inds = [data.inds ind];
+            inds = [data.Inds ind];
             
         else
             error(['Can not manage parent of type ' parentType]);
         end
         
         menu = uimenu(parent, 'Label', label, varargin{:});
-        data = struct('inds', inds);
-        set(menu, 'userdata', data);
+        data = struct('Inds', inds);
+        set(menu, 'UserData', data);
         
     end
     
@@ -493,11 +494,11 @@ methods (Static)
         children = get(menu, 'children');
         children = children(strcmp(get(children, 'type'), 'uimenu'));
         ind = length(children) + 1;
-        data = get(menu, 'userdata');
-        inds = [data.inds ind];
+        data = get(menu, 'UserData');
+        inds = [data.Inds ind];
         
-        % create user data associated with this menu
-        data = struct('action', action, 'inds', inds);
+        % create user data associated with obj menu
+        data = struct('Action', action, 'Inds', inds);
         
         % creates new item
         item = uimenu(menu, 'Label', label, ...
@@ -564,9 +565,9 @@ methods (Static)
             
         else
             % process final menu item
-            data = get(menu, 'userdata');
-            if ~isempty(data) && isstruct(data) && isfield(data, 'action') && ~isempty(data.action)
-                enable = isActivable(data.action);
+            data = get(menu, 'UserData');
+            if ~isempty(data) && isstruct(data) && isfield(data, 'Action') && ~isempty(data.Action)
+                enable = isActivable(data.Action);
             end
         end
         
@@ -582,7 +583,7 @@ methods (Static)
 end
 
 methods
-    function [h, ht] = addInputTextLine(this, parent, label, text, cb)
+    function [h, ht] = addInputTextLine(obj, parent, label, text, cb)
         
         hLine = uix.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
@@ -596,7 +597,7 @@ methods
             'HorizontalAlignment', 'Right');
         
         % creates the new control
-        bgColor = getWidgetBackgroundColor(this);
+        bgColor = getWidgetBackgroundColor(obj);
         h = uicontrol(...
             'Style', 'Edit', ...
             'Parent', hLine, ...
@@ -610,7 +611,7 @@ methods
         set(hLine, 'Widths', [-5 -5]);
     end
     
-    function [h, ht] = addComboBoxLine(this, parent, label, choices, cb)
+    function [h, ht] = addComboBoxLine(obj, parent, label, choices, cb)
         
         hLine = uix.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
@@ -624,7 +625,7 @@ methods
             'HorizontalAlignment', 'Right');
         
         % creates the new control
-        bgColor = getWidgetBackgroundColor(this);
+        bgColor = getWidgetBackgroundColor(obj);
         h = uicontrol('Style', 'PopupMenu', ...
             'Parent', hLine, ...
             'String', choices, ...
@@ -638,7 +639,7 @@ methods
         set(hLine, 'Widths', [-5 -5]);
     end
     
-    function h = addCheckBox(this, parent, label, state, cb) %#ok<INUSL>
+    function h = addCheckBox(obj, parent, label, state, cb) %#ok<INUSL>
         
         hLine = uix.HBox('Parent', parent, ...
             'Spacing', 5, 'Padding', 5);
@@ -661,7 +662,7 @@ end
 
 
 methods
-    function bgColor = getWidgetBackgroundColor(this) %#ok<MANU>
+    function bgColor = getWidgetBackgroundColor(obj) %#ok<MANU>
         % compute background color of most widgets
         if ispc
             bgColor = 'White';

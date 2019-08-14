@@ -1,5 +1,5 @@
 classdef OpenImageAction < imagem.gui.ImagemAction
-%OPENIMAGEACTION Open an image from a file
+% Open an image from a file.
 %
 %   Class OpenImageAction
 %
@@ -8,10 +8,10 @@ classdef OpenImageAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-07,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -19,11 +19,11 @@ classdef OpenImageAction < imagem.gui.ImagemAction
 
 %% Constructor
 methods
-    function this = OpenImageAction(viewer)
+    function obj = OpenImageAction(viewer)
     % Constructor for OpenImageAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(viewer, 'openImage');
+        obj = obj@imagem.gui.ImagemAction(viewer, 'openImage');
     end
 
 end % end constructors
@@ -31,12 +31,8 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('Open new Image ');
-        
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        gui = viewer.gui;
         
         [fileName, pathName] = uigetfile( ...
             {'*.gif;*.jpg;*.jpeg;*.bmp;*.png;*.tif;*.tiff;*.hdr;*.dcm;*.mhd', ...
@@ -60,12 +56,12 @@ methods
         img = Image.read(imagePath);
         
         % add image to application, and create new display
-        doc = addImageDocument(gui, img);
+        doc = addImageDocument(obj, img);
 
         % history
-        tag = doc.tag;
+        tag = doc.Tag;
         string = sprintf('%s = Image.read(''%s'');\n', tag, imagePath);
-        addToHistory(gui.app, string);
+        addToHistory(obj, string);
     end
 end % end methods
 

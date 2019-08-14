@@ -1,5 +1,5 @@
 classdef ImageWatershedAction < imagem.gui.actions.ScalarImageAction
-%IMAGEEXTENDEDMINIMAACTION Apply watershed to an intensity image
+% Apply watershed to an intensity image.
 %
 %   output = ImageWatershedAction(input)
 %
@@ -8,162 +8,157 @@ classdef ImageWatershedAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-02-27,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    handles;
+    Handles;
     
-    conn = 4;
-    connValues = [4, 8];
+    Conn = 4;
+    ConnValues = [4, 8];
     
-    computeWatershed = true;
-    computeBasins = false;
+    ComputeWatershed = true;
+    ComputeBasins = false;
 end
 
 methods
-    function this = ImageWatershedAction(viewer)
+    function obj = ImageWatershedAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'watershed');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'watershed');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
-        
-        if ~isScalarImage(doc.image)
+        if ~isScalarImage(currentImage(obj))
             warning('ImageM:WrongImageType', ...
                 'Watershed can be applied only on scalar images');
             return;
         end
         
-        createWatershedFigure(this);
-        updateWidgets(this);
+        createWatershedFigure(obj);
+        updateWidgets(obj);
     end
     
-    function hf = createWatershedFigure(this)
+    function hf = createWatershedFigure(obj)
         
+        gui = obj.Viewer.Gui;
+
         % creates the figure
         hf = figure(...
             'Name', 'Image Watershed', ...
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [200 150];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uix.VBox('Parent', vb);
         
-        gui = this.viewer.gui;
-        this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.ConnectivityPopup = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
-            @this.onConnectivityChanged);
+            @obj.onConnectivityChanged);
 
-        this.handles.resultTypePopup = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.resultTypePopup = addComboBoxLine(gui, mainPanel, ...
             'ResultType:', {'Watershed', 'Basins', 'Both'}, ...
-            @this.onResultTypeChanged);
+            @obj.onResultTypeChanged);
         
         % button for control panel
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
     end
         
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        clearPreviewImage(obj);
         
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function updateWidgets(this)
+    function updateWidgets(obj)
         
         % update preview image of the document
-        bin = computeWatershedImage(this) == 0;
-        doc = this.viewer.doc;
-        doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.viewer);
+        bin = computeWatershedImage(obj) == 0;
+        img = overlay(currentImage(obj), bin);
+        updatePreviewImage(obj, img);
     end
     
 end
 
 %% Control buttons Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         % apply the threshold operation
-        wat = computeWatershedImage(this);
-        if this.computeWatershed
-            newDoc = addImageDocument(this.viewer.gui, wat == 0);
+        wat = computeWatershedImage(obj);
+        if obj.ComputeWatershed
+            newDoc = addImageDocument(obj, wat == 0);
         end
-        if this.computeBasins
-            newDoc = addImageDocument(this.viewer.gui, uint16(wat));
+        if obj.ComputeBasins
+            newDoc = addImageDocument(obj, uint16(wat));
         end
         
         % add history
         string = sprintf('%s = watershed(%s, %d);\n', ...
-            newDoc.tag, this.viewer.doc.tag, this.conn);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, obj.Viewer.Doc.Tag, obj.Conn);
+        addToHistory(obj, string);
 
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
 end
 
 
 %% GUI Items Callback
 methods
-    function onConnectivityChanged(this, varargin)
-        index = get(this.handles.connectivityPopup, 'Value');
-        this.conn = this.connValues(index);
+    function onConnectivityChanged(obj, varargin)
+        index = get(obj.Handles.ConnectivityPopup, 'Value');
+        obj.Conn = obj.ConnValues(index);
         
-        updateWidgets(this);
+        updateWidgets(obj);
     end
     
-    function onResultTypeChanged(this, varargin)
-        type = get(this.handles.resultTypePopup, 'Value');
+    function onResultTypeChanged(obj, varargin)
+        type = get(obj.Handles.resultTypePopup, 'Value');
         switch type
             case 1
-                this.computeWatershed = true;
-                this.computeBasins = false;
+                obj.ComputeWatershed = true;
+                obj.ComputeBasins = false;
             case 2
-                this.computeWatershed = false;
-                this.computeBasins = true;
+                obj.ComputeWatershed = false;
+                obj.ComputeBasins = true;
             case 3
-                this.computeWatershed = true;
-                this.computeBasins = true;
+                obj.ComputeWatershed = true;
+                obj.ComputeBasins = true;
         end
     end
     
-    function wat = computeWatershedImage(this)
-        wat = watershed(this.viewer.doc.image, this.conn);
+    function wat = computeWatershedImage(obj)
+        wat = watershed(obj.Viewer.Doc.Image, obj.Conn);
     end
 end
 

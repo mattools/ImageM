@@ -1,5 +1,5 @@
 classdef SayHelloAction < imagem.gui.ImagemAction
-%SAYHELLOACTION  One-line description here, please.
+% Simple demo action.
 %
 %   Simple class for demonstrating the use of action classes.
 %
@@ -8,10 +8,10 @@ classdef SayHelloAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 

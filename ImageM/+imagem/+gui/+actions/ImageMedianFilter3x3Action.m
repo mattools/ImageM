@@ -1,5 +1,5 @@
 classdef ImageMedianFilter3x3Action < imagem.gui.actions.CurrentImageAction
-%IMAGEMEDIANFILTER3X3 Apply a simple filter on current image
+% Apply a simple filter on current image.
 %
 %   Class ImageMedianFilter3x3Action
 %
@@ -8,19 +8,19 @@ classdef ImageMedianFilter3x3Action < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Constructor
 methods
-    function this = ImageMedianFilter3x3Action(viewer)
+    function obj = ImageMedianFilter3x3Action(viewer)
     % Constructor for the parent class
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'medianFilter3x3');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'medianFilter3x3');
     end
 
 end % end constructors
@@ -28,25 +28,23 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('Compute Image median filter');
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
-        
-        se = ones(3, 3);
+        doc = currentDoc(obj);
         
         % apply 'median' operation
-        img2 = medianFilter(doc.image, se);
+        se = ones(3, 3);
+        img2 = medianFilter(doc.Image, se);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(obj, img2);
 
         % add history
         string = sprintf('%s = medianFilter(%s, ones(3,3));\n', ...
-            newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, doc.Tag);
+        addToHistory(obj, string);
     end
 end % end methods
 

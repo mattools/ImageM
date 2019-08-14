@@ -1,5 +1,5 @@
 classdef ImageBooleanOpAction < imagem.gui.ImagemAction
-%IMAGEOVERLAYACTION Open a dialog to compute imposed minima
+% Compute boolean operation from two images.
 %
 %   Class ImageBooleanOpAction
 %
@@ -8,41 +8,41 @@ classdef ImageBooleanOpAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-11-04,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    handles;
+    Handles;
     
-    opList = {@or, @and, @xor};
-    opNames = {'Or', 'And', 'Exclusive Or'};
+    OpList = {@or, @and, @xor};
+    OpNames = {'Or', 'And', 'Exclusive Or'};
     
 end % end properties
 
 
 %% Constructor
 methods
-    function this = ImageBooleanOpAction(viewer)
+    function obj = ImageBooleanOpAction(viewer)
     % Constructor for ImageBooleanOpAction class
-        this = this@imagem.gui.ImagemAction(viewer, 'imageBooleanOp');
+        obj = obj@imagem.gui.ImagemAction(viewer, 'imageBooleanOp');
     end
 
 end % end constructors
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('image arithmetic');
         
-        createFigure(this);
+        createFigure(obj);
     end
     
-    function hf = createFigure(this)
+    function hf = createFigure(obj)
         
         % action figure
         hf = figure(...
@@ -54,68 +54,68 @@ methods
         pos(3:4) = [250 200];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
-        imageNames = getImageNames(this.viewer.gui.app);
+        imageNames = getImageNames(obj.Viewer.Gui.App);
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, ...
             'Spacing', 5, 'Padding', 5);
         
-        gui = this.viewer.gui;
+        gui = obj.Viewer.Gui;
         
         % one panel for value text input
         mainPanel = uix.VBox('Parent', vb);
 
         % combo box for the first image
-        this.handles.imageList1 = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.ImageList1 = addComboBoxLine(gui, mainPanel, ...
             'First image:', imageNames);
         
         % combo box for the operation name
-        this.handles.operationList = addComboBoxLine(gui, mainPanel, ...
-            'Operation:', this.opNames);
+        obj.Handles.OperationList = addComboBoxLine(gui, mainPanel, ...
+            'Operation:', obj.OpNames);
         
         % combo box for the second image
-        this.handles.imageList2 = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.ImageList2 = addComboBoxLine(gui, mainPanel, ...
             'Second image:', imageNames);
         
         % button for control panel
         buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
         uicontrol('Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol('Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
     end
     
 
-    function closeFigure(this)
+    function closeFigure(obj)
         % clean up viewer figure
         
         % close the current fig
-        close(this.handles.figure);
+        close(obj.Handles.Figure);
     end
     
 end
 
 %% GUI Items Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         
-        gui = this.viewer.gui;
+        gui = obj.Viewer.Gui;
         
-        doc1 = getDocument(gui.app, get(this.handles.imageList1, 'Value'));
-        img1 = doc1.image;
+        doc1 = getDocument(gui.App, get(obj.Handles.ImageList1, 'Value'));
+        img1 = doc1.Image;
 
-        doc2 = getDocument(gui.app, get(this.handles.imageList2, 'Value'));
-        img2 = doc2.image;
+        doc2 = getDocument(gui.App, get(obj.Handles.ImageList2, 'Value'));
+        img2 = doc2.Image;
         
         % get operation as function handle
-        opIndex = get(this.handles.operationList, 'Value');
-        op = this.opList{opIndex};
+        opIndex = get(obj.Handles.OperationList, 'Value');
+        op = obj.OpList{opIndex};
         opName = char(op);
         
         if ndims(img1) ~= ndims(img2)
@@ -138,14 +138,14 @@ methods
         
         % add history
         string = sprintf('%s = %s(%s, %s));\n', ...
-            newDoc.tag, opName, doc1.tag, doc2.tag);
-        addToHistory(gui.app, string);
+            newDoc.Tag, opName, doc1.Tag, doc2.Tag);
+        addToHistory(gui.App, string);
 
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
     
 end

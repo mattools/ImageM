@@ -1,5 +1,5 @@
 classdef ZoomInAction < imagem.gui.actions.CurrentImageAction
-%ZOOMINACTION Zoom in the current figure
+% Zoom in the current figure.
 %
 %   output = ZoomInAction(input)
 %
@@ -8,25 +8,25 @@ classdef ZoomInAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-02,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ZoomInAction(viewer)
+    function obj = ZoomInAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'zoomIn');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'zoomIn');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
         % get handle to viewer figure
-        viewer = this.viewer;
+        viewer = obj.Viewer;
         
         % set up new zoom value
         zoom = getZoom(viewer);

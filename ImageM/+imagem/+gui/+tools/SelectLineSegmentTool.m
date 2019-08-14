@@ -1,5 +1,5 @@
 classdef SelectLineSegmentTool < imagem.gui.ImagemTool
-%LINEPROFILETOOL  One-line description here, please.
+% Select a line segment.
 %
 %   Class SelectLineSegmentTool
 %
@@ -8,28 +8,28 @@ classdef SelectLineSegmentTool < imagem.gui.ImagemTool
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    pos1;
+    Pos1;
     
-    lineHandle;
+    LineHandle;
         
 end % end properties
 
 
 %% Constructor
 methods
-    function this = SelectLineSegmentTool(viewer, varargin)
+    function obj = SelectLineSegmentTool(viewer, varargin)
         % Constructor for SelectLineSegmentTool class
-        this = this@imagem.gui.ImagemTool(viewer, 'selectLineSegment');
+        obj = obj@imagem.gui.ImagemTool(viewer, 'selectLineSegment');
     end
 
 end % end constructors
@@ -37,73 +37,73 @@ end % end constructors
 
 %% ImagemTool Methods
 methods
-    function select(this) %#ok<*MANU>
+    function select(obj) %#ok<*MANU>
         disp('select line segment');
-        this.pos1 = [];
+        obj.Pos1 = [];
     end
     
-    function deselect(this)
-        removeLineHandle(this);
+    function deselect(obj)
+        removeLineHandle(obj);
     end
     
-    function removeLineHandle(this)
-        if ~ishandle(this.lineHandle)
+    function removeLineHandle(obj)
+        if ~ishandle(obj.LineHandle)
             return;
         end
         
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         if isempty(ax)
             return;
         end
        
-        delete(this.lineHandle);
+        delete(obj.LineHandle);
         
     end
     
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.viewer.handles.imageAxis;
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
-        if isempty(this.pos1)
+        if isempty(obj.Pos1)
             % initialise the first point
-            this.pos1 = pos(1,1:2);
+            obj.Pos1 = pos(1,1:2);
             
             % if clicked first point, creates a new graphical object
-            removeLineHandle(this);
-            this.lineHandle = line(...
+            removeLineHandle(obj);
+            obj.LineHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'Marker', 's', 'MarkerSize', 3, ...
                 'Color', 'y', 'LineWidth', 1);
             
-            this.viewer.selection = [];
+            obj.Viewer.Selection = [];
             return;
         end
         
         % update graphical object
-        set(this.lineHandle, 'xdata', [this.pos1(1,1) pos(1,1)]);
-        set(this.lineHandle, 'ydata', [this.pos1(1,2) pos(1,2)]);
+        set(obj.LineHandle, 'xdata', [obj.Pos1(1,1) pos(1,1)]);
+        set(obj.LineHandle, 'ydata', [obj.Pos1(1,2) pos(1,2)]);
         
         % create new selection object
-        positions = [this.pos1 pos(1,1:2)];
-        shape = struct('type', 'linesegment', 'data', positions);
-        this.viewer.selection = shape;
+        positions = [obj.Pos1 pos(1,1:2)];
+        shape = struct('Type', 'LineSegment', 'Data', positions);
+        obj.Viewer.Selection = shape;
         
-        this.pos1 = [];
+        obj.Pos1 = [];
     end
     
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
         
-        if isempty(this.pos1)
+        if isempty(obj.Pos1)
             return;
         end
 
         % determine the line current end point
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % update line display
-        set(this.lineHandle, 'XData', [this.pos1(1,1); pos(1,1)]);
-        set(this.lineHandle, 'YData', [this.pos1(1,2); pos(1,2)]);
+        set(obj.LineHandle, 'XData', [obj.Pos1(1,1); pos(1,1)]);
+        set(obj.LineHandle, 'YData', [obj.Pos1(1,2); pos(1,2)]);
     end
     
     

@@ -1,5 +1,5 @@
 classdef SelectPolylineTool < imagem.gui.ImagemTool
-%LINEPROFILETOOL  One-line description here, please.
+% Select a polyline, right-click to end.
 %
 %   Class SelectPolylineTool
 %
@@ -8,28 +8,28 @@ classdef SelectPolylineTool < imagem.gui.ImagemTool
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    positions;
+    Positions;
     
-    lineHandle;
+    LineHandle;
         
 end % end properties
 
 
 %% Constructor
 methods
-    function this = SelectPolylineTool(viewer, varargin)
+    function obj = SelectPolylineTool(viewer, varargin)
         % Constructor for SelectPolylineTool class
-        this = this@imagem.gui.ImagemTool(viewer, 'selectPolyline');
+        obj = obj@imagem.gui.ImagemTool(viewer, 'selectPolyline');
     end
 
 end % end constructors
@@ -37,80 +37,79 @@ end % end constructors
 
 %% ImagemTool Methods
 methods
-    function select(this) %#ok<*MANU>
+    function select(obj) %#ok<*MANU>
         disp('select polyline');
-        this.positions = zeros(0, 2);
+        obj.Positions = zeros(0, 2);
     end
     
-    function deselect(this)
-        removeLineHandle(this);
+    function deselect(obj)
+        removeLineHandle(obj);
     end
     
-    function removeLineHandle(this)
-        if ~ishandle(this.lineHandle)
+    function removeLineHandle(obj)
+        if ~ishandle(obj.LineHandle)
             return;
         end
         
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         if isempty(ax)
             return;
         end
        
-        delete(this.lineHandle);
+        delete(obj.LineHandle);
         
     end
     
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.viewer.handles.imageAxis;
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % check if right-clicked or double-clicked
-        type = get(this.viewer.handles.figure, 'SelectionType');
+        type = get(obj.Viewer.Handles.Figure, 'SelectionType');
         if ~strcmp(type, 'normal')
             % update viewer's current selection
-            shape = struct('type', 'polyline', 'data', this.positions);
-            this.viewer.selection = shape;
+            shape = struct('Type', 'Polyline', 'Data', obj.Positions);
+            obj.Viewer.Selection = shape;
             
-            this.positions = zeros(0, 2);
+            obj.Positions = zeros(0, 2);
             return;
         end
         
         % udpate position list
-        this.positions = [this.positions ; pos(1,1:2)];
+        obj.Positions = [obj.Positions ; pos(1,1:2)];
         
-        if size(this.positions, 1) == 1
+        if size(obj.Positions, 1) == 1
             % if clicked first point, creates a new graphical object
-            removeLineHandle(this);
-            this.lineHandle = line(...
+            removeLineHandle(obj);
+            obj.LineHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'Marker', 's', 'MarkerSize', 3, ...
                 'Color', 'y', 'LineWidth', 1);
             
-            this.viewer.selection = [];
+            obj.Viewer.Selection = [];
         else
             % update graphical object
-            set(this.lineHandle, 'xdata', this.positions(:,1));
-            set(this.lineHandle, 'ydata', this.positions(:,2));
+            set(obj.LineHandle, 'xdata', obj.Positions(:,1));
+            set(obj.LineHandle, 'ydata', obj.Positions(:,2));
             
         end
         
     end
     
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
         
-        if size(this.positions, 1) < 1
+        if size(obj.Positions, 1) < 1
             return;
         end
 
         % determine the line current end point
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % update line display
-        set(this.lineHandle, 'XData', [this.positions(:,1); pos(1,1)]);
-        set(this.lineHandle, 'YData', [this.positions(:,2); pos(1,2)]);
+        set(obj.LineHandle, 'XData', [obj.Positions(:,1); pos(1,1)]);
+        set(obj.LineHandle, 'YData', [obj.Positions(:,2); pos(1,2)]);
     end
-    
     
 end % end methods
 

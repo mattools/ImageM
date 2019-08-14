@@ -1,5 +1,5 @@
 classdef ChangeImageLutAction < imagem.gui.actions.CurrentImageAction
-%CHANGEIMAGELUTACTION  Change color palette of current image document
+% Change Look-Up Table of current image document.
 %
 %   output = ChangeImageLutAction(input)
 %
@@ -8,61 +8,61 @@ classdef ChangeImageLutAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-11,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    lut = [];
-    lutName;
+    Lut = [];
+    LutName;
 end
 
 methods
-    function this = ChangeImageLutAction(viewer, lutName, lutValues)
+    function obj = ChangeImageLutAction(viewer, lutName, lutValues)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'changeImageLut');
-        this.lutName = lutName;
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'changeImageLut');
+        obj.LutName = lutName;
         if nargin > 2
-            this.lut = lutValues;
+            obj.Lut = lutValues;
         end
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
-        disp(['Change Image LUT to ' this.lutName]);
+    function actionPerformed(obj, src, event) %#ok<INUSD>
+        disp(['Change Image LUT to ' obj.LutName]);
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        viewer = obj.Viewer;
+        doc = viewer.Doc;
 
-        if strcmp(this.lutName, 'none')
-            doc.lut = [];
+        if strcmp(obj.LutName, 'none')
+            doc.Lut = [];
         else
-            if isempty(this.lut)
-                this.lut = computeLutFromName(this);
+            if isempty(obj.Lut)
+                obj.Lut = computeLutFromName(obj);
             end
-            doc.lut = this.lut;
+            doc.Lut = obj.Lut;
         end
         
-        doc.lutName = this.lutName;
-        doc.modified = true;
+        doc.LutName = obj.LutName;
+        doc.Modified = true;
         
-        updateDisplay(this.viewer);
+        updateDisplay(obj.Viewer);
     end
     
-    function lut = computeLutFromName(this)
+    function lut = computeLutFromName(obj)
         
         % get LUT name
-        name = this.lutName;
+        name = obj.LutName;
         
         % compute number of grayscale levels. 256 by default, but use label
         % number for label images
         nGrays = 256;
-        img = this.viewer.doc.image;
+        img = obj.Viewer.Doc.Image;
         if isLabelImage(img)
             nGrays = double(round(max(img)));
         end
@@ -113,9 +113,9 @@ methods
 end
 
 methods
-    function b = isActivable(this)
-        doc = this.viewer.doc;
-        b = ~isempty(doc) && ~isempty(doc.image) && ~isColorImage(doc.image);
+    function b = isActivable(obj)
+        doc = obj.Viewer.Doc;
+        b = ~isempty(doc) && ~isempty(doc.Image) && ~isColorImage(doc.Image);
     end
 end
 

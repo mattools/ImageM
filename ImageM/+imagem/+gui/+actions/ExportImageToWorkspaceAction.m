@@ -1,5 +1,5 @@
 classdef ExportImageToWorkspaceAction < imagem.gui.actions.CurrentImageAction
-%OPENIMAGEACTION Open an image from a file
+% Export image to workspace.
 %
 %   Class ExportImageToWorkspaceAction
 %
@@ -8,10 +8,10 @@ classdef ExportImageToWorkspaceAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ExportImageToWorkspaceAction(viewer)
+    function obj = ExportImageToWorkspaceAction(viewer)
     % Constructor for ExportImageToWorkspaceAction class
         
         % calls the viewer constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'exportImageToWorkspace');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'exportImageToWorkspace');
     end
 
 end % end constructors
@@ -35,7 +35,7 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('Export current image to workspace');
         
         % open dialog to input image name
@@ -50,7 +50,7 @@ methods
             return;
         end
         
-        assignin('base', answer{1}, this.viewer.doc.image);
+        assignin('base', answer{1}, currentImage(obj));
         
     end
 end % end methods

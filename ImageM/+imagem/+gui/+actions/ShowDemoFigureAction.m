@@ -1,5 +1,5 @@
 classdef ShowDemoFigureAction < imagem.gui.ImagemAction
-%SHOWDEMOFIGUREACTION Show a demo image
+% Show a demo image.
 %
 %   output = ShowDemoFigureAction(input)
 %
@@ -8,10 +8,10 @@ classdef ShowDemoFigureAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -24,7 +24,7 @@ end
 
 methods
     function actionPerformed(this, src, event) %#ok<INUSD>
-        imagem.gui.ImagemImageFigure(this.viewer.gui);
+        imagem.gui.ImagemImageFigure(this.Viewer.Gui);
     end
 end
 

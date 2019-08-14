@@ -16,7 +16,7 @@
 
 % clean up
 close all
-clear classes
+clear classes %#ok<CLCLS>
 
 % load demo image
 img = Image.read('cameraman.tif');

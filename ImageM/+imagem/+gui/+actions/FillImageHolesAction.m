@@ -1,5 +1,5 @@
 classdef FillImageHolesAction < imagem.gui.actions.ScalarImageAction
-%FILLIMAGEHOLESACTION  Fill holes of a binary image
+% Fill holes within a binary or scalar image.
 %
 %   Class FillImageHolesAction
 %
@@ -8,10 +8,10 @@ classdef FillImageHolesAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-05-25,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = FillImageHolesAction(viewer)
+    function obj = FillImageHolesAction(viewer)
     % Constructor for FillImageHolesAction class
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageFillHoles');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'imageFillHoles');
     end
 
 end % end constructors
@@ -33,23 +33,23 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
        
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        viewer = obj.Viewer;
+        doc = viewer.Doc;
         
         % compute Image skeleton
-        img2 = fillHoles(doc.image);
+        img2 = fillHoles(doc.Image);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(obj, img2);
         
         % add history
         string = sprintf('%s = fillHoles(%s, %d);\n', ...
-             newDoc.tag, this.viewer.doc.tag, ...
-             getDefaultConnectivity(viewer.gui.app, ndims(img2)));
-        addToHistory(viewer.gui.app, string);
+             newDoc.Tag, doc.Tag, ...
+             getDefaultConnectivity(viewer.Gui.App, ndims(img2)));
+        addToHistory(obj, string);
     end
 end % end methods
 

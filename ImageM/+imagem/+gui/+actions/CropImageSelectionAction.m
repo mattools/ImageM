@@ -1,5 +1,5 @@
 classdef CropImageSelectionAction < imagem.gui.actions.CurrentImageAction
-%RENAMEIMAGEACTION  Crop current rectangular selection 
+% Crop current rectangular selection.
 %
 %   Class CropImageSelectionAction
 %
@@ -8,10 +8,10 @@ classdef CropImageSelectionAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = CropImageSelectionAction(viewer)
+    function obj = CropImageSelectionAction(viewer)
     % Constructor for CropImageSelectionAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'cropImageSelection');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'cropImageSelection');
     end
 
 end % end constructors
@@ -35,37 +35,37 @@ end % end constructors
 
 %% Methods
 methods
-     function actionPerformed(this, src, event) %#ok<INUSD>
+     function actionPerformed(obj, src, event) %#ok<INUSD>
          
-         selection = this.viewer.selection;
+         selection = obj.Viewer.Selection;
          if isempty(selection)
              warndlg('Requires a non empty selection', ...
                  'Empty Selection', 'modal');
              return;
          end
          
-         type = selection.type;
+         type = selection.Type;
          if ~ismember(lower(type), {'box'})
              warndlg('Current selection must be a box', ...
                  'Invalid Selection', 'modal');
              return;
          end
          
-         box = selection.data;
+         box = selection.Data;
          box = round(box);
-         cropped = crop(this.viewer.doc.image, box);
+         cropped = crop(currentImage(obj), box);
          
          % add image to application, and create new display
-         newDoc = addImageDocument(this.viewer.gui, cropped);
+         newDoc = addImageDocument(obj, cropped);
          
-         tag = this.viewer.doc.tag;
-         newTag = newDoc.tag;
+         tag = obj.Viewer.Doc.Tag;
+         newTag = newDoc.Tag;
          
          % history
-         nd = ndims(this.viewer.doc.image);
+         nd = ndims(currentImage(obj));
          pattern = ['%s = crop(%s, [' repmat(' %d %d', 1, nd) ']);\n'];
          string = sprintf(pattern, newTag, tag, box);
-         addToHistory(this.viewer.gui.app, string);
+         addToHistory(obj, string);
          
      end
 end % end methods

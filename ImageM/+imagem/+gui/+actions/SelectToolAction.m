@@ -1,5 +1,5 @@
 classdef SelectToolAction < imagem.gui.ImagemAction
-%SELECTTOOLACTION  One-line description here, please.
+% Changes the selected tool.
 %
 %   output = SelectToolAction(input)
 %
@@ -8,55 +8,55 @@ classdef SelectToolAction < imagem.gui.ImagemAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
     % the tool to select
-    tool;
+    Tool;
 end
 
 methods
-    function this = SelectToolAction(viewer, tool)
+    function obj = SelectToolAction(viewer, tool)
         % calls the parent constructor
-        name = ['selectTool-' tool.name];
-        this = this@imagem.gui.ImagemAction(viewer, name);
-        this.tool = tool;
+        name = ['selectTool-' tool.Name];
+        obj = obj@imagem.gui.ImagemAction(viewer, name);
+        obj.Tool = tool;
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
-        disp(['select another tool: ' this.tool.name]);
+    function actionPerformed(obj, src, event) %#ok<INUSD>
+        disp(['select another tool: ' obj.Tool.Name]);
         
-        viewer = this.viewer;
-        this.tool.viewer = viewer;
+        viewer = obj.Viewer;
+        obj.Tool.Viewer = viewer;
         
         % remove previous tool
-        currentTool = viewer.currentTool;
+        currentTool = viewer.CurrentTool;
         if ~isempty(currentTool)
             deselect(currentTool);
             removeMouseListener(viewer, currentTool);
         end
         
         % choose the new tool
-        viewer.currentTool = this.tool;
+        viewer.CurrentTool = obj.Tool;
         
         % initialize new tool if not empty
-        if ~isempty(this.tool)
-            select(this.tool);
-            addMouseListener(viewer, this.tool);
+        if ~isempty(obj.Tool)
+            select(obj.Tool);
+            addMouseListener(viewer, obj.Tool);
         end
     end
 end
 
 methods
-    function b = isActivable(this)
-        b = isActivable(this.tool);
+    function b = isActivable(obj)
+        b = isActivable(obj.Tool);
     end
 end
 

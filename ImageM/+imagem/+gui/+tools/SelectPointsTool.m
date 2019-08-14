@@ -1,5 +1,5 @@
 classdef SelectPointsTool < imagem.gui.ImagemTool
-%SELECTPOINTSTOOL Click on a set of points, right click to end
+% Click on a set of points, right click to end.
 %
 %   Class SelectPointsTool
 %
@@ -8,10 +8,10 @@ classdef SelectPointsTool < imagem.gui.ImagemTool
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -19,19 +19,19 @@ classdef SelectPointsTool < imagem.gui.ImagemTool
 %% Properties
 properties
     % the list of point positions, as a N-by-2 array
-    positions;
+    Positions;
     
     % handle to the graphical item
-    pointsHandle;
+    PointsHandle;
         
 end % end properties
 
 
 %% Constructor
 methods
-    function this = SelectPointsTool(viewer, varargin)
+    function obj = SelectPointsTool(viewer, varargin)
         % Constructor for SelectPointsTool class
-        this = this@imagem.gui.ImagemTool(viewer, 'selectPoints');
+        obj = obj@imagem.gui.ImagemTool(viewer, 'selectPoints');
     end
 
 end % end constructors
@@ -39,84 +39,84 @@ end % end constructors
 
 %% ImagemTool Methods
 methods
-    function select(this) %#ok<*MANU>
+    function select(obj) %#ok<*MANU>
         disp('select tool: "point selection"');
-        this.positions = zeros(0, 2);
+        obj.Positions = zeros(0, 2);
     end
     
-    function deselect(this)
-        removePointsHandle(this);
+    function deselect(obj)
+        removePointsHandle(obj);
     end
     
-    function removePointsHandle(this)
-        if ~ishandle(this.pointsHandle)
+    function removePointsHandle(obj)
+        if ~ishandle(obj.PointsHandle)
             return;
         end
         
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         if isempty(ax)
             return;
         end
        
-        delete(this.pointsHandle);
+        delete(obj.PointsHandle);
     end
     
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.viewer.handles.imageAxis;
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
         % check if right-clicked or double-clicked
-        type = get(this.viewer.handles.figure, 'SelectionType');
+        type = get(obj.Viewer.Handles.Figure, 'SelectionType');
         if ~strcmp(type, 'normal')
             % update viewer's current selection
-            shape = struct('type', 'pointset', 'data', this.positions);
-            this.viewer.selection = shape;
+            shape = struct('Type', 'PointSet', 'Data', obj.Positions);
+            obj.Viewer.Selection = shape;
             
-            this.positions = zeros(0, 2);
+            obj.Positions = zeros(0, 2);
             return;
         end
         
         % udpate position list
-        this.positions = [this.positions ; pos(1,1:2)];
+        obj.Positions = [obj.Positions ; pos(1,1:2)];
         
-        if size(this.positions, 1) == 1
+        if size(obj.Positions, 1) == 1
             % if clicked first point, creates a new graphical object
-            removePointsHandle(this);
-            this.pointsHandle = line(...
+            removePointsHandle(obj);
+            obj.PointsHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'LineStyle', 'none', ...
                 'Marker', 'o', ...
                 'MarkerSize', 6, 'LineWidth', 1, ...
                 'Color', 'r', 'MarkerFaceColor', 'r');
             
-%             this.viewer.selection = [];
+%             obj.Viewer.Selection = [];
         else
             % update graphical object
-            set(this.pointsHandle, 'xdata', this.positions(:,1));
-            set(this.pointsHandle, 'ydata', this.positions(:,2));
+            set(obj.PointsHandle, 'xdata', obj.Positions(:,1));
+            set(obj.PointsHandle, 'ydata', obj.Positions(:,2));
             
         end
         
         % update viewer's current selection
-        shape = struct('type', 'pointset', 'data', this.positions, ...
+        shape = struct('Type', 'PointSet', 'Data', obj.Positions, ...
             'style', {{'Marker', 'o', 'MarkerSize', 6, 'LineWidth', 1, ...
                 'Color', 'r', 'MarkerFaceColor', 'r'}});
-        this.viewer.selection = shape;
+        obj.Viewer.Selection = shape;
     end
     
-%     function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+%     function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
 %         
-%         if size(this.positions, 1) < 1
+%         if size(obj.Positions, 1) < 1
 %             return;
 %         end
 % 
 %         % determine the line current end point
-%         ax = this.viewer.handles.imageAxis;
+%         ax = obj.Viewer.Handles.ImageAxis;
 %         pos = get(ax, 'CurrentPoint');
 %         
 %         % update line display
-%         set(this.pointsHandle, 'XData', [this.positions(:,1); pos(1,1)]);
-%         set(this.pointsHandle, 'YData', [this.positions(:,2); pos(1,2)]);
+%         set(obj.PointsHandle, 'XData', [obj.Positions(:,1); pos(1,1)]);
+%         set(obj.PointsHandle, 'YData', [obj.Positions(:,2); pos(1,2)]);
 %     end
     
     

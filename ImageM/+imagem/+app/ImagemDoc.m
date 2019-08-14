@@ -1,5 +1,5 @@
 classdef ImagemDoc < handle
-%IMAGEMDOC ImageM Document class: contains one image and associated data
+% ImageM Document class that contains one image and the associated data.
 %
 %   Class ImagemDoc
 %
@@ -8,10 +8,10 @@ classdef ImagemDoc < handle
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-10-22,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -19,46 +19,46 @@ classdef ImagemDoc < handle
 %% Properties
 properties
     % the reference image (an instance of Image class)
-    image;
+    Image;
     
     % the name used to identify image on command-line arguments
-    tag;
+    Tag;
     
     % an image used for preview when an action is running, or empty
-    previewImage = [];
+    PreviewImage = [];
     
 %     % a row vector of two values indicating minimal and maximal displayable
 %     % values for grayscale and intensity images.
-%     % (for the moment, this is managed in the PlanarImageViewer class)
+%     % (for the moment, obj is managed in the PlanarImageViewer class)
 %     displayRange = [];
     
     % look-up table (colormap) used for displaying the image. 
     % If empty -> no lut
-    lut = [];
+    Lut = [];
     
     % name of the current lookup table (used for display in menus)
-    lutName = '';
+    LutName = '';
     
     % background color used for display of label images
-    backgroundColor = 'w';
+    BackgroundColor = 'w';
     
     % a set of annotations, stored as an array of
     % structures with fields type, data, style.
-    shapes = {};
+    Shapes = {};
     
     
-    % a set of views attached to this doc. Can be image viewer, profiles...
-    views = {};
+    % a set of views attached to obj doc. Can be image viewer, profiles...
+    Views = {};
     
     % a flag of modification
-    modified = false;
+    Modified = false;
     
 end % end properties
 
 
 %% Constructor
 methods
-    function this = ImagemDoc(img)
+    function obj = ImagemDoc(img)
     % Constructor for ImagemDoc class
     % Requires an image as input.
 
@@ -69,7 +69,7 @@ methods
             error('Input argument must be an instance of Image class');
         end
         
-        this.image = img;
+        obj.Image = img;
         
         
 %         poly = circleToPolygon([50 50 40], 120);
@@ -77,22 +77,33 @@ methods
 %             'type', 'polygon', 'data', poly, ...
 %             'style', {{'-m', 'LineWidth', 2}});
 %         
-%         this.shapes = {shape};
+%         obj.Shapes = {shape};
     end
 
 end % end constructors
 
+%% Methods for image management
+methods
+    function name = imageNameForDisplay(obj)
+        % return the name of the image, or a default name is name is empty
+        
+        name = obj.Image.Name;
+        if isempty(name)
+            name = 'Unknown Image';
+        end
+    end
+end
 
 %% Methods for view management
 methods
-    function addView(this, v)
-        this.views = [this.views {v}];
+    function addView(obj, v)
+        obj.Views = [obj.Views {v}];
     end
     
-    function removeView(this, v)
+    function removeView(obj, v)
         ind = -1;
-        for i = 1:length(this.views)
-            if this.views{i} == v
+        for i = 1:length(obj.Views)
+            if obj.Views{i} == v
                 ind = i;
                 break;
             end
@@ -102,11 +113,11 @@ methods
             error('could not find the view');
         end
         
-        this.views(ind) = [];
+        obj.Views(ind) = [];
     end
     
-    function v = getViews(this)
-        v = this.views;
+    function v = getViews(obj)
+        v = obj.Views;
     end
     
 end % end methods
@@ -115,14 +126,14 @@ end % end methods
 %% Methods for shapes management
 
 methods
-    function addShape(this, s)
-        this.shapes = [this.shapes {s}];
+    function addShape(obj, s)
+        obj.Shapes = [obj.Shapes {s}];
     end
     
-    function removeShape(this, s)
+    function removeShape(obj, s)
         ind = -1;
-        for i = 1:length(this.shapes)
-            if this.shapes{i} == s
+        for i = 1:length(obj.Shapes)
+            if obj.Shapes{i} == s
                 ind = i;
                 break;
             end
@@ -132,11 +143,11 @@ methods
             error('could not find the shape to remove');
         end
         
-        this.shapes(ind) = [];
+        obj.Shapes(ind) = [];
     end
     
-    function s = getShapes(this)
-        s = this.shapes;
+    function s = getShapes(obj)
+        s = obj.Shapes;
     end
     
 end % end methods

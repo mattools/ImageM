@@ -1,5 +1,5 @@
 classdef SaveSelectionAction < imagem.gui.actions.CurrentImageAction
-%SAVESELECTIONACTION Save current selection in text file
+% Save current selection in text file.
 %
 %   Class SaveSelectionAction
 %
@@ -8,10 +8,10 @@ classdef SaveSelectionAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-14,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SaveSelectionAction(viewer)
+    function obj = SaveSelectionAction(viewer)
     % Constructor for SaveSelectionAction class
     
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'saveSelection');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'saveSelection');
     end
 
 end % end constructors
@@ -35,12 +35,12 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
 
         disp('Save current image selection');
         
-        viewer = this.viewer;
-        selection = viewer.selection;
+        viewer = obj.Viewer;
+        selection = viewer.Selection;
         if isempty(selection)
             errordlg('No selection in current image');
             return;
@@ -65,20 +65,20 @@ methods
        
         
         % different type of processing depending on selection type
-        switch lower(selection.type)
+        switch lower(selection.Type)
             case {'polyline', 'polygon', 'pointset'}
                 % number of vertices
-                nv = size(selection.data, 1);
+                nv = size(selection.Data, 1);
                 
                 % write selection type
-                fprintf(f, '# %s 2 %d\n', selection.type, nv);
+                fprintf(f, '# %s 2 %d\n', selection.Type, nv);
                 
                 for i = 1:nv
-                    fprintf(f, '%d %d\n', selection.data(i,1), selection.data(i,2));
+                    fprintf(f, '%d %d\n', selection.Data(i,1), selection.Data(i,2));
                 end
                 
             otherwise
-                errordlg('Can not save type-%s selections', selection.type);
+                errordlg('Can not save type-%s selections', selection.Type);
                 return;
         end
         

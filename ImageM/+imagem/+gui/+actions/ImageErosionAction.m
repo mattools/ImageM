@@ -1,5 +1,5 @@
 classdef ImageErosionAction < imagem.gui.actions.CurrentImageAction
-%IMAGEEROSIONACTION  One-line description here, please.
+% Morphological erosion of current image.
 %
 %   output = ImageDilationAction(input)
 %
@@ -8,40 +8,40 @@ classdef ImageErosionAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-09,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageErosionAction(viewer, varargin)
+    function obj = ImageErosionAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'imageErosion');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'imageErosion');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         % Compute Image erosion
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        viewer = obj.Viewer;
+        doc = viewer.Doc;
         
         se = ones(3, 3);
         
         % compute result image
-        img2 = erosion(doc.image, se);
+        img2 = erosion(doc.Image, se);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(viewer.Gui, img2);
         
         % add history
         string = sprintf('%s = erosion(%s, ones(3,3));\n', ...
-            newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, doc.Tag);
+        addToHistory(obj.Viewer.Gui.App, string);
     end
 end
 

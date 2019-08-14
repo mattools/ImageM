@@ -1,5 +1,5 @@
 classdef ImagemApp < handle
-%IMAGEMAPP ImageM application class, that manages open images
+% ImageM application class, that manages open images.
 %
 %   output = ImagemApp(input)
 %
@@ -8,35 +8,34 @@ classdef ImagemApp < handle
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    % set of image documents managed by this application
-    docList;
+    % set of image documents managed by obj application
+    DocList;
     
     % default connectivity associated to each dimension. Equals 4 for 2D,
     % and 6 for 3D. Stored as a row vector, starting at dim=2 (no need for
     % connectivity info for 1D)
-    defaultConnectivity = [4 6];
+    DefaultConnectivity = [4 6];
     
     % the size (diameter) of the brush (in pixels)
-    brushSize = 3;
+    BrushSize = 3;
     
     % history of user commands, as a cell array of strings
-    history = cell(0, 1);
+    History = cell(0, 1);
 end 
 
 %% Constructor
 methods
-    function this = ImagemApp(varargin)
-        
+    function obj = ImagemApp(varargin)
         
     end % constructor 
 
@@ -45,7 +44,7 @@ end % construction function
 %% General methods
 methods
 
-    function printVersion(this) %#ok<MANU>
+    function printVersion(obj) %#ok<MANU>
         % 
         disp('ImageM is running...');
         disp('testing version!');
@@ -55,14 +54,14 @@ end % general methods
 
 %% Method for document management
 methods
-    function addDocument(this, doc)
-        this.docList = [this.docList {doc}];
+    function addDocument(obj, doc)
+        obj.DocList = [obj.DocList {doc}];
     end
     
-    function removeDocument(this, doc)
+    function removeDocument(obj, doc)
         ind = -1;
-        for i = 1:length(this.docList)
-            if this.docList{i} == doc
+        for i = 1:length(obj.DocList)
+            if obj.DocList{i} == doc
                 ind = i;
                 break;
             end
@@ -72,37 +71,37 @@ methods
             error('could not find the document');
         end
         
-        this.docList(ind) = [];
+        obj.DocList(ind) = [];
     end
 
-    function docList = getDocuments(this)
-        docList = this.docList;
+    function docList = getDocuments(obj)
+        docList = obj.DocList;
     end
     
-    function names = getImageNames(this)
+    function names = getImageNames(obj)
         % returns a cell array of strings containing name of each image
-        names = cell(length(this.docList),1);
-        for i = 1:length(this.docList)
-            doc = this.docList{i};
-            names{i} = doc.image.name;
+        names = cell(length(obj.DocList),1);
+        for i = 1:length(obj.DocList)
+            doc = obj.DocList{i};
+            names{i} = doc.Image.Name;
         end
     end
     
-    function b = hasDocuments(this)
-        b = ~isempty(this.docList);
+    function b = hasDocuments(obj)
+        b = ~isempty(obj.DocList);
     end
 
-    function doc = getDocument(this, index)
+    function doc = getDocument(obj, index)
         % Returns a document, either by its index, or by its name
         
         if isnumeric(index)
-            doc = this.docList{index};
+            doc = obj.DocList{index};
             
         elseif ischar(index)
             doc = [];
-            for i = 1:length(this.docList)
-                currentDoc = this.docList{i};
-                if strcmp(currentDoc.image.name, index)
+            for i = 1:length(obj.DocList)
+                currentDoc = obj.DocList{i};
+                if strcmp(currentDoc.Image.Name, index)
                     doc = currentDoc;
                     break;
                 end
@@ -116,7 +115,7 @@ methods
         end
     end
     
-    function newName = createDocumentName(this, baseName)
+    function newName = createDocumentName(obj, baseName)
         % returns either the base name of doc, or the name with an index
        
         if isempty(baseName)
@@ -125,7 +124,7 @@ methods
         newName = baseName;
                
         % if the name is free, no problem
-        if ~hasDocumentWithName(this, baseName)
+        if ~hasDocumentWithName(obj, baseName)
             return;
         end
         
@@ -141,7 +140,7 @@ methods
         index = 1;
         while true
             newName = createIndexedName(baseName, index);
-            if ~hasDocumentWithName(this, newName)
+            if ~hasDocumentWithName(obj, newName)
                 return;
             end
             index = index + 1;
@@ -156,25 +155,25 @@ methods
 
     end
     
-    function b = hasDocumentWithName(this, name)
+    function b = hasDocumentWithName(obj, name)
         % returns true if the app contains a doc with the given name
         
         b = false;
-        for i = 1:length(this.docList)
-            doc = this.docList{i};
-            if isempty(doc.image)
+        for i = 1:length(obj.DocList)
+            doc = obj.DocList{i};
+            if isempty(doc.Image)
                 continue;
             end
             
-            if strcmp(doc.image.name, name)
+            if strcmp(doc.Image.Name, name)
                 b = true;
                 return;
             end
         end
     end
     
-    function newTag = createImageTag(this, image, baseName)
-        % finds a name that can be used as tag for this image
+    function newTag = createImageTag(obj, image, baseName)
+        % finds a name that can be used as tag for obj image
 
         % If no tag is specified, choose a base name that describe image
         % type
@@ -191,7 +190,7 @@ methods
         end
                
         % if the name is free, no problem
-        if isFreeTag(this, baseName)
+        if isFreeTag(obj, baseName)
             newTag = baseName;
             return;
         end
@@ -200,24 +199,24 @@ methods
         index = 1;
         while true
             newTag = [baseName num2str(index)];
-            if isFreeTag(this, newTag)
+            if isFreeTag(obj, newTag)
                 return;
             end
             index = index + 1;
         end
     end
     
-    function b = isFreeTag(this, tag)
+    function b = isFreeTag(obj, tag)
         % returns true if the app contains a doc/image with the given tag
         
         b = true;
-        for i = 1:length(this.docList)
-            doc = this.docList{i};
-            if isempty(doc.image)
+        for i = 1:length(obj.DocList)
+            doc = obj.DocList{i};
+            if isempty(doc.Image)
                 continue;
             end
             
-            if strcmp(doc.tag, tag)
+            if strcmp(doc.Tag, tag)
                 b = false;
                 return;
             end
@@ -229,17 +228,17 @@ end
 
 %% App global variables
 methods
-    function addToHistory(this, string)
+    function addToHistory(obj, string)
         % Add the specified string to app history
-        this.history = [this.history ; {string}];
+        obj.History = [obj.History ; {string}];
         fprintf('%s', string);
     end
 
-    function printHistory(this)
+    function printHistory(obj)
         % display stored history
         fprintf('Command history:\n');
-        for i = 1:length(this.history)
-            fprintf(this.history{i});
+        for i = 1:length(obj.History)
+            fprintf(obj.History{i});
         end
     end
 
@@ -247,7 +246,7 @@ end
 
 %% Method for local settings
 methods
-    function conn = getDefaultConnectivity(this, dim)
+    function conn = getDefaultConnectivity(obj, dim)
         % Get the default connectivity associated to a dimension
         % Defaults are 4 for 2D, and 6 for 3D.
         %
@@ -255,12 +254,12 @@ methods
         if nargin == 1
             dim = 2;
         end
-        conn = this.defaultConnectivity(dim - 1);
+        conn = obj.DefaultConnectivity(dim - 1);
     end
     
-    function setDefaultConnectivity(this, dim, conn)
+    function setDefaultConnectivity(obj, dim, conn)
         % Changes the default connectivity associated to a dimension
-        this.defaultConnectivity(dim - 1) = conn;
+        obj.DefaultConnectivity(dim - 1) = conn;
     end
     
 end

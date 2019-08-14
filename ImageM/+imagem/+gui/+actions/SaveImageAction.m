@@ -1,5 +1,5 @@
 classdef SaveImageAction < imagem.gui.actions.CurrentImageAction
-%OPENIMAGEACTION Open an image from a file
+% Open an image from a file.
 %
 %   Class SaveImageAction
 %
@@ -8,10 +8,10 @@ classdef SaveImageAction < imagem.gui.actions.CurrentImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,11 +23,11 @@ end % end properties
 
 %% Constructor
 methods
-    function this = SaveImageAction(viewer)
+    function obj = SaveImageAction(viewer)
     % Constructor for SaveImageAction class
         
         % calls the parent constructor
-        this = this@imagem.gui.actions.CurrentImageAction(viewer, 'saveImage');
+        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'saveImage');
     end
 
 end % end constructors
@@ -35,7 +35,7 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('Save current image');
         
         % Open dialog to save image
@@ -56,7 +56,8 @@ methods
 
 
         % try to save the current image
-        img = this.viewer.doc.image;
+        doc = currentDoc(obj);
+        img = doc.Image;
         try
             write(img, fullfile(pathName, fileName));
         catch ex
@@ -66,8 +67,8 @@ methods
         
         % add history
         string = sprintf('write(%s, ''%s'');\n', ...
-            this.viewer.doc.tag, fullfile(pathName, fileName));
-        addToHistory(this.viewer.gui.app, string);
+            doc.Tag, fullfile(pathName, fileName));
+        addToHistory(obj, string);
         
     end % end actionPerformed
     

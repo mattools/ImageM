@@ -1,5 +1,5 @@
 classdef ImagemTool < imagem.gui.events.MouseListener
-%IMAGEMTOOL Base class for interactive (mouse management) tools
+% Base class for interactive (mouse management) tools.
 %
 %   ImagemTool is an abstract class that serves as basis for developping
 %   more sophisticated classes. It encapsulates functions for interpreting
@@ -11,55 +11,63 @@ classdef ImagemTool < imagem.gui.events.MouseListener
 %   will change the way the mouse events are processed.
 %
 %
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 %% Properties
 properties
     % the parent GUI, that can be ImageDisplay, TableDisplay...
-    viewer;
+    Viewer;
     
-    % the name of this tool, that should be unique for all actions
-    name;
+    % the name of obj tool, that should be unique for all actions
+    Name;
 end
 
 %% Constructor
 methods
-    function this = ImagemTool(viewer, name)
+    function obj = ImagemTool(viewer, name)
         % Creates a new tool using parent viewer and a name
-        this.viewer = viewer;
-        this.name = name;
+        obj.Viewer = viewer;
+        obj.Name = name;
     end % constructor 
 
 end % construction function
 
 %% General methods
 methods
-    function select(this) %#ok<*MANU>
+    function select(obj) %#ok<*MANU>
     end
     
-    function deselect(this)
+    function deselect(obj)
     end
     
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
     end
     
-    function onMouseButtonReleased(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseButtonReleased(obj, hObject, eventdata) %#ok<INUSD>
     end
     
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
     end
     
 end % general methods
 
-
 methods
-    function b = isActivable(this)
-        doc = this.viewer.doc;
-        b = ~isempty(doc) && ~isempty(doc.image);
+    function b = isActivable(obj)
+        doc = currentDoc(obj);
+        b = ~isempty(doc) && ~isempty(doc.Image);
+    end
+end
+
+
+%% Utility methods
+methods
+    function doc = currentDoc(obj)
+        doc = obj.Viewer.Doc;
     end
 end
 

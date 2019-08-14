@@ -1,5 +1,5 @@
 classdef ImageExtendedMinWatershedAction < imagem.gui.actions.ScalarImageAction
-%IMAGEIMPOSEDWATERSHEDACTION Apply imposed watershed to an intensity image
+% Apply watershed using extended minima as markers.
 %
 %   output = ImageWatershedAction(input)
 %
@@ -8,68 +8,70 @@ classdef ImageExtendedMinWatershedAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-02-27,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
     % the set of handles to dialog widgets, indexed by their name
-    handles;
+    Handles;
     
     % the min and max of values present in image. Default is [0 255]
-    imageExtent = [0 255];
+    ImageExtent = [0 255];
     
     % the value of dynamic used to pre-filter images
-    extendedMinimaValue = 10;
+    ExtendedMinimaValue = 10;
     
     % the connectivity of the regions
-    conn = 4;
+    Conn = 4;
     
     % the list of available connectivity values
-    connValues = [4, 8];
+    ConnValues = [4, 8];
     
     % boolean flag indicating is binary image of watershed should be created
-    computeWatershed = true;
+    ComputeWatershed = true;
     
     % boolean flag indicating if label image of basins should be created
-    computeBasins = false;
+    ComputeBasins = false;
 end
 
 methods
-    function this = ImageExtendedMinWatershedAction(viewer)
+    function obj = ImageExtendedMinWatershedAction(viewer)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'extendMinWatershed');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'extendMinWatershed');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         disp('apply imposed watershed to current image');
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        viewer = obj.Viewer;
+        doc = viewer.Doc;
         
-        if ~isScalarImage(doc.image)
+        if ~isScalarImage(doc.Image)
             warning('ImageM:WrongImageType', ...
                 'Watershed can be applied only on scalar images');
             return;
         end
         
-        createWatershedFigure(this);
-        updateWidgets(this);
+        createWatershedFigure(obj);
+        updateWidgets(obj);
     end
     
-    function hf = createWatershedFigure(this)
+    function hf = createWatershedFigure(obj)
         
         % range of grayscale values
-        img = this.viewer.doc.image;
+        img = currentImage(obj);
         minVal = double(min(img));
         maxVal = double(max(img));
-        this.imageExtent = [minVal maxVal];
+        obj.ImageExtent = [minVal maxVal];
+        
+        gui = obj.Viewer.Gui;
         
         % compute slider steps
         valExtent = maxVal - minVal;
@@ -91,7 +93,7 @@ methods
         sliderValue = valExtent / 4;
         
         % background color of most widgets
-        bgColor = getWidgetBackgroundColor(this.viewer.gui);
+        bgColor = getWidgetBackgroundColor(gui);
         
         % creates the figure
         hf = figure(...
@@ -99,45 +101,43 @@ methods
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
-            'CloseRequestFcn', @this.closeFigure);
+            'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
         pos(3:4) = [250 200];
         set(hf, 'Position', pos);
         
-        this.handles.figure = hf;
+        obj.Handles.Figure = hf;
         
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         mainPanel = uix.VBox('Parent', vb);
         
-        gui = this.viewer.gui;
-        
-        this.handles.extendedMinText = addInputTextLine(gui, mainPanel, ...
+        obj.Handles.ExtendedMinText = addInputTextLine(gui, mainPanel, ...
             'Basin Dynamic:', '10', ...
-            @this.onExtendedMinTextChanged);
+            @obj.onExtendedMinTextChanged);
         
         % one slider for changing value
-        this.handles.valueSlider = uicontrol(...
+        obj.Handles.ValueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
             'Min', 1, 'Max', valExtent, ...
             'Value', sliderValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
-            'Callback', @this.onSliderValueChanged);
+            'Callback', @obj.onSliderValueChanged);
         
         % setup listeners for slider continuous changes
-        addlistener(this.handles.valueSlider, ...
-            'ContinuousValueChange', @this.onSliderValueChanged);
+        addlistener(obj.Handles.ValueSlider, ...
+            'ContinuousValueChange', @obj.onSliderValueChanged);
        
-        this.handles.connectivityPopup = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.ConnectivityPopup = addComboBoxLine(gui, mainPanel, ...
             'Connectivity:', {'4', '8'}, ...
-            @this.onConnectivityChanged);
+            @obj.onConnectivityChanged);
 
-        this.handles.resultTypePopup = addComboBoxLine(gui, mainPanel, ...
+        obj.Handles.ResultTypePopup = addComboBoxLine(gui, mainPanel, ...
             'ResultType:', {'Watershed', 'Basins', 'Both'}, ...
-            @this.onResultTypeChanged);
+            @obj.onResultTypeChanged);
         
         set(mainPanel, 'Heights', [35 25 35 35]);
         
@@ -145,120 +145,119 @@ methods
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'OK', ...
-            'Callback', @this.onButtonOK);
+            'Callback', @obj.onButtonOK);
         uicontrol( 'Parent', buttonsPanel, ...
             'String', 'Cancel', ...
-            'Callback', @this.onButtonCancel);
+            'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1 40] );
     end
         
-    function closeFigure(this, varargin)
+    function closeFigure(obj, varargin)
         % clean up viewer figure
-        this.viewer.doc.previewImage = [];
-        updateDisplay(this.viewer);
+        obj.Viewer.Doc.PreviewImage = [];
+        updateDisplay(obj.Viewer);
         
         % close the current fig
-        if ishandle(this.handles.figure)
-            delete(this.handles.figure);
+        if ishandle(obj.Handles.Figure)
+            delete(obj.Handles.Figure);
         end
     end
     
-    function updateWidgets(this)
+    function updateWidgets(obj)
         
         % update widget values
-        val = this.extendedMinimaValue;
-        set(this.handles.extendedMinText, 'String', num2str(val))
-        set(this.handles.valueSlider, 'Value', val);
+        val = obj.ExtendedMinimaValue;
+        set(obj.Handles.ExtendedMinText, 'String', num2str(val))
+        set(obj.Handles.ValueSlider, 'Value', val);
         
         % update preview image of the document
-        bin = computeWatershedImage(this) == 0;
-        doc = this.viewer.doc;
-        doc.previewImage = overlay(doc.image, bin);
-        updateDisplay(this.viewer);
+        bin = computeWatershedImage(obj) == 0;
+        doc = currentDoc(obj);
+        updatePreviewImage(obj, overlay(doc.Image, bin));
     end
     
 end
 
 %% Control buttons Callback
 methods
-    function onButtonOK(this, varargin)        
+    function onButtonOK(obj, varargin)        
         % apply the threshold operation
         
-        wat = computeWatershedImage(this);
-        refDoc = this.viewer.doc;
-        if this.computeWatershed
-            newDoc = addImageDocument(this.viewer.gui, wat == 0);
+        wat = computeWatershedImage(obj);
+        refDoc = currentDoc(obj);
+        if obj.ComputeWatershed
+            newDoc = addImageDocument(obj, wat == 0);
         end
-        if this.computeBasins
-            newDoc = addImageDocument(this.viewer.gui, uint16(wat));
+        if obj.ComputeBasins
+            newDoc = addImageDocument(obj, uint16(wat));
         end
         
         % add history
         string = sprintf('%s = watershed(%s, ''dynamic'', %f, ''conn'', %d));\n', ...
-            newDoc.tag, refDoc.tag, this.extendedMinimaValue, this.conn);
-        addToHistory(this.viewer.gui.app, string);
+            newDoc.Tag, refDoc.Tag, obj.ExtendedMinimaValue, obj.Conn);
+        addToHistory(obj, string);
         
-        closeFigure(this);
+        closeFigure(obj);
     end
     
-    function onButtonCancel(this, varargin)
-        closeFigure(this);
+    function onButtonCancel(obj, varargin)
+        closeFigure(obj);
     end
 end
 
 
 %% GUI Items Callback
 methods
-    function onExtendedMinTextChanged(this, varargin)
-        text = get(this.handles.extendedMinText, 'String');
+    function onExtendedMinTextChanged(obj, varargin)
+        text = get(obj.Handles.ExtendedMinText, 'String');
         val = str2double(text);
         if ~isfinite(val)
             return;
         end
         
         % check value is within bounds
-        extent = this.imageExtent;
+        extent = obj.ImageExtent;
         if val < extent(1) || val > extent(2)
             return;
         end
         
-        this.extendedMinimaValue = val;
-        updateWidgets(this);
+        obj.ExtendedMinimaValue = val;
+        updateWidgets(obj);
     end
     
-    function onSliderValueChanged(this, varargin)
-        val = get(this.handles.valueSlider, 'Value');
-        this.extendedMinimaValue = val;
-        updateWidgets(this);
+    function onSliderValueChanged(obj, varargin)
+        val = get(obj.Handles.ValueSlider, 'Value');
+        obj.ExtendedMinimaValue = val;
+        updateWidgets(obj);
     end
     
-    function onConnectivityChanged(this, varargin)
-        index = get(this.handles.connectivityPopup, 'Value');
-        this.conn = this.connValues(index);
+    function onConnectivityChanged(obj, varargin)
+        index = get(obj.Handles.ConnectivityPopup, 'Value');
+        obj.Conn = obj.ConnValues(index);
         
-        updateWidgets(this);
+        updateWidgets(obj);
     end
     
-    function onResultTypeChanged(this, varargin)
-        type = get(this.handles.resultTypePopup, 'Value');
+    function onResultTypeChanged(obj, varargin)
+        type = get(obj.Handles.ResultTypePopup, 'Value');
         switch type
             case 1
-                this.computeWatershed = true;
-                this.computeBasins = false;
+                obj.ComputeWatershed = true;
+                obj.ComputeBasins = false;
             case 2
-                this.computeWatershed = false;
-                this.computeBasins = true;
+                obj.ComputeWatershed = false;
+                obj.ComputeBasins = true;
             case 3
-                this.computeWatershed = true;
-                this.computeBasins = true;
+                obj.ComputeWatershed = true;
+                obj.ComputeBasins = true;
         end
     end
     
-    function wat = computeWatershedImage(this)
-        wat = watershed(this.viewer.doc.image, ...
-            'dynamic', this.extendedMinimaValue, ...
-            'conn', this.conn);
+    function wat = computeWatershedImage(obj)
+        wat = watershed(currentImage(obj), ...
+            'dynamic', obj.ExtendedMinimaValue, ...
+            'conn', obj.Conn);
     end
 end
 

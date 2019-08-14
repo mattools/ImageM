@@ -1,5 +1,5 @@
 classdef ImageGradientVectorAction < imagem.gui.actions.ScalarImageAction
-%IMAGEGRADIENTACTION Compute gradient of current image as vector image
+% Compute gradient of current image as vector image.
 %
 %   output = ImageGradientVectorAction(input)
 %
@@ -8,36 +8,35 @@ classdef ImageGradientVectorAction < imagem.gui.actions.ScalarImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-02-27,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function this = ImageGradientVectorAction(viewer, varargin)
+    function obj = ImageGradientVectorAction(viewer, varargin)
         % calls the parent constructor
-        this = this@imagem.gui.actions.ScalarImageAction(viewer, 'imageGradientVector');
+        obj = obj@imagem.gui.actions.ScalarImageAction(viewer, 'imageGradientVector');
     end
 end
 
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
 
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        % get handle to current doc
+        doc = currentDoc(obj);
         
         % apply 'gradient' operation
-        grad = gradient(doc.image);
+        grad = gradient(doc.Image);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, grad);
+        newDoc = addImageDocument(obj, grad);
         
         % add history
-        string = sprintf('%s = gradient(%s);\n', newDoc.tag, doc.tag);
-        addToHistory(viewer.gui.app, string);
+        string = sprintf('%s = gradient(%s);\n', newDoc.Tag, doc.Tag);
+        addToHistory(obj, string);
     end
 end
 

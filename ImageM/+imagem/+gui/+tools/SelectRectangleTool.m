@@ -1,5 +1,5 @@
 classdef SelectRectangleTool < imagem.gui.ImagemTool
-%LINEPROFILETOOL  One-line description here, please.
+% Select a rectangle.
 %
 %   Class SelectRectangleTool
 %
@@ -8,34 +8,34 @@ classdef SelectRectangleTool < imagem.gui.ImagemTool
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-03-13,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Properties
 properties
-    pos1;
+    Pos1;
     
-    lineHandle;
+    LineHandle;
     
     % the current step, can be 1 or 2
-    state = 0;
+    State = 0;
     
 end % end properties
 
 
 %% Constructor
 methods
-    function this = SelectRectangleTool(viewer, varargin)
+    function obj = SelectRectangleTool(viewer, varargin)
         % Constructor for SelectRectangleTool class
-        this = this@imagem.gui.ImagemTool(viewer, 'selectRectangle');
+        obj = obj@imagem.gui.ImagemTool(viewer, 'selectRectangle');
         
         % setup state
-        this.state = 1;
+        obj.State = 1;
     end
 
 end % end constructors
@@ -43,44 +43,44 @@ end % end constructors
 
 %% ImagemTool Methods
 methods
-    function select(this) %#ok<*MANU>
+    function select(obj) %#ok<*MANU>
         disp('select rectangle');
-        this.state = 1;
+        obj.State= 1;
     end
     
-    function deselect(this)
-        removeLineHandle(this);
+    function deselect(obj)
+        removeLineHandle(obj);
     end
     
-    function removeLineHandle(this)
-        if ~ishandle(this.lineHandle)
+    function removeLineHandle(obj)
+        if ~ishandle(obj.LineHandle)
             return;
         end
         
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         if isempty(ax)
             return;
         end
        
-        delete(this.lineHandle);
+        delete(obj.LineHandle);
         
     end
     
-    function onMouseButtonPressed(this, hObject, eventdata) %#ok<INUSD>
-        ax = this.viewer.handles.imageAxis;
+    function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
 %         fprintf('%f %f\n', pos(1, 1:2));
         
-        if this.state == 1
+        if obj.State== 1
             % determines the starting point of next line
-            this.pos1 = pos(1, 1:2);
-            this.state = 2;
-            removeLineHandle(this);
-            this.lineHandle = line(...
+            obj.Pos1 = pos(1, 1:2);
+            obj.State= 2;
+            removeLineHandle(obj);
+            obj.LineHandle = line(...
                 'XData', pos(1,1), 'YData', pos(1,2), ...
                 'Marker', 'none', 'color', 'y', 'linewidth', 1);
             
-            this.viewer.selection = [];
+            obj.Viewer.Selection = [];
             
             return;
         end
@@ -88,41 +88,41 @@ methods
         % Start processing state 2
         
         % determine the line end point
-        x1 = this.pos1(1, 1);
+        x1 = obj.Pos1(1, 1);
         x2 = pos(1, 1);
-        y1 = this.pos1(1, 2);
+        y1 = obj.Pos1(1, 2);
         y2 = pos(1, 2);
 
         boxData = [min(x1,x2) max(x1,x2) min(y1,y2) max(y1,y2)];
-        shape = struct('type', 'box', 'data', boxData);
+        shape = struct('Type', 'box', 'Data', boxData);
         
-        this.viewer.selection = shape;
+        obj.Viewer.Selection = shape;
         
         
         % revert to first state
-        this.state = 1;
+        obj.State= 1;
     end
     
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
         
-        if this.state ~= 2 || ~ishandle(this.lineHandle)
+        if obj.State~= 2 || ~ishandle(obj.LineHandle)
             return;
         end
 
         % determine the line current end point
-        ax = this.viewer.handles.imageAxis;
+        ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
-        x1 = this.pos1(1, 1);
+        x1 = obj.Pos1(1, 1);
         x2 = pos(1, 1);
-        y1 = this.pos1(1, 2);
+        y1 = obj.Pos1(1, 2);
         y2 = pos(1, 2);
         xdata = [x1 x2 x2 x1 x1];
         ydata = [y1 y1 y2 y2 y1];
         
         % update line display
-        set(this.lineHandle, 'XData', xdata);
-        set(this.lineHandle, 'YData', ydata);
+        set(obj.LineHandle, 'XData', xdata);
+        set(obj.LineHandle, 'YData', ydata);
         
         
         % update label of info panel
@@ -131,7 +131,7 @@ methods
         boxWidth    = abs(round(x2) - round(x1));
         boxHeight   = abs(round(y2) - round(y1));
         sizeString  = sprintf(', size=(%d,%d) px', boxWidth, boxHeight);
-        set(this.viewer.handles.infoPanel, ...
+        set(obj.Viewer.Handles.InfoPanel, ...
             'string', [locString sizeString]);
         
     end

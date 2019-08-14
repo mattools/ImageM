@@ -1,5 +1,5 @@
 classdef ShowCursorPositionTool < imagem.gui.ImagemTool
-%SHOWCURSORPOSITIONTOOL  One-line description here, please.
+% Show position of mouse cursor in status bar.
 %
 %   output = ShowCursorPositionTool(input)
 %
@@ -8,37 +8,37 @@ classdef ShowCursorPositionTool < imagem.gui.ImagemTool
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-21,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
 
 %% Constructor
 methods
-    function this = ShowCursorPositionTool(viewer, varargin)
+    function obj = ShowCursorPositionTool(viewer, varargin)
         % Creates a new tool using parent gui and a name
-         this = this@imagem.gui.ImagemTool(viewer, 'showCursorPosition');
+         obj = obj@imagem.gui.ImagemTool(viewer, 'showCursorPosition');
     end % constructor 
 
 end % construction function
 
 %% General methods
 methods
-    function onMouseMoved(this, hObject, eventdata) %#ok<INUSD>
+    function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
 
-        point = get(this.viewer.handles.imageAxis, 'CurrentPoint');
+        point = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
         point = point(1, 1:2);
-        coord = round(pointToIndex(this, point));
+        coord = round(pointToIndex(obj, point));
         
-        doc = this.viewer.doc;
-        img = doc.image;
+        doc = currentDoc(obj);
+        img = doc.Image;
         
         % control on bounds of image
         if any(coord < 1) || any(coord > size(img, [1 2]))
-            set(this.viewer.handles.infoPanel, 'string', '');
+            set(obj.Viewer.Handles.InfoPanel, 'string', '');
             return;
         end
         
@@ -47,22 +47,22 @@ methods
             % Display pixel + physical position
             locString = sprintf('(x,y) = (%d,%d) px = (%5.2f,%5.2f) %s', ...
                 coord(1), coord(2), point(1), point(2), ...
-                img.unitName);
+                img.UnitName);
         else
             % Display only pixel position
             locString = sprintf('(x,y) = (%d,%d) px', coord(1), coord(2));
         end
         
         % Display value of selected pixel
-        if strcmp(img.type, 'color')
+        if strcmp(img.Type, 'color')
             % case of color pixel: values are red, green and blue
             rgb = img(coord(1), coord(2), :);
             valueString = sprintf('  RGB = (%d %d %d)', ...
                 rgb(1), rgb(2), rgb(3));
             
-        elseif strcmp(img.type, 'vector')
+        elseif strcmp(img.Type, 'vector')
             % case of vector image: compute norm of the pixel
-            values  = this.viewer.doc.image(coord(1), coord(2), :);
+            values  = obj.Viewer.Doc.Image(coord(1), coord(2), :);
             norm    = sqrt(sum(double(values(:)) .^ 2));
             valueString = sprintf('  value = %g', norm);
             
@@ -76,16 +76,18 @@ methods
             end
         end
         
-        set(this.viewer.handles.infoPanel, ...
+        set(obj.Viewer.Handles.InfoPanel, ...
             'string', [locString '  ' valueString]);
     end
     
-    function index = pointToIndex(this, point)
+    function index = pointToIndex(obj, point)
         % Converts coordinates of a point in physical dimension to image index
         % First element is column index, second element is row index, both are
         % given in floating point and no rounding is performed.
-        spacing = this.viewer.doc.image.spacing(1:2);
-        origin  = this.viewer.doc.image.origin(1:2);
+        doc = currentDoc(obj);
+        img = doc.Image;
+        spacing = img.Spacing(1:2);
+        origin  = img.Origin(1:2);
         index   = (point - origin) ./ spacing + 1;
     end
     

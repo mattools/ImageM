@@ -1,5 +1,5 @@
 classdef ImageSkeletonAction < imagem.gui.actions.BinaryImageAction
-%IMAGESKELETONACTION  Computes skeleton of a binary image
+% Computes skeleton of a binary image.
 %
 %   Class ImageSkeletonAction
 %
@@ -8,10 +8,10 @@ classdef ImageSkeletonAction < imagem.gui.actions.BinaryImageAction
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,9 +23,9 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImageSkeletonAction(viewer)
+    function obj = ImageSkeletonAction(viewer)
     % Constructor for ImageSkeletonAction class
-        this = this@imagem.gui.actions.BinaryImageAction(viewer, 'imageSkeleton');
+        obj = obj@imagem.gui.actions.BinaryImageAction(viewer, 'imageSkeleton');
     end
 
 end % end constructors
@@ -33,21 +33,20 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function actionPerformed(obj, src, event) %#ok<INUSD>
         
         % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        doc = viewer.doc;
+        doc = currentDoc(obj);
         
         % compute Image skeleton
-        img2 = skeleton(doc.image);
+        img2 = skeleton(doc.Image);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(viewer.gui, img2);
+        newDoc = addImageDocument(obj, img2);
 
         % history
-        string = sprintf('%s = skeleton(%s);\n', newDoc.tag, doc.tag);
-        addToHistory(this.viewer.gui.app, string);
+        string = sprintf('%s = skeleton(%s);\n', newDoc.Tag, doc.Tag);
+        addToHistory(obj, string);
 
     end
 end % end methods

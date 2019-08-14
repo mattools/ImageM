@@ -1,5 +1,5 @@
 classdef ImageUtils < handle
-%IMAGEUTILS Utility methods for Image class management
+% Utility methods for Image class management.
 %
 %   The ImageUtils class contains only static methods.
 %
@@ -27,21 +27,21 @@ methods (Static)
         
         % extract or compute display data
         if isGrayscaleImage(image) || isColorImage(image)
-            cdata = permute(image.data, [2 1 4 3]);
+            cdata = permute(image.Data, [2 1 4 3]);
              
         elseif isLabelImage(image)
             % label image will be replaced by RGB image
             rgb = label2rgb(image);
-            cdata = permute(rgb.data, [2 1 4 3]);
+            cdata = permute(rgb.Data, [2 1 4 3]);
         
         elseif isVectorImage(image)
             % in case of vector images, display the norm
             imgNorm = norm(image);
-            cdata = permute(imgNorm.data, [2 1 4 3]);
+            cdata = permute(imgNorm.Data, [2 1 4 3]);
             
         else
             % intensity or unknown type
-            cdata = permute(image.data, [2 1 4 3]);
+            cdata = permute(image.Data, [2 1 4 3]);
             
         end
     end
@@ -51,7 +51,7 @@ methods (Static)
         
         % extract or compute display data
         if isGrayscaleImage(image) || isColorImage(image)
-            cdata = permute(image.data, [2 1 4 3]);
+            cdata = permute(image.Data, [2 1 4 3]);
             mini = 0;
             if islogical(cdata)
                 maxi = 1;
@@ -71,13 +71,13 @@ methods (Static)
         elseif isVectorImage(image)
             % in case of vector images, display the norm
             imgNorm = norm(image);
-            cdata = permute(imgNorm.data, [2 1 4 3]);
+            cdata = permute(imgNorm.Data, [2 1 4 3]);
             mini = min(cdata(:));
             maxi = max(cdata(:));
 
         else
             % intensity or unknown type
-            cdata = permute(image.data, [2 1 4 3]);
+            cdata = permute(image.Data, [2 1 4 3]);
             mini = min(cdata(:));
             maxi = max(cdata(:));
             
