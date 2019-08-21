@@ -126,7 +126,7 @@ methods
                 'NextPlot', 'add', ...
                 'Position', [0 0 1 1]);
             
-            % intialize image display with default image. 
+            % initialize image display with default image. 
             hIm = imshow(ones(10, 10), 'parent', ax);
             obj.Handles.ScrollPanel = imscrollpanel(scrollPanel, hIm);
 
@@ -159,7 +159,7 @@ methods
     end
 end
 
-%% M%ethods
+%% Methods
 
 methods
     
@@ -239,13 +239,7 @@ methods
         
         % display each shape stored in document
         drawShapes(obj);
-        
-%         % adjust zoom to view the full image
-%         api = iptgetapi(obj.Handles.ScrollPanel);
-%         mag = api.findFitMag();
-%         api.setMagnification(mag);
     end
-    
 
     function updateTitle(obj)
         % set up title of the figure, containing name of figure and current zoom
@@ -276,8 +270,7 @@ methods
         end
         
         % compute image zoom
-        api = iptgetapi(obj.Handles.ScrollPanel);
-        zoom = api.getMagnification();
+        zoom = getZoom(obj);
         
         % compute new title string 
         titlePattern = 'ImageM - %s [%d x %d %s] - %g:%g';

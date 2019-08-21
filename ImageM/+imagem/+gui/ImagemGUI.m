@@ -82,7 +82,11 @@ methods
         addDocument(obj.App, doc);
         
         % creates a display for the new image
-        viewer = imagem.gui.PlanarImageViewer(obj, doc);
+        if ~isempty(image) && size(image, 3) > 1
+            viewer = imagem.gui.Image3DSliceViewer(obj, doc);
+        else
+            viewer = imagem.gui.PlanarImageViewer(obj, doc);
+        end
         addView(doc, viewer);
     end
     
