@@ -1,4 +1,4 @@
-classdef PlanarImageViewer < handle
+classdef PlanarImageViewer < imagem.gui.ImageViewer
 % A viewer for planar images.
 %
 %   VIEWER = PlanarImageViewer(GUI, DOC)
@@ -15,7 +15,7 @@ classdef PlanarImageViewer < handle
 %     viewer = imagem.gui.PlanarImageViewer(obj, doc);
 %
 %   See also
-%     ImagemGUI, ImagemDoc
+%     ImagemGUI, PlanarImageViewer, imagem.app.ImagemDoc
 %
 
 % ------
@@ -26,38 +26,32 @@ classdef PlanarImageViewer < handle
 
 
 properties
-    % reference to the main GUI
-    Gui;
-   
-    % list of handles to the various gui items
-    Handles;
-    
-    % the image document
-    Doc;
-    
-    % a row vector of two values indicating minimal and maximal displayable
+    % A row vector of two values indicating minimal and maximal displayable
     % values for grayscale and intensity images.
     DisplayRange;
     
-    % specify how to change the zoom when figure is resized. Can be one of:
+    % Specify how to change the zoom when figure is resized. 
+    % Can be one of:
     % 'adjust'  -> find best zoom (default)
     % 'fixed'   -> keep previous zoom factor
     ZoomMode = 'adjust';
     
-    % the set of mouse listeners, stored as a cell array 
+    % The set of mouse listeners, stored as a cell array.
     MouseListeners = [];
     
-    % the currently selected tool
+    % The currently selected tool.
     CurrentTool = [];
     
-    % a selected shape
+    % A selected shape.
     Selection = [];
 end
 
+%% Constructor
 methods
     function obj = PlanarImageViewer(gui, doc)
-        obj.Gui = gui;
-        obj.Doc = doc;
+        
+        % call constructor of super class
+        obj = obj@imagem.gui.ImageViewer(gui, doc);
 
         % computes a new handle index large enough not to collide with
         % common figure handles
@@ -164,6 +158,8 @@ methods
       
     end
 end
+
+%% M%ethods
 
 methods
     
