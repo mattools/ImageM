@@ -29,7 +29,7 @@ methods
         viewer = obj.Viewer;
         
         % set up new zoom value
-        setZoom(viewer, 1);
+        setCurrentZoomLevel(viewer, 1);
         
         % update display
         updateTitle(viewer);

@@ -30,7 +30,7 @@ methods
         
         % set up new zoom value
         zoom = findBestZoom(viewer);
-        setZoom(viewer, zoom);
+        setCurrentZoomLevel(viewer, zoom);
         
         % update display
         updateTitle(viewer);

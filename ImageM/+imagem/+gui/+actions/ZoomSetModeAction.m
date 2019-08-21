@@ -47,7 +47,7 @@ methods
         end
         
         if ~isempty(obj.MenuItem)
-            set(obj.MenuItem, 'Checked', 'on');
+            set(obj.MenuItem, 'Checked', 'On');
         end
     end
     
@@ -62,7 +62,7 @@ methods
     
     function uncheckMenuItem(obj)
         if ~isempty(obj.MenuItem)
-            set(obj.MenuItem, 'Checked', 'off');
+            set(obj.MenuItem, 'Checked', 'Off');
         end
     end
 end

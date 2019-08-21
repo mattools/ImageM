@@ -8,13 +8,13 @@ function varargout = ImageM(varargin)
 %   Creates a new ImagM window initialized with the given image. IMG should
 %   be an instance of Image Object.
 %
-%   IV = ImageM(IMG);
+%   VIEWER = ImageM(IMG);
 %   Returns the ImageM Viewer object created for the input image.
 %   The viewer contains several fields, among them:
-%   * gui:  the global GUI that manages the set of frames/viewers
-%   * doc:  an ImagemDoc object that encapsulates the image together with
+%   * Gui:  the global GUI that manages the set of frames/viewers
+%   * Doc:  an ImagemDoc object that encapsulates the image together with
 %           useful information
-%   * handles: a set of handles to the widgets that constitute this viewer.
+%   * Handles: a set of handles to the widgets that constitute this viewer.
 %
 %
 %   Example

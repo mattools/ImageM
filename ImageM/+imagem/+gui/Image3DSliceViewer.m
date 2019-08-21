@@ -306,47 +306,6 @@ methods
 %         drawShapes(obj);
     end
     
-
-    function updateTitle(obj)
-        % Set up title of the figure, containing name of figure and current zoom
-        
-        % small checkup, because function can be called before figure was
-        % initialised
-        if ~isfield(obj.Handles, 'Figure')
-            return;
-        end
-        
-        if isempty(obj.Doc) || isempty(obj.Doc.Image)
-            return;
-        end
-        
-        % setup name to display
-        imgName = imageNameForDisplay(obj.Doc);
-    
-        % determine the type to display:
-        % * data type for intensity / grayscale image
-        % * type of image otherwise
-        switch obj.Doc.Image.Type
-            case 'grayscale'
-                type = class(obj.Doc.Image.Data);
-            case 'color'
-                type = 'color';
-            otherwise
-                type = obj.Doc.Image.Type;
-        end
-        
-        % compute image zoom
-        zoom = getZoom(obj);
-        
-        % compute new title string 
-        titlePattern = 'ImageM - %s [%d x %d x %d %s] - %g:%g';
-        titleString = sprintf(titlePattern, imgName, ...
-            size(obj.Doc.Image), type, max(1, zoom), max(1, 1/zoom));
-
-        % display new title
-        set(obj.Handles.Figure, 'Name', titleString);
-    end
-    
     function copySettings(obj, that)
         % copy display settings from another viewer
         obj.DisplayRange = that.DisplayRange;
@@ -357,14 +316,24 @@ end
 
 %% Zoom Management
 methods
-    function zoom = getZoom(obj)
+    function zoom = currentZoomLevel(obj)
         api = iptgetapi(obj.Handles.ScrollPanel);
         zoom = api.getMagnification();
     end
     
-    function setZoom(obj, newZoom)
+    function zoom = getZoom(obj)
+        warning('getZoom is deprecated, use currentZoomLevel instead');
+        zoom = currentZoomLevel(obj);
+    end
+    
+    function setCurrentZoomLevel(obj, newZoom)
         api = iptgetapi(obj.Handles.ScrollPanel);
         api.setMagnification(newZoom);
+    end
+    
+    function setZoom(obj, newZoom)
+        warning('setZoom is deprecated, use setCurrentZoomLevel instead');
+        setCurrentZoomLevel(obj, newZoom);
     end
     
     function zoom = findBestZoom(obj)

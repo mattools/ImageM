@@ -46,8 +46,6 @@ methods (Abstract)
     % Refresh display of current image.
     updateDisplay(obj);
     
-    % Set up title of the figure, depending on image info.
-    updateTitle(obj);
 end
 
 %% Constructor
@@ -69,6 +67,61 @@ end % end constructors
 
 %% Methods
 methods
+
+    function updateTitle(obj)
+        % Set up title of the figure, depending on image size and type.
+        
+        % small checkup, because function can be called before figure was
+        % initialised
+        if ~isfield(obj.Handles, 'Figure')
+            return;
+        end
+        
+        if isempty(obj.Doc) || isempty(obj.Doc.Image)
+            return;
+        end
+        
+        % setup name to display
+        imgName = imageNameForDisplay(obj.Doc);
+    
+        % determine the type to display:
+        % * data type for intensity / grayscale image
+        % * type of image otherwise
+        switch obj.Doc.Image.Type
+            case 'grayscale'
+                type = class(obj.Doc.Image.Data);
+            case 'color'
+                type = 'color';
+            otherwise
+                type = obj.Doc.Image.Type;
+        end
+        
+        % compute image zoom
+        zoom = currentZoomLevel(obj);
+        
+        % compute new title string
+        nd = ndims(obj.Doc.Image);
+        sizePattern = ['%d' repmat(' x %d', 1, nd-1)];
+        sizeString = sprintf(sizePattern, size(obj.Doc.Image));
+        zoomString = sprintf('%g:%g', max(1, zoom), max(1, 1/zoom));
+        titlePattern = '%s [%s %s] - %s - ImageM';
+        titleString = sprintf(titlePattern, imgName, sizeString, type, zoomString);
+%         titlePattern = 'ImageM - %s [%d x %d %s] - %g:%g';
+%         titleString = sprintf(titlePattern, imgName, ...
+%             size(obj.Doc.Image), type, max(1, zoom), max(1, 1/zoom));
+%         % compute new title string 
+%         titlePattern = 'ImageM - %s [%d x %d x %d %s] - %g:%g';
+%         titleString = sprintf(titlePattern, imgName, ...
+%             size(obj.Doc.Image), type, max(1, zoom), max(1, 1/zoom));
+
+        % display new title
+        set(obj.Handles.Figure, 'Name', titleString);
+    end
+    
+    function z = currentZoomLevel(obj) %#ok<MANU>
+        % Default method for returning zoom level (default value is 1).
+        z = 1;
+    end
 end % end methods
 
 end % end classdef

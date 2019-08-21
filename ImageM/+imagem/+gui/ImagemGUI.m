@@ -50,7 +50,7 @@ methods
         if isempty(image)
             % in case of empty image, create an "empty view"
             doc = [];
-            viewer = imagem.Gui.PlanarImageViewer(obj, doc);
+            viewer = imagem.gui.PlanarImageViewer(obj, doc);
             return;
         end
         
