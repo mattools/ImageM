@@ -1,4 +1,4 @@
-classdef FlipImageAction < imagem.gui.actions.CurrentImageAction
+classdef FlipImage < imagem.actions.CurrentImageAction
 % Flip current image.
 %
 %   Class FlipImageAction
@@ -11,7 +11,7 @@ classdef FlipImageAction < imagem.gui.actions.CurrentImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2012-05-18,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2012 INRA - Cepia Software Platform.
 
@@ -24,10 +24,8 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = FlipImageAction(viewer, axis, varargin)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'flipImage');
-        if nargin > 1
+    function obj = FlipImage(axis)
+        if nargin > 0
             obj.Axis = axis;
         end
     end
@@ -37,19 +35,19 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
          
         % flip image
-        doc = currentDoc(obj);
+        doc = currentDoc(frame);
         res = flip(doc.Image, obj.Axis);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(obj, res);
+        newDoc = addImageDocument(frame, res);
         
         % add history
         string = sprintf('%s = flip(%s, %d);\n', ...
              newDoc.Tag, doc.Tag, obj.Axis);
-        addToHistory(obj, string);
+        addToHistory(frame, string);
     end
 end
 

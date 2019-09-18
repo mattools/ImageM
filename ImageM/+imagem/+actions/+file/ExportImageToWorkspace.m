@@ -1,10 +1,10 @@
-classdef ExportImageToWorkspaceAction < imagem.gui.actions.CurrentImageAction
-% Export image to workspace.
+classdef ExportImageToWorkspace < imagem.actions.CurrentImageAction
+% Export current image to workspace.
 %
-%   Class ExportImageToWorkspaceAction
+%   Class ExportImageToWorkspace
 %
 %   Example
-%   ExportImageToWorkspaceAction
+%   ExportImageToWorkspace
 %
 %   See also
 %
@@ -23,11 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = ExportImageToWorkspaceAction(viewer)
-    % Constructor for ExportImageToWorkspaceAction class
-        
-        % calls the viewer constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'exportImageToWorkspace');
+    function obj = ExportImageToWorkspace()
     end
 
 end % end constructors
@@ -35,7 +31,7 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         disp('Export current image to workspace');
         
         % open dialog to input image name
@@ -50,8 +46,7 @@ methods
             return;
         end
         
-        assignin('base', answer{1}, currentImage(obj));
-        
+        assignin('base', answer{1}, currentImage(frame));
     end
 end % end methods
 

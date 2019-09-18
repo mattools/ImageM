@@ -1,10 +1,10 @@
-classdef CloseImageAction < imagem.gui.actions.CurrentImageAction
+classdef CloseFrame < imagem.actions.CurrentImageAction
 % Close the current ImageM figure.
 %
-%   output = CloseImageAction(input)
+%   output = CloseFrame(input)
 %
 %   Example
-%   CloseImageAction
+%   CloseFrame
 %
 %   See also
 %
@@ -16,23 +16,20 @@ classdef CloseImageAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function obj = CloseImageAction(viewer, varargin)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'closeImage');
+    function obj = CloseFrame()
     end
 end
 
 methods
-    function actionPerformed(obj, varargin)
+    function run(obj, frame) %#ok<INUSL>
 %         disp('Close image action');
         
-        viewer = obj.Viewer;
-        doc = viewer.Doc;
+        doc = frame.Doc;
         
-        close(viewer);
+        close(frame);
         
         if isempty(getViews(doc))
-            app = viewer.Gui.App;
+            app = frame.Gui.App;
             removeDocument(app, doc);
         end
     end

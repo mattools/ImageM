@@ -1,17 +1,17 @@
-classdef ImportImageFromWorkspaceAction < imagem.gui.ImagemAction
-%OPENIMAGEACTION Open an image from a file
+classdef ImportImageFromWorkspace < imagem.gui.Action
+% Import an image from workspace.
 %
 %   Class ImportImageFromWorkspaceAction
 %
 %   Example
-%   ImportImageFromWorkspaceAction
+%   ImportImageFromWorkspace
 %
 %   See also
 %
-%
+
 % ------
 % Author: David Legland
-% e-mail: david.legland@grignon.inra.fr
+% e-mail: david.legland@inra.fr
 % Created: 2011-11-07,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -23,11 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function this = ImportImageFromWorkspaceAction(viewer)
-    % Constructor for ImportImageFromWorkspaceAction class
-        
-        % calls the parent constructor
-        this = this@imagem.gui.ImagemAction(viewer, 'importImageFromWorkspace');
+    function this = ImportImageFromWorkspace()
     end
 
 end % end constructors
@@ -35,13 +31,9 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(this, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         disp('Import image from workspace');
-        
-        % get handle to viewer figure, and current doc
-        viewer = this.viewer;
-        gui = viewer.gui;
-        
+                
         % open dialog to input image name
         prompt = {'Enter Variable Name:'};
         title = 'Import From Workspace';
@@ -59,11 +51,11 @@ methods
         if isa(data, 'Image')
             img = data;
         else
-            img = Image('data');
+            img = Image(data);
         end
         
         % add image to application, and create new display
-        addImageDocument(gui, img);
+        addImageDocument(frame, img);
     end
 end % end methods
 

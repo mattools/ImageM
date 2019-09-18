@@ -1,4 +1,4 @@
-classdef OpenDemoImageAction < imagem.gui.ImagemAction
+classdef OpenDemoImage < imagem.gui.Action
 % Open and display one of the demo images.
 %
 %   Class OpenDemoImageAction
@@ -24,11 +24,8 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = OpenDemoImageAction(viewer, name, imageName)
-    % Constructor for OpenDemoImageAction class
-        
-        % calls the parent constructor
-        obj = obj@imagem.gui.ImagemAction(viewer, name);
+    function obj = OpenDemoImage(imageName)
+        % Constructor for OpenDemoImage class
         
         % initialize image name
         obj.ImageName = imageName;
@@ -39,19 +36,19 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
         
         % read the demo image
         img = Image.read(obj.ImageName);
         
         % add image to application, and create new display
-        doc = addImageDocument(obj, img);
+        doc = addImageDocument(frame, img);
         
         tag = doc.Tag;
                 
         % history
         string = sprintf('%s = Image.read(''%s'');\n', tag, obj.ImageName);
-        addToHistory(obj.Viewer.Gui.App, string);        
+        addToHistory(frame, string);        
     end
 end % end methods
 

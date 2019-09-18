@@ -1,5 +1,5 @@
-classdef SplitImageRGBAction < imagem.gui.actions.CurrentImageAction
-%SPLITIMAGERGBACTION  One-line description here, please.
+classdef SplitImageRGB < imagem.actions.CurrentImageAction
+% Split the three channels from a color image.
 %
 %   Class SplitImageRGBAction
 %
@@ -19,8 +19,7 @@ classdef SplitImageRGBAction < imagem.gui.actions.CurrentImageAction
 
 %% Constructor
 methods
-    function obj = SplitImageRGBAction(viewer, varargin)
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'splitImageRGB');
+    function obj = SplitImageRGB()
     end
 
 end % end constructors
@@ -28,11 +27,10 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         
-        % get handle to viewer figure, and current doc
-        viewer = obj.Viewer;
-        doc = viewer.Doc;
+        % get handle to current doc
+        doc = frame.Doc;
         
         if ~isColorImage(doc.Image)
             errordlg('Requires a Color image', 'Image Format Error');
@@ -43,21 +41,21 @@ methods
         [red, green, blue] = splitChannels(doc.Image);
         
         % add new images to application, and create new displays
-        docR = addImageDocument(viewer.Gui, red, [], 'red');
-        docG = addImageDocument(viewer.Gui, green, [], 'green');
-        docB = addImageDocument(viewer.Gui, blue, [], 'blue');
+        docR = addImageDocument(frame, red, [], 'red');
+        docG = addImageDocument(frame, green, [], 'green');
+        docB = addImageDocument(frame, blue, [], 'blue');
         
         % add history
-        string = sprintf('[%s %s %s] = splitChannels(%s);\n', ...
+        string = sprintf('[%s, %s, %s] = splitChannels(%s);\n', ...
             docR.Tag, docG.Tag, docB.Tag, doc.Tag);
-        addToHistory(viewer.Gui.App, string);
-        
+        addToHistory(frame, string);
     end
+    
 end % end methods
 
 methods
-    function b = isActivable(obj)
-        doc = obj.Viewer.Doc;
+    function b = isActivable(obj, frame) %#ok<INUSL>
+        doc = frame.Doc;
         b = ~isempty(doc) && ~isempty(doc.Image) && isColorImage(doc.Image);
     end
 end

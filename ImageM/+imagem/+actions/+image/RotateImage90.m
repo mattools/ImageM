@@ -1,10 +1,10 @@
-classdef RotateImage90Action < imagem.gui.actions.CurrentImageAction
+classdef RotateImage90 < imagem.actions.CurrentImageAction
 % Rotate current image by 90 degrees.
 %
-%   Class RotateImage90Action
+%   Class RotateImage90
 %
 %   Example
-%   RotateImage90Action
+%   RotateImage90
 %
 %   See also
 %
@@ -24,11 +24,9 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = RotateImage90Action(viewer, number, varargin)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'rotateImage');
-        if nargin > 1
-            obj.Number = number;
+    function obj = RotateImage90(varargin)
+        if ~isempty(varargin)
+            obj.Number = varargin{1};
         end
     end
 
@@ -37,21 +35,21 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
         
-        % get handle to viewer figure, and current doc
-        doc = currentDoc(obj);
+        % get handle to current doc
+        doc = currentDoc(frame);
         
         % flip image
         res = rotate90(doc.Image, obj.Number);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(obj, res);
+        newDoc = addImageDocument(frame, res);
         
         % history
         string = sprintf('%s = rotate90(%s, %d);\n', ...
             newDoc.Tag, doc.Tag, obj.Number);
-        addToHistory(obj, string);
+        addToHistory(frame, string);
     end
 end
 

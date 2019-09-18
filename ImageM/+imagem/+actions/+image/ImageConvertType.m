@@ -1,4 +1,4 @@
-classdef ImageConvertTypeAction < imagem.gui.actions.CurrentImageAction
+classdef ImageConvertType < imagem.actions.CurrentImageAction
 % Convert the type of the current image.
 %
 %   Class ImageConvertTypeAction
@@ -24,12 +24,8 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = ImageConvertTypeAction(viewer, typeName)
-        % Constructor for ImageConvertTypeAction class
-        
-        % calls the parent constructor
-        name = ['convertType-' typeName];
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, name);
+    function obj = ImageConvertType(typeName)
+        % Constructor for ImageConvertType class
         
         % init inner fields
         obj.TypeName = typeName;
@@ -40,24 +36,24 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
         if isempty(obj.TypeName)
             return;
         end
         
         % get handle to current doc
-        doc = currentDoc(obj);
+        doc = currentDoc(frame);
         
         % apply the conversion operation
         res = Image(doc.Image, 'type', obj.TypeName);
         
         % create a new doc
-        newDoc = addImageDocument(obj, res);
+        newDoc = addImageDocument(frame, res);
         
         % add history
         string = sprintf('%s = Image(%s, ''type'', ''%s'');\n', ...
             newDoc.Tag, doc.Tag, obj.TypeName);
-        addToHistory(obj, string);
+        addToHistory(frame, string);
     end
 end % end methods
 

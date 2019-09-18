@@ -1,5 +1,5 @@
-classdef SplitImageChannelsAction < imagem.gui.actions.VectorImageAction
-% Split image channels.
+classdef SplitImageChannels < imagem.actions.VectorImageAction
+% Split the channels from a multi-channel image.
 %
 %   Class SplitImageChannelsAction
 %
@@ -18,8 +18,7 @@ classdef SplitImageChannelsAction < imagem.gui.actions.VectorImageAction
 
 %% Constructor
 methods
-    function obj = SplitImageChannelsAction(viewer, varargin)
-        obj = obj@imagem.gui.actions.VectorImageAction(viewer, 'splitImageChannels');
+    function obj = SplitImageChannels()
     end
 
 end % end constructors
@@ -27,24 +26,23 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         disp('Split Image channels');
         
-        % get handle to viewer figure, and current doc
-        viewer = obj.Viewer;
-        doc = viewer.Doc;
+        % get handle to current doc
+        doc = frame.Doc;
         
         if ~isVectorImage(doc.Image)
             errordlg('Requires a Vector image', 'Image Format Error');
             return;
         end
         
-        % extract the ifferent channels
+        % extract the different channels
         channels = splitChannels(doc.Image);
         
         % add new images to application, and create new displays
         for i = 1:length(channels)
-            addImageDocument(viewer.Gui, channels{i});
+            addImageDocument(frame, channels{i});
         end
         
     end

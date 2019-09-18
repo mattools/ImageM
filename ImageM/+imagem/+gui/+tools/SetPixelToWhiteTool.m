@@ -55,7 +55,7 @@ methods
             return;
         end
         
-        point = get(obj.viewer.handles.ImageAxis, 'CurrentPoint');
+        point = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
         coord = round(pointToIndex(obj, point(1, 1:2)));
         
         % control on bounds of image
@@ -65,7 +65,7 @@ methods
         
         doc.Image(coord(1), coord(2)) = 255;
         
-        updateDisplay(obj.viewer);
+        updateDisplay(obj.Viewer);
    end
    
    function index = pointToIndex(obj, point)

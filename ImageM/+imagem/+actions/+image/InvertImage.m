@@ -1,4 +1,4 @@
-classdef InvertImageAction < imagem.gui.actions.CurrentImageAction
+classdef InvertImage < imagem.actions.CurrentImageAction
 % Invert the current image.
 %
 %   output = InvertImageAction(input)
@@ -16,27 +16,25 @@ classdef InvertImageAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function obj = InvertImageAction(viewer)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'invertImage');
+    function obj = InvertImage()
     end
 end
 
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         
         % get handle to viewer figure, and current doc
-        doc = currentDoc(obj);
+        doc = currentDoc(frame);
         
         % apply 'invert' operation
-        img2 = invert(currentImage(obj));
+        img2 = invert(currentImage(frame));
         
         % add image to application, and create new display
-        newDoc = addImageDocument(obj, img2);
+        newDoc = addImageDocument(frame, img2);
         
         % history
         string = sprintf('%s = invert(%s);\n', newDoc.Tag, doc.Tag);
-        addToHistory(obj, string);
+        addToHistory(frame, string);
     end
 end
 

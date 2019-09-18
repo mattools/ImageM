@@ -1,4 +1,4 @@
-classdef RenameImageAction < imagem.gui.actions.CurrentImageAction
+classdef RenameImage < imagem.actions.CurrentImageAction
 % Rename the current image.
 %
 %   Class RenameImageAction
@@ -23,11 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = RenameImageAction(viewer)
-    % Constructor for RenameImageAction class
-    
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'renameImage');
+    function obj = RenameImage()
     end
 
 end % end constructors
@@ -35,11 +31,11 @@ end % end constructors
 
 %% Methods
 methods
-     function actionPerformed(obj, src, event) %#ok<INUSD>
+     function run(obj, frame) %#ok<INUSL>
          
          % extract app data
-         image = currentImage(obj);
-         app = obj.Viewer.Gui.App;
+         image = currentImage(frame);
+         app = frame.Gui.App;
          
          % setup widget options
          prompt = {'New image name:'};
@@ -58,7 +54,7 @@ methods
              % if new name is valid, update title and escape
              if ~hasDocumentWithName(app, newName) || strcmp(newName, image.Name)
                  image.Name = newName;
-                 updateTitle(obj.Viewer);
+                 updateTitle(frame);
                  return;
              end
              

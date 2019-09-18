@@ -121,61 +121,60 @@ end % general methods
 
 %% GUI Creation methods
 methods
-    function createFigureMenu(obj, hf, viewer) %#ok<INUSL>
+    function createFigureMenu(obj, hf, frame) %#ok<INUSL>
         
         import imagem.gui.ImagemGUI;
         import imagem.gui.actions.*;
+        import imagem.actions.file.*;
+        import imagem.actions.image.*;
         import imagem.gui.tools.*;
                 
         % File Menu Definition
         
         fileMenu = ImagemGUI.addMenu(hf, 'Files');
         
-        item = ImagemGUI.addMenuItem(fileMenu, CreateImageAction(viewer), 'New...');
+        item = addMenuItem(fileMenu, CreateImage(), 'New...');
         set(item, 'Accelerator', 'N');
         
-        item = ImagemGUI.addMenuItem(fileMenu, ...
-            OpenImageAction(viewer), 'Open...');
+        item = addMenuItem(fileMenu, OpenImage(), 'Open...');
         set(item, 'Accelerator', 'O');
 
 
         demoMenu = ImagemGUI.addMenu(fileMenu, 'Open Demo');
         
-        action = OpenDemoImageAction(viewer, 'openDemoCameraman', 'cameraman.tif');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Cameraman (grayscale)');
+        action = OpenDemoImage('cameraman.tif');
+        addMenuItem(demoMenu, action, 'Cameraman (grayscale)');
         
-        action = OpenDemoImageAction(viewer, 'openDemoRice', 'rice.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Rice (grayscale)');
+        action = OpenDemoImage('rice.png');
+        addMenuItem(demoMenu, action, 'Rice (grayscale)');
         
-        action = OpenDemoImageAction(viewer, 'openDemoCoins', 'coins.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Coins (grayscale)');
+        action = OpenDemoImage('coins.png');
+        addMenuItem(demoMenu, action, 'Coins (grayscale)');
         
-        action = OpenDemoImageAction(viewer, 'openDemoPeppers', 'peppers.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Peppers (RGB)');
+        action = OpenDemoImage('peppers.png');
+        addMenuItem(demoMenu, action, 'Peppers (RGB)');
         
-        action = OpenDemoImageAction(viewer, 'openDemoCircles', 'circles.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Circles (binary)');
+        action = OpenDemoImage('circles.png');
+        addMenuItem(demoMenu, action, 'Circles (binary)');
         
-        action = OpenDemoImageAction(viewer, 'openDemoText', 'text.png');
-        ImagemGUI.addMenuItem(demoMenu, action, 'Text (binary)');
+        action = OpenDemoImage('text.png');
+        addMenuItem(demoMenu, action, 'Text (binary)');
         
-        ImagemGUI.addMenuItem(fileMenu, ImportImageFromWorkspaceAction(viewer), 'Import From Workspace...');
+        addMenuItem(fileMenu, ImportImageFromWorkspace(), 'Import From Workspace...');
         
         
-        item = ImagemGUI.addMenuItem(fileMenu, ...
-            SaveImageAction(viewer), 'Save As...', true);
+        item = addMenuItem(fileMenu, SaveImage(), 'Save As...', true);
         set(item, 'Accelerator', 'S');
 
-        ImagemGUI.addMenuItem(fileMenu, ExportImageToWorkspaceAction(viewer), 'Export To Workspace...');
+        addMenuItem(fileMenu, ExportImageToWorkspace(), 'Export To Workspace...');
         
         ImagemGUI.addMenuItem(fileMenu, ...
-            SaveSelectionAction(viewer), 'Save Selection...', true);
+            SaveSelectionAction(frame), 'Save Selection...', true);
 
-        item = ImagemGUI.addMenuItem(fileMenu, ...
-            CloseImageAction(viewer), 'Close', true);
+        item = addMenuItem(fileMenu, CloseFrame(), 'Close', true);
         set(item, 'Accelerator', 'W');
 
-        item = ImagemGUI.addMenuItem(fileMenu, ExitAction(viewer), 'Quit');
+        item = addMenuItem(fileMenu, Exit(), 'Quit');
         set(item, 'Accelerator', 'Q');
         
         
@@ -183,100 +182,97 @@ methods
         
         imageMenu = ImagemGUI.addMenu(hf, 'Image');
         
-        convertTypeMenu = ImagemGUI.addMenu(imageMenu, 'Convert Type');
-        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'binary'),  'Binary');
-        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'grayscale'),  'Grayscale');
-        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'intensity'),  'Intensity');
-        ImagemGUI.addMenuItem(convertTypeMenu, ImageConvertTypeAction(viewer, 'label'),  'Label');
+        convertTypeMenu = ImagemGUI.addMenu(imageMenu,  'Convert Type');
+        addMenuItem(convertTypeMenu, ImageConvertType('binary'),    'Binary');
+        addMenuItem(convertTypeMenu, ImageConvertType('grayscale'), 'Grayscale');
+        addMenuItem(convertTypeMenu, ImageConvertType('intensity'), 'Intensity');
+        addMenuItem(convertTypeMenu, ImageConvertType('label'),     'Label');
         
-        ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 1),  'Horizontal Flip', true);
-        ImagemGUI.addMenuItem(imageMenu, FlipImageAction(viewer, 2),  'Vertical Flip');
-        ImagemGUI.addMenuItem(imageMenu, RotateImage90Action(viewer, 1),  'Rotate Right');
-        ImagemGUI.addMenuItem(imageMenu, RotateImage90Action(viewer, -1),  'Rotate Left');
+        addMenuItem(imageMenu, FlipImage(1),        'Horizontal Flip', true);
+        addMenuItem(imageMenu, FlipImage(2),        'Vertical Flip');
+        addMenuItem(imageMenu, RotateImage90(1),    'Rotate Right');
+        addMenuItem(imageMenu, RotateImage90(-1),   'Rotate Left');
 
-        ImagemGUI.addMenuItem(imageMenu, SplitImageRGBAction(viewer),       'Split RGB', true);
-        ImagemGUI.addMenuItem(imageMenu, SplitImageChannelsAction(viewer),  'Split Channels');
-        ImagemGUI.addMenuItem(imageMenu, MergeChannelsAction(viewer),       'Merge Channels...');
+        addMenuItem(imageMenu, SplitImageRGB(),         'Split RGB', true);
+        addMenuItem(imageMenu, SplitImageChannels(),    'Split Channels');
+        addMenuItem(imageMenu, MergeImageChannels(),    'Merge Channels...');
 
-        item = ImagemGUI.addMenuItem(imageMenu, ...
-            InvertImageAction(viewer), 'Invert Image');
+        item = addMenuItem(imageMenu, InvertImage(),    'Invert Image');
         set(item, 'Accelerator', 'I');
         
-        ImagemGUI.addMenuItem(imageMenu, RenameImageAction(viewer),         'Rename', true);
-        item = ImagemGUI.addMenuItem(imageMenu, DuplicateImageAction(viewer),      'Duplicate');
+        addMenuItem(imageMenu, RenameImage(),           'Rename', true);
+        item = addMenuItem(imageMenu, DuplicateImage(), 'Duplicate');
         set(item, 'Accelerator', 'D');
-        ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(viewer), 	'Crop Selection');
+        ImagemGUI.addMenuItem(imageMenu, CropImageSelectionAction(frame), 	'Crop Selection');
         
         
         settingsMenu = ImagemGUI.addMenu(imageMenu, 'Settings', 'Separator', 'on');
-        ImagemGUI.addMenuItem(settingsMenu, ...
-            SetDefaultConnectivityAction(viewer), 'Set Connectivity');
-        ImagemGUI.addMenuItem(settingsMenu, ...
-            SetBrushSizeAction(viewer), 'Set Brush Size');
+        addMenuItem(settingsMenu, SetDefaultConnectivity(), 'Set Connectivity');
+        addMenuItem(settingsMenu, SetBrushSize(),       'Set Brush Size');
         
         
         % View Menu Definition
         
         viewMenu = ImagemGUI.addMenu(hf, 'View');
 
-        ImagemGUI.addMenuItem(viewMenu, ImageSetDisplayRangeAction(viewer), 'Set Display Range...');
+        ImagemGUI.addMenuItem(viewMenu, ImageSetDisplayRangeAction(frame), 'Set Display Range...');
 
         lutMenu = ImagemGUI.addMenu(viewMenu, 'Look-Up Table');
-        ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'gray'), 'Gray');
-        ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'inverted'), 'Inverted');
-        ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(viewer, 'blue-gray-red'), 'Blue-Gray-Red');
+        ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(frame, 'gray'), 'Gray');
+        ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(frame, 'inverted'), 'Inverted');
+        ImagemGUI.addMenuItem(lutMenu, ChangeImageLutAction(frame, 'blue-gray-red'), 'Blue-Gray-Red');
         
-        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(viewer, 'jet'), 'Jet', true);
-        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(viewer, 'hsv'), 'HSV');
-        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(viewer, 'colorcube'), 'Color Cube');
-        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(viewer, 'prism'), 'Prism');
+        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(frame, 'jet'), 'Jet', true);
+        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(frame, 'hsv'), 'HSV');
+        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(frame, 'colorcube'), 'Color Cube');
+        ImagemGUI.addMenuItem(lutMenu , ChangeImageLutAction(frame, 'prism'), 'Prism');
         
         matlabLutMenu = ImagemGUI.addMenu(lutMenu, 'Matlab''s');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'hot'), 'Hot');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'cool'), 'Cool');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'spring'), 'Spring');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'summer'), 'Summer');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'winter'), 'Winter');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'autumn'), 'Autumn');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'copper'), 'Copper');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'bone'), 'Bone');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'pink'), 'Pink');
-        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(viewer, 'lines'), 'Lines');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'hot'), 'Hot');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'cool'), 'Cool');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'spring'), 'Spring');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'summer'), 'Summer');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'winter'), 'Winter');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'autumn'), 'Autumn');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'copper'), 'Copper');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'bone'), 'Bone');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'pink'), 'Pink');
+        ImagemGUI.addMenuItem(matlabLutMenu, ChangeImageLutAction(frame, 'lines'), 'Lines');
         
         colorLutMenu = ImagemGUI.addMenu(lutMenu, 'Simple Colors');
-        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'blue'), 'Blue');
-        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'red'), 'Red');
-        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'green'), 'Green');
-        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'cyan'), 'Cyan');
-        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'yellow'), 'Yellow');
-        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(viewer, 'magenta'), 'Magenta');
+        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(frame, 'blue'), 'Blue');
+        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(frame, 'red'), 'Red');
+        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(frame, 'green'), 'Green');
+        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(frame, 'cyan'), 'Cyan');
+        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(frame, 'yellow'), 'Yellow');
+        ImagemGUI.addMenuItem(colorLutMenu, ChangeImageLutAction(frame, 'magenta'), 'Magenta');
 
         
         ImagemGUI.addMenuItem(viewMenu, ...
-            ZoomInAction(viewer), 'Zoom In', true);
+            ZoomInAction(frame), 'Zoom In', true);
         ImagemGUI.addMenuItem(viewMenu, ...
-            ZoomOutAction(viewer), 'Zoom Out');
+            ZoomOutAction(frame), 'Zoom Out');
         ImagemGUI.addMenuItem(viewMenu, ...
-            ZoomOneAction(viewer), 'Zoom 1:1');
+            ZoomOneAction(frame), 'Zoom 1:1');
 
-        ImagemGUI.addMenuItem(viewMenu, ZoomBestAction(viewer), 'Zoom Best');
+        ImagemGUI.addMenuItem(viewMenu, ZoomBestAction(frame), 'Zoom Best');
         
         zoomsMenu = ImagemGUI.addMenu(viewMenu, 'Others');
-        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 8), 'Zoom 8:1');
-        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 4), 'Zoom 4:1');
-        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 2), 'Zoom 2:1');
-        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1), 'Zoom 1:1');
-        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/2), 'Zoom 1:2');
-        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/4), 'Zoom 1:4');
-        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(viewer, 1/8), 'Zoom 1:8');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(frame, 8), 'Zoom 8:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(frame, 4), 'Zoom 4:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(frame, 2), 'Zoom 2:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(frame, 1), 'Zoom 1:1');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(frame, 1/2), 'Zoom 1:2');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(frame, 1/4), 'Zoom 1:4');
+        ImagemGUI.addMenuItem(zoomsMenu, ZoomChangeAction(frame, 1/8), 'Zoom 1:8');
 
         zoomModesMenu = ImagemGUI.addMenu(viewMenu, 'Zoom Mode');
-        adjustZoomAction = ZoomSetModeAction(viewer, 'adjust');
+        adjustZoomAction = ZoomSetModeAction(frame, 'adjust');
         mi1 = ImagemGUI.addMenuItem(zoomModesMenu, adjustZoomAction, 'Adjust');
         set(mi1, 'Checked', 'on');
         setMenuItem(adjustZoomAction, mi1);
         
-        fixedZoomAction = ZoomSetModeAction(viewer, 'fixed');
+        fixedZoomAction = ZoomSetModeAction(frame, 'fixed');
         mi2 = ImagemGUI.addMenuItem(zoomModesMenu, fixedZoomAction, 'Fixed');
         setMenuItem(fixedZoomAction, mi2);
 
@@ -288,123 +284,123 @@ methods
 %         createCheckedMenuGroup([mi1 mi2], mi1);
         
         ImagemGUI.addMenuItem(viewMenu, ...
-            PrintImageDocListAction(viewer), 'Print Image List', true);
+            PrintImageDocListAction(frame), 'Print Image List', true);
         
         
         % Process Menu Definition
         
         processMenu = ImagemGUI.addMenu(hf, 'Process');
         
-        ImagemGUI.addMenuItem(processMenu, ImageAdjustDynamicAction(viewer),    'Adjust Dynamic');
-        ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(viewer),       'Label To RGB...');
+        ImagemGUI.addMenuItem(processMenu, ImageAdjustDynamicAction(frame),    'Adjust Dynamic');
+        ImagemGUI.addMenuItem(processMenu, ImageLabelToRgbAction(frame),       'Label To RGB...');
 
 %         ImagemGUI.addMenuItem(processMenu, ImageMeanFilter3x3Action(viewer),    'Mean', true);
-        ImagemGUI.addMenuItem(processMenu, ImageBoxMeanFilterAction(viewer),    'Box Mean Filter...', true);
-        ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(viewer),     'Median Filter...');
-        ImagemGUI.addMenuItem(processMenu, ImageGaussianFilterAction(viewer),     'Gaussian Filter...');
+        ImagemGUI.addMenuItem(processMenu, ImageBoxMeanFilterAction(frame),    'Box Mean Filter...', true);
+        ImagemGUI.addMenuItem(processMenu, ImageMedianFilterAction(frame),     'Median Filter...');
+        ImagemGUI.addMenuItem(processMenu, ImageGaussianFilterAction(frame),     'Gaussian Filter...');
                 
         morphoMenu = ImagemGUI.addMenu(processMenu, 'Morphology');
-        ImagemGUI.addMenuItem(morphoMenu, ImageErosionAction(viewer),     'Erosion 3x3');
-        ImagemGUI.addMenuItem(morphoMenu, ImageDilationAction(viewer),    'Dilation 3x3');
-        ImagemGUI.addMenuItem(morphoMenu, ImageOpeningAction(viewer),     'Opening 3x3');
-        ImagemGUI.addMenuItem(morphoMenu, ImageClosingAction(viewer),     'Closing 3x3');    
-        ImagemGUI.addMenuItem(morphoMenu, ImageMorphologicalFilterAction(viewer), ...
+        ImagemGUI.addMenuItem(morphoMenu, ImageErosionAction(frame),     'Erosion 3x3');
+        ImagemGUI.addMenuItem(morphoMenu, ImageDilationAction(frame),    'Dilation 3x3');
+        ImagemGUI.addMenuItem(morphoMenu, ImageOpeningAction(frame),     'Opening 3x3');
+        ImagemGUI.addMenuItem(morphoMenu, ImageClosingAction(frame),     'Closing 3x3');    
+        ImagemGUI.addMenuItem(morphoMenu, ImageMorphologicalFilterAction(frame), ...
             'Morphological Filter...', true);    
         
-        item = ImagemGUI.addMenuItem(processMenu, ImageThresholdAction(viewer),  ...
+        item = ImagemGUI.addMenuItem(processMenu, ImageThresholdAction(frame),  ...
             'Threshold...', true);
         set(item, 'Accelerator', 'T');
-        ImagemGUI.addMenuItem(processMenu, ImageAutoThresholdOtsuAction(viewer),  'Auto Threshold (Otsu)');
-        item = ImagemGUI.addMenuItem(processMenu, ImageGradientAction(viewer),   'Gradient', true);
+        ImagemGUI.addMenuItem(processMenu, ImageAutoThresholdOtsuAction(frame),  'Auto Threshold (Otsu)');
+        item = ImagemGUI.addMenuItem(processMenu, ImageGradientAction(frame),   'Gradient', true);
         set(item, 'Accelerator', 'G');
-        ImagemGUI.addMenuItem(processMenu, ImageMorphoGradientAction(viewer), ...
+        ImagemGUI.addMenuItem(processMenu, ImageMorphoGradientAction(frame), ...
             'Morphological Gradient');
-        ImagemGUI.addMenuItem(processMenu, ImageGradientVectorAction(viewer),   'Gradient Vector');
-        ImagemGUI.addMenuItem(processMenu, ImageNormAction(viewer),       'Norm');
+        ImagemGUI.addMenuItem(processMenu, ImageGradientVectorAction(frame),   'Gradient Vector');
+        ImagemGUI.addMenuItem(processMenu, ImageNormAction(frame),       'Norm');
 
         minimaMenu = ImagemGUI.addMenu(processMenu, 'Minima / Maxima', 'Separator', 'on');
-        ImagemGUI.addMenuItem(minimaMenu, ImageRegionalMinimaAction(viewer), 'Regional Minima');
-        ImagemGUI.addMenuItem(minimaMenu, ImageRegionalMaximaAction(viewer), 'Regional Maxima');
-        ImagemGUI.addMenuItem(minimaMenu, ImageExtendedMinimaAction(viewer), 'Extended Minima...');
-        ImagemGUI.addMenuItem(minimaMenu, ImageExtendedMaximaAction(viewer), 'Extended Maxima...');
-        ImagemGUI.addMenuItem(minimaMenu, ImageImposeMinimaAction(viewer),   'Impose Minima...');
+        ImagemGUI.addMenuItem(minimaMenu, ImageRegionalMinimaAction(frame), 'Regional Minima');
+        ImagemGUI.addMenuItem(minimaMenu, ImageRegionalMaximaAction(frame), 'Regional Maxima');
+        ImagemGUI.addMenuItem(minimaMenu, ImageExtendedMinimaAction(frame), 'Extended Minima...');
+        ImagemGUI.addMenuItem(minimaMenu, ImageExtendedMaximaAction(frame), 'Extended Maxima...');
+        ImagemGUI.addMenuItem(minimaMenu, ImageImposeMinimaAction(frame),   'Impose Minima...');
         
-        ImagemGUI.addMenuItem(processMenu, ImageWatershedAction(viewer),      'Watershed...');
-        ImagemGUI.addMenuItem(processMenu, ImageExtendedMinWatershedAction(viewer), ...
+        ImagemGUI.addMenuItem(processMenu, ImageWatershedAction(frame),      'Watershed...');
+        ImagemGUI.addMenuItem(processMenu, ImageExtendedMinWatershedAction(frame), ...
             'Extended Min Watershed...');
         
-        ImagemGUI.addMenuItem(processMenu, ImageArithmeticAction(viewer), ...
+        ImagemGUI.addMenuItem(processMenu, ImageArithmeticAction(frame), ...
             'Image Arithmetic...', true);
-        ImagemGUI.addMenuItem(processMenu, ImageValuesTransformAction(viewer), ...
+        ImagemGUI.addMenuItem(processMenu, ImageValuesTransformAction(frame), ...
             'Image Maths 1...');
-        ImagemGUI.addMenuItem(processMenu, ImageMathematicAction(viewer), ...
+        ImagemGUI.addMenuItem(processMenu, ImageMathematicAction(frame), ...
             'Image Maths 2...');
         
         binaryMenu = ImagemGUI.addMenu(processMenu, 'Binary / Labels', 'Separator', 'on');
-        ImagemGUI.addMenuItem(binaryMenu, KillImageBordersAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, KillImageBordersAction(frame), ...
             'Kill Borders');
-        ImagemGUI.addMenuItem(binaryMenu, ImageAreaOpeningAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, ImageAreaOpeningAction(frame), ...
             'Area Opening');
-        ImagemGUI.addMenuItem(binaryMenu, KeepLargestRegionAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, KeepLargestRegionAction(frame), ...
             'Keep Largest Region');
-        ImagemGUI.addMenuItem(binaryMenu, FillImageHolesAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, FillImageHolesAction(frame), ...
             'Fill Holes');
 
         ImagemGUI.addMenuItem(binaryMenu, ...
-            ApplyImageFunctionAction(viewer, 'distanceMap'), ...
+            ApplyImageFunctionAction(frame, 'distanceMap'), ...
             'Distance Map');
 
-        ImagemGUI.addMenuItem(binaryMenu, ImageSkeletonAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, ImageSkeletonAction(frame), ...
             'Skeleton');
-        ImagemGUI.addMenuItem(binaryMenu, LabelBinaryImageAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, LabelBinaryImageAction(frame), ...
             'Connected Components Labeling');
         
-        ImagemGUI.addMenuItem(binaryMenu, ImageBooleanOpAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, ImageBooleanOpAction(frame), ...
             'Image Arithmetic...', true);
-        ImagemGUI.addMenuItem(binaryMenu, ImageOverlayAction(viewer), ...
+        ImagemGUI.addMenuItem(binaryMenu, ImageOverlayAction(frame), ...
             'Image Overlay');
         
         % Interactive tools
         
         toolsMenu = ImagemGUI.addMenu(hf, 'Tools');
         
-        tool = PrintCurrentPointTool(viewer);
-        ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
+        tool = PrintCurrentPointTool(frame);
+        ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(frame, tool), ...
             'Print Current Point');
 
-        tool = ScrollImagePositionTool(viewer);
-        ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(viewer, tool), ...
+        tool = ScrollImagePositionTool(frame);
+        ImagemGUI.addMenuItem(toolsMenu, SelectToolAction(frame, tool), ...
             'Scroll Image');
         
         
         
         ImagemGUI.addMenuItem(toolsMenu, ...
-            SelectToolAction(viewer, SelectRectangleTool(viewer)), ...
+            SelectToolAction(frame, SelectRectangleTool(frame)), ...
             'Select Rectangle', true);
 
         ImagemGUI.addMenuItem(toolsMenu, ...
-            SelectToolAction(viewer, SelectPolylineTool(viewer)), ...
+            SelectToolAction(frame, SelectPolylineTool(frame)), ...
             'Select Polyline');
 
         ImagemGUI.addMenuItem(toolsMenu, ...
-            SelectToolAction(viewer, SelectPointsTool(viewer)), ...
+            SelectToolAction(frame, SelectPointsTool(frame)), ...
             'Select Points');
 
         ImagemGUI.addMenuItem(toolsMenu, ...
-            SelectToolAction(viewer, SelectLineSegmentTool(viewer)), ...
+            SelectToolAction(frame, SelectLineSegmentTool(frame)), ...
             'Select Line Segment');
 
 
         ImagemGUI.addMenuItem(toolsMenu, ...
-            SelectToolAction(viewer, SetPixelToWhiteTool(viewer)), ...
+            SelectToolAction(frame, SetPixelToWhiteTool(frame)), ...
             'Set Pixel to White', true);
         
         ImagemGUI.addMenuItem(toolsMenu, ...
-            SelectToolAction(viewer, BrushTool(viewer)), ...
+            SelectToolAction(frame, BrushTool(frame)), ...
             'Brush');
         
         ImagemGUI.addMenuItem(toolsMenu, ...
-            PlotLabelMapCurvesFromTable(viewer), ...
+            PlotLabelMapCurvesFromTable(frame), ...
             'Plot Curves From Labels...');
         
         
@@ -413,16 +409,16 @@ methods
         analyzeMenu = ImagemGUI.addMenu(hf, 'Analyze');
         
         ImagemGUI.addMenuItem(analyzeMenu, ...
-            SetImageScaleAction(viewer), 'Set Image Scale');
+            SetImageScaleAction(frame), 'Set Image Scale');
 
         ImagemGUI.addMenuItem(analyzeMenu, ...
-            ImageAnalyzeParticlesAction(viewer), 'Analyze Particles');
+            ImageAnalyzeParticlesAction(frame), 'Analyze Particles');
         item = ImagemGUI.addMenuItem(analyzeMenu, ...
-            ShowImageHistogramAction(viewer), 'Histogram');
+            ShowImageHistogramAction(frame), 'Histogram');
         set(item, 'Accelerator', 'H');
 
         item = ImagemGUI.addMenuItem(analyzeMenu, ...
-            ImageSelectionLineProfileAction(viewer), ...
+            ImageSelectionLineProfileAction(frame), ...
             'Plot Line Profile');
         set(item, 'Accelerator', 'K');
         
@@ -431,8 +427,8 @@ methods
         helpMenu = ImagemGUI.addMenu(hf, 'Help');
         
         ImagemGUI.addMenuItem(helpMenu, ...
-            GenericAction(viewer, 'printHistory', ...
-            @(src, evt) viewer.Gui.App.printHistory), ...
+            GenericAction(frame, 'printHistory', ...
+            @(src, evt) frame.Gui.App.printHistory), ...
             'Print History');
         
         
@@ -459,6 +455,34 @@ methods
 %             
 %             disp('check box ground initialized');
 %         end
+
+        function item = addMenuItem(menu, action, label, varargin)
+            % Add a new menu item given as an "Action" instance
+            
+            % Compute menu position as a set of recursive index positions
+            children = get(menu, 'children');
+            children = children(strcmp(get(children, 'type'), 'uimenu'));
+            ind = length(children) + 1;
+            data = get(menu, 'UserData');
+            inds = [data.Inds ind];
+            
+            % create user data associated with obj menu
+            data = struct('Action', action, 'Inds', inds);
+            
+            % creates new item
+            item = uimenu(menu, 'Label', label, ...
+                'UserData', data, ...
+                'Callback', @(src, evt) action.run(frame));
+            
+            % eventually add separator above item
+            if ~isempty(varargin)
+                var = varargin{1};
+                if islogical(var)
+                    set(item, 'Separator', 'On');
+                end
+            end
+        end
+        
     end
     
 
@@ -520,7 +544,6 @@ methods (Static)
                 set(item, 'Separator', 'On');
             end
         end
-        
     end
     
     

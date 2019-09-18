@@ -1,10 +1,10 @@
-classdef SaveImageAction < imagem.gui.actions.CurrentImageAction
-% Open an image from a file.
+classdef SaveImage < imagem.actions.CurrentImageAction
+% Save the current image into a file.
 %
-%   Class SaveImageAction
+%   Class SaveImage
 %
 %   Example
-%   SaveImageAction
+%   SaveImage
 %
 %   See also
 %
@@ -23,11 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = SaveImageAction(viewer)
-    % Constructor for SaveImageAction class
-        
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'saveImage');
+    function obj = SaveImage()
     end
 
 end % end constructors
@@ -35,7 +31,7 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         disp('Save current image');
         
         % Open dialog to save image
@@ -54,9 +50,8 @@ methods
             return;
         end
 
-
         % try to save the current image
-        doc = currentDoc(obj);
+        doc = currentDoc(frame);
         img = doc.Image;
         try
             write(img, fullfile(pathName, fileName));
@@ -68,7 +63,7 @@ methods
         % add history
         string = sprintf('write(%s, ''%s'');\n', ...
             doc.Tag, fullfile(pathName, fileName));
-        addToHistory(obj, string);
+        addToHistory(frame, string);
         
     end % end actionPerformed
     

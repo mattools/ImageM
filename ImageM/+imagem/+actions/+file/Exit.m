@@ -1,4 +1,4 @@
-classdef ExitAction < imagem.gui.ImagemAction
+classdef Exit < imagem.gui.Action
 % Close the application.
 %
 %   output = ExitAction(input)
@@ -16,16 +16,9 @@ classdef ExitAction < imagem.gui.ImagemAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function obj = ExitAction(viewer, varargin)
-        % calls the viewer constructor
-        obj = obj@imagem.gui.ImagemAction(viewer, 'quit');
-    end
-end
-
-methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
         disp('quit...');
-        exit(obj.Viewer.Gui);
+        exit(frame.Gui);
     end
 end
 

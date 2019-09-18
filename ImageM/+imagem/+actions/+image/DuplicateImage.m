@@ -1,4 +1,4 @@
-classdef DuplicateImageAction < imagem.gui.actions.CurrentImageAction
+classdef DuplicateImage < imagem.actions.CurrentImageAction
 % Duplicate the current image.
 %
 %   Class DuplicateImageAction
@@ -23,11 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = DuplicateImageAction(viewer)
-    % Constructor for DuplicateImageAction class
-    
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'duplicateImage');
+    function obj = DuplicateImage()
     end
 
 end % end constructors
@@ -35,12 +31,12 @@ end % end constructors
 
 %% Methods
 methods
-     function actionPerformed(obj, src, event) %#ok<INUSD>
+     function run(obj, frame) %#ok<INUSL,INUSD>
          
-         image = clone(currentImage(obj));
+         image = clone(currentImage(frame));
          
          % add image to application, and create new display
-         addImageDocument(obj, image);
+         addImageDocument(frame, image);
          
      end
 end % end methods

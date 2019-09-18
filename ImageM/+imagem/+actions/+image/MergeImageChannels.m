@@ -1,13 +1,13 @@
-classdef MergeChannelsAction < imagem.gui.ImagemAction
+classdef MergeImageChannels < imagem.gui.Action
 % Merge three grayscale images to create a color image.
 %
-%   Class ImageArithmeticAction
+%   Class MergeImageChannels
 %
 %   Example
-%   ImageArithmeticAction
+%   MergeImageChannels
 %
 %   See also
-%
+%     SplitImageChannels
 
 % ------
 % Author: David Legland
@@ -20,35 +20,33 @@ classdef MergeChannelsAction < imagem.gui.ImagemAction
 properties
     Handles;
     
-    OpList = {@plus, @minus, @times, @rdivide};
-    OpNames = {'Plus', 'Minus', 'Times', 'Divides'};
-    
+    Frame;
+        
 end % end properties
 
 
 %% Constructor
 methods
-    function obj = MergeChannelsAction(viewer)
-    % Constructor for MergeChannelsAction class
-        obj = obj@imagem.gui.ImagemAction(viewer, 'mergeChannels');
+    function obj = MergeImageChannels()
     end
 
 end % end constructors
 
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
         disp('merge channels');
         
-        createFigure(obj);
+        obj.Frame = frame;
+        createFigure(obj, frame);
     end
     
-    function hf = createFigure(obj)
+    function hf = createFigure(obj, refFrame)
         
-        gui = obj.Viewer.Gui;
+        gui = refFrame.Gui;
         
         % action figure
         hf = figure(...
-            'Name', 'Image Arithmetic', ...
+            'Name', 'Merge Channels', ...
             'NumberTitle', 'off', ...
             'MenuBar', 'none', 'Toolbar', 'none');
         set(hf, 'units', 'pixels');
@@ -105,7 +103,7 @@ end
 methods
     function onButtonOK(obj, varargin)        
         
-        app = obj.Viewer.Gui.App;
+        app = obj.Frame.Gui.App;
         
         doc1 = getDocument(app, get(obj.Handles.RedChannelList, 'Value'));
         img1 = doc1.Image;
@@ -130,12 +128,12 @@ methods
         res = Image.createRGB(img1, img2, img3);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(obj, res);
+        newDoc = addImageDocument(obj.Frame, res);
         
         % add history
         string = sprintf('%s = Image.createRGB(%s, %s, %s));\n', ...
             newDoc.Tag, doc1.Tag, doc2.Tag, doc3.Tag);
-        addToHistory(app, string);
+        addToHistory(obj.Frame, string);
 
         closeFigure(obj);
     end

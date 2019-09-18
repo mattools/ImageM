@@ -156,6 +156,42 @@ methods
     end
 end % end methods
 
+%% Utility methods
+methods
+    function doc = currentDoc(obj)
+        doc = obj.Doc;
+    end
+    
+    function img = currentImage(obj)
+        % Return the current image (may be empty)
+        img = [];
+        doc = obj.Doc;
+        if ~isempty(doc)
+            img = doc.Image;
+        end
+    end
+    
+    function updatePreviewImage(obj, image)
+        % Update preview image of document and refresh display
+        obj.Doc.PreviewImage = image;
+        updateDisplay(obj);
+    end
+    
+    function clearPreviewImage(obj)
+        % Clear preview image of document and refresh display
+        obj.Doc.PreviewImage = [];
+        updateDisplay(obj);
+    end
+    
+    function [doc, viewer] = addImageDocument(obj, image, varargin)
+        % Create a new frame for the image based on the current viewer.
+        [doc, viewer] = addImageDocument(obj.Gui, image, varargin{:});
+    end
+    
+    function addToHistory(obj, string)
+        addToHistory(obj.Gui.App, string);
+    end
+end
 
 %% Mouse listeners management
 methods

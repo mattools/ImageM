@@ -1,4 +1,4 @@
-classdef CreateImageAction < imagem.gui.ImagemAction
+classdef CreateImage < imagem.gui.Action
 % Open a dialog to create a new image.
 %
 %   Class CreateImageAction
@@ -23,19 +23,16 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = CreateImageAction(viewer)
-    % Constructor for CreateImageAction class
-        obj = obj@imagem.gui.ImagemAction(viewer, 'createImage');
+    function obj = CreateImage()
     end
 
 end % end constructors
 
 
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         disp('create a new image');
         
-
         prompt = {'Size X:', 'Size Y:', 'Data type:', 'Fill with:'};
         name = 'Create a new image';
         numLines = 1;
@@ -73,13 +70,10 @@ methods
         img = Image.create([dimX dimY], dataType);
         img(:) = fillValue;
         
-        addImageDocument(obj, img);
+        addImageDocument(frame, img);
     end
     
-    
-    
 end
-
 
 end % end classdef
 

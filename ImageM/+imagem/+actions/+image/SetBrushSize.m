@@ -1,5 +1,5 @@
-classdef SetBrushSizeAction < imagem.gui.ImagemAction
-% Changes the size of the brush.
+classdef SetBrushSize < imagem.gui.Action
+% Change the size of the brush.
 %
 %   Class SetBrushSizeAction
 %
@@ -18,35 +18,25 @@ classdef SetBrushSizeAction < imagem.gui.ImagemAction
 
 %% Properties
 properties
-    Handles;
-    
-    Conn2d;
-    Conn3d;
-    
-    Conn2dValues = [4 8];
-    Conn3dValues = [6 26];
-    
 end % end properties
 
 
 %% Constructor
 methods
-    function obj = SetBrushSizeAction(viewer)
-    % Constructor for SetBrushSizeAction class
-        obj = obj@imagem.gui.ImagemAction(viewer, 'setBrushSize');
+    function obj = SetBrushSize()
     end
 
 end % end constructors
 
 
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL,INUSD>
         disp('set brush size');
 
         answer = inputdlg(...
             'Enter the brush size (in pixels):', ...
             'Input Brush size', ...
-            1, {num2str(obj.Viewer.Gui.App.BrushSize)});
+            1, {num2str(frame.Gui.App.BrushSize)});
         
         if isempty(answer)
             return;
@@ -57,8 +47,7 @@ methods
             errordlg('Could not understand brush size');
         end
         
-        obj.Viewer.Gui.App.BrushSize = size;
-        
+        frame.Gui.App.BrushSize = size;
     end
     
 end

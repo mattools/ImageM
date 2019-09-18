@@ -1,10 +1,10 @@
-classdef SetDefaultConnectivityAction < imagem.gui.ImagemAction
-% Changes default connectivity in App.
+classdef SetDefaultConnectivity < imagem.gui.Action
+% Change default connectivity in App.
 %
-%   Class SetDefaultConnectivityAction
+%   Class SetDefaultConnectivity
 %
 %   Example
-%   SetDefaultConnectivityAction
+%   SetDefaultConnectivity
 %
 %   See also
 %
@@ -20,31 +20,34 @@ classdef SetDefaultConnectivityAction < imagem.gui.ImagemAction
 properties
     Handles;
     
+    Frame;
+    
     Conn2d;
     Conn3d;
     
     Conn2dValues = [4 8];
     Conn3dValues = [6 26];
+    
 end % end properties
 
 
 %% Constructor
 methods
-    function obj = SetDefaultConnectivityAction(viewer)
-    % Constructor for SetDefaultConnectivityAction class
-        obj = obj@imagem.gui.ImagemAction(viewer, 'setDefaultConnectivity');
-        
-        app = viewer.Gui.App;
-        obj.Conn2d = getDefaultConnectivity(app, 2);
-        obj.Conn3d = getDefaultConnectivity(app, 3);
+    function obj = SetDefaultConnectivity()
     end
 
 end % end constructors
 
 
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
         disp('set connectivity');
+
+        % Constructor for SetDefaultConnectivityAction class
+        obj.Frame = frame;
+        app = frame.Gui.App;
+        obj.Conn2d = getDefaultConnectivity(app, 2);
+        obj.Conn3d = getDefaultConnectivity(app, 3);
 
         f = figure(...
             'Name', 'Set Connectivity', ...
@@ -53,7 +56,7 @@ methods
         obj.Handles.Figure = f;
         
         % compute background color of most widgets
-        bgColor = getWidgetBackgroundColor(obj.Viewer.Gui);
+        bgColor = getWidgetBackgroundColor(obj.Frame.Gui);
         
         % vertical layout
         vb  = uix.VBox('Parent', f, 'Spacing', 5, 'Padding', 5);
@@ -118,7 +121,7 @@ end
 methods
     function onButtonOK(obj, varargin)        
         % apply the threshold operation
-        app = obj.Viewer.Gui.App;
+        app = obj.Frame.Gui.App;
         setDefaultConnectivity(app, 2, obj.Conn2d);
         setDefaultConnectivity(app, 3, obj.Conn3d);
         close(obj.Handles.Figure);
