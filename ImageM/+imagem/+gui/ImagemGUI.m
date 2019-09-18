@@ -403,6 +403,10 @@ methods
             SelectToolAction(viewer, BrushTool(viewer)), ...
             'Brush');
         
+        ImagemGUI.addMenuItem(toolsMenu, ...
+            PlotLabelMapCurvesFromTable(viewer), ...
+            'Plot Curves From Labels...');
+        
         
         % Analyze Menu Definition
         
