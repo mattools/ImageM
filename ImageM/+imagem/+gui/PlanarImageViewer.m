@@ -36,15 +36,10 @@ properties
     % 'fixed'   -> keep previous zoom factor
     ZoomMode = 'adjust';
     
-    % The set of mouse listeners, stored as a cell array.
-    MouseListeners = [];
-    
-    % The currently selected tool.
-    CurrentTool = [];
-    
     % A selected shape.
     Selection = [];
 end
+
 
 %% Constructor
 methods
@@ -316,54 +311,7 @@ methods
 end
 
 
-%% Mouse listeners management
-methods
-    function addMouseListener(obj, listener)
-        % Add a mouse listener to obj viewer
-        obj.MouseListeners = [obj.MouseListeners {listener}];
-    end
-    
-    function removeMouseListener(obj, listener)
-        % Remove a mouse listener from obj viewer
-        
-        % find which listeners are the same as the given one
-        inds = false(size(obj.MouseListeners));
-        for i = 1:numel(obj.MouseListeners)
-            if obj.MouseListeners{i} == listener
-                inds(i) = true;
-            end
-        end
-        
-        % remove first existing listener
-        inds = find(inds);
-        if ~isempty(inds)
-            obj.MouseListeners(inds(1)) = [];
-        end
-    end
-    
-    function processMouseButtonPressed(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
-        for i = 1:length(obj.MouseListeners)
-            onMouseButtonPressed(obj.MouseListeners{i}, hObject, eventdata);
-        end
-    end
-    
-    function processMouseButtonReleased(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
-        for i = 1:length(obj.MouseListeners)
-            onMouseButtonReleased(obj.MouseListeners{i}, hObject, eventdata);
-        end
-    end
-    
-    function processMouseMoved(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
-        for i = 1:length(obj.MouseListeners)
-            onMouseMoved(obj.MouseListeners{i}, hObject, eventdata);
-        end
-    end
-end
-
-%% Mouse listeners management
+%% Key listeners management
 methods
     function onKeyPressed(obj, hObject, eventdata) %#ok<INUSL>
 %         disp(['key pressed: ' eventdata.Character]);

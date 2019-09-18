@@ -18,7 +18,7 @@ classdef ImageViewer < handle
 %     end % end classdef
 %
 %   See also
-%     PlanarImageViewer
+%     PlanarImageViewer, Image3DSliceViewer
 %
 
 % ------
@@ -38,8 +38,39 @@ properties
     
     % The image document.
     Doc;
+
+    
+    % The set of mouse listeners, stored as a cell array.
+    MouseListeners = [];
+    
+    % The currently selected tool.
+    CurrentTool = [];
     
 end % end properties
+
+
+%% Getter / Setter methods
+methods
+    function set.CurrentTool(obj, newTool)
+        
+        % remove previous tool
+        if ~isempty(obj.CurrentTool)
+            deselect(obj.CurrentTool);
+            removeMouseListener(obj, obj.CurrentTool);
+        end
+        
+        % set the new tool
+        obj.CurrentTool = newTool;
+        
+        % initialize new tool if not empty
+        if ~isempty(newTool)
+            select(newTool);
+            addMouseListener(obj, newTool);
+        end
+    end
+    
+end % getter / setter methods
+
 
 %% Abstract methods
 methods (Abstract)
@@ -47,6 +78,7 @@ methods (Abstract)
     updateDisplay(obj);
     
 end
+
 
 %% Constructor
 methods
@@ -123,6 +155,54 @@ methods
         z = 1;
     end
 end % end methods
+
+
+%% Mouse listeners management
+methods
+    function addMouseListener(obj, listener)
+        % Add a mouse listener to obj viewer
+        obj.MouseListeners = [obj.MouseListeners {listener}];
+    end
+    
+    function removeMouseListener(obj, listener)
+        % Remove a mouse listener from obj viewer
+        
+        % find which listeners are the same as the given one
+        inds = false(size(obj.MouseListeners));
+        for i = 1:numel(obj.MouseListeners)
+            if obj.MouseListeners{i} == listener
+                inds(i) = true;
+            end
+        end
+        
+        % remove first existing listener
+        inds = find(inds);
+        if ~isempty(inds)
+            obj.MouseListeners(inds(1)) = [];
+        end
+    end
+    
+    function processMouseButtonPressed(obj, hObject, eventdata)
+        % propagates mouse event to all listeners
+        for i = 1:length(obj.MouseListeners)
+            onMouseButtonPressed(obj.MouseListeners{i}, hObject, eventdata);
+        end
+    end
+    
+    function processMouseButtonReleased(obj, hObject, eventdata)
+        % propagates mouse event to all listeners
+        for i = 1:length(obj.MouseListeners)
+            onMouseButtonReleased(obj.MouseListeners{i}, hObject, eventdata);
+        end
+    end
+    
+    function processMouseMoved(obj, hObject, eventdata)
+        % propagates mouse event to all listeners
+        for i = 1:length(obj.MouseListeners)
+            onMouseMoved(obj.MouseListeners{i}, hObject, eventdata);
+        end
+    end
+end
 
 end % end classdef
 

@@ -36,21 +36,7 @@ methods
         viewer = obj.Viewer;
         obj.Tool.Viewer = viewer;
         
-        % remove previous tool
-        currentTool = viewer.CurrentTool;
-        if ~isempty(currentTool)
-            deselect(currentTool);
-            removeMouseListener(viewer, currentTool);
-        end
-        
-        % choose the new tool
         viewer.CurrentTool = obj.Tool;
-        
-        % initialize new tool if not empty
-        if ~isempty(obj.Tool)
-            select(obj.Tool);
-            addMouseListener(viewer, obj.Tool);
-        end
     end
 end
 
