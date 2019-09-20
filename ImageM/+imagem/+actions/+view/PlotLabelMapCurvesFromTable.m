@@ -1,4 +1,4 @@
-classdef PlotLabelMapCurvesFromTable < imagem.gui.actions.LabelImageAction
+classdef PlotLabelMapCurvesFromTable < imagem.actions.LabelImageAction
 % One-line description here, please.
 %
 %   Class PlotLabelMapCurvesFromTable
@@ -24,11 +24,6 @@ end % end properties
 %% Constructor
 methods
     function obj = PlotLabelMapCurvesFromTable(viewer)
-        % Constructor for PlotLabelMapCurvesFromTable class
-        
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.LabelImageAction(viewer, 'plotLabelMapCurvesFromTable');
-
     end
 
 end % end constructors
@@ -36,7 +31,7 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL>
         disp('plot label map curves from data table');
         
         [fileName, pathName] = uigetfile( ...
@@ -56,10 +51,8 @@ methods
         tablePath = fullfile(pathName, fileName);
         tab = Table.read(tablePath);
         
-        viewer = obj.Viewer;
-        tool = imagem.gui.tools.PlotClickedLabelCurve(obj.Viewer, tab);
-        
-        viewer.CurrentTool = tool;
+        tool = imagem.tools.PlotClickedLabelCurve(frame, tab);
+        frame.CurrentTool = tool;
     end
 end % end methods
 

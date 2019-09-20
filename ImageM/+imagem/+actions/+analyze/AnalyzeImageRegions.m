@@ -1,7 +1,7 @@
-classdef ImageAnalyzeParticlesAction < imagem.gui.actions.LabelImageAction
+classdef AnalyzeImageRegions < imagem.actions.LabelImageAction
 % Compute geometrical descriptors of particles.
 %
-%   output = ImageAnalyzeParticlesAction(input)
+%   output = AnalyzeImageRegions(input)
 %
 %   Example
 %   ImageAnalyzeParticlesAction
@@ -19,6 +19,8 @@ properties
     % liste of handles to widgets
     Handles;
     
+    Viewer;
+    
 %     % the name of the image to draw overlay
 %     overlayImageName = '';
 %     
@@ -31,17 +33,16 @@ end
 
 
 methods
-    function obj = ImageAnalyzeParticlesAction(viewer, varargin)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.LabelImageAction(viewer, 'imageAnalyzeParticles');
+    function obj = AnalyzeImageRegions()
     end
 end
 
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
-        disp('analyze particles');
+    function run(obj, frame)
+        disp('analyze regions');
         
         % setup display
+        obj.Viewer = frame;
         createFigure(obj);
     end
     
@@ -49,7 +50,7 @@ methods
         % compute the selected features on the current image and return table 
         
         % get current image
-        img = currentImage(obj);
+        img = currentImage(obj.Viewer);
         
         % identify features to compute
         areaFlag        = get(obj.Handles.AreaCheckBox, 'Value');
@@ -153,38 +154,6 @@ methods
         end
         
         tab.Name = [img.Name '-features'];
-%         % extract parameters
-%         props = regionprops(img.Data', {...
-%             'Area', 'Perimeter', 'Centroid', ...
-%             'MajorAxisLength', 'MinorAxisLength', 'Orientation'});
-% 
-%         % format to column vectors
-%         areas = [props.Area]';
-%         perim = [props.Perimeter]';
-%         centro = reshape([props.Centroid], 2, length(props))';
-%         major = [props.MajorAxisLength]';
-%         minor = [props.MinorAxisLength]';
-%         theta = -[props.Orientation]';
-        
-% %         % create data table
-% %         data = [areas perim centro major minor theta];
-% %         tab = Table(data, 'colNames', ...
-% %             {'Area', 'Perimeter', 'CentroidX', 'CentroidY', ...
-% %             'MajorAxisLength', 'MinorAxisLength', 'Orientation'});
-
-        % display data table in its own window
-        show(tab);
-        
-%         % display overlay of ellipses
-%         ellis = [centro major/2 minor/2 theta];
-%         shape = struct(...
-%             'type', 'ellipse', ...
-%             'data', ellis, ...
-%             'style', {{'-b', 'LineWidth', 1}});
-%         obj.Viewer.doc.shapes = {shape};
-        
-        updateDisplay(obj.Viewer);
-        
     end
 end
 
@@ -387,14 +356,13 @@ methods
         gui = obj.Viewer.Gui;
         imageName = get(obj.Handles.OverlayImagePopup, 'Value');
         docToOverlay = getDocument(gui.App, imageName);
-
         
         closeFigure(obj);
 
         % display data table in its own window
         show(tab);
         
-        img = currentImage(obj);
+        img = currentImage(obj.Viewer);
         
         switch lower(overlayType)
             case 'none'

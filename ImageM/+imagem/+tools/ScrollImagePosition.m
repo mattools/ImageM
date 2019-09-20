@@ -1,4 +1,4 @@
-classdef ScrollImagePositionTool < imagem.gui.ImagemTool
+classdef ScrollImagePosition < imagem.gui.Tool
 % Move the position of the viewbox.
 %
 %   Class SelectLineSegmentTool
@@ -27,9 +27,9 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = ScrollImagePositionTool(viewer, varargin)
+    function obj = ScrollImagePosition(viewer, varargin)
         % Constructor for SelectLineSegmentTool class
-        obj = obj@imagem.gui.ImagemTool(viewer, 'scrollImagePosition');
+        obj = obj@imagem.gui.Tool(viewer, 'scrollImagePosition');
     end
 
 end % end constructors

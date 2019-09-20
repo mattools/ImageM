@@ -1,4 +1,4 @@
-classdef ShowImageHistogramAction < imagem.gui.actions.CurrentImageAction
+classdef ShowImageHistogram < imagem.actions.CurrentImageAction
 % Display histogram of current image.
 %
 %   output = ShowImageHistogramAction(input)
@@ -16,19 +16,17 @@ classdef ShowImageHistogramAction < imagem.gui.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function obj = ShowImageHistogramAction(viewer, varargin)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'showImageHistogram');
+    function obj = ShowImageHistogram()
     end
 end
 
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL>
         disp('Show image histogram');
         
         % open figure to display histogram
         figure;
-        histogram(currentImage(obj));
+        histogram(currentImage(frame));
     end
 end
 

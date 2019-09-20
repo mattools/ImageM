@@ -15,7 +15,7 @@ classdef PlanarImageViewer < imagem.gui.ImageViewer
 %     viewer = imagem.gui.PlanarImageViewer(obj, doc);
 %
 %   See also
-%     ImagemGUI, PlanarImageViewer, imagem.app.ImagemDoc
+%     ImagemGUI, PlanarImageViewer, ImagemDoc
 %
 
 % ------
@@ -89,7 +89,7 @@ methods
             set(fig, 'WindowButtonMotionFcn',   @obj.processMouseMoved);
 
             % setup mouse listener for display of mouse coordinates
-            tool = imagem.gui.tools.ShowCursorPositionTool(obj, 'showMousePosition');
+            tool = imagem.tools.ShowCursorPosition(obj, 'showMousePosition');
             addMouseListener(obj, tool);
             
             % setup key listener

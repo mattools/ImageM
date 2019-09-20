@@ -1,4 +1,4 @@
-classdef PrintCurrentPointTool < imagem.gui.ImagemTool
+classdef PrintCurrentPointPosition < imagem.gui.Tool
 % Print position of current point.
 %
 %   output = PrintCurrentPointTool(input)
@@ -18,9 +18,8 @@ classdef PrintCurrentPointTool < imagem.gui.ImagemTool
 
 %% Constructor
 methods
-    function obj = PrintCurrentPointTool(viewer, varargin)
-        % Creates a new tool using parent gui and a name
-         obj = obj@imagem.gui.ImagemTool(viewer, 'printCurrentPoint');
+    function obj = PrintCurrentPointPosition(viewer, varargin)
+        obj = obj@imagem.gui.Tool(viewer, 'printCurrentPointPosition');
     end % constructor 
 
 end % construction function

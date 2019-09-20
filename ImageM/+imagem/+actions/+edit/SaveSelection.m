@@ -1,4 +1,4 @@
-classdef SaveSelectionAction < imagem.gui.actions.CurrentImageAction
+classdef SaveSelection < imagem.actions.CurrentImageAction
 % Save current selection in text file.
 %
 %   Class SaveSelectionAction
@@ -23,11 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = SaveSelectionAction(viewer)
-    % Constructor for SaveSelectionAction class
-    
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'saveSelection');
+    function obj = SaveSelection()
     end
 
 end % end constructors
@@ -35,12 +31,11 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSL>
 
         disp('Save current image selection');
         
-        viewer = obj.Viewer;
-        selection = viewer.Selection;
+        selection = frame.Selection;
         if isempty(selection)
             errordlg('No selection in current image');
             return;

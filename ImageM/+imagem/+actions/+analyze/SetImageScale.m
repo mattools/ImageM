@@ -1,4 +1,4 @@
-classdef SetImageScaleAction < imagem.gui.actions.CurrentImageAction
+classdef SetImageScale < imagem.actions.CurrentImageAction
 % Set image scale.
 %
 %   Class SetImageScaleAction
@@ -19,14 +19,13 @@ classdef SetImageScaleAction < imagem.gui.actions.CurrentImageAction
 %% Properties
 properties
     Handles;
+    Viewer;
 end % end properties
 
 
 %% Constructor
 methods
-    function obj = SetImageScaleAction(viewer)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'setImageScale');
+    function obj = SetImageScale()
     end
 
 end % end constructors
@@ -34,9 +33,10 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame)
         disp('set image scale');
         
+        obj.Viewer = frame;
         createFigure(obj);
         updateWidgets(obj);
     end
@@ -95,7 +95,7 @@ methods
     
     function closeFigure(obj, varargin)
         % clean up viewer figure
-        clearPreviewImage(obj);
+        clearPreviewImage(obj.Viewer);
         
         % close the current fig
         if ishandle(obj.Handles.Figure)
@@ -126,7 +126,7 @@ methods
         
         unit = get(obj.Handles.UnitText, 'String');
         
-        img = currentImage(obj);
+        img = currentImage(obj.Viewer);
         
         
         disp(distPx);

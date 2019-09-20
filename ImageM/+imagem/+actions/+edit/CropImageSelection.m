@@ -1,4 +1,4 @@
-classdef CropImageSelectionAction < imagem.gui.actions.CurrentImageAction
+classdef CropImageSelection < imagem.actions.CurrentImageAction
 % Crop current rectangular selection.
 %
 %   Class CropImageSelectionAction
@@ -23,11 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = CropImageSelectionAction(viewer)
-    % Constructor for CropImageSelectionAction class
-    
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'cropImageSelection');
+    function obj = CropImageSelection()
     end
 
 end % end constructors
@@ -35,9 +31,9 @@ end % end constructors
 
 %% Methods
 methods
-     function actionPerformed(obj, src, event) %#ok<INUSD>
+     function run(obj, frame) %#ok<INUSL>
          
-         selection = obj.Viewer.Selection;
+         selection = frame.Selection;
          if isempty(selection)
              warndlg('Requires a non empty selection', ...
                  'Empty Selection', 'modal');
@@ -53,19 +49,19 @@ methods
          
          box = selection.Data;
          box = round(box);
-         cropped = crop(currentImage(obj), box);
+         cropped = crop(currentImage(frame), box);
          
          % add image to application, and create new display
-         newDoc = addImageDocument(obj, cropped);
+         newDoc = addImageDocument(frame, cropped);
          
-         tag = obj.Viewer.Doc.Tag;
+         tag = frame.Doc.Tag;
          newTag = newDoc.Tag;
          
          % history
-         nd = ndims(currentImage(obj));
+         nd = ndims(currentImage(frame));
          pattern = ['%s = crop(%s, [' repmat(' %d %d', 1, nd) ']);\n'];
          string = sprintf(pattern, newTag, tag, box);
-         addToHistory(obj, string);
+         addToHistory(frame, string);
          
      end
 end % end methods

@@ -1,10 +1,10 @@
-classdef ImageSelectionLineProfileAction < imagem.gui.actions.CurrentImageAction
+classdef PlotImageLineProfile < imagem.actions.CurrentImageAction
 % Plot line profile of current selection.
 %
-%   Class ImageSelectionLineProfileAction
+%   Class PlotImageLineProfile
 %
 %   Example
-%   ImageSelectionLineProfileAction
+%   PlotImageLineProfile
 %
 %   See also
 %
@@ -18,16 +18,13 @@ classdef ImageSelectionLineProfileAction < imagem.gui.actions.CurrentImageAction
 
 %% Properties
 properties
+    Viewer;
 end % end properties
 
 
 %% Constructor
 methods
-    function obj = ImageSelectionLineProfileAction(viewer)
-    % Constructor for ImageSelectionLineProfileAction class
-    
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.CurrentImageAction(viewer, 'selectionLineProfile');
+    function obj = PlotImageLineProfile()
     end
 
 end % end constructors
@@ -35,10 +32,10 @@ end % end constructors
 
 %% Methods
 methods
-    function actionPerformed(obj, src, event) %#ok<INUSD>
+    function run(obj, frame) %#ok<INUSD>
         
-        viewer = obj.Viewer;
-        selection = viewer.Selection;
+        obj.Viewer = frame;
+        selection = frame.Selection;
         if isempty(selection)
             return;
         end
@@ -76,7 +73,7 @@ methods
         
         
         % extract corresponding pixel values (nearest-neighbor eval)
-        img = currentImage(obj);
+        img = currentImage(frame);
         vals = interp(img, pts);
         
 
@@ -114,4 +111,3 @@ methods
 end % end methods
 
 end % end classdef
-

@@ -1,4 +1,4 @@
-classdef LineProfileTool < imagem.gui.ImagemTool
+classdef LineProfile < imagem.gui.Tool
 % Draw linear profile.
 %
 %   Class LineProfileTool
@@ -31,9 +31,9 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = LineProfileTool(viewer, varargin)
+    function obj = LineProfile(viewer, varargin)
         % Constructor for LineProfileTool class
-        obj = obj@imagem.gui.ImagemTool(viewer, 'lineProfile');
+        obj = obj@imagem.gui.Tool(viewer, 'lineProfile');
         
         % setup state
         obj.State = 1;

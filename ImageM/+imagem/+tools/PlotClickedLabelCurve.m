@@ -1,4 +1,4 @@
-classdef PlotClickedLabelCurve < imagem.gui.ImagemTool
+classdef PlotClickedLabelCurve < imagem.gui.Tool
 %PLOTCLICKEDLABELCURVE  One-line description here, please.
 %
 %   Class PlotClickedLabelCurve
@@ -32,7 +32,7 @@ methods
     function obj = PlotClickedLabelCurve(viewer, tab, varargin)
         % Constructor for PlotClickedLabelCurve class
 
-        obj = obj@imagem.gui.ImagemTool(viewer, 'plotLabelCurve');
+        obj = obj@imagem.gui.Tool(viewer, 'plotLabelCurve');
         
         obj.Table = tab;
         
@@ -56,8 +56,6 @@ methods
 
     function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
 
-        disp('click...');
-        
         doc = obj.Viewer.Doc;
         img = doc.Image;
         
@@ -75,7 +73,7 @@ methods
         end
         
         currentLabel = img(coord(1), coord(2));
-        fprintf('Current Label: %d\n', currentLabel);
+%         fprintf('Current Label: %d\n', currentLabel);
         if currentLabel < 1
             return;
         end

@@ -1,10 +1,10 @@
-classdef SelectPolylineTool < imagem.gui.ImagemTool
-% Select a polyline, right-click to end.
+classdef SelectLineSegment < imagem.gui.Tool
+% Select a line segment.
 %
-%   Class SelectPolylineTool
+%   Class SelectLineSegmentTool
 %
 %   Example
-%   SelectPolylineTool
+%   SelectLineSegmentTool
 %
 %   See also
 %
@@ -18,7 +18,7 @@ classdef SelectPolylineTool < imagem.gui.ImagemTool
 
 %% Properties
 properties
-    Positions;
+    Pos1;
     
     LineHandle;
         
@@ -27,9 +27,9 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = SelectPolylineTool(viewer, varargin)
-        % Constructor for SelectPolylineTool class
-        obj = obj@imagem.gui.ImagemTool(viewer, 'selectPolyline');
+    function obj = SelectLineSegment(viewer, varargin)
+        % Constructor for SelectLineSegmentTool class
+        obj = obj@imagem.gui.Tool(viewer, 'selectLineSegment');
     end
 
 end % end constructors
@@ -38,8 +38,8 @@ end % end constructors
 %% ImagemTool Methods
 methods
     function select(obj) %#ok<*MANU>
-        disp('select polyline');
-        obj.Positions = zeros(0, 2);
+        disp('select line segment');
+        obj.Pos1 = [];
     end
     
     function deselect(obj)
@@ -64,21 +64,10 @@ methods
         ax = obj.Viewer.Handles.ImageAxis;
         pos = get(ax, 'CurrentPoint');
         
-        % check if right-clicked or double-clicked
-        type = get(obj.Viewer.Handles.Figure, 'SelectionType');
-        if ~strcmp(type, 'normal')
-            % update viewer's current selection
-            shape = struct('Type', 'Polyline', 'Data', obj.Positions);
-            obj.Viewer.Selection = shape;
+        if isempty(obj.Pos1)
+            % initialise the first point
+            obj.Pos1 = pos(1,1:2);
             
-            obj.Positions = zeros(0, 2);
-            return;
-        end
-        
-        % udpate position list
-        obj.Positions = [obj.Positions ; pos(1,1:2)];
-        
-        if size(obj.Positions, 1) == 1
             % if clicked first point, creates a new graphical object
             removeLineHandle(obj);
             obj.LineHandle = line(...
@@ -87,18 +76,24 @@ methods
                 'Color', 'y', 'LineWidth', 1);
             
             obj.Viewer.Selection = [];
-        else
-            % update graphical object
-            set(obj.LineHandle, 'xdata', obj.Positions(:,1));
-            set(obj.LineHandle, 'ydata', obj.Positions(:,2));
-            
+            return;
         end
         
+        % update graphical object
+        set(obj.LineHandle, 'xdata', [obj.Pos1(1,1) pos(1,1)]);
+        set(obj.LineHandle, 'ydata', [obj.Pos1(1,2) pos(1,2)]);
+        
+        % create new selection object
+        positions = [obj.Pos1 pos(1,1:2)];
+        shape = struct('Type', 'LineSegment', 'Data', positions);
+        obj.Viewer.Selection = shape;
+        
+        obj.Pos1 = [];
     end
     
     function onMouseMoved(obj, hObject, eventdata) %#ok<INUSD>
         
-        if size(obj.Positions, 1) < 1
+        if isempty(obj.Pos1)
             return;
         end
 
@@ -107,9 +102,10 @@ methods
         pos = get(ax, 'CurrentPoint');
         
         % update line display
-        set(obj.LineHandle, 'XData', [obj.Positions(:,1); pos(1,1)]);
-        set(obj.LineHandle, 'YData', [obj.Positions(:,2); pos(1,2)]);
+        set(obj.LineHandle, 'XData', [obj.Pos1(1,1); pos(1,1)]);
+        set(obj.LineHandle, 'YData', [obj.Pos1(1,2); pos(1,2)]);
     end
+    
     
 end % end methods
 

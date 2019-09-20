@@ -1,4 +1,4 @@
-classdef ShowCursorPositionTool < imagem.gui.ImagemTool
+classdef ShowCursorPosition < imagem.gui.Tool
 % Show position of mouse cursor in status bar.
 %
 %   output = ShowCursorPositionTool(input)
@@ -18,9 +18,9 @@ classdef ShowCursorPositionTool < imagem.gui.ImagemTool
 
 %% Constructor
 methods
-    function obj = ShowCursorPositionTool(viewer, varargin)
+    function obj = ShowCursorPosition(viewer, varargin)
         % Creates a new tool using parent gui and a name
-         obj = obj@imagem.gui.ImagemTool(viewer, 'showCursorPosition');
+         obj = obj@imagem.gui.Tool(viewer, 'showCursorPosition');
     end % constructor 
 
 end % construction function

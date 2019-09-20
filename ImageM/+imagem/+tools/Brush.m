@@ -1,4 +1,4 @@
-classdef BrushTool < imagem.gui.ImagemTool
+classdef Brush < imagem.gui.Tool
 % Draw on current image using current brush and 'color'.
 %
 %   output = BrushTool(input)
@@ -27,9 +27,9 @@ end
 
 %% Constructor
 methods
-    function obj = BrushTool(parent, varargin)
+    function obj = Brush(parent, varargin)
         % Creates a new tool using parent gui and a name
-         obj = obj@imagem.gui.ImagemTool(parent, 'brush');
+         obj = obj@imagem.gui.Tool(parent, 'brush');
     end % constructor 
 
 end % construction function
@@ -97,7 +97,7 @@ methods
    end
    
    function drawBrushLine(obj, coord1, coord2)
-       [x, y] = imagem.gui.tools.BrushTool.intline(coord1(1), coord1(2), coord2(1), coord2(2));
+       [x, y] = imagem.tools.Brush.intline(coord1(1), coord1(2), coord2(1), coord2(2));
        
        % iterate on current line
        for i = 1 : length(x)

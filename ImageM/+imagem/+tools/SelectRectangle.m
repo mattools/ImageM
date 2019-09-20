@@ -1,4 +1,4 @@
-classdef SelectRectangleTool < imagem.gui.ImagemTool
+classdef SelectRectangle < imagem.gui.Tool
 % Select a rectangle.
 %
 %   Class SelectRectangleTool
@@ -30,9 +30,9 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = SelectRectangleTool(viewer, varargin)
+    function obj = SelectRectangle(viewer, varargin)
         % Constructor for SelectRectangleTool class
-        obj = obj@imagem.gui.ImagemTool(viewer, 'selectRectangle');
+        obj = obj@imagem.gui.Tool(viewer, 'selectRectangle');
         
         % setup state
         obj.State = 1;

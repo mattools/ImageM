@@ -1,4 +1,4 @@
-classdef AnalyzeImageParticlesAction < imagem.gui.actions.LabelImageAction
+classdef AnalyzeImageParticles < imagem.actions.LabelImageAction
 % Compute geometrical descriptors of particles.
 %
 %   output = AnalyzeImageParticlesAction(input)
@@ -16,9 +16,7 @@ classdef AnalyzeImageParticlesAction < imagem.gui.actions.LabelImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 methods
-    function obj = AnalyzeImageParticlesAction(viewer, varargin)
-        % calls the parent constructor
-        obj = obj@imagem.gui.actions.LabelImageAction(viewer, 'analyzeImageParticles');
+    function obj = AnalyzeImageParticles()
     end
 end
 

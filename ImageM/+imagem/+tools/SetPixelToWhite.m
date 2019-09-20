@@ -1,4 +1,4 @@
-classdef SetPixelToWhiteTool < imagem.gui.ImagemTool
+classdef SetPixelToWhite < imagem.gui.Tool
 % Set pixel color to white
 %
 %   output = SetPixelToWhiteTool(input)
@@ -22,9 +22,9 @@ end
 
 %% Constructor
 methods
-    function obj = SetPixelToWhiteTool(viewer, varargin)
+    function obj = SetPixelToWhite(viewer, varargin)
         % Creates a new tool using parent gui and a name
-         obj = obj@imagem.gui.ImagemTool(viewer, 'setPixelToWhite');
+         obj = obj@imagem.gui.Tool(viewer, 'setPixelToWhite');
     end % constructor 
 
 end % construction function

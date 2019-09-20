@@ -1,4 +1,4 @@
-classdef SelectPointsTool < imagem.gui.ImagemTool
+classdef SelectPoints < imagem.gui.Tool
 % Click on a set of points, right click to end.
 %
 %   Class SelectPointsTool
@@ -29,9 +29,9 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = SelectPointsTool(viewer, varargin)
+    function obj = SelectPoints(viewer, varargin)
         % Constructor for SelectPointsTool class
-        obj = obj@imagem.gui.ImagemTool(viewer, 'selectPoints');
+        obj = obj@imagem.gui.Tool(viewer, 'selectPoints');
     end
 
 end % end constructors
