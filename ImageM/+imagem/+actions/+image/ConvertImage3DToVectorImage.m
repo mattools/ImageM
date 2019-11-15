@@ -1,4 +1,4 @@
-classdef ConvertImage3DToVectorImage < imagem.actions.CurrentImageAction
+classdef ConvertImage3DToVectorImage < imagem.actions.Image3DAction
 %CONVERTIMAGE3DTOVECTORIMAGE  One-line description here, please.
 %
 %   Class ConvertImage3DToVectorImage
@@ -48,14 +48,6 @@ methods
         string = sprintf('%s = Image(''Data'', %s.Data, ''vector'', true);\n', ...
             newDoc.Tag, doc.Tag);
         addToHistory(frame, string);
-    end
-
-    
-    function b = isActivable(obj, frame)
-        b = isActivable@imagem.actions.CurrentImageAction(obj, frame);
-        if b
-            b = is3dImage(currentImage(frame));
-        end
     end
     
 end % end methods

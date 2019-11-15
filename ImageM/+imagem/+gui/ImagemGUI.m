@@ -192,6 +192,7 @@ methods
         
         addMenuItem(imageMenu, RenameImage(),           'Rename', 'Separator', 'on');
         addMenuItem(imageMenu, DuplicateImage(),        'Duplicate', 'Accelerator', 'D');
+        addMenuItem(imageMenu, ExtractSlice(),          'Extract Slice');
         addMenuItem(imageMenu, CropImageSelection(),    'Crop Selection');
         
         

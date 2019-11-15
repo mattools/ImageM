@@ -176,10 +176,23 @@ methods
     end
     
     function [h, ht] = addNumericField(obj, label, value, nDigits, cb)
-        % Add a text field to obj diaolg
+        % Add a numeric field to obj diaolg
         %
         % usage:
-        %   addTextField(GD, LABEL, INPUTTEXT);
+        %   addNumericField(GD, LABEL, DEFAULTVALUE);
+        %   Adds a new text field containing a numeric value.
+        %
+        %   addNumericField(GD, LABEL, DEFAULTVALUE, NDIGITS);
+        %   Also specifies the number of digits after decimal mark. De
+        %
+        %   addNumericField(GD, LABEL, DEFAULTVALUE, NDIGITS, CB);
+        %   Also specifies a callback function.
+        %
+        
+        % choose default values if they are not specified
+        if ~isa('nDigits', 'var')
+            nDigits = 0;
+        end
         
         % create horizontal box
         hLine = uix.HBox('Parent', obj.Handles.MainPanel, ...
@@ -390,6 +403,13 @@ methods
         else
             set(obj.Handles.Figure, 'Visible', 'off');
         end
+    end
+    
+    function setSize(obj, newSize)
+        set(obj.Handles.Figure, 'Units', 'pixels');
+        pos = get(obj.Handles.Figure, 'Position');
+        pos(3:4) = newSize;
+        set(obj.Handles.Figure, 'Position', pos);
     end
     
     function b = wasOked(obj)
