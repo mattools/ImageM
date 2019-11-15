@@ -35,12 +35,6 @@ properties
     % 'fixed'   -> keep previous zoom factor
     ZoomMode = 'adjust';
     
-    % The set of mouse listeners, stored as a cell array.
-    MouseListeners = [];
-    
-    % The currently selected tool.
-    CurrentTool = [];
-    
     % A selected shape.
     Selection = [];
 end % end properties
@@ -98,7 +92,7 @@ methods
             set(fig, 'WindowButtonMotionFcn',   @obj.processMouseMoved);
 
             % setup mouse listener for display of mouse coordinates
-            tool = imagem.gui.tools.ShowCursorPositionTool(obj, 'showMousePosition');
+            tool = imagem.tools.ShowCursorPosition(obj, 'showMousePosition');
             addMouseListener(obj, tool);
             
             % setup key listener

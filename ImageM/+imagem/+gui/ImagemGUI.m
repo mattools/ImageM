@@ -168,7 +168,7 @@ methods
         
         imageMenu = addMenu(hf, 'Image');
         
-        convertTypeMenu = addMenu(imageMenu,  'Convert Type');
+        convertTypeMenu = addMenu(imageMenu,  'Set Image Type');
         addMenuItem(convertTypeMenu, ImageConvertType('binary'),    'Binary');
         addMenuItem(convertTypeMenu, ImageConvertType('grayscale'), 'Grayscale');
         addMenuItem(convertTypeMenu, ImageConvertType('intensity'), 'Intensity');
