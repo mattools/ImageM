@@ -36,7 +36,13 @@ methods
          image = clone(currentImage(frame));
          
          % add image to application, and create new display
-         addImageDocument(frame, image);
+         [doc, viewer] = addImageDocument(frame, image); %#ok<ASGLU>
+         viewer.DisplayRange = frame.DisplayRange;
+         
+         % additional setup for 3D images
+         if isa(frame, 'imagem.gui.Image3DSliceViewer') && isa(viewer, 'imagem.gui.Image3DSliceViewer')
+             updateSliceIndex(viewer, frame.SliceIndex);
+         end
          
      end
 end % end methods
