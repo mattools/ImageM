@@ -74,7 +74,6 @@ methods
         
         % extract corresponding pixel values (nearest-neighbor eval)
         img = currentImage(frame);
-        vals = interp(img, pts);
         
 
         % new figure for display
@@ -83,11 +82,13 @@ methods
         
         % display resulting curve(s)
         if isScalarImage(img)
+            vals = interp(img, pts);
             plot(dists, vals);
             ylabel('Intensity');
             
         elseif isColorImage(img)
             % display each color histogram as stairs, to see the 3 curves
+            vals = interp(img, pts);
             hh = stairs(vals);
             
             % setup curve colors
@@ -95,6 +96,13 @@ methods
             set(hh(2), 'color', [0 1 0]); % green
             set(hh(3), 'color', [0 0 1]); % blue
             ylabel('Color intensity');
+            
+        elseif isVectorImage(img)
+            % for vector images, display the profile of norm
+            img2 = norm(img);
+            vals = interp(img2, pts);
+            plot(dists, vals);
+            ylabel('Channels norm');
             
         else
             warning('LineProfileTool:UnsupportedImageImageType', ...
