@@ -25,10 +25,7 @@ properties
     % The XY slice to be displayed, as an instance of Image class.
     SliceImage;
     
-    % A row vector of two values indicating minimal and maximal displayable
-    % values for grayscale and intensity images.
-    DisplayRange;
-    
+   
     % Specify how to change the zoom when figure is resized. 
     % Can be one of:
     % 'adjust'  -> find best zoom (default)

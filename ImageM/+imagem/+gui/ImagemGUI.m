@@ -81,7 +81,7 @@ methods
         % add ImageDoc to the application
         addDocument(obj.App, doc);
         
-        % creates a display for the new image
+        % creates a display for the new image depending on image dimension
         if ~isempty(image) && size(image, 3) > 1
             viewer = imagem.gui.Image3DSliceViewer(obj, doc);
         else

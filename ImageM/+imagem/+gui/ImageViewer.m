@@ -1,4 +1,4 @@
-classdef ImageViewer < handle
+classdef ImageViewer < imagem.gui.ImagemFrame
 % Base class for all viewers (figures) containing images.
 %
 %   Class ImageViewer
@@ -18,7 +18,7 @@ classdef ImageViewer < handle
 %     end % end classdef
 %
 %   See also
-%     PlanarImageViewer, Image3DSliceViewer
+%     ImagemFrame, PlanarImageViewer, Image3DSliceViewer
 %
 
 % ------
@@ -30,15 +30,12 @@ classdef ImageViewer < handle
 
 %% Properties
 properties
-    % Reference to the main GUI.
-    Gui;
-   
-    % List of handles to the various gui items.
-    Handles;
-    
     % The image document.
     Doc;
-
+    
+    % A row vector of two values indicating minimal and maximal displayable
+    % values for grayscale and intensity images.
+    DisplayRange;
     
     % The set of mouse listeners, stored as a cell array.
     MouseListeners = [];
@@ -83,15 +80,16 @@ end
 %% Constructor
 methods
     function obj = ImageViewer(gui, doc)
-    % Constructor for ImageViewer class
-    %
-    %  Usage
-    %  % call constructor of super class
-    %  obj = obj@imagem.gui.ImageViewer(gui, doc);
-    %
-        obj.Gui = gui;
+        % Constructor for ImageViewer class.
+        %
+        %  Usage:
+        %  OBJ = imagem.gui.ImageViewer(GUI, DOC);
+        %  where GUI is an instance of ImagemGUI, and DOC is an instance of
+        %  ImagemDoc.
+        
+        % call constructor of super class
+        obj = obj@imagem.gui.ImagemFrame(gui);
         obj.Doc = doc;
-        obj.Handles = struct();
     end
 
 end % end constructors
