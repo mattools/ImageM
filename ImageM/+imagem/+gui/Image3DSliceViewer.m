@@ -48,6 +48,11 @@ methods
         % setup initial slice index
         obj.SliceIndex = ceil(size(obj.Doc.Image, 3) / 2);
 
+        % setup default display options
+        [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(obj.Doc.Image);
+        obj.DisplayRange = [mini maxi];
+
+        
         % computes a new handle index large enough not to collide with
         % common figure handles
         while true
@@ -199,7 +204,7 @@ methods
 %         set(obj.Handles.ZEdit, 'String', num2str(newIndex));
     end
     
-    function updateSliceImage(obj)
+    function sliceImage = updateSliceImage(obj)
         % Recompute the slice image from current image and slice index.
 
         % current image is either the document image, or the preview image
@@ -215,6 +220,10 @@ methods
         
         if strcmpi(obj.SliceImage.Type, 'vector')
             obj.SliceImage = norm(obj.SliceImage);
+        end
+        
+        if nargout > 0
+            sliceImage = obj.SliceImage;
         end
     end
     
@@ -236,12 +245,12 @@ methods
             return;
         end
         
-        updateSliceImage(obj);
-        img = obj.SliceImage;
+        img = obj.Doc.Image;
+        sliceImage = updateSliceImage(obj);
         
         % compute display data
         % TODO: label image need to use LUT and BGCOLOR
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(img);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
@@ -249,11 +258,11 @@ methods
         api.replaceImage(cdata, 'PreserveView', true);
         
         % extract calibration data
-        spacing = img.Spacing;
-        origin  = img.Origin;
+        spacing = sliceImage.Spacing;
+        origin  = sliceImage.Origin;
         
         % set up spatial calibration
-        dim     = size(img);
+        dim     = size(sliceImage);
         xdata   = ([0 dim(1)-1] * spacing(1) + origin(1));
         ydata   = ([0 dim(2)-1] * spacing(2) + origin(2));
         
@@ -261,26 +270,20 @@ methods
         set(obj.Handles.Image, 'YData', ydata);
         
         % setup axis extent from image extent
-        extent = physicalExtent(img);
+        extent = physicalExtent(sliceImage);
         set(obj.Handles.ImageAxis, 'XLim', extent(1:2));
         set(obj.Handles.ImageAxis, 'YLim', extent(3:4));
 %         api.setVisibleLocation(loc);
         
-        % eventually adjust displayrange
+        % eventually adjust displayrange (for the whole image)
         if isGrayscaleImage(img) || isIntensityImage(img) || isVectorImage(img)
-            % get min and max display values, or recompute them
-            if isempty(obj.DisplayRange)
-                [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(img);
-            else
-                mini = obj.DisplayRange(1);
-                maxi = obj.DisplayRange(2);
-            end
-            
+            mini = obj.DisplayRange(1);
+            maxi = obj.DisplayRange(2);
             set(obj.Handles.ImageAxis, 'CLim', [mini maxi]);
         end
         
         % set up lookup table (if not empty)
-        if ~isColorImage(img) && ~isempty(obj.Doc.Lut)
+        if ~isColorImage(sliceImage) && ~isempty(obj.Doc.Lut)
             colormap(obj.Handles.ImageAxis, obj.Doc.Lut);
         end
         
@@ -288,7 +291,7 @@ methods
         children = get(obj.Handles.ImageAxis, 'Children');
         for i = 1:length(children)
             child = children(i);
-            if ~strcmpi(get(child, 'type'), 'image')
+            if ~strcmpi(get(child, 'Type'), 'Image')
                 delete(child);
             end
         end

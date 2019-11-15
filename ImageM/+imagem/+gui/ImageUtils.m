@@ -19,7 +19,7 @@ classdef ImageUtils < handle
 %% Methods
 methods (Static)
     function cdata = computeDisplayImage(image)
-        % Computes a matlab image for display using inner image data
+        % Computes a matlab image for display using inner image data.
         %
         % usage
         % CDATA = imagem.ImageUtils.computeDisplayImage(IMG);
@@ -47,39 +47,48 @@ methods (Static)
     end
     
     function [mini, maxi] = computeDisplayRange(image)
-        % compute best display range for an image according to its type
+        % Compute best display range for an image according to its type.
         
         % extract or compute display data
-        if isGrayscaleImage(image) || isColorImage(image)
-            cdata = permute(image.Data, [2 1 4 3]);
+        if isBinaryImage(image)
             mini = 0;
-            if islogical(cdata)
-                maxi = 1;
-            elseif isinteger(cdata)
-                maxi = intmax(class(cdata));
+            maxi = 1;
+        elseif isGrayscaleImage(image)
+            mini = 0;
+            if isa(image.Data, 'uint8')
+                maxi = 255;
+            elseif isinteger(image.Data)
+                maxi = max(image.Data(:));
             else
                 warning('ImageM:Display', ...
-                    'Try to display a grayscale image with float data');
-                maxi = max(cdata(:));
+                    'Try to display a grayscale image with non-integer data');
+                maxi = max(image.Data(:));
+            end
+            
+        elseif isColorImage(image)
+            mini = 0;
+            if isinteger(image.Data)
+                maxi = intmax(class(image.Data));
+            else
+                % RGB using floating-point values
+                maxi = 1;
             end
             
         elseif isLabelImage(image)
             % label image will be replaced by RGB image
-            maxi = 255;
             mini = 0;
+            maxi = 255;
         
         elseif isVectorImage(image)
             % in case of vector images, display the norm
             imgNorm = norm(image);
-            cdata = permute(imgNorm.Data, [2 1 4 3]);
-            mini = min(cdata(:));
-            maxi = max(cdata(:));
+            mini = min(imgNorm.Data(:));
+            maxi = max(imgNorm.Data(:));
 
         else
             % intensity or unknown type
-            cdata = permute(image.Data, [2 1 4 3]);
-            mini = min(cdata(:));
-            maxi = max(cdata(:));
+            mini = min(image.Data(:));
+            maxi = max(image.Data(:));
             
         end
 
