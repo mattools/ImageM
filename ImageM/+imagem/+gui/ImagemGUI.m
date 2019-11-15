@@ -173,24 +173,29 @@ methods
         addMenuItem(convertTypeMenu, ImageConvertType('grayscale'), 'Grayscale');
         addMenuItem(convertTypeMenu, ImageConvertType('intensity'), 'Intensity');
         addMenuItem(convertTypeMenu, ImageConvertType('label'),     'Label');
+
+        colorMenu = addMenu(imageMenu, 'Color', 'Separator', 'On');
+        addMenuItem(colorMenu, SplitImageRGB(),         'Split RGB');
+        addMenuItem(colorMenu, SplitImageChannels(),    'Split Channels');
+        addMenuItem(colorMenu, MergeImageChannels(),    'Merge Channels...');
         
-        addMenuItem(imageMenu, FlipImage(1),            'Horizontal Flip', 'Separator', 'on');
+        convertMenu = addMenu(imageMenu, 'Convert');
+        addMenuItem(convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
+        addMenuItem(convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
+
+        addMenuItem(imageMenu, FlipImage(1),            'Horizontal Flip', 'Separator', 'On');
         addMenuItem(imageMenu, FlipImage(2),            'Vertical Flip');
         addMenuItem(imageMenu, RotateImage90(1),        'Rotate Right');
         addMenuItem(imageMenu, RotateImage90(-1),       'Rotate Left');
 
-        addMenuItem(imageMenu, SplitImageRGB(),         'Split RGB', 'Separator', 'on');
-        addMenuItem(imageMenu, SplitImageChannels(),    'Split Channels');
-        addMenuItem(imageMenu, MergeImageChannels(),    'Merge Channels...');
-
-        addMenuItem(imageMenu, InvertImage(),           'Invert Image', 'Accelerator', 'I');
+        addMenuItem(imageMenu, InvertImage(),           'Invert Image', 'Accelerator', 'I', 'Separator', 'On');
         
-        addMenuItem(imageMenu, RenameImage(),           'Rename', 'Separator', 'on');
+        addMenuItem(imageMenu, RenameImage(),           'Rename', 'Separator', 'On');
         addMenuItem(imageMenu, DuplicateImage(),        'Duplicate', 'Accelerator', 'D');
         addMenuItem(imageMenu, CropImageSelection(),    'Crop Selection');
         
         
-        settingsMenu = addMenu(imageMenu, 'Settings', 'Separator', 'on');
+        settingsMenu = addMenu(imageMenu, 'Settings', 'Separator', 'On');
         addMenuItem(settingsMenu, SetDefaultConnectivity(), 'Set Connectivity');
         addMenuItem(settingsMenu, SetBrushSize(),           'Set Brush Size');
         
