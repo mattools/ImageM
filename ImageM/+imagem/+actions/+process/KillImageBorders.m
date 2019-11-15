@@ -50,10 +50,10 @@ methods
 end % end methods
 
 methods
-    function b = isActivable(obj)
-        b = isActivable@imagem.gui.actions.CurrentImageAction(obj);
+    function b = isActivable(obj, frame)
+        b = isActivable@imagem.actions.CurrentImageAction(obj, frame);
         if b
-            img = currentImage(obj);
+            img = currentImage(frame);
             binFlag = isBinaryImage(img);
             lblFlag = isLabelImage(img);
             b = b && (binFlag || lblFlag);

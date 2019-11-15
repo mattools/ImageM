@@ -57,8 +57,8 @@ methods
 end % general methods
 
 methods
-    function b = isActivable(obj, frame) %#ok<INUSL>
-        doc = currentDoc(frame);
+    function b = isActivable(obj)
+        doc = currentDoc(obj.Viewer);
         b = ~isempty(doc) && ~isempty(doc.Image);
     end
 end

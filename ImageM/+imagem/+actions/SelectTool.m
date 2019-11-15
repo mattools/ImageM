@@ -38,7 +38,7 @@ end
 
 methods
     function b = isActivable(obj, frame)
-        b = isActivable(obj.Tool, frame);
+        b = isActivable(obj.Tool);
     end
 end
 

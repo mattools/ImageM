@@ -174,7 +174,7 @@ methods
         addMenuItem(convertTypeMenu, ImageConvertType('intensity'), 'Intensity');
         addMenuItem(convertTypeMenu, ImageConvertType('label'),     'Label');
 
-        colorMenu = addMenu(imageMenu, 'Color', 'Separator', 'On');
+        colorMenu = addMenu(imageMenu, 'Color', 'Separator', 'on');
         addMenuItem(colorMenu, SplitImageRGB(),         'Split RGB');
         addMenuItem(colorMenu, SplitImageChannels(),    'Split Channels');
         addMenuItem(colorMenu, MergeImageChannels(),    'Merge Channels...');
@@ -183,19 +183,19 @@ methods
         addMenuItem(convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
         addMenuItem(convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
 
-        addMenuItem(imageMenu, FlipImage(1),            'Horizontal Flip', 'Separator', 'On');
+        addMenuItem(imageMenu, FlipImage(1),            'Horizontal Flip', 'Separator', 'on');
         addMenuItem(imageMenu, FlipImage(2),            'Vertical Flip');
         addMenuItem(imageMenu, RotateImage90(1),        'Rotate Right');
         addMenuItem(imageMenu, RotateImage90(-1),       'Rotate Left');
 
-        addMenuItem(imageMenu, InvertImage(),           'Invert Image', 'Accelerator', 'I', 'Separator', 'On');
+        addMenuItem(imageMenu, InvertImage(),           'Invert Image', 'Accelerator', 'I', 'Separator', 'on');
         
-        addMenuItem(imageMenu, RenameImage(),           'Rename', 'Separator', 'On');
+        addMenuItem(imageMenu, RenameImage(),           'Rename', 'Separator', 'on');
         addMenuItem(imageMenu, DuplicateImage(),        'Duplicate', 'Accelerator', 'D');
         addMenuItem(imageMenu, CropImageSelection(),    'Crop Selection');
         
         
-        settingsMenu = addMenu(imageMenu, 'Settings', 'Separator', 'On');
+        settingsMenu = addMenu(imageMenu, 'Settings', 'Separator', 'on');
         addMenuItem(settingsMenu, SetDefaultConnectivity(), 'Set Connectivity');
         addMenuItem(settingsMenu, SetBrushSize(),           'Set Brush Size');
         
@@ -427,6 +427,12 @@ methods
             % eventually add separator above item
             if separatorFlag
                 set(item, 'Separator', 'On');
+            end
+            
+            if isActivable(action, frame)
+                set(item, 'Enable', 'on');
+            else
+                set(item, 'Enable', 'off');
             end
             
             while length(varargin) > 1
