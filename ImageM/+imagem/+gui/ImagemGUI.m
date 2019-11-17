@@ -89,6 +89,15 @@ methods
         end
         addView(doc, viewer);
     end
+
+    function frame = createTableFrame(obj, table)
+        % Create a new Frame for displaying the table.
+        
+        % initialize table doc
+        doc = imagem.app.TableDoc(table);
+        
+        frame = imagem.gui.TableFrame(obj, doc);
+    end
     
     function addToHistory(obj, string)
         % Add the specified string to gui history
@@ -445,7 +454,122 @@ methods
         
     end
     
+    function createTableMenu(obj, hf, frame) %#ok<INUSL>
+        
+        import imagem.gui.ImagemGUI;
+        import imagem.gui.actions.*;
+        import imagem.actions.*;
+        import imagem.actions.file.*;
+        import imagem.actions.edit.*;
+        import imagem.actions.image.*;
+        import imagem.actions.view.*;
+        import imagem.actions.process.*;
+        import imagem.actions.process.binary.*;
+        import imagem.actions.analyze.*;
+        import imagem.gui.tools.*;
+        import imagem.tools.*;
+                
+        % File Menu Definition
+        
+        fileMenu = addMenu(hf, 'Files');
+        
 
+        demoMenu = addMenu(fileMenu, 'Open Demo');
+
+
+        item = addMenuItem(fileMenu, CloseFrame(),      'Close', 'Separator', 'on');
+        set(item, 'Accelerator', 'W');
+
+        item = addMenuItem(fileMenu, Exit(), 'Quit');
+        set(item, 'Accelerator', 'Q');
+        
+        % Help menu definition
+        helpMenu = addMenu(hf, 'Help');
+        
+        addMenuItem(helpMenu, ...
+            imagem.actions.GenericAction(...
+            @(frm) printHistory(frm.Gui.App)), ...
+            'Print History');
+
+        
+        % TODO: remove duplication of addMenu and addMenuItem functions
+        function menu = addMenu(parent, label, varargin)
+            % Add a new menu to the given figure or menu
+            % Computes the new level of the menu
+            
+            parentType = get(parent, 'type');
+            if strcmp(parentType, 'figure')
+                % counts the number of menus in the parent figure
+                children = get(parent, 'children');
+                children = children(strcmp(get(children, 'type'), 'uimenu'));
+                inds = length(children) + 1;
+                
+            elseif strcmp(parentType, 'uimenu')
+                % counts the number of sub-menus in the parent menu, and add
+                % new position to the set of indices of parent menu
+                children = get(parent, 'children');
+                children = children(strcmp(get(children, 'type'), 'uimenu'));
+                ind = length(children) + 1;
+                data = get(parent, 'userdata');
+                inds = [data.Inds ind];
+                
+            else
+                error(['Can not manage parent of type ' parentType]);
+            end
+            
+            menu = uimenu(parent, 'Label', label, varargin{:});
+            data = struct('Inds', inds);
+            set(menu, 'UserData', data);
+            
+        end
+
+        function item = addMenuItem(menu, action, label, varargin)
+            % Add a new menu item given as an "Action" instance
+
+            % parse separator option
+            separatorFlag = false;
+            if ~isempty(varargin)
+                var = varargin{1};
+                if islogical(var)
+                    separatorFlag = var;
+                    varargin(1) = [];
+                end
+            end
+            
+            % Compute menu position as a set of recursive index positions
+            children = get(menu, 'children');
+            children = children(strcmp(get(children, 'type'), 'uimenu'));
+            ind = length(children) + 1;
+            data = get(menu, 'UserData');
+            inds = [data.Inds ind];
+            
+            % create user data associated with obj menu
+            data = struct('Action', action, 'Inds', inds);
+            
+            % creates new item
+            item = uimenu(menu, 'Label', label, ...
+                'UserData', data, ...
+                'Callback', @(src, evt) action.run(frame));
+            
+            % eventually add separator above item
+            if separatorFlag
+                set(item, 'Separator', 'On');
+            end
+            
+            if isActivable(action, frame)
+                set(item, 'Enable', 'on');
+            else
+                set(item, 'Enable', 'off');
+            end
+            
+            while length(varargin) > 1
+                set(item, varargin{1}, varargin{2});
+                varargin(1:2) = [];
+            end
+        end
+        
+    end
+    
 end
 
 methods (Static)

@@ -1,4 +1,4 @@
-classdef CloseFrame < imagem.actions.CurrentImageAction
+classdef CloseFrame < imagem.gui.Action
 % Close the current ImageM figure.
 %
 %   output = CloseFrame(input)
@@ -24,14 +24,14 @@ methods
     function run(obj, frame) %#ok<INUSL>
 %         disp('Close image action');
         
-        doc = frame.Doc;
+%         doc = frame.Doc;
         
         close(frame);
         
-        if isempty(getViews(doc))
-            app = frame.Gui.App;
-            removeDocument(app, doc);
-        end
+%         if isempty(getViews(doc))
+%             app = frame.Gui.App;
+%             removeDocument(app, doc);
+%         end
     end
 end
 

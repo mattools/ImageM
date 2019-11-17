@@ -67,7 +67,9 @@ methods
         tab = Table(data, colNames, rowNames);
         
 
-        show(tab);
+%         show(tab);
+        createTableFrame(frame.Gui, tab);
+        
 %         % create a new doc
 %         newDoc = addImageDocument(frame, res);
 %         
