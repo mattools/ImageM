@@ -182,6 +182,7 @@ methods
         convertMenu = addMenu(imageMenu, 'Convert');
         addMenuItem(convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
         addMenuItem(convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
+        addMenuItem(convertMenu, UnfoldVectorImage(),   'Unfold Vector Image to Table');
 
         addMenuItem(imageMenu, FlipImage(1),            'Horizontal Flip', 'Separator', 'on');
         addMenuItem(imageMenu, FlipImage(2),            'Vertical Flip');
