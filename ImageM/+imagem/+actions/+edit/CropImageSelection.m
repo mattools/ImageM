@@ -49,7 +49,13 @@ methods
          
          box = selection.Data;
          box = round(box);
-         cropped = crop(currentImage(frame), box);
+         
+         img = currentImage(frame);
+         nd = ndims(img);
+         if nd > 2
+             box = [box 1 size(img, 3)];
+         end
+         cropped = crop(img, box);
          
          % add image to application, and create new display
          newDoc = addImageDocument(frame, cropped);
@@ -58,7 +64,6 @@ methods
          newTag = newDoc.Tag;
          
          % history
-         nd = ndims(currentImage(frame));
          pattern = ['%s = crop(%s, [' repmat(' %d %d', 1, nd) ']);\n'];
          string = sprintf(pattern, newTag, tag, box);
          addToHistory(frame, string);
