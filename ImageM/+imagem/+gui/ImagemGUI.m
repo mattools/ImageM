@@ -338,21 +338,21 @@ methods
         
         toolsMenu = addMenu(hf, 'Tools');
         
-        tool = PrintCurrentPointPosition(frame);
-        addMenuItem(toolsMenu, SelectTool(tool),        'Print Current Point');
+%         tool = PrintCurrentPointPosition(frame);
+        addMenuItem(toolsMenu, SelectTool(@PrintCurrentPointPosition), 'Print Current Point');
 
-        tool = ScrollImagePosition(frame);
-        addMenuItem(toolsMenu, SelectTool(tool),        'Scroll Image');
+%         tool = ScrollImagePosition(frame);
+        addMenuItem(toolsMenu, SelectTool(@ScrollImagePosition),        'Scroll Image');
         
-        addMenuItem(toolsMenu, SelectTool(SelectRectangle(frame)),  'Select Rectangle', true);
-        addMenuItem(toolsMenu, SelectTool(SelectPolyline(frame)),   'Select Polyline');
-        addMenuItem(toolsMenu, SelectTool(SelectPoints(frame)),     'Select Points');
-        addMenuItem(toolsMenu, SelectTool(SelectLineSegment(frame)),'Select Line Segment');
+        addMenuItem(toolsMenu, SelectTool(@SelectRectangle),  'Select Rectangle', true);
+        addMenuItem(toolsMenu, SelectTool(@SelectPolyline),   'Select Polyline');
+        addMenuItem(toolsMenu, SelectTool(@SelectPoints),     'Select Points');
+        addMenuItem(toolsMenu, SelectTool(@SelectLineSegment),'Select Line Segment');
 
-        addMenuItem(toolsMenu, SelectTool(SetPixelToWhite(frame)), ...
+        addMenuItem(toolsMenu, SelectTool(@SetPixelToWhite), ...
             'Set Pixel to White', true);
         
-        addMenuItem(toolsMenu, SelectTool(Brush(frame)),            'Brush');
+        addMenuItem(toolsMenu, SelectTool(@Brush),            'Brush');
         addMenuItem(toolsMenu, PlotLabelMapCurvesFromTable(),       'Plot Curves From Labels...');
         
         

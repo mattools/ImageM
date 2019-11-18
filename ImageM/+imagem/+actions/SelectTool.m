@@ -16,29 +16,37 @@ classdef SelectTool < imagem.gui.Action
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    % the tool to select
-    Tool;
+    % A function handle to the tool constructor.
+    BuildFunction;
+    
+    % An optional function used to decide whether the action can be used.
+    IsActivableFunction;
 end
 
 methods
-    function obj = SelectTool(tool)
-        obj.Tool = tool;
+    function obj = SelectTool(buildFn, varargin)
+        obj.BuildFunction = buildFn;
+        
+        obj.IsActivableFunction = @(x) true;
+        if ~isempty(varargin)
+            var1 = varargin{1};
+            if isa(var1, 'function_handle')
+                obj.IsActivableFunction = var1;
+            end
+        end
     end
 end
 
 methods
     function run(obj, frame)
-        disp(['select another tool: ' obj.Tool.Name]);
-        
-        obj.Tool.Viewer = frame;
-        
-        frame.CurrentTool = obj.Tool;
+        tool = obj.BuildFunction(frame);
+        frame.CurrentTool = tool;
     end
 end
 
 methods
     function b = isActivable(obj, frame)
-        b = isActivable(obj.Tool);
+        b = obj.IsActivableFunction(frame);
     end
 end
 
