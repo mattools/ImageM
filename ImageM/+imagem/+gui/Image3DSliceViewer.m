@@ -360,57 +360,15 @@ methods
         
         zslice = round(get(hObject, 'Value'));
         zslice = max(get(hObject, 'Min'), min(get(hObject, 'Max'), zslice));
-
+        
         updateSliceIndex(obj, zslice);
+        
+        % propagate change of current slice event to ImageDisplayListeners
+        evt = struct('Source', obj, 'EventName', 'CurrentSliceChanged');
+        processCurrentSliceChanged(obj, obj.Handles.Figure, evt);
     end
 end
 
-%% Mouse listeners management
-methods
-    function addMouseListener(obj, listener)
-        % Add a mouse listener to obj viewer
-        obj.MouseListeners = [obj.MouseListeners {listener}];
-    end
-    
-    function removeMouseListener(obj, listener)
-        % Remove a mouse listener from obj viewer
-        
-        % find which listeners are the same as the given one
-        inds = false(size(obj.MouseListeners));
-        for i = 1:numel(obj.MouseListeners)
-            if obj.MouseListeners{i} == listener
-                inds(i) = true;
-            end
-        end
-        
-        % remove first existing listener
-        inds = find(inds);
-        if ~isempty(inds)
-            obj.MouseListeners(inds(1)) = [];
-        end
-    end
-    
-    function processMouseButtonPressed(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
-        for i = 1:length(obj.MouseListeners)
-            onMouseButtonPressed(obj.MouseListeners{i}, hObject, eventdata);
-        end
-    end
-    
-    function processMouseButtonReleased(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
-        for i = 1:length(obj.MouseListeners)
-            onMouseButtonReleased(obj.MouseListeners{i}, hObject, eventdata);
-        end
-    end
-    
-    function processMouseMoved(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
-        for i = 1:length(obj.MouseListeners)
-            onMouseMoved(obj.MouseListeners{i}, hObject, eventdata);
-        end
-    end
-end
 
 %% Mouse listeners management
 methods

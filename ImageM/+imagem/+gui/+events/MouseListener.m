@@ -23,7 +23,7 @@ end % end properties
 
 %% Constructor
 methods
-    function this = MouseListener(varargin)
+    function obj = MouseListener(varargin)
     % Constructor for MouseListener class
 
     end
@@ -33,9 +33,9 @@ end % end constructors
 
 %% Methods
 methods (Abstract)
-    onMouseButtonPressed(this, source, event)
-    onMouseButtonReleased(this, source, event)
-    onMouseMoved(this, source, event)
+    onMouseButtonPressed(obj, source, event)
+    onMouseButtonReleased(obj, source, event)
+    onMouseMoved(obj, source, event)
 end % end methods
 
 end % end classdef

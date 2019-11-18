@@ -37,6 +37,9 @@ properties
     % values for grayscale and intensity images.
     DisplayRange;
     
+    % The set of image display listeners, stored as a cell array.
+    ImageDisplayListeners = [];
+    
     % The set of mouse listeners, stored as a cell array.
     MouseListeners = [];
     
@@ -161,7 +164,7 @@ methods
     end
     
     function img = currentImage(obj)
-        % Return the current image (may be empty)
+        % Return the current image (may be empty).
         img = [];
         doc = obj.Doc;
         if ~isempty(doc)
@@ -170,13 +173,13 @@ methods
     end
     
     function updatePreviewImage(obj, image)
-        % Update preview image of document and refresh display
+        % Update preview image of document and refresh display.
         obj.Doc.PreviewImage = image;
         updateDisplay(obj);
     end
     
     function clearPreviewImage(obj)
-        % Clear preview image of document and refresh display
+        % Clear preview image of document and refresh display.
         obj.Doc.PreviewImage = [];
         updateDisplay(obj);
     end
@@ -191,15 +194,64 @@ methods
     end
 end
 
+
+%% Image display listeners management
+methods
+    function addImageDisplayListener(obj, listener)
+        % Add a mouse listener to obj viewer.
+        obj.ImageDisplayListeners = [obj.ImageDisplayListeners {listener}];
+    end
+    
+    function removeImageDisplayListener(obj, listener)
+        % Remove a mouse listener from obj viewer.
+        
+        % find which listeners are the same as the given one
+        inds = false(size(obj.ImageDisplayListeners));
+        for i = 1:numel(obj.ImageDisplayListeners)
+            if obj.ImageDisplayListeners{i} == listener
+                inds(i) = true;
+            end
+        end
+        
+        % remove first existing listener
+        inds = find(inds);
+        if ~isempty(inds)
+            obj.ImageDisplayListeners(inds(1)) = [];
+        end
+    end
+    
+    function processDisplayRangeChanged(obj, hObject, eventdata)
+        % propagates image display event to all listeners.
+        for i = 1:length(obj.ImageDisplayListeners)
+            onDisplayRangeChanged(obj.ImageDisplayListeners{i}, hObject, eventdata);
+        end
+    end
+    
+    function processCurrentSliceChanged(obj, hObject, eventdata)
+        % propagates image display event to all listeners.
+        for i = 1:length(obj.ImageDisplayListeners)
+            onCurrentSliceChanged(obj.ImageDisplayListeners{i}, hObject, eventdata);
+        end
+    end
+    
+    function processCurrentChannelChanged(obj, hObject, eventdata)
+        % propagates image display event to all listeners.
+        for i = 1:length(obj.ImageDisplayListeners)
+            onCurrentChannelChanged(obj.ImageDisplayListeners{i}, hObject, eventdata);
+        end
+    end
+end
+
+
 %% Mouse listeners management
 methods
     function addMouseListener(obj, listener)
-        % Add a mouse listener to obj viewer
+        % Add a mouse listener to obj viewer.
         obj.MouseListeners = [obj.MouseListeners {listener}];
     end
     
     function removeMouseListener(obj, listener)
-        % Remove a mouse listener from obj viewer
+        % Remove a mouse listener from obj viewer.
         
         % find which listeners are the same as the given one
         inds = false(size(obj.MouseListeners));
@@ -217,21 +269,21 @@ methods
     end
     
     function processMouseButtonPressed(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
+        % propagates mouse event to all listeners.
         for i = 1:length(obj.MouseListeners)
             onMouseButtonPressed(obj.MouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseButtonReleased(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
+        % propagates mouse event to all listeners.
         for i = 1:length(obj.MouseListeners)
             onMouseButtonReleased(obj.MouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseMoved(obj, hObject, eventdata)
-        % propagates mouse event to all listeners
+        % propagates mouse event to all listeners.
         for i = 1:length(obj.MouseListeners)
             onMouseMoved(obj.MouseListeners{i}, hObject, eventdata);
         end
