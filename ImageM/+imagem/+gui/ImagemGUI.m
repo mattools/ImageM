@@ -338,10 +338,7 @@ methods
         
         toolsMenu = addMenu(hf, 'Tools');
         
-%         tool = PrintCurrentPointPosition(frame);
         addMenuItem(toolsMenu, SelectTool(@PrintCurrentPointPosition), 'Print Current Point');
-
-%         tool = ScrollImagePosition(frame);
         addMenuItem(toolsMenu, SelectTool(@ScrollImagePosition),        'Scroll Image');
         
         addMenuItem(toolsMenu, SelectTool(@SelectRectangle),  'Select Rectangle', true);
@@ -354,6 +351,8 @@ methods
         
         addMenuItem(toolsMenu, SelectTool(@Brush),            'Brush');
         addMenuItem(toolsMenu, PlotLabelMapCurvesFromTable(),       'Plot Curves From Labels...');
+        action = SelectTool(@PlotImage3DZProfile, @(f) is3dImage(f.Doc.Image));
+        addMenuItem(toolsMenu, action,  'Plot Image3D Z-Profile');
         
         
         % Analyze Menu Definition
