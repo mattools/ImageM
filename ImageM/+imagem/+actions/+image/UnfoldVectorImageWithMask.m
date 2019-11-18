@@ -1,11 +1,11 @@
-classdef UnfoldVectorImage < imagem.actions.VectorImageAction
+classdef UnfoldVectorImageWithMask < imagem.actions.VectorImageAction
 %UNFOLDVECTORIMAGE Transform a vector image into a Table.
 %
-%   Class UnfoldVectorImage
+%   Class UnfoldVectorImageWithMask
 %
 %
 %   Example
-%   UnfoldVectorImage
+%   UnfoldVectorImageWithMask
 %
 %   See also
 %
@@ -24,7 +24,7 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = UnfoldVectorImage(varargin)
+    function obj = UnfoldVectorImageWithMask(varargin)
         % calls the parent constructor
         obj = obj@imagem.actions.VectorImageAction(varargin{:});
     end
@@ -44,16 +44,48 @@ methods
             return;
         end
         
-        % size of the table
-        nr = elementNumber(img);
-        nc = channelNumber(img);
+       
+        % choose a binary image to use as mask
+        gui = frame.Gui;
+        imageNames = getImageNames(gui.App);
         
+        gd = imagem.gui.GenericDialog();
+        addChoice(gd, 'Mask Image: ', imageNames, imageNames{1});
+
+        % displays the dialog, and waits for user
+        showDialog(gd);
+        % check if ok or cancel was clicked
+        if wasCanceled(gd)
+            return;
+        end
+        
+        % gets the user inputs
+        maskImageName = getNextString(gd);
+        doc = getDocument(gui.App, maskImageName);
+        maskImage = doc.Image;
+        if ~isBinaryImage(maskImage)
+            warning('Requires a binary image as mask');
+            return;
+        end
+        if size(maskImage, 1) ~= size(img, 1) || size(maskImage, 2) ~= size(img, 2)
+            warning('Input and mask image must have same size');
+            return;
+        end
+              
         % create sampling grid (iterating over x first)
         lx = 1:size(img, 1);
         ly = 1:size(img, 2);
         [y, x] = meshgrid(ly, lx);
         coords = [reshape(x, [numel(x) 1]), reshape(y, [numel(x) 1])];
-                
+        
+        % sample elements inside mask
+        coords = coords(maskImage.Data, :);
+        
+        % size of the table
+        nr = size(coords, 1);
+        nc = channelNumber(img);
+
+        % create row names
         rowNames = cell(nr, 1);
         for i = 1:nr
             rowNames{i} = sprintf('x%03d-y%03d', coords(i,:));
@@ -64,11 +96,14 @@ methods
             colNames{i} = sprintf('Ch%02d', i);
         end
         
-        data = reshape(img.Data, [nr nc]);
-        tab = Table(data, colNames, rowNames);
-        
+        % unfold selected pixels
+        data = zeros(nr, nc);
+        for j = 1:nc
+            slice = img.Data(:,:,:,j);
+            data(:,j) = slice(maskImage.Data);
+        end
+        tab = Table(data, colNames);
 
-%         show(tab);
         createTableFrame(frame.Gui, tab);
         
 %         % create a new doc
