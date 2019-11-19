@@ -24,6 +24,7 @@ properties
     % application
     App;
     
+    Options;
 end 
 
 %% Constructor
@@ -36,6 +37,8 @@ methods
         %
         
         obj.App = appli;
+        
+        obj.Options = imagem.gui.GuiOptions();
         
     end % constructor 
 
@@ -469,6 +472,8 @@ methods
         import imagem.actions.file.*;
         import imagem.actions.edit.*;
         import imagem.actions.image.*;
+        import imagem.actions.table.edit.*;
+        import imagem.actions.table.pca.*;
         import imagem.actions.view.*;
         import imagem.actions.process.*;
         import imagem.actions.process.binary.*;
@@ -481,7 +486,7 @@ methods
         fileMenu = addMenu(hf, 'Files');
         
 
-        demoMenu = addMenu(fileMenu, 'Open Demo');
+%         demoMenu = addMenu(fileMenu, 'Open Demo');
 
 
         item = addMenuItem(fileMenu, CloseFrame(),      'Close', 'Separator', 'on');
@@ -490,6 +495,19 @@ methods
         item = addMenuItem(fileMenu, Exit(), 'Quit');
         set(item, 'Accelerator', 'Q');
         
+        
+        % Edit menu
+        editMenu = addMenu(hf, 'Edit');
+        addMenuItem(editMenu, RenameTable(), 'Rename...');
+        addMenuItem(editMenu, SelectTableRows(), 'Select Rows...', 'Separator', 'On');
+        addMenuItem(editMenu, SelectTableColumns(), 'Select Columns...');
+        
+        
+        % Process menu
+        processMenu = addMenu(hf, 'Process');
+        addMenuItem(processMenu, Pca(), 'PCA...');
+        
+
         % Help menu definition
         helpMenu = addMenu(hf, 'Help');
         
