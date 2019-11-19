@@ -65,7 +65,7 @@ end % end properties
 %% Constructor
 methods
     function obj = GenericDialog(varargin)
-    % Constructor for GenericDialog class
+    % Constructor for GenericDialog class.
 
         createLayout(obj, varargin{:});
     end
@@ -74,7 +74,7 @@ end % end constructors
 
 methods (Access = private)
     function createLayout(obj, varargin)
-        % initialize the layout (figure and widgets)
+        % initialize the layout (figure and widgets).
         hf = createFigure(obj, varargin{:});
         obj.Handles.Figure = hf;
         
@@ -98,7 +98,7 @@ methods (Access = private)
     end
     
      function hf = createFigure(obj, varargin)
-        % create new figure and return its handle
+        % create new figure and return its handle.
         
         % parse dialog title
         if isempty(varargin)
@@ -140,7 +140,7 @@ end
 %% Methods
 methods
     function [h, ht] = addTextField(obj, label, text, cb)
-        % Add a text field to obj diaolg
+        % Add a text field to this dialog.
         %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
@@ -176,7 +176,7 @@ methods
     end
     
     function [h, ht] = addNumericField(obj, label, value, nDigits, cb)
-        % Add a numeric field to obj diaolg
+        % Add a numeric field to this dialog.
         %
         % usage:
         %   addNumericField(GD, LABEL, DEFAULTVALUE);
@@ -236,10 +236,14 @@ methods
     end
     
     function h = addCheckBox(obj, label, checked, cb)
-        % Add  text field to obj diaolg
+        % Add  text field to this dialog.
         %
         % usage:
         %   addTextField(GD, LABEL, INPUTTEXT);
+        
+        if ~exist('checked', 'var')
+            checked = false;
+        end
         
         % create horizontal box
         hLine = uix.HBox('Parent', obj.Handles.MainPanel, ...
@@ -253,7 +257,7 @@ methods
             'Parent', hLine, ...
             'String', label, ...
             'Value', checked);
-        if isa('cb', 'var')
+        if exist('cb', 'var')
             set(h, 'Callback', cb);
         end
         
@@ -269,7 +273,7 @@ methods
     end
     
     function [h, ht] = addChoice(obj, label, choiceLabels, initialValue, cb)
-        % Add choice as a popupmenu
+        % Add choice as a popupmenu.
         %
         % usage:
         %   addChoice(GD, LABEL, CHOICES, INITIALVALUE);
@@ -437,7 +441,7 @@ end
 end % end classdef
 
 function ht = addLabel(parent, label)
-% add a label to a widget, with predefined settings
+% add a label to a widget, with predefined settings.
 ht = uicontrol('Style', 'Text', ...
     'Parent', parent, ...
     'String', label, ...

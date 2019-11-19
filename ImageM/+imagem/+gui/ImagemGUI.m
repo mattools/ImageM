@@ -472,6 +472,7 @@ methods
         import imagem.actions.file.*;
         import imagem.actions.edit.*;
         import imagem.actions.image.*;
+        import imagem.actions.table.*;
         import imagem.actions.table.edit.*;
         import imagem.actions.table.pca.*;
         import imagem.actions.view.*;
@@ -506,6 +507,7 @@ methods
         % Process menu
         processMenu = addMenu(hf, 'Process');
         addMenuItem(processMenu, Pca(), 'PCA...');
+        addMenuItem(processMenu, TableKMeans(), 'K-Means...', 'Separator', 'On');
         
 
         % Help menu definition
