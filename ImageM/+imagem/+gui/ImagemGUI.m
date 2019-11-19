@@ -90,8 +90,12 @@ methods
         addView(doc, viewer);
     end
 
-    function frame = createTableFrame(obj, table)
+    function [frame, doc] = createTableFrame(obj, table)
         % Create a new Frame for displaying the table.
+        %
+        % Usage:
+        %    [frame, doc] = createTableFrame(obj, table);
+        %
         
         % initialize table doc
         doc = imagem.app.TableDoc(table);
@@ -141,6 +145,7 @@ methods
         import imagem.actions.process.*;
         import imagem.actions.process.binary.*;
         import imagem.actions.analyze.*;
+        import imagem.actions.table.*;
         import imagem.gui.tools.*;
         import imagem.tools.*;
                 
@@ -148,8 +153,9 @@ methods
         
         fileMenu = addMenu(hf, 'Files');
         
-        addMenuItem(fileMenu, CreateImage(),            'New...', 'Accelerator', 'N');
-        addMenuItem(fileMenu, OpenImage(),              'Open...', 'Accelerator', 'O');
+        addMenuItem(fileMenu, CreateImage(),            'New Image...', 'Accelerator', 'N');
+        addMenuItem(fileMenu, OpenImage(),              'Open Image...', 'Accelerator', 'O');
+        addMenuItem(fileMenu, OpenTable(),              'Open Table...', 'Accelerator', 'O');
 
         demoMenu = addMenu(fileMenu, 'Open Demo');
         addMenuItem(demoMenu, OpenDemoImage('cameraman.tif'), 	'Cameraman (grayscale)');
@@ -158,6 +164,7 @@ methods
         addMenuItem(demoMenu, OpenDemoImage('peppers.png'), 'Peppers (RGB)');
         addMenuItem(demoMenu, OpenDemoImage('circles.png'), 'Circles (binary)');
         addMenuItem(demoMenu, OpenDemoImage('text.png'),    'Text (binary)');
+        addMenuItem(demoMenu, OpenDemoTable('fisherIris.txt'),    'Fisher Iris (Table)', 'Separator', 'on');
 
         addMenuItem(fileMenu, ImportImageFromWorkspace(),   'Import From Workspace...');
         
@@ -352,7 +359,7 @@ methods
         
         addMenuItem(toolsMenu, SelectTool(@Brush),            'Brush');
         addMenuItem(toolsMenu, PlotLabelMapCurvesFromTable(),       'Plot Curves From Labels...');
-        action = SelectTool(@PlotImage3DZProfile, @(f) is3dImage(f.Doc.Image));
+        action = SelectTool(@PlotImage3DZProfile);
         addMenuItem(toolsMenu, action,  'Plot Image3D Z-Profile');
         
         
