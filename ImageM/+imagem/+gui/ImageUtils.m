@@ -18,10 +18,10 @@ classdef ImageUtils < handle
 
 %% Methods
 methods (Static)
-    function cdata = computeDisplayImage(image)
+    function cdata = computeDisplayImage(image, varargin)
         % Computes a matlab image for display using inner image data.
         %
-        % usage
+        % Usage:
         % CDATA = imagem.ImageUtils.computeDisplayImage(IMG);
         % 
         
@@ -31,7 +31,7 @@ methods (Static)
              
         elseif isLabelImage(image)
             % label image will be replaced by RGB image
-            rgb = label2rgb(image);
+            rgb = label2rgb(image, varargin{:});
             cdata = permute(rgb.Data, [2 1 4 3]);
         
         elseif isVectorImage(image)

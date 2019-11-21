@@ -163,20 +163,20 @@ methods
         end
         
         % check up doc validity
-        if isempty(obj.Doc) || isempty(obj.Doc.Image)
+        doc = obj.Doc;
+        if isempty(doc) || isempty(doc.Image)
             return;
         end
         
         % current image is either the document image, or the preview image
         % if there is one
-        img = obj.Doc.Image;
-        if ~isempty(obj.Doc.PreviewImage)
-            img = obj.Doc.PreviewImage;
+        img = doc.Image;
+        if ~isempty(doc.PreviewImage)
+            img = doc.PreviewImage;
         end
         
         % compute display data
-        % TODO: label image need to use LUT and BGCOLOR
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(img);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(img, doc.Lut, doc.BackgroundColor);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
@@ -215,8 +215,8 @@ methods
         end
         
         % set up lookup table (if not empty)
-        if ~isColorImage(img) && ~isempty(obj.Doc.Lut)
-            colormap(obj.Handles.ImageAxis, obj.Doc.Lut);
+        if ~isColorImage(img) && ~isLabelImage(img) && ~isempty(doc.Lut)
+            colormap(obj.Handles.ImageAxis, doc.Lut);
         end
         
         % remove all axis children that are not image

@@ -41,7 +41,7 @@ methods
         newDoc = addImageDocument(frame, lbl);
         
         % history
-        string = sprintf('%s = comonentLabeling(%s);\n', newDoc.Tag, doc.Tag);
+        string = sprintf('%s = componentLabeling(%s);\n', newDoc.Tag, doc.Tag);
         addToHistory(frame, string);
     end
     

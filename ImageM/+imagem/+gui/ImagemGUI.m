@@ -74,10 +74,18 @@ methods
         end
         doc.Tag = tag;
         
-        % display settings
+        % compute LUT of label image
         if ~isempty(image)
             if isLabelImage(image)
-                doc.Lut = 'jet';
+                doc.LutName = 'jet';
+                nLabels = max(image.Data(:));
+                if nLabels < 255
+                    baseLut = jet(255);
+                    inds = floor((1:nLabels)*255/nLabels);
+                    doc.Lut = baseLut(inds,:);
+                else
+                    doc.Lut = jet(nLabels);
+                end
             end
         end
         

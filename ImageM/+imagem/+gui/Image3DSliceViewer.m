@@ -249,8 +249,7 @@ methods
         sliceImage = updateSliceImage(obj);
         
         % compute display data
-        % TODO: label image need to use LUT and BGCOLOR
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, obj.Doc.Lut, obj.Doc.BackgroundColor);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
@@ -283,7 +282,7 @@ methods
         end
         
         % set up lookup table (if not empty)
-        if ~isColorImage(sliceImage) && ~isempty(obj.Doc.Lut)
+        if ~isColorImage(sliceImage) && ~isLabelImage(img) && ~isempty(obj.Doc.Lut)
             colormap(obj.Handles.ImageAxis, obj.Doc.Lut);
         end
         
