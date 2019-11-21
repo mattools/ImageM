@@ -53,7 +53,7 @@ methods
             'CloseRequestFcn', @obj.close);
         
         % create main figure menu
-        createFrameMenu(gui, fig, obj);
+        createFigureMenu(gui, fig, obj);
         if ~isempty(obj.Doc)
             setupLayout(fig);
         end

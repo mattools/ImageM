@@ -68,7 +68,7 @@ methods
         % create a new doc
         createTableFrame(frame.Gui, k);
         
-        if displayFlag
+        if displayFlag && size(tab, 2) > 1
             figure;
             scatterGroup(tab(:,1), tab(:,2), k);
         end
