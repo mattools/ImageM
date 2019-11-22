@@ -262,7 +262,8 @@ methods
         addMenuItem(obj, binaryMenu, ConnectedComponentsLabeling(),  'Connected Components Labeling');
         
         addMenuItem(obj, binaryMenu, ImageBooleanOp(),       'Boolean Operation...', true);
-        addMenuItem(obj, binaryMenu, BinaryImageOverlay(),   'Image Overlay');
+        addMenuItem(obj, binaryMenu, BinaryImageOverlay(),   'Image Overlay...');
+        addMenuItem(obj, binaryMenu, CreateLabelValuesMap(), 'Create Label Values Map...');
         
         % Interactive tools
         
