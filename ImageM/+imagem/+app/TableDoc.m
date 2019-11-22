@@ -21,6 +21,9 @@ properties
     % the data table that stores the data.
     Table;
     
+    % the name used to identify image on command-line arguments
+    Tag;
+    
     % a boolean flag indicating whether the table was modified or .
     Modified = false;
     

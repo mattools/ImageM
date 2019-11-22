@@ -78,7 +78,7 @@ methods
         if ~isempty(image)
             if isLabelImage(image)
                 doc.LutName = 'jet';
-                nLabels = max(image.Data(:));
+                nLabels = double(max(image.Data(:)));
                 if nLabels < 255
                     baseLut = jet(255);
                     inds = floor((1:nLabels)*255/nLabels);
@@ -111,6 +111,17 @@ methods
         % initialize table doc
         doc = imagem.app.TableDoc(table);
         
+        % setup document tag
+        if nargin < 4
+            tag = createTableTag(obj.App, table);
+        else
+            tag = createTableTag(obj.App, table, refTag);
+        end
+        doc.Tag = tag;
+
+        % add ImageDoc to the application
+        addDocument(obj.App, doc);
+
         frame = imagem.gui.TableFrame(obj, doc);
     end
     

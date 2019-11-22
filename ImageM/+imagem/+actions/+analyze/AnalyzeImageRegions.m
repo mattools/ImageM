@@ -360,7 +360,7 @@ methods
         closeFigure(obj);
 
         % display data table in its own window
-        show(tab);
+        createTableFrame(obj.Viewer.Gui, tab);
         
         img = currentImage(obj.Viewer);
         
