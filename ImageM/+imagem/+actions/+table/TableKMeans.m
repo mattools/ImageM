@@ -47,7 +47,8 @@ methods
         gd = imagem.gui.GenericDialog('K-Means');
         numberLabel = 'Class number: ';
         addNumericField(gd, numberLabel, nClasses, 0);
-        addCheckBox(gd, 'Display result', true);
+        addCheckBox(gd, 'Display Centroids', true);
+        addCheckBox(gd, 'Plot Result', true);
         setSize(gd, [200 150]);
         
         showDialog(gd);
@@ -59,14 +60,20 @@ methods
         if nClasses < 1 || nClasses > maxClassNumber
             error('sliceIndex must be comprised between 1 and %d', maxClassNumber);
         end
+        displayCentroids = getNextBoolean(gd);
         displayFlag = getNextBoolean(gd);
         
         
         % run the kmeans
-        k = kmeans(tab, nClasses);
+        [k, centroids] = kmeans(tab, nClasses);
         
         % create a new doc
         createTableFrame(frame.Gui, k);
+
+        if displayCentroids
+            % create a new doc
+            createTableFrame(frame.Gui, centroids);
+        end
         
         if displayFlag && size(tab, 2) > 1
             figure;
