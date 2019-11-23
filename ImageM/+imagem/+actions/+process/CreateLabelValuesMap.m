@@ -95,12 +95,15 @@ methods
             'Column Name:', obj.ColumnNameList, ...
             @obj.onColumnNameChanged);
         
+        obj.Handles.BackgroundValueTextField = addInputTextLine(gui, mainPanel, ...
+            'Background Value:', '0.0');
+        
 %         obj.Handles.shuffleMapCheckbox = addCheckBox(gui, mainPanel, ...
 %             'Shuffle map', true, ...
 %             @obj.onShuffleMapChanged);
         
         
-        set(mainPanel, 'Heights', [35 25]);
+        set(mainPanel, 'Heights', [35 25 35]);
         
         % button for control panel
         buttonsPanel = uix.HButtonBox( 'Parent', vb, 'Padding', 5);
@@ -157,20 +160,33 @@ methods
         column = tableDoc.Table(colName);
         values = column.Data;
         
+        bgValueText = get(obj.Handles.BackgroundValueTextField, 'String');
+        if strcmpi(bgValueText, 'NaN')
+            bgValue = NaN;
+        elseif strcmpi(bgValueText, '-inf')
+            bgValue = -inf;
+        elseif strcmpi(bgValueText, '+inf')
+            bgValue = inf;
+        else
+            bgValue = str2double(bgValueText);
+        end
+
         labelImage = obj.Frame.Doc.Image;
         labelList = unique(labelImage.Data(:));
         labelList(labelList == 0) = [];
         nLabels = length(labelList);
 
-        resData = zeros(size(labelImage.Data));
+        resData = ones(size(labelImage.Data)) * bgValue;
         for i = 1:nLabels
             resData(labelImage.Data == labelList(i)) = values(i);
         end
         res = Image('Data', resData, 'parent', labelImage, 'type', 'intensity');
 
-        
         % create document containing the new image
-        addImageDocument(obj.Frame, res);
+        [newDoc, newFrame] = addImageDocument(obj.Frame, res);
+
+        valueRange = [min(values) max(values)];
+        newFrame.DisplayRange = valueRange;
 %         newDoc = addImageDocument(obj.Frame, res);
 %         
 %         % add history
