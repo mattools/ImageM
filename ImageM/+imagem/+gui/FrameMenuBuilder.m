@@ -317,6 +317,7 @@ methods
         import imagem.actions.edit.*;
         import imagem.actions.image.*;
         import imagem.actions.table.*;
+        import imagem.actions.table.file.*;
         import imagem.actions.table.edit.*;
         import imagem.actions.table.pca.*;
         import imagem.actions.view.*;
@@ -329,6 +330,10 @@ methods
         % File Menu Definition
         
         fileMenu = addMenu(obj, hf, 'Files');
+
+        addMenuItem(obj, fileMenu, OpenTable(),              'Open Table...', 'Accelerator', 'O');
+        addMenuItem(obj, fileMenu, SaveTable(),              'Save As...', ...
+            'Separator', 'on', 'Accelerator', 'S');
 
         item = addMenuItem(obj, fileMenu, CloseFrame(),      'Close', 'Separator', 'on');
         set(item, 'Accelerator', 'W');

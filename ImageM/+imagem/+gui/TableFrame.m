@@ -105,8 +105,13 @@ end % end constructors
 
 %% Methods
 methods
+    function doc = currentDoc(obj)
+        % Return the TableDoc instance associated to this frame.
+        doc = obj.Doc;
+    end
+    
     function updateTitle(obj)
-        % Set up title of the figure, depending on image size and type.
+        % Set up title of the figure, depending on table size.
         
         % small checkup, because function can be called before figure was
         % initialised

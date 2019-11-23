@@ -45,6 +45,20 @@ end % end constructors
 
 %% Methods
 methods
+        
+    function [doc, viewer] = addImageDocument(obj, image, varargin)
+        % Create a new frame for the image based on the current frame.
+        [doc, viewer] = addImageDocument(obj.Gui, image, varargin{:});
+    end
+    
+    function addToHistory(obj, string)
+        % Simple wrapper to the function in App class.
+        %
+        % See Also
+        %    imagem.app.App.addToHistory
+        
+        addToHistory(obj.Gui.App, string);
+    end
 end % end methods
 
 end % end classdef
