@@ -295,9 +295,10 @@ methods
         addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(), 'Analyze Regions');
         addMenuItem(obj, analyzeMenu, ShowImageHistogram(),  'Histogram', ...
             'Accelerator', 'H');
+        addMenuItem(obj, analyzeMenu, VectorImageJointHistogram(),  'Joint Histogram...');
 
         addMenuItem(obj, analyzeMenu, PlotImageLineProfile(),'Plot Line Profile', ...
-            'Accelerator', 'K');
+            'Accelerator', 'K', 'Separator', 'on');
         
         
         % Help menu definition
