@@ -120,8 +120,9 @@ methods
         convertMenu = addMenu(obj, imageMenu, 'Convert');
         addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
         addMenuItem(obj, convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
-        addMenuItem(obj, convertMenu, UnfoldVectorImage(),   'Unfold Vector Image to Table');
-        addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),   'Unfold Vector Image Within Mask to Table...');
+        addMenuItem(obj, convertMenu, ConvertVectorImageToRGB(),        'Vector Image to RGB');
+        addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
 
         addMenuItem(obj, imageMenu, FlipImage(1),            'Horizontal Flip', 'Separator', 'on');
         addMenuItem(obj, imageMenu, FlipImage(2),            'Vertical Flip');
