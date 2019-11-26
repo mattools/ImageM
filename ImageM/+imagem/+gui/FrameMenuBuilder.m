@@ -357,6 +357,8 @@ methods
         plotMenu = addMenu(obj, hf, 'Plot');
         addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...');
         addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
+        addMenuItem(obj, plotMenu, BoxPlot(), 'Box Plot...', 'Separator', 'on');
+        addMenuItem(obj, plotMenu, GroupBoxPlot(), 'Box Plot by Group...');
         addMenuItem(obj, plotMenu, PlotRows(), 'Plot Rows', 'Separator', 'on');
         addMenuItem(obj, plotMenu, PlotColumns(), 'Plot Columns...');
         

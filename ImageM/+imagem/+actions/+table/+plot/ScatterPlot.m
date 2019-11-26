@@ -13,8 +13,8 @@ classdef ScatterPlot < imagem.actions.CurrentTableAction
 % ------
 % Author: David Legland
 % e-mail: david.legland@inra.fr
-% Created: 2012-03-26,    using Matlab 7.9.0.529 (R2009b)
-% Copyright 2012 INRA - Cepia Software Platform.
+% Created: 2019-11-26,    using Matlab 9.7.0.1190202 (R2019b)
+% Copyright 2019 INRA - BIA-BIBS.
 
 
 %% Properties
