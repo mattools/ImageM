@@ -67,6 +67,9 @@ methods
         data = reshape(img.Data, [nr nc]);
         tab = Table(data, colNames, rowNames);
         
+        coordsTable = Table(coords, {'x', 'y'}, rowNames);
+        createTableFrame(frame.Gui, coordsTable);
+        
 
 %         show(tab);
         createTableFrame(frame.Gui, tab);

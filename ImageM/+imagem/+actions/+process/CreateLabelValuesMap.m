@@ -98,9 +98,9 @@ methods
         obj.Handles.BackgroundValueTextField = addInputTextLine(gui, mainPanel, ...
             'Background Value:', '0.0');
         
-%         obj.Handles.shuffleMapCheckbox = addCheckBox(gui, mainPanel, ...
-%             'Shuffle map', true, ...
-%             @obj.onShuffleMapChanged);
+        %         obj.Handles.shuffleMapCheckbox = addCheckBox(gui, mainPanel, ...
+        %             'Shuffle map', true, ...
+        %             @obj.onShuffleMapChanged);
         
         
         set(mainPanel, 'Heights', [35 25 35]);
@@ -116,7 +116,7 @@ methods
         
         set(vb, 'Heights', [-1 40] );
     end
-
+    
     function closeFigure(obj, varargin)
         
         % close the current fig
@@ -124,7 +124,7 @@ methods
             delete(obj.Handles.Figure);
         end
     end
- 
+    
 end % end methods
 
 
@@ -183,7 +183,7 @@ methods
         res = Image('Data', resData, 'parent', labelImage, 'type', 'intensity');
 
         % create document containing the new image
-        [newDoc, newFrame] = addImageDocument(obj.Frame, res);
+        [newDoc, newFrame] = addImageDocument(obj.Frame, res); %#ok<ASGLU>
 
         valueRange = [min(values) max(values)];
         newFrame.DisplayRange = valueRange;

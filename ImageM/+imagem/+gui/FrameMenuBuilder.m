@@ -349,6 +349,7 @@ methods
         editMenu = addMenu(obj, hf, 'Edit');
         addMenuItem(obj, editMenu, RenameTable(), 'Rename...');
         addMenuItem(obj, editMenu, Transpose(), 'Transpose');
+        addMenuItem(obj, editMenu, Concatenate(), 'Concatenate...');
         addMenuItem(obj, editMenu, SelectTableRows(), 'Select Rows...', 'Separator', 'On');
         addMenuItem(obj, editMenu, SelectTableColumns(), 'Select Columns...');
         addMenuItem(obj, editMenu, FoldTableToImage(), 'Fold Table To Image...', 'Separator', 'On');

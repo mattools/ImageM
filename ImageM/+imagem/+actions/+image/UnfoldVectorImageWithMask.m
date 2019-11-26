@@ -104,6 +104,9 @@ methods
         end
         tab = Table(data, colNames);
 
+        coordsTable = Table(coords, {'x', 'y'}, rowNames);
+        createTableFrame(frame.Gui, coordsTable);
+        
         createTableFrame(frame.Gui, tab);
         
 %         % create a new doc
