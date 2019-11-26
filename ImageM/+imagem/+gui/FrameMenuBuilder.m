@@ -321,6 +321,7 @@ methods
         import imagem.actions.table.*;
         import imagem.actions.table.file.*;
         import imagem.actions.table.edit.*;
+        import imagem.actions.table.plot.*;
         import imagem.actions.table.pca.*;
         import imagem.actions.view.*;
         import imagem.actions.process.*;
@@ -347,9 +348,16 @@ methods
         % Edit menu
         editMenu = addMenu(obj, hf, 'Edit');
         addMenuItem(obj, editMenu, RenameTable(), 'Rename...');
+        addMenuItem(obj, editMenu, Transpose(), 'Transpose');
         addMenuItem(obj, editMenu, SelectTableRows(), 'Select Rows...', 'Separator', 'On');
         addMenuItem(obj, editMenu, SelectTableColumns(), 'Select Columns...');
         addMenuItem(obj, editMenu, FoldTableToImage(), 'Fold Table To Image...', 'Separator', 'On');
+        
+        % Plot menu
+        plotMenu = addMenu(obj, hf, 'Plot');
+        addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...');
+        addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
+        addMenuItem(obj, plotMenu, PlotRows(), 'Plot Rows', 'Separator', 'on');
         
         % Process menu
         processMenu = addMenu(obj, hf, 'Process');

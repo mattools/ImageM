@@ -124,7 +124,14 @@ methods
 
         frame = imagem.gui.TableFrame(obj, doc);
     end
-    
+
+    function h = createPlotFrame(obj)
+        % Create a new figure with standard options
+        h = figure;
+        clf; hold on;
+        set(gca, obj.Options.TextOptions{:});
+    end
+
     function addToHistory(obj, string)
         % Add the specified string to gui history
         
