@@ -358,6 +358,7 @@ methods
         addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...');
         addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
         addMenuItem(obj, plotMenu, PlotRows(), 'Plot Rows', 'Separator', 'on');
+        addMenuItem(obj, plotMenu, PlotColumns(), 'Plot Columns...');
         
         % Process menu
         processMenu = addMenu(obj, hf, 'Process');
