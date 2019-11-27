@@ -18,18 +18,18 @@ classdef ImagemApp < handle
 
 %% Properties
 properties
-    % set of image documents managed by obj application
+    % Set of documents (images, tables...) managed by this application.
     DocList;
     
-    % default connectivity associated to each dimension. Equals 4 for 2D,
-    % and 6 for 3D. Stored as a row vector, starting at dim=2 (no need for
-    % connectivity info for 1D)
+    % Default connectivity associated to each dimension.
+    % Equals 4 for 2D, and 6 for 3D. Stored as a row vector, starting at
+    % dim=2 (no need for connectivity info for 1D)
     DefaultConnectivity = [4 6];
     
-    % the size (diameter) of the brush (in pixels)
+    % The size (diameter) of the brush (in pixels).
     BrushSize = 3;
     
-    % history of user commands, as a cell array of strings
+    % History of user commands, as a cell array of strings.
     History = cell(0, 1);
 end 
 
@@ -83,7 +83,7 @@ methods
         names = {};
         for i = 1:length(obj.DocList)
             doc = obj.DocList{i};
-            if isa(doc, 'imagem.app.ImagemDoc')
+            if isa(doc, 'imagem.app.ImageDoc')
                 names = [names {doc.Image.Name}]; %#ok<AGROW>
             end
         end
@@ -139,7 +139,7 @@ methods
         
         for i = 1:length(obj.DocList)
             doc = obj.DocList{i};
-            if isa(doc, 'imagem.app.ImagemDoc')
+            if isa(doc, 'imagem.app.ImageDoc')
                 if strcmp(doc.Image.Name, imageName)
                     return;
                 end
@@ -220,7 +220,7 @@ methods
         b = false;
         for i = 1:length(obj.DocList)
             doc = obj.DocList{i};
-            if isa(doc, 'imagem.gui.ImagemDoc')
+            if isa(doc, 'imagem.gui.ImageDoc')
                 if strcmp(doc.Image.Name, name)
                     b = true;
                     return;

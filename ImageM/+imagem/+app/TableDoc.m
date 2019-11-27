@@ -1,4 +1,4 @@
-classdef TableDoc < handle
+classdef TableDoc < imagem.app.ImagemDoc
 %TABLEDOC  Enapsulates a data Table, and data for GUI interaction.
 %
 %   Class TableDoc
@@ -20,21 +20,15 @@ classdef TableDoc < handle
 properties
     % the data table that stores the data.
     Table;
-    
-    % the name used to identify image on command-line arguments
-    Tag;
-    
-    % a boolean flag indicating whether the table was modified or .
-    Modified = false;
-    
+        
 end % end properties
 
 
 %% Constructor
 methods
-    function this = TableDoc(table)
+    function obj = TableDoc(table)
     % Constructor for TableDoc class
-        this.Table = table;
+        obj.Table = table;
     end
 
 end % end constructors

@@ -88,7 +88,7 @@ methods
         %  Usage:
         %  OBJ = imagem.gui.ImageViewer(GUI, DOC);
         %  where GUI is an instance of ImagemGUI, and DOC is an instance of
-        %  ImagemDoc.
+        %  ImageDoc.
         
         % call constructor of super class
         obj = obj@imagem.gui.ImagemFrame(gui);

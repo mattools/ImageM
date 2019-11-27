@@ -64,7 +64,7 @@ methods
         image.Name = newName;
         
         % creates new instance of ImageDoc
-        doc = imagem.app.ImagemDoc(image);
+        doc = imagem.app.ImageDoc(image);
         
         % setup document tag
         if nargin < 4

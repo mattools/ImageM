@@ -15,9 +15,9 @@ properties
 end
 
 methods
-    function this = GenericAction(fhandle)
+    function obj = GenericAction(fhandle)
         % calls the parent constructor
-        this.FunctionHandle = fhandle;
+        obj.FunctionHandle = fhandle;
     end
 end
 

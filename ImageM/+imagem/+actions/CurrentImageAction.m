@@ -33,6 +33,9 @@ methods
     function b = isActivable(obj, frame)
         b = isActivable@imagem.actions.CurrentDocAction(obj, frame);
         if b
+            b = isa(frame.Doc, 'imagem.app.ImageDoc');
+        end
+        if b
             b = ~isempty(currentImage(frame));
         end
     end

@@ -4,18 +4,18 @@ classdef PlanarImageViewer < imagem.gui.ImageViewer
 %   VIEWER = PlanarImageViewer(GUI, DOC)
 %   Creates a VIEWER for an ImageM document.
 %   GUI: the instance of ImagemGUI that manages all frames
-%   DOC: the instance of ImagemDoc that contains the data to display.
+%   DOC: the instance of ImageDoc that contains the data to display.
 %
 %   Example
 %     app = imagem.app.ImagemApp;
 %     gui = imagem.gui.ImagemGUI(app);
 %     img = Image.read('cameraman.tif');
-%     doc = imagem.app.ImagemDoc(image);
+%     doc = imagem.app.ImageDoc(image);
 %     addDocument(app, doc);
 %     viewer = imagem.gui.PlanarImageViewer(obj, doc);
 %
 %   See also
-%     ImagemGUI, PlanarImageViewer, ImagemDoc
+%     ImagemGUI, PlanarImageViewer, ImageDoc
 %
 
 % ------
