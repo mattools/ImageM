@@ -53,6 +53,12 @@ methods
         % setup new name
         table.Name = newName;
         updateTitle(frame);
+        
+        % add history
+        string = sprintf('%s.Name = ''%s'');\n', ...
+            doc.Tag, newName);
+        addToHistory(frame, string);
+
     end
 end % end methods
 

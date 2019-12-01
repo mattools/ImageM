@@ -68,22 +68,26 @@ methods
         [k, centroids] = kmeans(tab, nClasses);
         
         % create a new doc
-        createTableFrame(frame.Gui, k);
-
+        [frame2, doc2] = createTableFrame(frame.Gui, k);
+        
+        % optional processing of centroids
         if displayCentroids
             % create a new doc
-            createTableFrame(frame.Gui, centroids);
+            [frameC, docC] = createTableFrame(frame.Gui, centroids); %#ok<ASGLU>
+            historyString = sprintf('[%s,%s] = kmeans(%s, %d);\n', ...
+                doc2.Tag, docC.Tag, doc.Tag, nClasses);
+        else
+            historyString = sprintf('%s = kmeans(%s, %d);\n', ...
+                doc2.Tag, doc.Tag, nClasses);
         end
+        addToHistory(frame2, historyString);
+        
         
         if displayFlag && size(tab, 2) > 1
             figure;
             scatterGroup(tab(:,1), tab(:,2), k);
         end
         
-%         % add history
-%         string = sprintf('%s = squeeze(slice(%s, 3, %d));\n', ...
-%             newDoc.Tag, doc.Tag, sliceIndex);
-%         addToHistory(frame, string);
     end
     
 end % end methods

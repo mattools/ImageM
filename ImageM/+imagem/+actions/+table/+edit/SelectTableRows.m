@@ -50,8 +50,13 @@ methods
         end
         
         tab2 = table(sel, :);
-        createTableFrame(gui, tab2);
+        [frame2, doc2] = createTableFrame(gui, tab2);
         
+        % add history
+        indsString = ['[' num2str(sel(:)', '%d ') ']'];
+        string = sprintf('%s = %s(%s, :);\n', ...
+            doc2.Tag, frame.Doc.Tag, indsString);
+        addToHistory(frame2, string);
     end
 end % end methods
 

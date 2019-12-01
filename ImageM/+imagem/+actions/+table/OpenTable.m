@@ -35,7 +35,7 @@ end % end constructors
 %% Methods
 methods
     function run(obj, frame) %#ok<INUSL>
-        disp('Open new table ');
+        disp('% Open new table ');
         
         % get handle to parent GUI
         gui = frame.Gui;
@@ -53,10 +53,16 @@ methods
         end
 
         % read the table
-        tab = Table.read(fullfile(pathName, fileName));
+        filePath = fullfile(pathName, fileName);
+        tab = Table.read(filePath);
         
         % add image to application, and create new display
-        createTableFrame(gui, tab);
+        [frame, doc] = createTableFrame(gui, tab);
+        
+        % add history
+        string = sprintf('%s = Table.read(''%s'');\n', ...
+            doc.Tag, filePath);
+        addToHistory(frame, string);
     end
 end % end methods
 

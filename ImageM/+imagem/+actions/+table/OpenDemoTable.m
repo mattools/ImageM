@@ -46,7 +46,12 @@ methods
         tab = Table.read(obj.DemoFileName);
         
         % add image to application, and create new display
-        createTableFrame(gui, tab);
+        [frame2, doc2] = createTableFrame(gui, tab);
+        
+        % add history
+        string = sprintf('%s = Table.read(''%s'');\n', ...
+            doc2.Tag, obj.DemoFileName);
+        addToHistory(frame2, string);
     end
 end % end methods
 
