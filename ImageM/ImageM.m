@@ -64,7 +64,7 @@ app = ImagemApp;
 gui = ImagemGUI(app);
 
 % use the GUI to create a new image display
-[doc, viewer] = addImageDocument(gui, img); %#ok<ASGLU>
+viewer = createImageFrame(gui, img);
 
 
 % returns handle to viewer if requested

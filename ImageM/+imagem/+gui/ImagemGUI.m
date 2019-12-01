@@ -21,9 +21,10 @@ classdef ImagemGUI < handle
 
 %% Properties
 properties
-    % application
+    % the application instance that contains and manages documents.
     App;
     
+    % some options for widgets creation, as an instance of GuiOptions.
     Options;
 end 
 
@@ -33,7 +34,7 @@ methods
         % IMAGEM constructor
         %
         % IM = ImageM(APP)
-        % where APP is an instance of ImagemApp
+        % where APP is an instance of ImagemApp.
         %
         
         obj.App = appli;
@@ -47,51 +48,54 @@ end % construction function
 
 %% General methods
 methods
-    function [doc, viewer] = addImageDocument(obj, image, newName, refTag)
-        % Create a new document from image, add it to app, and display img
+    function [frame, doc] = createImageFrame(obj, image)
+        % Create a new image viewer frame.
+        %
+        % FRAME = createImageFrame(obj, image);
+        % Creates a new frame from image instance.
+        %
+        % [FRAME, DOC] = createImageFrame(obj, image);
+        % Also returns the created doc.
         
+        % in case of empty image, create an "empty view"
         if isempty(image)
-            % in case of empty image, create an "empty view"
+            doc = [];
+            frame = imagem.gui.PlanarImageViewer(obj, doc);
+            return;
+        end
+        
+        doc = createImageDocument(obj.App, image);
+       
+        % creates a display for the new image depending on image dimension
+        if ~isempty(image) && size(image, 3) > 1
+            frame = imagem.gui.Image3DSliceViewer(obj, doc);
+        else
+            frame = imagem.gui.PlanarImageViewer(obj, doc);
+        end
+        addView(doc, frame);
+    end
+
+    function [doc, viewer] = addImageDocument(obj, image, newName, refTag)
+        % Create a new document from image, add it to app, and display img.
+        % (Deprecated).
+        %
+        
+        % in case of empty image, create an "empty view"
+        if isempty(image)
             doc = [];
             viewer = imagem.gui.PlanarImageViewer(obj, doc);
             return;
         end
         
-        if nargin < 3 || isempty(newName)
-            % find a 'free' name for image
-            newName = createDocumentName(obj.App, image.Name);
+        if ~exist('newName', 'var')
+            newName = [];
         end
-        image.Name = newName;
-        
-        % creates new instance of ImageDoc
-        doc = imagem.app.ImageDoc(image);
-        
-        % setup document tag
-        if nargin < 4
-            tag = createImageTag(obj.App, image);
-        else
-            tag = createImageTag(obj.App, image, refTag);
-        end
-        doc.Tag = tag;
-        
-        % compute LUT of label image
-        if ~isempty(image)
-            if isLabelImage(image)
-                doc.LutName = 'jet';
-                nLabels = double(max(image.Data(:)));
-                if nLabels < 255
-                    baseLut = jet(255);
-                    inds = floor((1:nLabels)*255/nLabels);
-                    doc.Lut = baseLut(inds,:);
-                else
-                    doc.Lut = jet(nLabels);
-                end
-            end
+        if ~exist('refTag', 'var')
+            refTag = 'img';
         end
         
-        % add ImageDoc to the application
-        addDocument(obj.App, doc);
-        
+        doc = createImageDocument(obj.App, image, newName, refTag);
+       
         % creates a display for the new image depending on image dimension
         if ~isempty(image) && size(image, 3) > 1
             viewer = imagem.gui.Image3DSliceViewer(obj, doc);
@@ -105,22 +109,13 @@ methods
         % Create a new Frame for displaying the table.
         %
         % Usage:
-        %    [frame, doc] = createTableFrame(obj, table);
+        %   FRAME = createTableFrame(obj, table);
+        %   Creates a new frame from Image instance.
         %
+        %   [FRAME, DOC] = createTableFrame(obj, table);
+        %   Also returns the created doc.
         
-        % initialize table doc
-        doc = imagem.app.TableDoc(table);
-        
-        % setup document tag
-        if nargin < 4
-            tag = createTableTag(obj.App, table);
-        else
-            tag = createTableTag(obj.App, table, refTag);
-        end
-        doc.Tag = tag;
-
-        % add ImageDoc to the application
-        addDocument(obj.App, doc);
+        doc = createTableDocument(obj.App, table);
 
         frame = imagem.gui.TableFrame(obj, doc);
     end

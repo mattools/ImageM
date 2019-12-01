@@ -52,6 +52,202 @@ methods
     end
 end % general methods
 
+
+%% Methods for management of image documents
+methods
+    function doc = createImageDocument(obj, image, newName, refTag)
+        % Create a new image document, add it to app, and return doc.
+        
+        % determine the name of the new image
+        if nargin < 3 || isempty(newName)
+            % find a 'free' name for image
+            newName = createDocumentName(obj, image.Name);
+        end
+        image.Name = newName;
+        
+        % creates new instance of ImageDoc
+        doc = imagem.app.ImageDoc(image);
+        
+        % setup document tag
+        if nargin < 4
+            tag = createImageTag(obj, image);
+        else
+            tag = createImageTag(obj, image, refTag);
+        end
+        doc.Tag = tag;
+        
+        % compute LUT of label image
+        if isLabelImage(image)
+            doc.LutName = 'jet';
+            nLabels = double(max(image.Data(:)));
+            if nLabels < 255
+                baseLut = jet(255);
+                inds = floor((1:nLabels)*255/nLabels);
+                doc.Lut = baseLut(inds,:);
+            else
+                doc.Lut = jet(nLabels);
+            end
+        end
+        
+        % add ImageDoc to the application
+        addDocument(obj, doc);
+    end
+    
+    function doc = getImageDocument(obj, imageName)
+        % Returns the image document with specified name.
+        % If several images have the same name, returns the first one.
+        
+        if ~ischar(imageName)
+            error('image name should be specified as a string');
+        end
+        
+        for i = 1:length(obj.DocList)
+            doc = obj.DocList{i};
+            if isa(doc, 'imagem.app.ImageDoc')
+                if strcmp(doc.Image.Name, imageName)
+                    return;
+                end
+            end
+        end
+        
+        error(['Could not find any image document with name: ' imageName]);
+    end
+
+    function names = getImageNames(obj)
+        % returns a cell array of strings containing name of each image.
+        names = {};
+        for i = 1:length(obj.DocList)
+            doc = obj.DocList{i};
+            if isa(doc, 'imagem.app.ImageDoc')
+                names = [names {doc.Image.Name}]; %#ok<AGROW>
+            end
+        end
+    end
+    
+    function newTag = createImageTag(obj, image, baseName)
+        % finds a name that can be used as tag for obj image
+
+        % If no tag is specified, choose a base name that describe image
+        % type
+        if nargin < 3 || isempty(baseName)
+            % try to use a more specific tag depending on image type
+            if isBinaryImage(image)
+                baseName = 'bin';
+            elseif isLabelImage(image)
+                baseName = 'lbl';
+            else
+                % default tag for any type of image
+                baseName = 'img';
+            end
+        end
+               
+        % if the name is free, no problem
+        if isFreeTag(obj, baseName)
+            newTag = baseName;
+            return;
+        end
+        
+        % iterate on indices until we find a free tag
+        index = 1;
+        while true
+            newTag = [baseName num2str(index)];
+            if isFreeTag(obj, newTag)
+                return;
+            end
+            index = index + 1;
+        end
+    end
+    
+end
+
+
+%% Methods for management of Table documents
+methods
+    function doc = createTableDocument(obj, table, newName, refTag)
+        % Create a new image document, add it to app, and return doc.
+        
+        % determine the name of the new image
+        if nargin < 3 || isempty(newName)
+            % find a 'free' name for image
+            newName = createDocumentName(obj, table.Name);
+        end
+        table.Name = newName;
+        
+        % creates new instance of TableDoc
+        doc = imagem.app.TableDoc(table);
+        
+        % setup document tag
+        if nargin < 4
+            tag = createTableTag(obj, table);
+        else
+            tag = createTableTag(obj, table, refTag);
+        end
+        doc.Tag = tag;
+        
+        % add ImageDoc to the application
+        addDocument(obj, doc);
+    end
+    
+    function doc = getTableDocument(obj, tableName)
+        % Returns the table document with specified name.
+        % If several tables have th esame name, returns the first one.
+        
+        if ~ischar(tableName)
+            error('table name should be specified as a string');
+        end
+        
+        for i = 1:length(obj.DocList)
+            doc = obj.DocList{i};
+            if isa(doc, 'imagem.app.TableDoc')
+                if strcmp(doc.Table.Name, tableName)
+                    return;
+                end
+            end
+        end
+        
+        error(['Could not find any table with name: ' tableName]);
+    end
+
+    function names = getTableNames(obj)
+        % returns a cell array of strings containing name of each table.
+        names = {};
+        for i = 1:length(obj.DocList)
+            doc = obj.DocList{i};
+            if isa(doc, 'imagem.app.TableDoc')
+                names = [names {doc.Table.Name}]; %#ok<AGROW>
+            end
+        end
+    end
+
+    function newTag = createTableTag(obj, table, baseName) %#ok<INUSL>
+        % finds a name that can be used as tag for a table document
+
+        % If no tag is specified, choose a base name that describe table
+        if nargin < 3 || isempty(baseName)
+            % default tag for tables
+            baseName = 'tab';
+        end
+               
+        % if the name is free, no problem
+        if isFreeTag(obj, baseName)
+            newTag = baseName;
+            return;
+        end
+        
+        % iterate on indices until we find a free tag
+        index = 1;
+        while true
+            newTag = [baseName num2str(index)];
+            if isFreeTag(obj, newTag)
+                return;
+            end
+            index = index + 1;
+        end
+    end
+    
+end
+
+
 %% Method for document management
 methods
     function addDocument(obj, doc)
@@ -78,28 +274,6 @@ methods
         docList = obj.DocList;
     end
     
-    function names = getImageNames(obj)
-        % returns a cell array of strings containing name of each image.
-        names = {};
-        for i = 1:length(obj.DocList)
-            doc = obj.DocList{i};
-            if isa(doc, 'imagem.app.ImageDoc')
-                names = [names {doc.Image.Name}]; %#ok<AGROW>
-            end
-        end
-    end
-    
-    function names = getTableNames(obj)
-        % returns a cell array of strings containing name of each table.
-        names = {};
-        for i = 1:length(obj.DocList)
-            doc = obj.DocList{i};
-            if isa(doc, 'imagem.app.TableDoc')
-                names = [names {doc.Table.Name}]; %#ok<AGROW>
-            end
-        end
-    end
-
     
     function b = hasDocuments(obj)
         b = ~isempty(obj.DocList);
@@ -127,51 +301,6 @@ methods
         else
             error('Index must be either numeric or char');
         end
-    end
-
-    function doc = getImageDocument(obj, imageName)
-        % Returns the image document with specified name.
-        % If several images have the same name, returns the first one.
-        
-        if ~ischar(imageName)
-            error('image name should be specified as a string');
-        end
-        
-        for i = 1:length(obj.DocList)
-            doc = obj.DocList{i};
-            if isa(doc, 'imagem.app.ImageDoc')
-                if strcmp(doc.Image.Name, imageName)
-                    return;
-                end
-            end
-%             currentDoc = obj.DocList{i};
-%             if strcmp(currentDoc.Image.Name, imageName)
-%                 doc = currentDoc;
-%                 return;
-%             end
-        end
-        
-        error(['Could not find any image with name: ' imageName]);
-    end
-
-    function doc = getTableDocument(obj, tableName)
-        % Returns the table document with specified name.
-        % If several tables have th esame name, returns the first one.
-        
-        if ~ischar(tableName)
-            error('table name should be specified as a string');
-        end
-        
-        for i = 1:length(obj.DocList)
-            doc = obj.DocList{i};
-            if isa(doc, 'imagem.app.TableDoc')
-                if strcmp(doc.Table.Name, tableName)
-                    return;
-                end
-            end
-        end
-        
-        error(['Could not find any table with name: ' tableName]);
     end
 
     function newName = createDocumentName(obj, baseName)
@@ -231,66 +360,6 @@ methods
                     return;
                 end
             end
-        end
-    end
-    
-    function newTag = createImageTag(obj, image, baseName)
-        % finds a name that can be used as tag for obj image
-
-        % If no tag is specified, choose a base name that describe image
-        % type
-        if nargin < 3 || isempty(baseName)
-            % try to use a more specific tag depending on image type
-            if isBinaryImage(image)
-                baseName = 'bin';
-            elseif isLabelImage(image)
-                baseName = 'lbl';
-            else
-                % default tag for any type of image
-                baseName = 'img';
-            end
-        end
-               
-        % if the name is free, no problem
-        if isFreeTag(obj, baseName)
-            newTag = baseName;
-            return;
-        end
-        
-        % iterate on indices until we find a free tag
-        index = 1;
-        while true
-            newTag = [baseName num2str(index)];
-            if isFreeTag(obj, newTag)
-                return;
-            end
-            index = index + 1;
-        end
-    end
-    
-    function newTag = createTableTag(obj, table, baseName) %#ok<INUSL>
-        % finds a name that can be used as tag for a table document
-
-        % If no tag is specified, choose a base name that describe table
-        if nargin < 3 || isempty(baseName)
-            % default tag for tables
-            baseName = 'tab';
-        end
-               
-        % if the name is free, no problem
-        if isFreeTag(obj, baseName)
-            newTag = baseName;
-            return;
-        end
-        
-        % iterate on indices until we find a free tag
-        index = 1;
-        while true
-            newTag = [baseName num2str(index)];
-            if isFreeTag(obj, newTag)
-                return;
-            end
-            index = index + 1;
         end
     end
     
