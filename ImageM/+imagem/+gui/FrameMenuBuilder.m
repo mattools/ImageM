@@ -116,6 +116,7 @@ methods
         addMenuItem(obj, colorMenu, SplitImageRGB(),         'Split RGB');
         addMenuItem(obj, colorMenu, SplitImageChannels(),    'Split Channels');
         addMenuItem(obj, colorMenu, MergeImageChannels(),    'Merge Channels...');
+        addMenuItem(obj, colorMenu, EditChannelNames(),      'Edit Channels...');
         
         convertMenu = addMenu(obj, imageMenu, 'Convert');
         addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
