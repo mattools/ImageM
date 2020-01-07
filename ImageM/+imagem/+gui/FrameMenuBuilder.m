@@ -106,6 +106,8 @@ methods
         
         imageMenu = addMenu(obj, hf, 'Image');
         
+        addMenuItem(obj, imageMenu, PrintImageInfo(),    'Print info');
+        
         convertTypeMenu = addMenu(obj, imageMenu,  'Set Image Type');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('binary'),    'Binary');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('grayscale'), 'Grayscale');

@@ -113,10 +113,10 @@ methods
         pos = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
         obj.LastClickedPoint = pos(1,:);
 
-%         fprintf('%f %f\n', pos(1, 1:2));
+        fprintf('%f %f\n', pos(1, 1:2));
         
         img = obj.Viewer.Doc.Image;
-        coord = round(pointToIndex(img, pos(1, 1:3)));
+        coord = round(pointToIndex(img, pos(1, 1:2)));
         coord = coord(1:2);
         
         % control on bounds of image
