@@ -106,7 +106,10 @@ methods
         
         imageMenu = addMenu(obj, hf, 'Image');
         
-        addMenuItem(obj, imageMenu, PrintImageInfo(),    'Print info');
+        addMenuItem(obj, imageMenu, PrintImageInfo(),       'Print info');
+        calibMenu = addMenu(obj, imageMenu, 'Calibration');
+        addMenuItem(obj, calibMenu, EditSpatialCalibration(),           'Edit Spatial Calibration...');
+        addMenuItem(obj, calibMenu, ClearSpatialCalibration(),          'Clear Spatial Calibration');
         
         convertTypeMenu = addMenu(obj, imageMenu,  'Set Image Type');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('binary'),    'Binary');
@@ -115,11 +118,11 @@ methods
         addMenuItem(obj, convertTypeMenu, ImageConvertType('label'),     'Label');
 
         colorMenu = addMenu(obj, imageMenu, 'Color', 'Separator', 'on');
-        addMenuItem(obj, colorMenu, SplitImageRGB(),         'Split RGB');
-        addMenuItem(obj, colorMenu, SplitImageChannels(),    'Split Channels');
-        addMenuItem(obj, colorMenu, MergeImageChannels(),    'Merge Channels...');
-        addMenuItem(obj, colorMenu, ReorderChannels(),       'Re-order Channels...', true);
-        addMenuItem(obj, colorMenu, EditChannelNames(),      'Edit Channels...');
+        addMenuItem(obj, colorMenu, SplitImageRGB(),        'Split RGB');
+        addMenuItem(obj, colorMenu, SplitImageChannels(),   'Split Channels');
+        addMenuItem(obj, colorMenu, MergeImageChannels(),   'Merge Channels...');
+        addMenuItem(obj, colorMenu, ReorderChannels(),      'Re-order Channels...', true);
+        addMenuItem(obj, colorMenu, EditChannelNames(),     'Edit Channels...');
         
         convertMenu = addMenu(obj, imageMenu, 'Convert');
         addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
@@ -128,17 +131,17 @@ methods
         addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
         addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
 
-        addMenuItem(obj, imageMenu, FlipImage(1),            'Horizontal Flip', 'Separator', 'on');
-        addMenuItem(obj, imageMenu, FlipImage(2),            'Vertical Flip');
-        addMenuItem(obj, imageMenu, RotateImage90(1),        'Rotate Right');
-        addMenuItem(obj, imageMenu, RotateImage90(-1),       'Rotate Left');
+        addMenuItem(obj, imageMenu, FlipImage(1),           'Horizontal Flip', 'Separator', 'on');
+        addMenuItem(obj, imageMenu, FlipImage(2),           'Vertical Flip');
+        addMenuItem(obj, imageMenu, RotateImage90(1),       'Rotate Right');
+        addMenuItem(obj, imageMenu, RotateImage90(-1),      'Rotate Left');
 
-        addMenuItem(obj, imageMenu, InvertImage(),           'Invert Image', 'Accelerator', 'I', 'Separator', 'on');
+        addMenuItem(obj, imageMenu, InvertImage(),          'Invert Image', 'Accelerator', 'I', 'Separator', 'on');
         
-        addMenuItem(obj, imageMenu, RenameImage(),           'Rename', 'Separator', 'on');
-        addMenuItem(obj, imageMenu, DuplicateImage(),        'Duplicate', 'Accelerator', 'D');
-        addMenuItem(obj, imageMenu, ExtractSlice(),          'Extract Slice');
-        addMenuItem(obj, imageMenu, CropImageSelection(),    'Crop Selection');
+        addMenuItem(obj, imageMenu, RenameImage(),          'Rename', 'Separator', 'on');
+        addMenuItem(obj, imageMenu, DuplicateImage(),       'Duplicate', 'Accelerator', 'D');
+        addMenuItem(obj, imageMenu, ExtractSlice(),         'Extract Slice');
+        addMenuItem(obj, imageMenu, CropImageSelection(),   'Crop Selection');
         
         
         settingsMenu = addMenu(obj, imageMenu, 'Settings', 'Separator', 'on');
@@ -150,7 +153,7 @@ methods
         
         viewMenu = addMenu(obj, hf, 'View');
 
-        addMenuItem(obj, viewMenu, ImageSetDisplayRange(),   'Set Display Range...');
+        addMenuItem(obj, viewMenu, ImageSetDisplayRange(),  'Set Display Range...');
 
         lutMenu = addMenu(obj, viewMenu, 'Look-Up Table');
         addMenuItem(obj, lutMenu, SetImageLut('gray'),           'Gray');
