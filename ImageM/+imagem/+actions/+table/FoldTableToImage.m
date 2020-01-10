@@ -46,7 +46,10 @@ methods
         % default options
         sizeX = nRows;
         sizeY = 1;
-        
+        if ~isempty(doc.ImageSize)
+            sizeX = doc.ImageSize(1);
+            sizeY = doc.ImageSize(2);
+        end
         
         % open a dialog to choose slice index
         gd = imagem.gui.GenericDialog('Fold Table to image');
@@ -76,7 +79,11 @@ methods
         data = zeros(sizeX, sizeY, 1, nCols, 'like', tab.Data);
         data(:) = tab.Data(:);
         
-        img = Image('Data', data, 'vector', nCols > 1);
+        if nCols == 1
+            img = Image('Data', data, 'type', 'intensity', 'channelNames', tab.ColNames(1));
+        else
+            img = Image('Data', data, 'type', 'vector', 'channelNames', tab.ColNames);
+        end
         
         addImageDocument(frame.Gui, img);
     end

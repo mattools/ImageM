@@ -72,7 +72,8 @@ methods
         
 
 %         show(tab);
-        createTableFrame(frame.Gui, tab);
+         [newFrame, newDoc] = createTableFrame(frame.Gui, tab, frame); %#ok<ASGLU>
+         newDoc.ImageSize = [size(img, 1) size(img, 2)];
         
 %         % create a new doc
 %         newDoc = addImageDocument(frame, res);
@@ -80,7 +81,8 @@ methods
 %         % add history
 %         string = sprintf('%s = squeeze(slice(%s, 3, %d));\n', ...
 %             newDoc.Tag, doc.Tag, sliceIndex);
-%         addToHistory(frame, string);
+        string = sprintf('%% %s <- unfold vector image %s\n', newDoc.Tag, doc.Tag);
+        addToHistory(frame, string);
     end
     
 end % end methods

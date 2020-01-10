@@ -22,6 +22,9 @@ properties
     % the input data table
     Table;
     
+    % The original parent document
+    ParentDoc;
+    
     % the results of the PCA
     ResPca;
     
@@ -47,6 +50,16 @@ methods
         
         obj.Gui = gui;
         obj.Table = table;
+        
+        while ~isempty(varargin)
+            if isa(varargin{1}, 'imagem.gui.TableFrame')
+                refFrame = varargin{1};
+                obj.ParentDoc = currentDoc(refFrame);
+            else
+                error('Unkown parameter');
+            end
+            varargin(1) = [];
+        end
 
         % create default figure
         fig = figure(...
@@ -234,7 +247,7 @@ methods
         end
         
         eigenValues = obj.ResPca.EigenValues;
-        createTableFrame(obj.Gui, eigenValues);
+        createTableFrame(obj.Gui, eigenValues, obj.ParentDoc);
     end
     
     function onShowScoresTable(obj, varargin)
@@ -245,7 +258,7 @@ methods
         end
         
         scores = obj.ResPca.Scores;
-        createTableFrame(obj.Gui, scores);
+        createTableFrame(obj.Gui, scores, obj.ParentDoc);
     end
     
     function onShowLoadingsTable(obj, varargin)
@@ -256,7 +269,7 @@ methods
         end
         
         loadings = obj.ResPca.Loadings;
-        createTableFrame(obj.Gui, loadings);
+        createTableFrame(obj.Gui, loadings, obj.ParentDoc);
     end
     
     function onScreePlot(obj, varargin)

@@ -77,7 +77,7 @@ methods
 
     function [doc, viewer] = addImageDocument(obj, image, newName, refTag)
         % Create a new document from image, add it to app, and display img.
-        % (Deprecated).
+        % (Deprecated, replaced by createImageFrame).
         %
         
         % in case of empty image, create an "empty view"
@@ -105,7 +105,7 @@ methods
         addView(doc, viewer);
     end
 
-    function [frame, doc] = createTableFrame(obj, table)
+    function [frame, doc] = createTableFrame(obj, table, varargin)
         % Create a new Frame for displaying the table.
         %
         % Usage:
@@ -115,8 +115,32 @@ methods
         %   [FRAME, DOC] = createTableFrame(obj, table);
         %   Also returns the created doc.
         
-        doc = createTableDocument(obj.App, table);
-
+        parentFrame = []; % will be used to locate the new frame
+        tableDoc = [];
+        
+        while ~isempty(varargin)
+            var1 = varargin{1};
+            if isa(var1, 'imagem.gui.TableFrame')
+                parentFrame = var1;
+                tableDoc = currentDoc(parentFrame);
+            elseif isa(var1, 'imagem.gui.ImagemFrame')
+                parentFrame = var1;
+            elseif isa(var1, 'imagem.app.TableDoc')
+                tableDoc = var1;
+            else
+                error('Unable to process input argument of type %s', class(var1));
+            end
+            varargin(1) = [];
+        end
+        
+        % create new doc
+        if ~isempty(tableDoc)
+            doc = createTableDocument(obj.App, table, tableDoc);
+        else
+            doc = createTableDocument(obj.App, table);
+        end
+        
+        % create new frame for containing the doc.
         frame = imagem.gui.TableFrame(obj, doc);
     end
 

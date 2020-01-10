@@ -163,11 +163,43 @@ end
 
 %% Methods for management of Table documents
 methods
-    function doc = createTableDocument(obj, table, newName, refTag)
+    function doc = createTableDocument(obj, table, varargin)
         % Create a new image document, add it to app, and return doc.
+        %
+        % Syntax:
+        % doc = createTableDocument(app, table)
+        % Create a new document from the Table object
+        %
+        % doc = createTableDocument(app, table, parentDoc)
+        % Also copies some information from parent document.
+        %
+        % doc = createTableDocument(..., NAME)
+        % specifies the name of the new table.
+        %
+        
+        % default values
+        refTag = '';
+        newName = '';
+        parentDoc = '';
+        
+        while ~isempty(varargin)
+            if isa(varargin{1}, 'imagem.app.TableDoc')
+                parentDoc = varargin{1};
+                
+            elseif ischar(varargin{1})
+                if isempty(newName)
+                    newName = varargin{1};
+                else
+                    refTag = varargin{1};
+                end
+            end
+            
+            varargin(1) = [];
+            continue;
+        end
         
         % determine the name of the new image
-        if nargin < 3 || isempty(newName)
+        if isempty(newName)
             % find a 'free' name for image
             newName = createDocumentName(obj, table.Name);
         end
@@ -176,12 +208,13 @@ methods
         % creates new instance of TableDoc
         doc = imagem.app.TableDoc(table);
         
-        % setup document tag
-        if nargin < 4
-            tag = createTableTag(obj, table);
-        else
-            tag = createTableTag(obj, table, refTag);
+        % optionnally copy some info
+        if ~isempty(parentDoc)
+            doc.ImageSize = parentDoc.ImageSize;
         end
+        
+        % setup document tag
+        tag = createTableTag(obj, table, refTag);
         doc.Tag = tag;
         
         % add ImageDoc to the application

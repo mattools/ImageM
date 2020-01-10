@@ -50,7 +50,7 @@ methods
         end
         
         tab2 = table(:, sel);
-        [frame2, doc2] = createTableFrame(gui, tab2);
+        [frame2, doc2] = createTableFrame(gui, tab2, frame);
         
         % add history
         indsString = ['[' num2str(sel(:)', '%d ') ']'];
