@@ -310,7 +310,7 @@ methods
         
         % setup image to overlay with current image index
         name = obj.Viewer.Doc.Image.Name;
-        index = find(strcmp(name, imageNames));
+        index = find(strcmp(name, imageNames), 1, 'last');
         set(obj.Handles.OverlayImagePopup, 'Value', index);
         
         % setup layout for all widgets but control panel
