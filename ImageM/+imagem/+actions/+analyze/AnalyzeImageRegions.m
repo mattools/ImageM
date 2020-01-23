@@ -75,8 +75,9 @@ methods
         resol = [1 1];
         
         % initialize empty table
-        nLabels = length(unique(img(:))) - 1;
-        tab = Table(zeros(nLabels, 0));
+        labelList = unique(img(:));
+        labelList(labelList == 0) = [];
+        tab = Table(labelList, {'Label'});
         
         % process global size features
         if areaFlag || shapeFactorFlag
