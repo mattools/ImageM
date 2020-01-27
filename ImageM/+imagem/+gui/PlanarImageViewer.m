@@ -20,7 +20,7 @@ classdef PlanarImageViewer < imagem.gui.ImageViewer
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -356,7 +356,7 @@ methods
         % function called when the Scroll panel has been resized
         
        if strcmp(obj.ZoomMode, 'adjust')
-            if ~isfield(obj.Handles, 'scrollPanel')
+            if ~isfield(obj.Handles, 'ScrollPanel')
                 return;
             end
             scroll = obj.Handles.ScrollPanel;

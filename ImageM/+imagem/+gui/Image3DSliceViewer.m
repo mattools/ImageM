@@ -418,7 +418,7 @@ methods
         % function called when the Scroll panel has been resized
         
        if strcmp(obj.ZoomMode, 'adjust')
-            if ~isfield(obj.Handles, 'scrollPanel')
+            if ~isfield(obj.Handles, 'ScrollPanel')
                 return;
             end
             scroll = obj.Handles.ScrollPanel;
