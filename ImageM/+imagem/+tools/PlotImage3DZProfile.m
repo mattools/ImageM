@@ -116,7 +116,7 @@ methods
         fprintf('%f %f\n', pos(1, 1:2));
         
         img = obj.Viewer.Doc.Image;
-        coord = round(pointToIndex(img, pos(1, 1:2)));
+        coord = round(pointToIndex(img, [pos(1, 1:2) obj.Viewer.SliceIndex]));
         coord = coord(1:2);
         
         % control on bounds of image

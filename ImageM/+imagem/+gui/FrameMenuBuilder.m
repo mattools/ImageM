@@ -281,8 +281,9 @@ methods
         addMenuItem(obj, toolsMenu, SelectTool(@ScrollImagePosition),        'Scroll Image');
         
         addMenuItem(obj, toolsMenu, SelectTool(@SelectRectangle),  'Select Rectangle', true);
-        addMenuItem(obj, toolsMenu, SelectTool(@SelectPolyline),   'Select Polyline');
         addMenuItem(obj, toolsMenu, SelectTool(@SelectPoints),     'Select Points');
+        addMenuItem(obj, toolsMenu, SelectTool(@SelectPolyline),   'Select Polyline');
+        addMenuItem(obj, toolsMenu, SelectTool(@SelectPolygon),    'Select Polygon');
         addMenuItem(obj, toolsMenu, SelectTool(@SelectLineSegment),'Select Line Segment');
 
         addMenuItem(obj, toolsMenu, SelectTool(@SetPixelToWhite), ...

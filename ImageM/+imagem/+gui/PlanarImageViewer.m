@@ -257,6 +257,8 @@ methods
         switch lower(shape.Type)
             case 'polygon'
                 h = drawPolygon(ax, shape.Data, shape.Style{:});
+            case 'polyline'
+                h = drawPolyline(ax, shape.Data, shape.Style{:});
             case 'pointset'
                 h = drawPoint(ax, shape.Data, shape.Style{:});
             case 'box'
