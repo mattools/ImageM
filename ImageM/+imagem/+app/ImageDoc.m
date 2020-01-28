@@ -26,7 +26,7 @@ properties
     
 %     % a row vector of two values indicating minimal and maximal displayable
 %     % values for grayscale and intensity images.
-%     % (for the moment, obj is managed in the PlanarImageViewer class)
+%     % (for the moment, this is managed in the PlanarImageViewer class)
 %     displayRange = [];
     
     % Look-up table (colormap) used for displaying the image. 
@@ -38,6 +38,10 @@ properties
     
     % Background color used for display of label images.
     BackgroundColor = 'w';
+    
+    % Specifies the preferred way for displaying channels.
+    % Can be one of: {'Curve'}, 'Bar', 'Stem'.
+    ChannelDisplayType = 'Curve';
     
     % A set of annotations.
     % stored as an array of structures with fields type, data, style.

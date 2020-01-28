@@ -293,6 +293,8 @@ methods
         addMenuItem(obj, toolsMenu, PlotLabelMapCurvesFromTable(),       'Plot Curves From Labels...');
         action = SelectTool(@PlotImage3DZProfile);
         addMenuItem(obj, toolsMenu, action,  'Plot Image3D Z-Profile');
+        action = SelectTool(@PlotVectorImageChannels);
+        addMenuItem(obj, toolsMenu, action,  'Plot Vector Image Channels');
         
         
         % Analyze Menu Definition
