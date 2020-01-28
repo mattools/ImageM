@@ -38,7 +38,7 @@ classdef GenericDialog < handle
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2014-04-18,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2014 INRA - Cepia Software Platform.
 
@@ -126,6 +126,7 @@ methods (Access = private)
             'Toolbar', 'none', ...
             'NextPlot', 'new', ...
             'WindowStyle', 'modal', ...
+            'CloseRequestFcn', @obj.closeFigure, ...
             'Visible', 'off');
         
         set(hf, 'units', 'pixels');
@@ -429,10 +430,11 @@ methods
         button = obj.ClosingButton;
     end
     
-    function closeFigure(obj)
+    function closeFigure(obj, varargin)
         % close the current figure
+        obj.ClosingButton = 'cancel';
         if ~isempty(obj.Handles.Figure)
-            close(obj.Handles.Figure);
+            delete(obj.Handles.Figure);
         end
     end
     

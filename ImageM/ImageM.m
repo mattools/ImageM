@@ -5,8 +5,8 @@ function varargout = ImageM(varargin)
 %   Creates a new ImageM window, with a menu and without image.
 %
 %   ImageM(IMG)
-%   Creates a new ImagM window initialized with the given image. IMG should
-%   be an instance of Image Object.
+%   Creates a new ImageM window initialized with the given image. IMG
+%   should be an instance of Image Object.
 %
 %   VIEWER = ImageM(IMG);
 %   Returns the ImageM Viewer object created for the input image.
@@ -27,7 +27,7 @@ function varargout = ImageM(varargin)
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
