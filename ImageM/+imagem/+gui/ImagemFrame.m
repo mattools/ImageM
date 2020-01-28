@@ -49,6 +49,9 @@ methods
     function [doc, viewer] = addImageDocument(obj, image, varargin)
         % Create a new frame for the image based on the current frame.
         [doc, viewer] = addImageDocument(obj.Gui, image, varargin{:});
+        if isa(obj, 'imagem.gui.ImageViewer')
+            doc.ChannelDisplayType = obj.Doc.ChannelDisplayType;
+        end
     end
     
     function addToHistory(obj, string)

@@ -108,8 +108,14 @@ methods
         
         addMenuItem(obj, imageMenu, PrintImageInfo(),       'Print info');
         calibMenu = addMenu(obj, imageMenu, 'Calibration');
-        addMenuItem(obj, calibMenu, EditSpatialCalibration(),           'Edit Spatial Calibration...');
-        addMenuItem(obj, calibMenu, ClearSpatialCalibration(),          'Clear Spatial Calibration');
+        addMenuItem(obj, calibMenu, EditSpatialCalibration(),       'Edit Spatial Calibration...');
+        addMenuItem(obj, calibMenu, ClearSpatialCalibration(),      'Clear Spatial Calibration');
+        channelTypeMenu = addMenu(obj, calibMenu, 'Channel Display');
+        addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Curve'),   'Curve');
+        addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Bar'),     'Bar');
+        addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Stem'),    'Stem');
+        
+        
         
         convertTypeMenu = addMenu(obj, imageMenu,  'Set Image Type');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('binary'),    'Binary');
