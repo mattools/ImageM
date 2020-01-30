@@ -307,14 +307,16 @@ methods
         
         analyzeMenu = addMenu(obj, hf, 'Analyze');
         
-        addMenuItem(obj, analyzeMenu, SetImageScale(),       'Set Image Scale');
-        addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(), 'Analyze Regions');
-        addMenuItem(obj, analyzeMenu, ShowImageHistogram(),  'Histogram', ...
+        addMenuItem(obj, analyzeMenu, SetImageScale(),          'Set Image Scale');
+        addMenuItem(obj, analyzeMenu, MeasureWithinSelection(), 'Measure Within Selection', ...
+            'Accelerator', 'M');
+        addMenuItem(obj, analyzeMenu, ShowImageHistogram(),     'Histogram', ...
             'Accelerator', 'H');
-        addMenuItem(obj, analyzeMenu, VectorImageJointHistogram(),  'Joint Histogram...');
+        addMenuItem(obj, analyzeMenu, VectorImageJointHistogram(),      'Joint Histogram...');
 
-        addMenuItem(obj, analyzeMenu, PlotImageLineProfile(),'Plot Line Profile', ...
+        addMenuItem(obj, analyzeMenu, PlotImageLineProfile(),   'Plot Line Profile', ...
             'Accelerator', 'K', 'Separator', 'on');
+        addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(),    'Analyze Regions', 'Separator', 'on');
         
         
         % Help menu definition

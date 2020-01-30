@@ -66,21 +66,7 @@ methods
         function setupLayout(hf)
             
             table = obj.Doc.Table;
-            
-            % format table data
-            if ~hasFactors(table)
-                % create a numeric data table
-                data = table.Data;
-                
-            else
-                % if data table has factor columns, need to convert data array
-                data = num2cell(table.Data);
-                indLevels = find(~cellfun(@isnumeric, table.Levels));
-                for i = indLevels
-                    data(:,i) = table.Levels{i}(table.Data(:, i));
-                end
-                
-            end
+            data = getTableData(obj);
                         
             % add a uitable component
             ht = uitable(hf, ...
@@ -109,7 +95,15 @@ methods
         % Return the TableDoc instance associated to this frame.
         doc = obj.Doc;
     end
-    
+
+    function repaint(obj)
+        % Repaint the frame and its content.
+        data = getTableData(obj);
+        set(obj.Handles.Uitable, 'Data', data);
+        updateTitle(obj);
+        drawnow;
+    end
+
     function updateTitle(obj)
         % Set up title of the figure, depending on table size.
         
@@ -150,6 +144,28 @@ methods
     end
         
 end % end methods
+
+methods
+    function data = getTableData(obj)
+        % Convert table data into valid numeric or cell array.
+        table = obj.Doc.Table;
+        
+        % format table data
+        if ~hasFactors(table)
+            % create a numeric data table
+            data = table.Data;
+            
+        else
+            % if data table has factor columns, need to convert data array
+            data = num2cell(table.Data);
+            indLevels = find(~cellfun(@isnumeric, table.Levels));
+            for i = indLevels
+                data(:,i) = table.Levels{i}(table.Data(:, i));
+            end
+            
+        end
+    end
+end
 
 %% Edition of cells
 methods
