@@ -28,7 +28,10 @@ properties
     
     % The size (diameter) of the brush (in pixels).
     BrushSize = 3;
-    
+
+    % The value used to draw the brush
+    BrushValue = 255;
+
     % History of user commands, as a cell array of strings.
     History = cell(0, 1);
 end 

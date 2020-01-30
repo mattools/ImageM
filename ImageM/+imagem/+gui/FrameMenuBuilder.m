@@ -151,8 +151,9 @@ methods
         
         
         settingsMenu = addMenu(obj, imageMenu, 'Settings', 'Separator', 'on');
-        addMenuItem(obj, settingsMenu, SetDefaultConnectivity(), 'Set Connectivity');
         addMenuItem(obj, settingsMenu, SetBrushSize(),           'Set Brush Size');
+        addMenuItem(obj, settingsMenu, SetBrushValue(),           'Set Brush Value');
+        addMenuItem(obj, settingsMenu, SetDefaultConnectivity(), 'Set Connectivity', 'Separator', 'on');
         
         
         % View Menu Definition

@@ -11,7 +11,7 @@ classdef Brush < imagem.gui.Tool
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2011-11-21,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -19,8 +19,8 @@ classdef Brush < imagem.gui.Tool
 properties
     ButtonPressed = false;
     
-    % the current drawing 'color', initialized to white
-    Color = 255;
+%     % The current drawing 'value', initialized to white
+%     Value = 255;
     
     PreviousPoint;
 end
@@ -56,11 +56,7 @@ methods
    function processCurrentPosition(obj)
         doc = obj.Viewer.Doc;
         img = doc.Image;
-        
-        if ~isGrayscaleImage(img)
-            return;
-        end
-        
+                
         point = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
         coord = round(pointToIndex(obj, point(1, 1:2)));
         
@@ -69,13 +65,21 @@ methods
         if any(coord < 1) || any(coord > dim([1 2]))
             return;
         end
+        
+        % indices of Z, C and T dimensions
+        iz = 1;
+        if isa(obj.Viewer, 'imagem.gui.Image3DSliceViewer')
+            iz = obj.Viewer.SliceIndex;
+        end
+        ic = 1:channelNumber(img);
+        it = 1; % not managed for the moment
 
         if ~isempty(obj.PreviousPoint)
             % mouse moved from a previous position
-            drawBrushLine(obj, coord, obj.PreviousPoint);
+            drawBrushLine(obj, coord, obj.PreviousPoint, iz, ic, it);
         else
             % respond to mouse button pressed, mouse hasn't moved yet
-            drawBrush(obj, coord);
+            drawBrush(obj, coord, iz, ic, it);
         end
         
         obj.PreviousPoint = coord;
@@ -96,16 +100,16 @@ methods
        index   = (point - origin) ./ spacing + 1;
    end
    
-   function drawBrushLine(obj, coord1, coord2)
+   function drawBrushLine(obj, coord1, coord2, iz, ic, it)
        [x, y] = imagem.tools.Brush.intline(coord1(1), coord1(2), coord2(1), coord2(2));
        
        % iterate on current line
        for i = 1 : length(x)
-           drawBrush(obj, [x(i) y(i)]);
+           drawBrush(obj, [x(i) y(i)], iz, ic, it);
        end
    end
    
-   function drawBrush(obj, coord)
+   function drawBrush(obj, coord, iz, ic, it)
        doc  = obj.Viewer.Doc;
        
        % brush size in each direction
@@ -119,11 +123,11 @@ methods
        y1 = max(coord(2)-bs1, 1);
        x2 = min(coord(1)+bs2, dim(1));
        y2 = min(coord(2)+bs2, dim(2));
-       
+
        % iterate on brush pixels
-       for i = x1:x2
-           for j = y1:y2
-               doc.Image(i, j) = obj.Color;
+       for ix = x1:x2
+           for iy = y1:y2
+               doc.Image.Data(ix, iy, iz, ic, it) = obj.Viewer.Gui.App.BrushValue;
            end
        end
    end
@@ -131,13 +135,14 @@ end % methods
 
 methods (Static, Access = private)
     function [x, y] = intline(x1, y1, x2, y2)
-        %INTLINE Integer-coordinate line drawing algorithm.
-        %   [X, Y] = INTLINE(X1, X2, Y1, Y2) computes an
+        % Integer-coordinate line drawing algorithm.
+        %
+        %   [X, Y] = intline(X1, X2, Y1, Y2) computes an
         %   approximation to the line segment joining (X1, Y1) and
         %   (X2, Y2) with integer coordinates.  X1, X2, Y1, and Y2
-        %   should be integers.  INTLINE is reversible; that is,
-        %   INTLINE(X1, X2, Y1, Y2) produces the same results as
-        %   FLIPUD(INTLINE(X2, X1, Y2, Y1)).
+        %   should be integers.  intline is reversible; that is,
+        %   intline(X1, X2, Y1, Y2) produces the same results as
+        %   FLIPUD(intline(X2, X1, Y2, Y1)).
         %
         %   Function adapted from the 'strel' function of matlab.
         %
@@ -190,7 +195,7 @@ end
 methods
     function b = isActivable(obj)
         doc = obj.Viewer.Doc;
-        b = ~isempty(doc) && ~isempty(doc.Image) && isScalarImage(doc.Image);
+        b = ~isempty(doc) && ~isempty(doc.Image);
     end
 end
 
