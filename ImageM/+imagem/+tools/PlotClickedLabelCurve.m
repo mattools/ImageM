@@ -72,7 +72,7 @@ methods
             return;
         end
         
-        currentLabel = img(coord(1), coord(2));
+        currentLabel = img{coord(1), coord(2)};
 %         fprintf('Current Label: %d\n', currentLabel);
         if currentLabel < 1
             return;
