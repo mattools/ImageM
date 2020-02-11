@@ -67,6 +67,7 @@ methods
         res = floodFill(img, coord, obj.Viewer.Gui.App.BrushValue);
         img.Data = res.Data;
         
+        doc.Modified = true;
         updateDisplay(obj.Viewer);
    end
    

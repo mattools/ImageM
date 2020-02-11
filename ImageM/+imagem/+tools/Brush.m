@@ -73,10 +73,18 @@ methods
 
         if ~isempty(obj.PreviousPoint)
             % mouse moved from a previous position
-            drawBrushLine(obj, coord, obj.PreviousPoint, iz, ic, it);
+            if isScalarImage(img)
+                drawBrushLine(obj, coord, obj.PreviousPoint, iz, ic, it);
+            else
+                drawColorBrushLine(obj, coord, obj.PreviousPoint, iz, it);
+            end
         else
             % respond to mouse button pressed, mouse hasn't moved yet
-            drawBrush(obj, coord, iz, ic, it);
+            if isScalarImage(img)
+                drawBrush(obj, coord, iz, ic, it);
+            else
+                drawColorBrush(obj, coord, iz, it);
+            end
         end
         
         obj.PreviousPoint = coord;
@@ -106,6 +114,15 @@ methods
        end
    end
    
+   function drawColorBrushLine(obj, coord1, coord2, iz, it)
+       [x, y] = imagem.tools.Brush.intline(coord1(1), coord1(2), coord2(1), coord2(2));
+       
+       % iterate on current line
+       for i = 1 : length(x)
+           drawColorBrush(obj, [x(i) y(i)], iz, it);
+       end
+   end
+   
    function drawBrush(obj, coord, iz, ic, it)
        doc  = obj.Viewer.Doc;
        
@@ -120,11 +137,34 @@ methods
        y1 = max(coord(2)-bs1, 1);
        x2 = min(coord(1)+bs2, dim(1));
        y2 = min(coord(2)+bs2, dim(2));
-
+       
        % iterate on brush pixels
        for ix = x1:x2
            for iy = y1:y2
                doc.Image.Data(ix, iy, iz, ic, it) = obj.Viewer.Gui.App.BrushValue;
+           end
+       end
+   end
+   
+   function drawColorBrush(obj, coord, iz, it)
+       doc  = obj.Viewer.Doc;
+       
+       % brush size in each direction
+       bs = obj.Viewer.Gui.App.BrushSize;
+       bs1 = floor((bs-1) / 2);
+       bs2 = ceil((bs-1) / 2);
+       
+       % compute bounds
+       dim = size(doc.Image);
+       x1 = max(coord(1)-bs1, 1);
+       y1 = max(coord(2)-bs1, 1);
+       x2 = min(coord(1)+bs2, dim(1));
+       y2 = min(coord(2)+bs2, dim(2));
+       
+       % iterate on brush pixels
+       for ix = x1:x2
+           for iy = y1:y2
+               doc.Image.Data(ix, iy, iz, :, it) = obj.Viewer.Gui.App.BrushColor;
            end
        end
    end

@@ -298,7 +298,8 @@ methods
         
         addMenuItem(obj, toolsMenu, SelectTool(@Brush),            'Brush');
         addMenuItem(obj, toolsMenu, SelectTool(@FloodFillTool),    'Flood Fill');
-        addMenuItem(obj, toolsMenu, PlotLabelMapCurvesFromTable(), 'Plot Curves From Labels...');
+        addMenuItem(obj, toolsMenu, SelectTool(@PickValueOrColor), 'Pick Current Value/Color');
+        addMenuItem(obj, toolsMenu, PlotLabelMapCurvesFromTable(), 'Plot Curves From Labels...', true);
         action = SelectTool(@PlotImage3DZProfile);
         addMenuItem(obj, toolsMenu, action,  'Plot Image3D Z-Profile');
         action = SelectTool(@PlotVectorImageChannels);
