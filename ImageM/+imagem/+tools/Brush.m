@@ -13,15 +13,12 @@ classdef Brush < imagem.gui.Tool
 % Author: David Legland
 % e-mail: david.legland@inrae.fr
 % Created: 2011-11-21,    using Matlab 7.9.0.529 (R2009b)
-% Copyright 2011 INRA - Cepia Software Platform.
+% Copyright 2011 INRAE - Cepia Software Platform.
 
 %% Properties
 properties
     ButtonPressed = false;
-    
-%     % The current drawing 'value', initialized to white
-%     Value = 255;
-    
+
     PreviousPoint;
 end
 
