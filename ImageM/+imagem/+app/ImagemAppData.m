@@ -1,10 +1,10 @@
-classdef ImagemApp < handle
+classdef ImagemAppData < handle
 % ImageM application class, that manages open images.
 %
-%   output = ImagemApp(input)
+%   output = ImagemAppData(input)
 %
 %   Example
-%   ImagemApp
+%   ImagemAppData
 %
 %   See also
 %
@@ -41,9 +41,9 @@ end
 
 %% Constructor
 methods
-    function obj = ImagemApp(varargin)
-        
-    end % constructor 
+    function obj = ImagemAppData(varargin)
+        % Constructor for the ImagemAppData class.
+    end
 
 end % construction function
 

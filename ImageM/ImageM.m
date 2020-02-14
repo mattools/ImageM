@@ -31,7 +31,7 @@ function varargout = ImageM(varargin)
 % Created: 2011-03-10,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
-import imagem.app.ImagemApp;
+import imagem.app.ImagemAppData;
 import imagem.gui.ImagemGUI;
 
 % check if image is present, or create one
@@ -60,7 +60,7 @@ if ~isempty(varargin)
 end
 
 % create the application, and a GUI
-app = ImagemApp;
+app = ImagemAppData;
 gui = ImagemGUI(app);
 
 % use the GUI to create a new image display
