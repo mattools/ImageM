@@ -136,7 +136,9 @@ methods
         addMenuItem(obj, convertMenu, ConvertVectorImageToRGB(),        'Vector Image to RGB');
         addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
         addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
-
+        addMenuItem(obj, imageMenu, ReshapeImage(),         'Reshape...');
+        addMenuItem(obj, imageMenu, PermuteDimensions(),    'Permute Dimensions...');
+        
         addMenuItem(obj, imageMenu, FlipImage(1),           'Horizontal Flip', 'Separator', 'on');
         addMenuItem(obj, imageMenu, FlipImage(2),           'Vertical Flip');
         addMenuItem(obj, imageMenu, RotateImage90(1),       'Rotate Right');

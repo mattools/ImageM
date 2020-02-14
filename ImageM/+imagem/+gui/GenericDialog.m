@@ -320,7 +320,27 @@ methods
         set(obj.Handles.MainPanel, 'Heights', obj.BoxSizes);
     end
     
-   
+       function ht = addMessage(obj, text)
+        % Add a text message to this dialog.
+        %
+        % usage:
+        %   addMessage(GD, MSGTEXT);
+        
+        
+        hLine = uix.HBox('Parent', obj.Handles.MainPanel, ...
+            'Spacing', 5, 'Padding', 5);
+        
+        % Label of the widget
+        ht = addLabel(hLine, text);
+        
+        % setup size in horizontal direction
+        set(hLine, 'Widths', -1);
+        
+        % update vertical size of widgets
+        obj.BoxSizes = [obj.BoxSizes 25];
+        set(obj.Handles.MainPanel, 'Heights', obj.BoxSizes);
+       end
+    
 end % end methods
 
 

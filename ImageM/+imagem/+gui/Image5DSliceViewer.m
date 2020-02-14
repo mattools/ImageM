@@ -141,10 +141,11 @@ methods (Access = private)
         zstep1 = 1/zmax;
         zstep2 = max(min(10/zmax, .5), zstep1);
         
+        text = sprintf('Slice index (%d/%d)', obj.SliceIndex, zmax);
         obj.Handles.SliceIndexLabel = uicontrol(...
             'Parent', obj.Handles.DisplayOptionsPanel, ...
             'Style', 'text', ...
-            'String', 'Slice Index', ...
+            'String', {'', text}, ...
             'HorizontalAlignment', 'left');
         
         obj.Handles.SliceIndexSlider = uicontrol('Style', 'slider', ...
@@ -169,11 +170,12 @@ methods (Access = private)
         tmax = size(img, 5);
         tstep1 = 1/tmax;
         tstep2 = max(min(10/tmax, .5), tstep1);
-        
+
+        text = sprintf('Frame index (%d/%d)', obj.FrameIndex, tmax);
         obj.Handles.FrameIndexLabel = uicontrol(...
             'Parent', obj.Handles.DisplayOptionsPanel, ...
             'Style', 'text', ...
-            'String', 'Frame Index', ...
+            'String', {'', text}, ...
             'HorizontalAlignment', 'left');
         
         obj.Handles.FrameIndexSlider = uicontrol('Style', 'slider', ...
@@ -253,6 +255,8 @@ methods
         
         obj.SliceIndex = newIndex;
         
+        text = sprintf('Slice index (%d/%d)', newIndex, size(obj.Doc.Image, 3));
+        set(obj.Handles.SliceIndexLabel, 'String', {'', text});
 %         updateSliceImage(obj);
         
         updateDisplay(obj);
@@ -269,6 +273,9 @@ methods
         end
         
         obj.FrameIndex = newIndex;
+
+        text = sprintf('Frame index (%d/%d)', newIndex, size(obj.Doc.Image, 5));
+        set(obj.Handles.FrameIndexLabel, 'String', {'', text});
         
         updateDisplay(obj);
         

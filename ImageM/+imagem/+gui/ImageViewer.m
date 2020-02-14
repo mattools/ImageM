@@ -135,18 +135,15 @@ methods
         % compute new title string
         nd = ndims(obj.Doc.Image);
         sizePattern = ['%d' repmat(' x %d', 1, nd-1)];
-        sizeString = sprintf(sizePattern, size(obj.Doc.Image));
+        sizeString = sprintf(sizePattern, size(obj.Doc.Image, 1:nd));
+        nf = size(obj.Doc.Image, 5);
+        if nf > 1
+            sizeString = sprintf('%s (x%d)', sizeString, nf);
+        end
         zoomString = sprintf('%g:%g', max(1, zoom), max(1, 1/zoom));
         titlePattern = '%s [%s %s] - %s - ImageM';
         titleString = sprintf(titlePattern, imgName, sizeString, type, zoomString);
-%         titlePattern = 'ImageM - %s [%d x %d %s] - %g:%g';
-%         titleString = sprintf(titlePattern, imgName, ...
-%             size(obj.Doc.Image), type, max(1, zoom), max(1, 1/zoom));
-%         % compute new title string 
-%         titlePattern = 'ImageM - %s [%d x %d x %d %s] - %g:%g';
-%         titleString = sprintf(titlePattern, imgName, ...
-%             size(obj.Doc.Image), type, max(1, zoom), max(1, 1/zoom));
-
+        
         % display new title
         set(obj.Handles.Figure, 'Name', titleString);
     end
