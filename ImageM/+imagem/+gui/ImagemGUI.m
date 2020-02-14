@@ -67,7 +67,9 @@ methods
         doc = createImageDocument(obj.App, image);
        
         % creates a display for the new image depending on image dimension
-        if ~isempty(image) && size(image, 3) > 1
+        if ~isempty(image) && size(image, 5) > 1
+            frame = imagem.gui.Image5DSliceViewer(obj, doc);
+        elseif ~isempty(image) && size(image, 3) > 1
             frame = imagem.gui.Image3DSliceViewer(obj, doc);
         else
             frame = imagem.gui.PlanarImageViewer(obj, doc);
