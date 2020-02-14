@@ -45,12 +45,18 @@ end % end constructors
 
 %% Methods
 methods
-        
+    function [frame, doc] = createImageFrame(obj, image, varargin)
+        % Create a new frame for the image based on the current frame.
+        [frame, doc] = createImageFrame(obj.Gui, image, varargin{:});
+        if isa(obj, 'imagem.gui.ImageViewer') && ~isempty(obj.Doc)
+            doc.ChannelDisplayType = obj.Doc.ChannelDisplayType;
+        end
+    end
+    
     function [doc, viewer] = addImageDocument(obj, image, varargin)
         % Create a new frame for the image based on the current frame.
         [viewer, doc] = createImageFrame(obj.Gui, image, varargin{:});
-%         [doc, viewer] = addImageDocument(obj.Gui, image, varargin{:});
-        if isa(obj, 'imagem.gui.ImageViewer')
+        if isa(obj, 'imagem.gui.ImageViewer') && ~isempty(obj.Doc)
             doc.ChannelDisplayType = obj.Doc.ChannelDisplayType;
         end
     end

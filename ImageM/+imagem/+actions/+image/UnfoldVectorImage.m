@@ -44,45 +44,35 @@ methods
             return;
         end
         
-        % size of the table
-        nr = elementNumber(img);
-        nc = channelNumber(img);
+        % unfold the table
+        [data, colNames, coords] = unfold(img);
+        tab = Table(data, colNames);
         
-        % create sampling grid (iterating over x first)
-        lx = 1:size(img, 1);
-        ly = 1:size(img, 2);
-        [y, x] = meshgrid(ly, lx);
-        coords = [reshape(x, [numel(x) 1]), reshape(y, [numel(x) 1])];
-                
-        rowNames = cell(nr, 1);
-        for i = 1:nr
-            rowNames{i} = sprintf('x%03d-y%03d', coords(i,:));
-        end
-        
-        colNames = cell(1, nc);
-        for i = 1:nc
-            colNames{i} = sprintf('Ch%02d', i);
-        end
-        
-        data = reshape(img.Data, [nr nc]);
-        tab = Table(data, colNames, rowNames);
-        
-        coordsTable = Table(coords, {'x', 'y'}, rowNames);
-        createTableFrame(frame.Gui, coordsTable);
-        
+        % create table viewer
+        [newFrame, newDoc] = createTableFrame(frame.Gui, tab, frame); %#ok<ASGLU>
+        newDoc.ImageSize = size(img, 1:ndims(img));
 
-%         show(tab);
-         [newFrame, newDoc] = createTableFrame(frame.Gui, tab, frame); %#ok<ASGLU>
-         newDoc.ImageSize = [size(img, 1) size(img, 2)];
-        
-%         % create a new doc
-%         newDoc = addImageDocument(frame, res);
-%         
-%         % add history
-%         string = sprintf('%s = squeeze(slice(%s, 3, %d));\n', ...
-%             newDoc.Tag, doc.Tag, sliceIndex);
-        string = sprintf('%% %s <- unfold vector image %s\n', newDoc.Tag, doc.Tag);
+        % add to history
+        string = sprintf('[tab, names, coords] = unfold(%s);\n', doc.Tag);
         addToHistory(frame, string);
+        string = sprintf('%s = Table(tab, names});\n', newDoc.Tag);
+        addToHistory(frame, string);
+        
+        % also create a table for coordinates
+        if ndims(img) == 2 %#ok<ISMAT>
+            coordNames = {'x', 'y'};
+            coordStr = '{''x'', ''y''}';
+        elseif ndims(img) == 3
+            coordNames = {'x', 'y', 'z'};
+            coordStr = '{''x'', ''y'', ''z''}';
+        end
+        coordsTable = Table(coords, coordNames);
+        [coordsFrame, coordsDoc] = createTableFrame(frame.Gui, coordsTable); %#ok<ASGLU>
+        
+        % add to history
+        string = sprintf('%s = Table(coords, %s});\n', coordsDoc.Tag, coordStr);
+        addToHistory(frame, string);
+        
     end
     
 end % end methods
