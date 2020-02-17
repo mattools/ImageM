@@ -48,6 +48,30 @@ end % construction function
 
 %% General methods
 methods
+    function frame = createDocumentFrame(obj, doc)
+        % Create a new frame for the input document.
+        %
+        % See also
+        %   createImageFrame, createTableFrame
+        
+        % in case of empty document, create an "empty" image view
+        if isempty(doc)
+            frame = imagem.gui.PlanarImageViewer(obj, []);
+            return;
+        end
+        
+        if isa(doc, 'imagem.app.ImageDoc')
+            frame = createImageDocFrame(obj, doc);
+        elseif isa(doc, 'imagem.app.TableDoc')
+            % create new frame for containing the table document.
+            frame = imagem.gui.TableFrame(obj, doc);
+        else
+            error('Unable to manage document with class: %s', classname(doc));
+        end
+        addView(doc, frame);
+    end
+    
+    
     function [frame, doc] = createImageFrame(obj, image)
         % Create a new image viewer frame.
         %
@@ -64,20 +88,14 @@ methods
             return;
         end
         
+        % create the document (and add it to the app)
         doc = createImageDocument(obj.App, image);
-       
-        % creates a display for the new image depending on image dimension
-        if ~isempty(image) && size(image, 5) > 1
-            frame = imagem.gui.Image5DSliceViewer(obj, doc);
-        elseif ~isempty(image) && size(image, 3) > 1
-            frame = imagem.gui.Image3DSliceViewer(obj, doc);
-        else
-            frame = imagem.gui.PlanarImageViewer(obj, doc);
-        end
-        addView(doc, frame);
+        
+        % create the frame (and add the frame to the list of doc views)
+        frame = createImageDocFrame(obj, doc);
     end
 
-    function [doc, viewer] = addImageDocument(obj, image, newName, refTag)
+    function [doc, frame] = addImageDocument(obj, image, newName, refTag)
         % Create a new document from image, add it to app, and display img.
         % (Deprecated, replaced by createImageFrame).
         %
@@ -85,7 +103,7 @@ methods
         % in case of empty image, create an "empty view"
         if isempty(image)
             doc = [];
-            viewer = imagem.gui.PlanarImageViewer(obj, doc);
+            frame = imagem.gui.PlanarImageViewer(obj, doc);
             return;
         end
         
@@ -96,17 +114,39 @@ methods
             refTag = 'img';
         end
         
+        % create the document (and add it to the app)
         doc = createImageDocument(obj.App, image, newName, refTag);
-       
-        % creates a display for the new image depending on image dimension
-        if ~isempty(image) && size(image, 3) > 1
-            viewer = imagem.gui.Image3DSliceViewer(obj, doc);
-        else
-            viewer = imagem.gui.PlanarImageViewer(obj, doc);
-        end
-        addView(doc, viewer);
-    end
 
+        % create the frame (and add the frame to the list of doc views)
+        frame = createImageDocFrame(obj, doc);
+    end
+    
+    function frame = createImageDocFrame(obj, doc, parentFrame)
+        % Create a new frame for the input doc based on a parent frame.
+        
+        if isa(doc, 'Image')
+            doc = createImageDocument(obj.App, doc.Image);
+        end
+        img = doc.Image;
+        
+        if isempty(img)
+            frame = imagem.gui.PlanarImageViewer(obj, doc);
+            addView(doc, frame);
+            return;
+        end
+        
+        % creates a display for the new image depending on image dimension
+        if size(img, 5) > 1
+            frame = imagem.gui.Image5DSliceViewer(obj, doc);
+        elseif size(img, 3) > 1
+            frame = imagem.gui.Image3DSliceViewer(obj, doc);
+        else
+            frame = imagem.gui.PlanarImageViewer(obj, doc);
+        end
+        addView(doc, frame);
+    end
+    
+    
     function [frame, doc] = createTableFrame(obj, table, varargin)
         % Create a new Frame for displaying the table.
         %

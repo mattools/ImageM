@@ -156,7 +156,8 @@ methods
         ovr = overlay(refImg, binImg, color);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(obj.Viewer, ovr, [], 'ovr');
+        newDoc = createImageDocument(app, ovr, '', 'ovr');
+        createImageDocFrame(obj.Viewer.Gui, newDoc);
         
         % add history
         string = sprintf('%s = overlay(%s, %s, ''%c'');\n', ...
