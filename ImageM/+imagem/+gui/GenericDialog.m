@@ -191,7 +191,7 @@ methods
         %
         
         % choose default values if they are not specified
-        if ~isa('nDigits', 'var')
+        if nargin < 4
             nDigits = 0;
         end
         

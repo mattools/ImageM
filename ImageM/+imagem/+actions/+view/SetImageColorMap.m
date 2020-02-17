@@ -1,10 +1,10 @@
-classdef SetImageLut < imagem.actions.CurrentImageAction
-% Change Look-Up Table of current image document.
+classdef SetImageColorMap < imagem.actions.CurrentImageAction
+% Change Colormap of current image document.
 %
-%   output = SetImageLut(input)
+%   output = SetImageColorMap(input)
 %
 %   Example
-%   SetImageLut
+%   SetImageColorMap
 %
 %   See also
 %
@@ -16,25 +16,28 @@ classdef SetImageLut < imagem.actions.CurrentImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    LutName;
-    Lut = [];
+    % The name of the color map, as char array.
+    ColorMapName;
+    
+    % The values of the color map, as a N-by-3 array.
+    ColorMap = [];
 end
 
 methods
-    function obj = SetImageLut(lutName, lutValues)
+    function obj = SetImageColorMap(cmapName, cmapValues)
         % calls the parent constructor
         obj = obj@imagem.actions.CurrentImageAction();
 
-        obj.LutName = lutName;
+        obj.ColorMapName = cmapName;
         if nargin > 2
-            obj.Lut = lutValues;
+            obj.ColorMap = cmapValues;
         end
     end
 end
 
 methods
     function run(obj, frame) %#ok<INUSD>
-        disp(['Change Image LUT to ' obj.LutName]);
+        disp(['Change Image ColorMap to ' obj.ColorMapName]);
         
         % get handle to current doc
         doc = frame.Doc;
@@ -48,25 +51,25 @@ methods
         end
         
         
-        if strcmp(obj.LutName, 'none')
-            doc.Lut = [];
+        if strcmp(obj.ColorMapName, 'none')
+            doc.ColorMap = [];
         else
-            if isempty(obj.Lut)
-                obj.Lut = computeLutFromName(obj, nValues);
+            if isempty(obj.ColorMap)
+                obj.ColorMap = computeColorMapFromName(obj, nValues);
             end
-            doc.Lut = obj.Lut;
+            doc.ColorMap = obj.ColorMap;
         end
         
-        doc.LutName = obj.LutName;
+        doc.ColorMapName = obj.ColorMapName;
         doc.Modified = true;
         
         updateDisplay(frame);
     end
     
-    function lut = computeLutFromName(obj, nValues)
+    function lut = computeColorMapFromName(obj, nValues)
         
         % get LUT name
-        name = obj.LutName;
+        name = obj.ColorMapName;
         
         % create the appropriate LUT array depending on LUT name and on
         % number of levels

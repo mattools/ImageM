@@ -176,7 +176,7 @@ methods
         end
         
         % compute display data
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(img, doc.Lut, doc.BackgroundColor);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(img, doc.ColorMap, doc.BackgroundColor);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
@@ -215,8 +215,8 @@ methods
         end
         
         % set up lookup table (if not empty)
-        if ~isColorImage(img) && ~isLabelImage(img) && ~isempty(doc.Lut)
-            colormap(obj.Handles.ImageAxis, doc.Lut);
+        if ~isColorImage(img) && ~isLabelImage(img) && ~isempty(doc.ColorMap)
+            colormap(obj.Handles.ImageAxis, doc.ColorMap);
         end
         
         % remove all axis children that are not image

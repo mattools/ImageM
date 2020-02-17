@@ -42,10 +42,10 @@ methods
         % create a new Dialog and populate with some fields
         gd = imagem.gui.GenericDialog('Spatial Calibration');
         for i = 1:nd
-            addNumericField(gd, sprintf('Spacing %d:', i), img.Spacing(i), 2);
+            addNumericField(gd, sprintf('Spacing %d:', i), img.Spacing(i), 3);
         end
         for i = 1:nd
-            addNumericField(gd, sprintf('Origin %d:', i), img.Origin(i), 2);
+            addNumericField(gd, sprintf('Origin %d:', i), img.Origin(i), 3);
         end
         addTextField(gd, 'Unit Name:', img.UnitName);
         

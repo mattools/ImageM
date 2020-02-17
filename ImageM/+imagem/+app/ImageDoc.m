@@ -1,13 +1,13 @@
 classdef ImageDoc < imagem.app.ImagemDoc
 % ImageM Document class that contains one image and the associated data.
 %
-%   Class ImagemDoc
+%   Class ImageDoc
 %
 %   Example
-%   ImagemDoc
+%   ImageDoc
 %
 %   See also
-%
+%     imagem.app.ImagemDoc, imagem.app.TableDoc
 
 % ------
 % Author: David Legland
@@ -23,18 +23,15 @@ properties
     
     % An image used for preview when an action is running, or empty.
     PreviewImage = [];
-    
-%     % a row vector of two values indicating minimal and maximal displayable
-%     % values for grayscale and intensity images.
-%     % (for the moment, this is managed in the PlanarImageViewer class)
-%     displayRange = [];
+
+    % Display range info are managed within the ImageViewer class.
     
     % Look-up table (colormap) used for displaying the image. 
     % If empty -> no lut
-    Lut = [];
+    ColorMap = [];
     
     % Name of the current lookup table (used for display in menus).
-    LutName = '';
+    ColorMapName = '';
     
     % Background color used for display of label images.
     BackgroundColor = 'w';
@@ -53,8 +50,8 @@ end % end properties
 %% Constructor
 methods
     function obj = ImageDoc(img)
-    % Constructor for ImagemDoc class.
-    % Requires an image as input.
+        % Constructor for ImagemDoc class.
+        % Requires an image as input.
 
         if nargin ~= 1
             error('An image must be provided as input');

@@ -84,14 +84,14 @@ methods
         
         % compute LUT of label image
         if isLabelImage(image)
-            doc.LutName = 'jet';
+            doc.ColorMapName = 'jet';
             nLabels = double(max(image.Data(:)));
             if nLabels < 255
                 baseLut = jet(255);
                 inds = floor((1:nLabels)*255/nLabels);
-                doc.Lut = baseLut(inds,:);
+                doc.ColorMap = baseLut(inds,:);
             else
-                doc.Lut = jet(nLabels);
+                doc.ColorMap = jet(nLabels);
             end
         end
         

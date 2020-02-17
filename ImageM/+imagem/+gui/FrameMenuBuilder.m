@@ -84,6 +84,7 @@ methods
         addMenuItem(obj, demoMenu, OpenDemoImage('rice.png'),    'Rice (grayscale)');
         addMenuItem(obj, demoMenu, OpenDemoImage('coins.png'),   'Coins (grayscale)');
         addMenuItem(obj, demoMenu, OpenDemoImage('peppers.png'), 'Peppers (RGB)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('mri.tif'),     'MRI Head (3D)');
         addMenuItem(obj, demoMenu, OpenDemoImage('circles.png'), 'Circles (binary)');
         addMenuItem(obj, demoMenu, OpenDemoImage('text.png'),    'Text (binary)');
         addMenuItem(obj, demoMenu, OpenDemoTable('fisherIris.txt'),    'Fisher Iris (Table)', 'Separator', 'on');
@@ -154,7 +155,7 @@ methods
         
         settingsMenu = addMenu(obj, imageMenu, 'Settings', 'Separator', 'on');
         addMenuItem(obj, settingsMenu, SetBrushSize(),           'Set Brush Size');
-        addMenuItem(obj, settingsMenu, SetBrushValue(),           'Set Brush Value');
+        addMenuItem(obj, settingsMenu, SetBrushValue(),          'Set Brush Value');
         addMenuItem(obj, settingsMenu, SetDefaultConnectivity(), 'Set Connectivity', 'Separator', 'on');
         
         
@@ -164,35 +165,35 @@ methods
 
         addMenuItem(obj, viewMenu, ImageSetDisplayRange(),  'Set Display Range...');
 
-        lutMenu = addMenu(obj, viewMenu, 'Look-Up Table');
-        addMenuItem(obj, lutMenu, SetImageLut('gray'),           'Gray');
-        addMenuItem(obj, lutMenu, SetImageLut('inverted'),       'Inverted');
-        addMenuItem(obj, lutMenu, SetImageLut('blue-gray-red'),  'Blue-Gray-Red');
+        lutMenu = addMenu(obj, viewMenu, 'Color Maps');
+        addMenuItem(obj, lutMenu, SetImageColorMap('gray'),           'Gray');
+        addMenuItem(obj, lutMenu, SetImageColorMap('inverted'),       'Inverted');
+        addMenuItem(obj, lutMenu, SetImageColorMap('blue-gray-red'),  'Blue-Gray-Red');
         
-        addMenuItem(obj, lutMenu, SetImageLut('jet'),            'Jet', 'Separator', 'on');
-        addMenuItem(obj, lutMenu, SetImageLut('hsv'),            'HSV');
-        addMenuItem(obj, lutMenu, SetImageLut('colorcube'),      'Color Cube');
-        addMenuItem(obj, lutMenu, SetImageLut('prism'),          'Prism');
+        addMenuItem(obj, lutMenu, SetImageColorMap('jet'),            'Jet', 'Separator', 'on');
+        addMenuItem(obj, lutMenu, SetImageColorMap('hsv'),            'HSV');
+        addMenuItem(obj, lutMenu, SetImageColorMap('colorcube'),      'Color Cube');
+        addMenuItem(obj, lutMenu, SetImageColorMap('prism'),          'Prism');
         
         matlabLutMenu = addMenu(obj, lutMenu, 'Matlab''s');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('hot'),      'Hot');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('cool'),     'Cool');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('spring'),   'Spring');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('summer'),   'Summer');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('winter'),   'Winter');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('autumn'),   'Autumn');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('copper'),   'Copper');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('bone'),     'Bone');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('pink'),     'Pink');
-        addMenuItem(obj, matlabLutMenu, SetImageLut('lines'),    'Lines');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('hot'),      'Hot');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('cool'),     'Cool');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('spring'),   'Spring');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('summer'),   'Summer');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('winter'),   'Winter');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('autumn'),   'Autumn');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('copper'),   'Copper');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('bone'),     'Bone');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('pink'),     'Pink');
+        addMenuItem(obj, matlabLutMenu, SetImageColorMap('lines'),    'Lines');
         
         colorLutMenu = addMenu(obj, lutMenu, 'Simple Colors');
-        addMenuItem(obj, colorLutMenu, SetImageLut('blue'),      'Blue');
-        addMenuItem(obj, colorLutMenu, SetImageLut('red'),       'Red');
-        addMenuItem(obj, colorLutMenu, SetImageLut('green'),     'Green');
-        addMenuItem(obj, colorLutMenu, SetImageLut('cyan'),      'Cyan');
-        addMenuItem(obj, colorLutMenu, SetImageLut('yellow'),    'Yellow');
-        addMenuItem(obj, colorLutMenu, SetImageLut('magenta'),   'Magenta');
+        addMenuItem(obj, colorLutMenu, SetImageColorMap('blue'),      'Blue');
+        addMenuItem(obj, colorLutMenu, SetImageColorMap('red'),       'Red');
+        addMenuItem(obj, colorLutMenu, SetImageColorMap('green'),     'Green');
+        addMenuItem(obj, colorLutMenu, SetImageColorMap('cyan'),      'Cyan');
+        addMenuItem(obj, colorLutMenu, SetImageColorMap('yellow'),    'Yellow');
+        addMenuItem(obj, colorLutMenu, SetImageColorMap('magenta'),   'Magenta');
 
         
         addMenuItem(obj, viewMenu, ZoomIn(),         'Zoom In', true);
@@ -223,6 +224,9 @@ methods
             action = actionGroup(iAction);
             setActionGroup(action, actionGroup);
         end
+        
+        addMenuItem(obj, viewMenu, ShowImage3DOrthoSlices(),    'Show 3D OrthoSlices...', ...
+            'Separator', 'on');
         
         addMenuItem(obj, viewMenu, PrintImageDocList(),      'Print Image List', 'Separator', 'on');
         

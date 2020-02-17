@@ -249,7 +249,7 @@ methods
         sliceImage = updateSliceImage(obj);
         
         % compute display data
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, obj.Doc.Lut, obj.Doc.BackgroundColor);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, obj.Doc.ColorMap, obj.Doc.BackgroundColor);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
@@ -282,8 +282,8 @@ methods
         end
         
         % set up lookup table (if not empty)
-        if ~isColorImage(sliceImage) && ~isLabelImage(img) && ~isempty(obj.Doc.Lut)
-            colormap(obj.Handles.ImageAxis, obj.Doc.Lut);
+        if ~isColorImage(sliceImage) && ~isLabelImage(img) && ~isempty(obj.Doc.ColorMap)
+            colormap(obj.Handles.ImageAxis, obj.Doc.ColorMap);
         end
         
         % remove all axis children that are not image
