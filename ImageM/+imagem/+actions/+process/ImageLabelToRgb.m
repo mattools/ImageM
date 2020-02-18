@@ -49,7 +49,7 @@ methods
         
         obj.Frame = frame;
         createFigure(obj, frame);
-        updatePreviewImage(obj, frame);
+        updatePreviewImage(obj);
     end
     
     function hf = createFigure(obj, frame)
@@ -82,7 +82,7 @@ methods
             'Background Color:', obj.ColorNames, ...
             @obj.onBgColorChanged);
 
-        obj.Handles.shuffleMapCheckbox = addCheckBox(gui, mainPanel, ...
+        obj.Handles.ShuffleMapCheckbox = addCheckBox(gui, mainPanel, ...
             'Shuffle map', true, ...
             @obj.onShuffleMapChanged);
 
@@ -104,7 +104,7 @@ methods
     function closeFigure(obj, varargin)
         % clean up viewer figure
         obj.Frame.Doc.PreviewImage = [];
-        updateDisplay(obj.Viewer);
+        updateDisplay(obj.Frame);
         
         % close the current fig
         if ishandle(obj.Handles.Figure)
@@ -112,11 +112,11 @@ methods
         end
     end
     
-    function updatePreviewImage(obj, frame)
+    function updatePreviewImage(obj)
         % update preview image of the document
         img = computePreviewImage(obj);
-        frame.Doc.PreviewImage = img;
-        updateDisplay(frame);
+        obj.Frame.Doc.PreviewImage = img;
+        updateDisplay(obj.Frame);
     end
     
     function rgb = computePreviewImage(obj)
@@ -137,7 +137,7 @@ methods
         
         % add history
         string = sprintf('%s = label2rgb(%s, ''%s'', ''%s''));\n', ...
-            newDoc.Tag, obj.Viewer.Doc.Tag, obj.MapName, obj.BgColorName);
+            newDoc.Tag, obj.Frame.Doc.Tag, obj.MapName, obj.BgColorName);
         addToHistory(obj.Frame, string);
         
         closeFigure(obj);
