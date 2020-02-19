@@ -74,7 +74,14 @@ methods
         
         % extract corresponding pixel values (nearest-neighbor eval)
         img = currentImage(frame);
-        
+        if ndims(img) > 2 %#ok<ISMAT>
+            if isprop(frame, 'FrameIndex')
+                img = frame(img, frame.FrameIndex);
+            end
+            if isprop(frame, 'SliceIndex')
+                img = squeeze(slice(img, 3, frame.SliceIndex));
+            end
+        end
 
         % new figure for display
         hf = figure;
