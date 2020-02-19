@@ -320,7 +320,7 @@ methods
         set(obj.Handles.MainPanel, 'Heights', obj.BoxSizes);
     end
     
-       function ht = addMessage(obj, text)
+    function ht = addMessage(obj, text)
         % Add a text message to this dialog.
         %
         % usage:

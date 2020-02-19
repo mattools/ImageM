@@ -238,23 +238,15 @@ methods
         addMenuItem(obj, processMenu, AdjustImageDynamic(),  'Adjust Dynamic');
         addMenuItem(obj, processMenu, ImageLabelToRgb(),     'Label To RGB...');
 
+%         filtersMenu = addMenu(obj, processMenu, 'Filters', 'Separator', 'on');
+
         addMenuItem(obj, processMenu, ImageBoxMeanFilter(),  'Box Mean Filter...', 'Separator', 'on');
         addMenuItem(obj, processMenu, ImageMedianFilter(),   'Median Filter...');
         addMenuItem(obj, processMenu, ImageGaussianFilter(), 'Gaussian Filter...');
-                
-        morphoMenu = addMenu(obj, processMenu, 'Morphology');
-        addMenuItem(obj, morphoMenu, ImageErosion(),     'Erosion 3x3');
-        addMenuItem(obj, morphoMenu, ImageDilation(),    'Dilation 3x3');
-        addMenuItem(obj, morphoMenu, ImageOpening(),     'Opening 3x3');
-        addMenuItem(obj, morphoMenu, ImageClosing(),     'Closing 3x3');
-        addMenuItem(obj, morphoMenu, ImageMorphologicalFilter(), 'Morphological Filter...', 'Separator', 'on');    
+        addMenuItem(obj, processMenu, ImageMorphologicalFilter(), 'Morphological Filter...');    
         
-        addMenuItem(obj, processMenu, ImageThreshold(),      'Threshold...', ...
-            'Separator', 'on', 'Accelerator', 'T');
-        addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(),  'Auto Threshold (Otsu)');
         addMenuItem(obj, processMenu, ImageGradient(),       'Gradient', ...
             'Separator', 'on', 'Accelerator', 'G');
-        addMenuItem(obj, processMenu, ImageMorphoGradient(), 'Morphological Gradient');
         addMenuItem(obj, processMenu, ImageGradientVector(), 'Gradient Vector');
         addMenuItem(obj, processMenu, VectorImageNorm(),     'Norm');
 
@@ -265,6 +257,9 @@ methods
         addMenuItem(obj, minimaMenu, ImageExtendedMaxima(),  'Extended Maxima...');
         addMenuItem(obj, minimaMenu, ImageImposeMinima(),    'Impose Minima...');
         
+        addMenuItem(obj, processMenu, ImageThreshold(),      'Threshold...', ...
+            'Separator', 'on', 'Accelerator', 'T');
+        addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(),  'Auto Threshold (Otsu)');
         addMenuItem(obj, processMenu, ImageWatershed(),      'Watershed...');
         addMenuItem(obj, processMenu, ImageExtendedMinWatershed(),   'Extended Min Watershed...');
         
