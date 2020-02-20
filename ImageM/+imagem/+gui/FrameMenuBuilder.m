@@ -85,6 +85,7 @@ methods
         addMenuItem(obj, demoMenu, OpenDemoImage('coins.png'),   'Coins (grayscale)');
         addMenuItem(obj, demoMenu, OpenDemoImage('peppers.png'), 'Peppers (RGB)');
         addMenuItem(obj, demoMenu, OpenDemoImage('mri.tif'),     'MRI Head (3D)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('xylophone.mp4'),     'Xylophone (movie)');
         addMenuItem(obj, demoMenu, OpenDemoImage('circles.png'), 'Circles (binary)');
         addMenuItem(obj, demoMenu, OpenDemoImage('text.png'),    'Text (binary)');
         addMenuItem(obj, demoMenu, OpenDemoTable('fisherIris.txt'),    'Fisher Iris (Table)', 'Separator', 'on');
@@ -150,6 +151,7 @@ methods
         addMenuItem(obj, imageMenu, RenameImage(),          'Rename', 'Separator', 'on');
         addMenuItem(obj, imageMenu, DuplicateImage(),       'Duplicate', 'Accelerator', 'D');
         addMenuItem(obj, imageMenu, ExtractSlice(),         'Extract Slice');
+        addMenuItem(obj, imageMenu, ExtractFrame(),         'Extract Time Frame');
         addMenuItem(obj, imageMenu, CropImageSelection(),   'Crop Selection');
         
         
