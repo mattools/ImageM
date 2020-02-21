@@ -51,7 +51,7 @@ methods
             'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
-        pos(3:4) = [250 230];
+        pos(3:4) = [300 180];
         set(hf, 'Position', pos);
         
         obj.Handles.Figure = hf;
@@ -65,8 +65,6 @@ methods
             'Distance in pixels:', '');
         obj.Handles.DistanceUserUnitText = addInputTextLine(gui, mainPanel, ...
             'Known distance:', '');
-        obj.Handles.pixelAspectRatioText = addInputTextLine(gui, mainPanel, ...
-            'Pixel Aspect Ratio:', '');
         obj.Handles.UnitText = addInputTextLine(gui, mainPanel, ...
             'Unit:', '');
 
@@ -104,12 +102,6 @@ methods
     end
     
     function updateWidgets(obj) %#ok<MANU>
-        
-%         % update preview image of the document
-%         bin = computeWatershedImage(obj) == 0;
-%         doc = obj.viewer.doc;
-%         doc.previewImage = overlay(doc.image, bin);
-%         updateDisplay(obj.viewer);
     end
 
 end % end methods

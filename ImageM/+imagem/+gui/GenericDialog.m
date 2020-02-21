@@ -131,7 +131,7 @@ methods (Access = private)
         
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
-        pos(3:4) = [200 250];
+        pos(3:4) = [300 250];
         set(hf, 'Position', pos);
         
         obj.Handles.Figure = hf;
