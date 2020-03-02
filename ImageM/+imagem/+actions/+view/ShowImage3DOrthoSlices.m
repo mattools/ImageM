@@ -121,7 +121,7 @@ methods
         end
         
         % add history
-        string = sprintf('showOrthoSlices(img, [%d %d %d])', doc.Tag, pos);
+        string = sprintf('showOrthoSlices(%s, [%d %d %d]);\n', doc.Tag, pos);
         addToHistory(frame, string);
     end
     

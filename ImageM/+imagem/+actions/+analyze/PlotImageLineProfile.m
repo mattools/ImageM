@@ -35,33 +35,59 @@ methods
     function run(obj, frame) %#ok<INUSD>
         
         obj.Viewer = frame;
+        
+        % current selection
         selection = frame.Selection;
         if isempty(selection)
             return;
         end
         
+        % current image (limit to one slice and one frame)
+        img = currentImage(frame);
+        if ndims(img) > 2 %#ok<ISMAT>
+            if isprop(frame, 'FrameIndex')
+                img = frame(img, frame.FrameIndex);
+            end
+            if isprop(frame, 'SliceIndex')
+                img = squeeze(slice(img, 3, frame.SliceIndex));
+            end
+        end
+
+
         switch lower(selection.Type)
             case 'linesegment'
-                % determine the line end point
+                % determine the line end point (calibrated coordinates)
                 pos1 = selection.Data(1, 1:2);
                 pos2 = selection.Data(1, 3:4);
-                len = hypot(pos1(1) - pos2(1), pos1(2) - pos2(2));
                 
+                % length of selection in pixel coordinates
+                pos1px = pointToContinuousIndex(img, pos1);
+                pos2px = pointToContinuousIndex(img, pos2);
+                len = hypot(pos1px(1) - pos2px(1), pos1px(2) - pos2px(2));
+                
+                % choose a number of points to have around 1 pixel spacing
                 nValues = ceil(len) + 1;
+                
+                % compute (calibrated) position of sampling points
                 x = linspace(pos1(1), pos2(1), nValues);
                 y = linspace(pos1(2), pos2(2), nValues);
-                dists = [0 cumsum(hypot(diff(x), diff(y)))];
-                
                 pts = [x' y'];
                 
-            case 'polyline'
-                dx = diff(selection.Data(:,1));
-                dy = diff(selection.Data(:,2));
-                len = sum(hypot(dx, dy));
+                % use cumulative distance as abscissa
+                dists = [0 cumsum(hypot(diff(x), diff(y)))];
                 
+            case 'polyline'
+                % length of selection in pixel coordinates
+                verticesPx = pointToContinuousIndex(img, selection.Data(:,1:2));
+                len = polylineLength(verticesPx);
+                
+                % choose a number of points to have around 1 pixel spacing
                 nValues = ceil(len) + 1;
+                
+                % compute (calibrated) position of sampling points
                 pts = resamplePolyline(selection.Data, nValues);
                 
+                % use cumulative distance as abscissa
                 dx = diff(pts(:,1));
                 dy = diff(pts(:,2));
                 dists = [0 cumsum(hypot(dx, dy))'];
@@ -73,16 +99,6 @@ methods
         
         
         % extract corresponding pixel values (nearest-neighbor eval)
-        img = currentImage(frame);
-        if ndims(img) > 2 %#ok<ISMAT>
-            if isprop(frame, 'FrameIndex')
-                img = frame(img, frame.FrameIndex);
-            end
-            if isprop(frame, 'SliceIndex')
-                img = squeeze(slice(img, 3, frame.SliceIndex));
-            end
-        end
-
         % new figure for display
         hf = figure;
         set(hf, 'NumberTitle', 'off');
@@ -91,32 +107,44 @@ methods
         if isScalarImage(img)
             vals = interp(img, pts);
             plot(dists, vals);
-            ylabel('Intensity');
+            if isempty(img.ChannelNames)
+                ylabel('Intensity');
+            else
+                ylabel(img.ChannelNames{1});
+            end
             
         elseif isColorImage(img)
             % display each color histogram as stairs, to see the 3 curves
             vals = interp(img, pts);
-            hh = stairs(vals);
+            hh = stairs(dists, vals);
             
             % setup curve colors
             set(hh(1), 'color', [1 0 0]); % red
             set(hh(2), 'color', [0 1 0]); % green
             set(hh(3), 'color', [0 0 1]); % blue
             ylabel('Color intensity');
+            if ~isempty(img.ChannelNames)
+                legend(hh, img.ChannelNames);
+            end
             
         elseif isVectorImage(img)
             % for vector images, display the profile of norm
             img2 = norm(img);
             vals = interp(img2, pts);
             plot(dists, vals);
-            ylabel('Channels norm');
+            ylabel('Channels norm'); % TODO: use channel names for legend
             
         else
             warning('LineProfileTool:UnsupportedImageImageType', ...
                 ['Can not manage images of type ' img.Type]);
         end
-
-        xlabel('Position on line');
+        
+        % annotate plot
+        if isempty(img.UnitName)
+            xlabel('Position on line');
+        else
+            xlabel(sprintf('Position on line (%s)', img.UnitName));
+        end
         
         if ~isempty(img.Name)
             title(img.Name);
