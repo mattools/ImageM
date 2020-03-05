@@ -53,6 +53,13 @@ methods
             locString = sprintf('(x,y) = (%d,%d) px', coord(1), coord(2));
         end
         
+        if size(img, 3) > 1
+            locString = [locString sprintf(' z=%d', obj.Viewer.SliceIndex)];
+        end
+        if size(img, 5) > 1
+            locString = [locString sprintf(' t=%d', obj.Viewer.FrameIndex)];
+        end
+        
         % Display value of selected pixel
         if strcmp(img.Type, 'color')
             % case of color pixel: values are red, green and blue
