@@ -229,6 +229,7 @@ methods
         
         addMenuItem(obj, viewMenu, ShowImage3DOrthoSlices(),    'Show 3D OrthoSlices...', ...
             'Separator', 'on');
+        addMenuItem(obj, viewMenu, Image3DIsosurface(),    'Show 3D Isosurface...');
         
         addMenuItem(obj, viewMenu, PrintImageDocList(),      'Print Image List', 'Separator', 'on');
         
