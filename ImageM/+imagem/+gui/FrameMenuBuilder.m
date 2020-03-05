@@ -262,9 +262,10 @@ methods
         
         addMenuItem(obj, processMenu, ImageThreshold(),      'Threshold...', ...
             'Separator', 'on', 'Accelerator', 'T');
-        addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(),  'Auto Threshold (Otsu)');
-        addMenuItem(obj, processMenu, ImageWatershed(),      'Watershed...');
-        addMenuItem(obj, processMenu, ImageExtendedMinWatershed(),   'Extended Min Watershed...');
+        addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(),     'Auto Threshold (Otsu)');
+        addMenuItem(obj, processMenu, ImageMaxEntropyThreshold(),   'Auto Threshold (Max Entropy)');
+        addMenuItem(obj, processMenu, ImageWatershed(),             'Watershed...');
+        addMenuItem(obj, processMenu, ImageExtendedMinWatershed(),  'Extended Min Watershed...');
         
         addMenuItem(obj, processMenu, ImageArithmetic(),     'Image Arithmetic...', true);
         addMenuItem(obj, processMenu, ImageValuesTransform(),'Image Maths 1...');
