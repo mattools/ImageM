@@ -55,9 +55,11 @@ methods
         
         if size(img, 3) > 1
             locString = [locString sprintf(' z=%d', obj.Viewer.SliceIndex)];
+            img = slice(img, obj.Viewer.SliceIndex);
         end
         if size(img, 5) > 1
             locString = [locString sprintf(' t=%d', obj.Viewer.FrameIndex)];
+            img = frame(img, obj.Viewer.FrameIndex);
         end
         
         % Display value of selected pixel
