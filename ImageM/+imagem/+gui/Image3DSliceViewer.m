@@ -215,8 +215,7 @@ methods
         end
         
         index = obj.SliceIndex;
-        
-        obj.SliceImage = squeeze(slice(img, 3, index));
+        obj.SliceImage = slice(img, index);
         
         if strcmpi(obj.SliceImage.Type, 'vector')
             obj.SliceImage = norm(obj.SliceImage);
