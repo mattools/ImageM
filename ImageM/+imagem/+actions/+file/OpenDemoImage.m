@@ -42,13 +42,13 @@ methods
         img = Image.read(obj.ImageName);
         
         % add image to application, and create new display
-        frame = createImageFrame(frame, img);
+        frame2 = createImageFrame(frame, img);
         
-        tag = frame.Doc.Tag;
+        tag = frame2.Doc.Tag;
                 
         % history
         string = sprintf('%s = Image.read(''%s'');\n', tag, obj.ImageName);
-        addToHistory(frame, string);        
+        addToHistory(frame2, string);        
     end
 end % end methods
 

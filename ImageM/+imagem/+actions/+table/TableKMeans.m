@@ -1,19 +1,19 @@
 classdef TableKMeans < imagem.actions.CurrentTableAction
-%EXTRACTSLICE  One-line description here, please.
+%Apply K-means clustering on the current table.
 %
-%   Class ExtractSlice
+%   Class TableKMeans
 %
 %   Example
-%   ExtractSlice
+%   TableKMeans
 %
 %   See also
 %
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2019-11-15,    using Matlab 9.7.0.1190202 (R2019b)
-% Copyright 2019 INRA - BIA-BIBS.
+% Copyright 2019 INRAE - BIA-BIBS.
 
 
 %% Properties
@@ -24,7 +24,7 @@ end % end properties
 %% Constructor
 methods
     function obj = TableKMeans(varargin)
-    % Constructor for ExtractSlice class
+    % Constructor for TableKMeans class
 
     end
 
