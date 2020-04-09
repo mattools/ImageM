@@ -1,5 +1,5 @@
 classdef ImageExtendedMinima < imagem.actions.ScalarImageAction
-% Extract extended minima in a grayscale image.
+% Extract extended minima in a grayscale or intensity image.
 %
 %   output = ImageExtendedMinimaAction(input)
 %
@@ -7,7 +7,7 @@ classdef ImageExtendedMinima < imagem.actions.ScalarImageAction
 %   ImageExtendedMinimaAction
 %
 %   See also
-%
+%     ImageExtendedMaximaAction
 
 % ------
 % Author: David Legland
@@ -80,10 +80,20 @@ methods
         % initial value of minima dynamic
         dynValue = valExtent / 4;
         obj.Value = dynValue;
-
         
+        % setup connectivity options
+        if ndims(img) == 2 %#ok<ISMAT>
+            obj.ConnValues = [4 8];
+            connValuesString = {'4', '8'};
+        else
+            obj.ConnValues = [6 26];
+            connValuesString = {'6', '26'};
+        end
+        
+        % background color of most widgets
         gui = obj.Viewer.Gui;
-        
+        bgColor = getWidgetBackgroundColor(gui);
+                
         % action figure
         hf = figure(...
             'Name', 'Extended Minima', ...
@@ -97,10 +107,7 @@ methods
         set(hf, 'Position', pos);
         
         obj.Handles.Figure = hf;
-        
-        % background color of most widgets
-        bgColor = getWidgetBackgroundColor(gui);
-        
+                
         % vertical layout
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         
@@ -137,7 +144,7 @@ methods
 
         % combo box for the connectivity
         obj.Handles.ConnectivityPopup = addComboBoxLine(gui, mainPanel, ...
-            'Connectivity:', {'4', '8'}, ...
+            'Connectivity:', connValuesString, ...
             @obj.onConnectivityChanged);
         
         % button for control panel
@@ -154,7 +161,16 @@ methods
     
     function bin = computeMinimaImage(obj)
         % Compute the result of threshold
-        bin = extendedMinima(currentImage(obj.Viewer), obj.Value, obj.Conn);
+        img = currentImage(obj.Viewer);
+        bin = extendedMinima(img, obj.Value, obj.Conn);
+
+        % compute image name
+        baseName = '';
+        if ~isempty(img.Name)
+            baseName = [img.Name '-'];
+        end
+        newName = sprintf('%semin%dC%d', baseName, obj.Value, obj.Conn);
+        bin.Name = newName;
     end
     
     function closeFigure(obj, varargin)
@@ -191,17 +207,19 @@ methods
         
         % computes minima
         bin = computeMinimaImage(obj);
-        newDoc = addImageDocument(obj.Viewer, bin, [], 'emin');
+        newDoc = addImageDocument(obj.Viewer, bin);
         
         % add history
-        string = sprintf('%s = extendedMinima(%s, %f, %d);\n', ...
-            newDoc.Tag, obj.Viewer.Doc.Tag, obj.Value, obj.Conn);
+        string = sprintf('%s = extendedMinima(%s, %s, %d);\n', ...
+            newDoc.Tag, obj.Viewer.Doc.Tag, num2str(obj.Value), obj.Conn);
         addToHistory(obj.Viewer, string);
 
         closeFigure(obj);
     end
     
     function onButtonCancel(obj, varargin)
+        clearPreviewImage(obj.Viewer)
+        updateDisplay(obj.Viewer);
         closeFigure(obj);
     end
     

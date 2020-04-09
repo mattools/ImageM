@@ -1,5 +1,5 @@
 classdef ImageExtendedMaxima < imagem.actions.ScalarImageAction
-% Extract extended maxima in a grayscale image.
+% Extract extended maxima in a grayscale or intensity image.
 %
 %   output = ImageExtendedMaximaAction(input)
 %
@@ -7,7 +7,7 @@ classdef ImageExtendedMaxima < imagem.actions.ScalarImageAction
 %   ImageExtendedMaximaAction
 %
 %   See also
-%
+%     ImageExtendedMinimaAction
 
 % ------
 % Author: David Legland
@@ -81,11 +81,19 @@ methods
         dynValue = valExtent / 4;
         obj.Value = dynValue;
         
-
+        % setup connectivity options
+        if ndims(img) == 2 %#ok<ISMAT>
+            obj.ConnValues = [4 8];
+            connValuesString = {'4', '8'};
+        else
+            obj.ConnValues = [6 26];
+            connValuesString = {'6', '26'};
+        end
+        
         % background color of most widgets
         gui = obj.Viewer.Gui;
         bgColor = getWidgetBackgroundColor(gui);
-                
+        
         % action figure
         hf = figure(...
             'Name', 'Extended Maxima', ...
@@ -95,7 +103,7 @@ methods
             'CloseRequestFcn', @obj.closeFigure);
         set(hf, 'units', 'pixels');
         pos = get(hf, 'Position');
-        pos(3:4) = 200;
+        pos(3:4) = [250 200];
         set(hf, 'Position', pos);
         
         obj.Handles.Figure = hf;
@@ -136,7 +144,7 @@ methods
         
         % combo box for the connectivity
         obj.Handles.ConnectivityPopup = addComboBoxLine(gui, mainPanel, ...
-            'Connectivity:', {'4', '8'}, ...
+            'Connectivity:', connValuesString, ...
             @obj.onConnectivityChanged);
            
         % button for control panel
@@ -152,8 +160,18 @@ methods
     end
     
     function bin = computeMaximaImage(obj)
-        % Compute the result of threshold
-        bin = extendedMaxima(obj.Viewer.Doc.Image, obj.Value, obj.Conn);
+        % Compute the result of extended maxima.
+        
+        img = currentImage(obj.Viewer);
+        bin = extendedMaxima(img, obj.Value, obj.Conn);
+
+        % compute image name
+        baseName = '';
+        if ~isempty(img.Name)
+            baseName = [img.Name '-'];
+        end
+        newName = sprintf('%semax%dC%d', baseName, obj.Value, obj.Conn);
+        bin.Name = newName;
     end
     
     function closeFigure(obj, varargin)
@@ -175,6 +193,7 @@ methods
         set(obj.Handles.ValueEdit, 'String', num2str(obj.Value))
         set(obj.Handles.ValueSlider, 'Value', obj.Value);
         
+            
         % update preview image of the document
         bin = computeMaximaImage(obj);
         updatePreviewImage(obj.Viewer, bin);
@@ -190,11 +209,11 @@ methods
         updateDisplay(obj.Viewer);
 
         bin = computeMaximaImage(obj);
-        newDoc = addImageDocument(obj.Viewer, bin, [], 'emax');
+        newDoc = addImageDocument(obj.Viewer, bin);
         
         % add history
-        string = sprintf('%s = extendedMaxima(%s, %f, %d);\n', ...
-            newDoc.Tag, doc.Tag, obj.Value, obj.Conn);
+        string = sprintf('%s = extendedMaxima(%s, %s, %d);\n', ...
+            newDoc.Tag, doc.Tag, num2str(obj.Value), obj.Conn);
         addToHistory(obj.Viewer, string);
 
         closeFigure(obj);

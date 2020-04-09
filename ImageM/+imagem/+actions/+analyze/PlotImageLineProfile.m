@@ -49,7 +49,7 @@ methods
                 img = frame(img, frame.FrameIndex);
             end
             if isprop(frame, 'SliceIndex')
-                img = squeeze(slice(img, 3, frame.SliceIndex));
+                img = slice(img, frame.SliceIndex);
             end
         end
 

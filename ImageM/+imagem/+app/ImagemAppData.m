@@ -61,8 +61,14 @@ end % general methods
 
 %% Methods for management of image documents
 methods
-    function doc = createImageDocument(obj, image, newName, refTag)
+    function [doc, tag] = createImageDocument(obj, image, newName, refTag)
         % Create a new image document, add it to app, and return doc.
+        %
+        % DOC = createImageDocument(APP, IMG);
+        % Creates the new document for the image IMAGE, in the instance of
+        % ImageMAppData given by APP.
+        %
+
         
         % determine the name of the new image
         if nargin < 3 || isempty(newName)
