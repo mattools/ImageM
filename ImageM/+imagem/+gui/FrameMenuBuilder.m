@@ -386,8 +386,9 @@ methods
         addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
         addMenuItem(obj, plotMenu, BoxPlot(), 'Box Plot...', 'Separator', 'on');
         addMenuItem(obj, plotMenu, GroupBoxPlot(), 'Box Plot by Group...');
-        addMenuItem(obj, plotMenu, PlotRows(), 'Plot Rows', 'Separator', 'on');
-        addMenuItem(obj, plotMenu, PlotColumns(), 'Plot Columns...');
+        addMenuItem(obj, plotMenu, PlotColumns(), 'Plot Columns...', 'Separator', 'on');
+        addMenuItem(obj, plotMenu, PlotRows(), 'Plot Rows');
+        addMenuItem(obj, plotMenu, ChoosePreferredPlotTypes(), 'Choose Preferred Plot Type...', 'Separator', 'on');
         
         % Process menu
         processMenu = addMenu(obj, hf, 'Process');
