@@ -28,7 +28,7 @@ classdef GenericDialog < handle
 %
 %     % Creates new image, and displays if requested
 %     img = Image.create([width height], type);
-%     img.name = name;
+%     img.Name = name;
 %     if display
 %         show(img); title(name);
 %     end

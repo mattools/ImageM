@@ -33,9 +33,12 @@ properties
     % Name of the current lookup table (used for display in menus).
     ColorMapName = '';
     
-    % Background color used for display of label images.
-    BackgroundColor = 'w';
-    
+    % The color associated to background, as a 1-by-3 vector of RGB values
+    % within the [0 1] interval. Default is white.
+    % For label images, corresponds to the label "0".
+    % For intensity images, corresponds to the value "NaN".
+    BackgroundColor = [1 1 1];
+        
     % Specifies the preferred way for displaying channels.
     % Can be one of: {'Curve'}, 'Bar', 'Stem'.
     ChannelDisplayType = 'Curve';

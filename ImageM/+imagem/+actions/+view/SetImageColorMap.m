@@ -41,7 +41,7 @@ methods
         
         % get handle to current doc
         doc = frame.Doc;
-
+        
         % compute number of grayscale levels. 256 by default, but use label
         % number for label images
         nValues = 256;

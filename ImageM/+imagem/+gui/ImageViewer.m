@@ -23,7 +23,7 @@ classdef ImageViewer < imagem.gui.ImagemFrame
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2019-08-21,    using Matlab 9.6.0.1072779 (R2019a)
 % Copyright 2019 INRA - BIA-BIBS.
 
@@ -33,9 +33,11 @@ properties
     % The image document.
     Doc;
     
+    
     % A row vector of two values indicating minimal and maximal displayable
     % values for grayscale and intensity images.
     DisplayRange;
+    
     
     % The set of image display listeners, stored as a cell array.
     ImageDisplayListeners = [];

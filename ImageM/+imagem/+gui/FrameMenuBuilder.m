@@ -196,6 +196,8 @@ methods
         addMenuItem(obj, colorLutMenu, SetImageColorMap('cyan'),      'Cyan');
         addMenuItem(obj, colorLutMenu, SetImageColorMap('yellow'),    'Yellow');
         addMenuItem(obj, colorLutMenu, SetImageColorMap('magenta'),   'Magenta');
+        
+        addMenuItem(obj, viewMenu, SetBackgroundColor(),  'Set Background Color...');
 
         
         addMenuItem(obj, viewMenu, ZoomIn(),         'Zoom In', true);
