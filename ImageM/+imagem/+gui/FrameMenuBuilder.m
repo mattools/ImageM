@@ -242,6 +242,7 @@ methods
         
         addMenuItem(obj, processMenu, AdjustImageDynamic(),  'Adjust Dynamic');
         addMenuItem(obj, processMenu, ImageLabelToRgb(),     'Label To RGB...');
+        addMenuItem(obj, processMenu, ImageReplaceValue(),   'Replace Value(s)...');
 
 %         filtersMenu = addMenu(obj, processMenu, 'Filters', 'Separator', 'on');
 

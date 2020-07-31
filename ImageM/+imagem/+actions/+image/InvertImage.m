@@ -32,6 +32,11 @@ methods
         % add image to application, and create new display
         newDoc = addImageDocument(frame, img2);
         
+        % copy display settings
+        newDoc.ColorMap = doc.ColorMap;
+        newDoc.ColorMapName = doc.ColorMapName;
+        newDoc.BackgroundColor = doc.BackgroundColor;
+        
         % history
         string = sprintf('%s = invert(%s);\n', newDoc.Tag, doc.Tag);
         addToHistory(frame, string);

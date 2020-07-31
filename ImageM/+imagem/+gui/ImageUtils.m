@@ -23,6 +23,7 @@ methods (Static)
         %
         % Usage:
         % CDATA = imagem.ImageUtils.computeDisplayImage(IMG);
+        % CDATA = imagem.ImageUtils.computeDisplayImage(IMG, LUT, BOUNDS, BGCOLOR);
         % 
         
         % extract or compute display data
@@ -31,7 +32,12 @@ methods (Static)
              
         elseif isLabelImage(image)
             % label image will be replaced by RGB image
-            rgb = label2rgb(image, varargin{:});
+            if length(varargin) == 3
+                options = varargin([1 3]);
+            else
+                options = {};
+            end
+            rgb = label2rgb(image, options{:});
             cdata = permute(rgb.Data, [2 1 4 3]);
         
         elseif isVectorImage(image)
@@ -39,8 +45,13 @@ methods (Static)
             imgNorm = norm(image);
             cdata = permute(imgNorm.Data, [2 1 4 3]);
             
+        elseif isScalarImage(image)
+            % intensity -> convert to RGB to manage NaN values coloration
+            rgb = double2rgb(image, varargin{:});
+            cdata = permute(rgb.Data, [2 1 4 3]);
+            
         else
-            % intensity or unknown type
+            % unknown type
             cdata = permute(image.Data, [2 1 4 3]);
             
         end

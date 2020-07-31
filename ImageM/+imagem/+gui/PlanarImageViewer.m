@@ -176,7 +176,7 @@ methods
         end
         
         % compute display data
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(img, doc.ColorMap, doc.BackgroundColor);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(img, doc.ColorMap, obj.DisplayRange, doc.BackgroundColor);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
