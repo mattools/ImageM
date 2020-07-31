@@ -172,10 +172,11 @@ methods
         addMenuItem(obj, lutMenu, SetImageColorMap('inverted'),       'Inverted');
         addMenuItem(obj, lutMenu, SetImageColorMap('blue-gray-red'),  'Blue-Gray-Red');
         
-        addMenuItem(obj, lutMenu, SetImageColorMap('jet'),            'Jet', 'Separator', 'on');
+        addMenuItem(obj, lutMenu, SetImageColorMap('parula'),         'Parula', 'Separator', 'on');
         addMenuItem(obj, lutMenu, SetImageColorMap('hsv'),            'HSV');
         addMenuItem(obj, lutMenu, SetImageColorMap('colorcube'),      'Color Cube');
         addMenuItem(obj, lutMenu, SetImageColorMap('prism'),          'Prism');
+        addMenuItem(obj, lutMenu, SetImageColorMap('jet'),            'Jet');
         
         matlabLutMenu = addMenu(obj, lutMenu, 'Matlab''s');
         addMenuItem(obj, matlabLutMenu, SetImageColorMap('hot'),      'Hot');
