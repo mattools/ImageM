@@ -29,10 +29,19 @@ methods
         % if selection exists, use it as roi
         roi = [];
         if isprop(frame, 'Selection') && ~isempty(frame.Selection)
+            
             selection = frame.Selection;
-            if strcmp(selection.Type, 'Polygon')
+            type = selection.Type;
+            
+            if strcmpi(type, 'Polygon')
                 poly = selection.Data;
                 roi = roipoly(img.Data(:,:,1,1,1), poly(:,2), poly(:,1));
+            elseif strcmp(type, 'box')
+                box = selection.Data;
+                poly = boxToPolygon(box);
+                roi = roipoly(img.Data(:,:,1,1,1), poly(:,2), poly(:,1));
+            else
+                warning('Can not use ROI with type %s forhistogram, compute whole histogram', type);
             end
         end
         
