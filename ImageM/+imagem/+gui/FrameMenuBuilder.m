@@ -207,21 +207,21 @@ methods
         addMenuItem(obj, viewMenu, ZoomBestFit(),    'Zoom Best');
         
         zoomsMenu = addMenu(obj, viewMenu, 'Others');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(8),      'Zoom 8:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(4),      'Zoom 4:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(2),      'Zoom 2:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1),      'Zoom 1:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/2),    'Zoom 1:2');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/4),    'Zoom 1:4');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/8),    'Zoom 1:8');
+        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(8),     'Zoom 8:1');
+        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(4),     'Zoom 4:1');
+        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(2),     'Zoom 2:1');
+        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1),     'Zoom 1:1');
+        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/2),   'Zoom 1:2');
+        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/4),   'Zoom 1:4');
+        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/8),   'Zoom 1:8');
 
         zoomModesMenu = addMenu(obj, viewMenu, 'Zoom Mode');
         adjustZoomAction = SetZoomMode('adjust');
-        mi1 = addMenuItem(obj, zoomModesMenu, adjustZoomAction,  'Adjust', 'Checked', 'on');
+        mi1 = addMenuItem(obj, zoomModesMenu, adjustZoomAction, 'Adjust', 'Checked', 'on');
         setMenuItem(adjustZoomAction, mi1);
         
         fixedZoomAction = SetZoomMode('fixed');
-        mi2 = addMenuItem(obj, zoomModesMenu, fixedZoomAction,   'Fixed');
+        mi2 = addMenuItem(obj, zoomModesMenu, fixedZoomAction,  'Fixed');
         setMenuItem(fixedZoomAction, mi2);
 
         actionGroup = [adjustZoomAction fixedZoomAction];
@@ -232,61 +232,62 @@ methods
         
         addMenuItem(obj, viewMenu, ShowImage3DOrthoSlices(),    'Show 3D OrthoSlices...', ...
             'Separator', 'on');
-        addMenuItem(obj, viewMenu, Image3DIsosurface(),    'Show 3D Isosurface...');
+        addMenuItem(obj, viewMenu, Image3DIsosurface(),         'Show 3D Isosurface...');
         
-        addMenuItem(obj, viewMenu, PrintImageDocList(),      'Print Image List', 'Separator', 'on');
+        addMenuItem(obj, viewMenu, PrintImageDocList(),         'Print Image List', 'Separator', 'on');
         
         
         % Process Menu Definition
         
         processMenu = addMenu(obj, hf, 'Process');
         
-        addMenuItem(obj, processMenu, AdjustImageDynamic(),  'Adjust Dynamic');
-        addMenuItem(obj, processMenu, ImageLabelToRgb(),     'Label To RGB...');
-        addMenuItem(obj, processMenu, ImageReplaceValue(),   'Replace Value(s)...');
+        addMenuItem(obj, processMenu, AdjustImageDynamic(),     'Adjust Dynamic');
+        addMenuItem(obj, processMenu, ImageLabelToRgb(),        'Label To RGB...');
+        addMenuItem(obj, processMenu, ImageReplaceValue(),      'Replace Value(s)...');
 
 %         filtersMenu = addMenu(obj, processMenu, 'Filters', 'Separator', 'on');
 
-        addMenuItem(obj, processMenu, ImageBoxMeanFilter(),  'Box Mean Filter...', 'Separator', 'on');
-        addMenuItem(obj, processMenu, ImageMedianFilter(),   'Median Filter...');
+        addMenuItem(obj, processMenu, ImageBoxMeanFilter(), 'Box Mean Filter...', 'Separator', 'on');
+        addMenuItem(obj, processMenu, ImageMedianFilter(),  'Median Filter...');
         addMenuItem(obj, processMenu, ImageGaussianFilter(), 'Gaussian Filter...');
         addMenuItem(obj, processMenu, ImageMorphologicalFilter(), 'Morphological Filter...');    
         
-        addMenuItem(obj, processMenu, ImageGradient(),       'Gradient', ...
+        addMenuItem(obj, processMenu, ImageGradient(),      'Gradient', ...
             'Separator', 'on', 'Accelerator', 'G');
         addMenuItem(obj, processMenu, ImageGradientVector(), 'Gradient Vector');
-        addMenuItem(obj, processMenu, VectorImageNorm(),     'Norm');
+        addMenuItem(obj, processMenu, VectorImageNorm(),    'Norm');
 
         minimaMenu = addMenu(obj, processMenu, 'Minima / Maxima', 'Separator', 'on');
-        addMenuItem(obj, minimaMenu, ImageRegionalMinima(),  'Regional Minima');
-        addMenuItem(obj, minimaMenu, ImageRegionalMaxima(),  'Regional Maxima');
-        addMenuItem(obj, minimaMenu, ImageExtendedMinima(),  'Extended Minima...');
-        addMenuItem(obj, minimaMenu, ImageExtendedMaxima(),  'Extended Maxima...');
-        addMenuItem(obj, minimaMenu, ImageImposeMinima(),    'Impose Minima...');
+        addMenuItem(obj, minimaMenu, ImageRegionalMinima(), 'Regional Minima');
+        addMenuItem(obj, minimaMenu, ImageRegionalMaxima(), 'Regional Maxima');
+        addMenuItem(obj, minimaMenu, ImageExtendedMinima(), 'Extended Minima...');
+        addMenuItem(obj, minimaMenu, ImageExtendedMaxima(), 'Extended Maxima...');
+        addMenuItem(obj, minimaMenu, ImageImposeMinima(),   'Impose Minima...');
         
-        addMenuItem(obj, processMenu, ImageThreshold(),      'Threshold...', ...
+        addMenuItem(obj, processMenu, ImageThreshold(),     'Threshold...', ...
             'Separator', 'on', 'Accelerator', 'T');
-        addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(),     'Auto Threshold (Otsu)');
-        addMenuItem(obj, processMenu, ImageMaxEntropyThreshold(),   'Auto Threshold (Max Entropy)');
-        addMenuItem(obj, processMenu, ImageWatershed(),             'Watershed...');
-        addMenuItem(obj, processMenu, ImageExtendedMinWatershed(),  'Extended Min Watershed...');
+        addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(), 'Auto Threshold (Otsu)');
+        addMenuItem(obj, processMenu, ImageMaxEntropyThreshold(), 'Auto Threshold (Max Entropy)');
+        addMenuItem(obj, processMenu, ImageWatershed(),      'Watershed...');
+        addMenuItem(obj, processMenu, ImageExtendedMinWatershed(), 'Extended Min Watershed...');
         
-        addMenuItem(obj, processMenu, ImageArithmetic(),     'Image Arithmetic...', true);
-        addMenuItem(obj, processMenu, ImageValuesTransform(),'Image Maths 1...');
-        addMenuItem(obj, processMenu, ImageMathematic(),     'Image Maths 2...');
+        addMenuItem(obj, processMenu, ImageArithmetic(),    'Image Arithmetic...', true);
+        addMenuItem(obj, processMenu, ImageValuesTransform(), 'Image Maths 1...');
+        addMenuItem(obj, processMenu, ImageMathematic(),    'Image Maths 2...');
         
         binaryMenu = addMenu(obj, processMenu, 'Binary / Labels', 'Separator', 'on');
-        addMenuItem(obj, binaryMenu, KillImageBorders(),     'Kill Borders');
-        addMenuItem(obj, binaryMenu, ImageAreaOpening(),     'Area Opening');
-        addMenuItem(obj, binaryMenu, KeepLargestRegion(),    'Keep Largest Region');
-        addMenuItem(obj, binaryMenu, FillImageHoles(),       'Fill Holes');
+        addMenuItem(obj, binaryMenu, KillImageBorders(),    'Kill Borders');
+        addMenuItem(obj, binaryMenu, ImageAreaOpening(),    'Area Opening');
+        addMenuItem(obj, binaryMenu, KeepLargestRegion(),   'Keep Largest Region');
+        addMenuItem(obj, binaryMenu, FillImageHoles(),      'Fill Holes');
 
         addMenuItem(obj, binaryMenu, ApplyImageFunction('distanceMap'), 'Distance Map');
-        addMenuItem(obj, binaryMenu, ImageSkeleton(),        'Skeleton');
+        addMenuItem(obj, binaryMenu, GeodesicDistanceMap(), 'Geodesic Distance Map');
+        addMenuItem(obj, binaryMenu, ImageSkeleton(),       'Skeleton');
         addMenuItem(obj, binaryMenu, ConnectedComponentsLabeling(),  'Connected Components Labeling');
         
-        addMenuItem(obj, binaryMenu, ImageBooleanOp(),       'Boolean Operation...', true);
-        addMenuItem(obj, binaryMenu, BinaryImageOverlay(),   'Image Overlay...');
+        addMenuItem(obj, binaryMenu, ImageBooleanOp(),      'Boolean Operation...', true);
+        addMenuItem(obj, binaryMenu, BinaryImageOverlay(),  'Image Overlay...');
         addMenuItem(obj, binaryMenu, CreateLabelValuesMap(), 'Create Label Values Map...');
         
         % Interactive tools
@@ -319,16 +320,16 @@ methods
         
         analyzeMenu = addMenu(obj, hf, 'Analyze');
         
-        addMenuItem(obj, analyzeMenu, SetImageScale(),          'Set Image Scale');
+        addMenuItem(obj, analyzeMenu, SetImageScale(),      'Set Image Scale');
         addMenuItem(obj, analyzeMenu, MeasureWithinSelection(), 'Measure Within Selection', ...
             'Accelerator', 'M');
-        addMenuItem(obj, analyzeMenu, ShowImageHistogram(),     'Histogram', ...
+        addMenuItem(obj, analyzeMenu, ShowImageHistogram(), 'Histogram', ...
             'Accelerator', 'H');
-        addMenuItem(obj, analyzeMenu, VectorImageJointHistogram(),      'Joint Histogram...');
+        addMenuItem(obj, analyzeMenu, VectorImageJointHistogram(), 'Joint Histogram...');
 
-        addMenuItem(obj, analyzeMenu, PlotImageLineProfile(),   'Plot Line Profile', ...
+        addMenuItem(obj, analyzeMenu, PlotImageLineProfile(), 'Plot Line Profile', ...
             'Accelerator', 'K', 'Separator', 'on');
-        addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(),    'Analyze Regions', 'Separator', 'on');
+        addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(), 'Analyze Regions', 'Separator', 'on');
         
         
         % Help menu definition

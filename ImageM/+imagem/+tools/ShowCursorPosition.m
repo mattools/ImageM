@@ -65,19 +65,19 @@ methods
         % Display value of selected pixel
         if strcmp(img.Type, 'color')
             % case of color pixel: values are red, green and blue
-            rgb = img(coord(1), coord(2), :);
+            rgb = img.Data(coord(1), coord(2), :);
             valueString = sprintf('  RGB = (%d %d %d)', ...
                 rgb(1), rgb(2), rgb(3));
             
         elseif strcmp(img.Type, 'vector')
             % case of vector image: compute norm of the pixel
-            values  = obj.Viewer.Doc.Image(coord(1), coord(2), :);
+            values  = obj.Viewer.Doc.Image.Data(coord(1), coord(2), :);
             norm    = sqrt(sum(double(values(:)) .^ 2));
             valueString = sprintf('  value = %g', norm);
             
         else
             % case of a gray-scale pixel
-            value = img(coord(1), coord(2));
+            value = img.Data(coord(1), coord(2));
             if ~isfloat(value)
                 valueString = sprintf('  value = %3d', value);
             else

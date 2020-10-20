@@ -66,6 +66,23 @@ methods
         nc = size(tab, 2);
         tab.PreferredPlotTypes = repmat({type}, 1, nc);
         
+        % create table axis that corresponds to image axis
+        indC = findChannelAxes(img);
+        imAxis = img.Axes{indC};
+        if isa(imAxis, 'image.axis.NumericalAxis')
+            values = indexToPosition(imAxis, 1:nc);
+            axis = table.axis.NumericalAxis(imAxis.Name, values);
+            tab.Axes{2} = axis;
+            
+        elseif isa(imAxis, 'image.axis.CategoricalAxis')
+            axis = table.axis.CategoricalAxis(imAxis.Name, imAxis.Names);
+            tab.Axes{2} = axis;
+            
+        else
+            warning(['Unknown type of axis in image: ' class(imAxis)]);
+        end
+            
+        
         % create table viewer
         [newFrame, newDoc] = createTableFrame(frame.Gui, tab, frame); %#ok<ASGLU>
         newDoc.ImageSize = size(img, 1:ndims(img));
