@@ -1,5 +1,5 @@
 classdef FrameMenuBuilder < handle
-%FRAMEMENUBUILDER  One-line description here, please.
+% Utilkity class that builds the menu bar of an ImageM frame.
 %
 %   Class FrameMenuBuilder
 %
@@ -264,7 +264,7 @@ methods
         addMenuItem(obj, minimaMenu, ImageExtendedMaxima(), 'Extended Maxima...');
         addMenuItem(obj, minimaMenu, ImageImposeMinima(),   'Impose Minima...');
         
-        addMenuItem(obj, processMenu, ImageThreshold(),     'Threshold...', ...
+        addMenuItem(obj, processMenu, ImageThreshold(),     'Manual Threshold...', ...
             'Separator', 'on', 'Accelerator', 'T');
         addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(), 'Auto Threshold (Otsu)');
         addMenuItem(obj, processMenu, ImageMaxEntropyThreshold(), 'Auto Threshold (Max Entropy)');

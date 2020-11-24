@@ -157,16 +157,18 @@ methods
         
         set(vb, 'Heights', [-1 40] );
         
-        % display full histogram and 
+        % display full histogram and segmented region
         bar(obj.Handles.HistogramAxis, x, histo, 1, 'k', ...
             'LineStyle', 'none');
-        % hold on;
         set(obj.Handles.HistogramAxis, 'NextPlot', 'Add');
         set(obj.Handles.HistogramAxis, ...
             'YTickLabelMode', 'Manual', 'YTickLabel', '');
         obj.Handles.ThresholdedHistogramBar = ...
             bar(obj.Handles.HistogramAxis, x, histo, 1, 'r', ...
             'LineStyle', 'none');
+        yBounds = get(obj.Handles.HistogramAxis, 'ylim');
+        obj.Handles.ThresholdLine = ...
+            plot(obj.Handles.HistogramAxis, [sliderValue sliderValue], [0 yBounds(2)], 'k');
         
         % setup histogram bounds
         w = x(2) - x(1);
@@ -217,6 +219,7 @@ methods
             histo2(1:ind-1) = 0;
         end
         set(obj.Handles.ThresholdedHistogramBar, 'YData', histo2);
+        set(obj.Handles.ThresholdLine, 'XData', [obj.Value obj.Value]);
         
         % update preview image of the document
         bin = computeThresholdedImage(obj);
