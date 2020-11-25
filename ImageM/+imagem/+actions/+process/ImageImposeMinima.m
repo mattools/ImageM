@@ -11,7 +11,7 @@ classdef ImageImposeMinima < imagem.actions.CurrentImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2011-12-15,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -127,13 +127,13 @@ end
 
 %% GUI Items Callback
 methods
-    function onButtonOK(obj, varargin)        
+    function onButtonOK(obj, varargin)
         
         app = obj.Viewer.Gui.App;
         
         refDoc = getDocument(app, get(obj.Handles.ImageList1, 'Value'));
         refImg = refDoc.Image;
-
+        
         binDoc = getDocument(app, get(obj.Handles.ImageList2, 'Value'));
         binImg = binDoc.Image;
         
@@ -165,7 +165,7 @@ methods
         string = sprintf('%s = imposeMinima(%s, %s, %d));\n', ...
             newDoc.Tag, refDoc.Tag, binDoc.Tag, conn);
         addToHistory(obj.Viewer, string);
-
+        
         closeFigure(obj);
     end
     

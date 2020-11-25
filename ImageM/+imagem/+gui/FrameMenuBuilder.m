@@ -257,8 +257,9 @@ methods
         addMenuItem(obj, processMenu, ImageGradientVector(), 'Gradient Vector');
         addMenuItem(obj, processMenu, VectorImageNorm(),    'Norm');
 
-        minimaMenu = addMenu(obj, processMenu, 'Minima / Maxima', 'Separator', 'on');
-        addMenuItem(obj, minimaMenu, ImageRegionalMinima(), 'Regional Minima');
+        minimaMenu = addMenu(obj, processMenu, 'Connected Regions Operators', 'Separator', 'on');
+        addMenuItem(obj, minimaMenu, ImageMorphologicalReconstruction(), 'Morphological Reconstruction...');    
+        addMenuItem(obj, minimaMenu, ImageRegionalMinima(), 'Regional Minima', 'Separator', 'on');
         addMenuItem(obj, minimaMenu, ImageRegionalMaxima(), 'Regional Maxima');
         addMenuItem(obj, minimaMenu, ImageExtendedMinima(), 'Extended Minima...');
         addMenuItem(obj, minimaMenu, ImageExtendedMaxima(), 'Extended Maxima...');
