@@ -214,7 +214,7 @@ methods
         if isLabelImage(img)
             obj.LabelImage = img;
         elseif isBinaryImage(img)
-            obj.LabelImage = labeling(img, obj.Conn);
+            obj.LabelImage = componentLabeling(img, obj.Conn);
         else 
             error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
         end

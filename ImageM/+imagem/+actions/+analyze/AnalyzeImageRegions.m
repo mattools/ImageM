@@ -71,7 +71,7 @@ methods
         geodElongFlag   = get(obj.Handles.GeodesicElongationCheckBox, 'Value');
         tortuosityFlag  = get(obj.Handles.TortuosityCheckBox, 'Value');
         
-        % TODO: use spatial resolution
+        % TODO: use spatial calbration
         resol = [1 1];
         
         % initialize empty table
@@ -97,7 +97,7 @@ methods
         end
 
         % process inertia-based features
-        if centroidFlag || ellipseFlag || ellipseElongationFlag
+        if centroidFlag || ellipseFlag || ellipseElongFlag
             elli = imEquivalentEllipse(img.Data', resol);
             
             if centroidFlag || ellipseFlag
