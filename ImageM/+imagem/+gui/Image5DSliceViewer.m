@@ -295,7 +295,7 @@ methods
         end
         
         % extract the 2D image to display (can be color or channel)
-        obj.SliceImage = slice(frame(img, obj.FrameIndex), 3, obj.SliceIndex);
+        obj.SliceImage = slice(frame(img, obj.FrameIndex), obj.SliceIndex);
         
         if strcmpi(obj.SliceImage.Type, 'vector')
             obj.SliceImage = norm(obj.SliceImage);
