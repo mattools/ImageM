@@ -276,8 +276,9 @@ methods
         addMenuItem(obj, processMenu, ImageValuesTransform(), 'Image Maths 1...');
         addMenuItem(obj, processMenu, ImageMathematic(),    'Image Maths 2...');
         
-        binaryMenu = addMenu(obj, processMenu, 'Binary / Labels', 'Separator', 'on');
-        addMenuItem(obj, binaryMenu, KillImageBorders(),    'Kill Borders');
+        binaryMenu = addMenu(obj, processMenu, 'Binary / Labels', 'Separator', 'On');
+        addMenuItem(obj, binaryMenu, ConnectedComponentsLabeling(),  'Connected Components Labeling');
+        addMenuItem(obj, binaryMenu, KillImageBorders(),    'Kill Borders', 'Separator', 'On');
         addMenuItem(obj, binaryMenu, ImageAreaOpening(),    'Area Opening');
         addMenuItem(obj, binaryMenu, KeepLargestRegion(),   'Keep Largest Region');
         addMenuItem(obj, binaryMenu, FillImageHoles(),      'Fill Holes');
@@ -285,7 +286,6 @@ methods
         addMenuItem(obj, binaryMenu, ApplyImageFunction('distanceMap'), 'Distance Map');
         addMenuItem(obj, binaryMenu, GeodesicDistanceMap(), 'Geodesic Distance Map');
         addMenuItem(obj, binaryMenu, ImageSkeleton(),       'Skeleton');
-        addMenuItem(obj, binaryMenu, ConnectedComponentsLabeling(),  'Connected Components Labeling');
         
         addMenuItem(obj, binaryMenu, ImageBooleanOp(),      'Boolean Operation...', true);
         addMenuItem(obj, binaryMenu, BinaryImageOverlay(),  'Image Overlay...');
