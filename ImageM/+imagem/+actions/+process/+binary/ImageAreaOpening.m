@@ -21,19 +21,19 @@ properties
     
     Viewer;
     
-    % the number of individual particles in original image
-    LabelMax = 255;
-    
-    % image of labeled particles (either original image, or result of labeling)
+    % The image of regions (either original image, or result of labeling)
     LabelImage;
     
-    % the list of precomputed areas
-    ParticleAreas;
+    % The list of region indices with label image.
+    LabelList = [];
     
-    % the selected value for minimum area
-    MinAreaValue = 10;
+    % The list of precomputed region sizes
+    RegionSizeList;
+    
+    % The selected value for minimum size.
+    MinSizeValue = 10;
 
-    % the connectivity of the regions
+    % The connectivity of the regions.
     Conn = 4;
     
     % the list of available connectivity values (constant)
@@ -58,9 +58,22 @@ methods
             return;
         end
         
+        % setup depending on image dimensionality
+        nd = ndims(doc.Image);
+        if nd == 2
+            obj.Conn = 4;
+            obj.ConnValues = [4, 8];
+        elseif nd == 3
+            obj.Conn = 6;
+            obj.ConnValues = [6, 26];
+        end
+        
         % update inner state of the tool
         updateLabelImage(obj);
-        updateParticleAreaList(obj);
+        updateRegionSizeList(obj);
+        
+        % startup threshold value
+        obj.MinSizeValue = median(obj.RegionSizeList);
         
         % setup display
         createFigure(obj);
@@ -70,10 +83,9 @@ methods
     function hf = createFigure(obj)
         
         % range of particle areas
-        areas = obj.ParticleAreas;
+        areas = obj.RegionSizeList;
         minVal = 0;
         maxVal = double(max(areas));
-        obj.LabelMax = maxVal;
         
         % compute slider steps
         valExtent = maxVal + 1;
@@ -82,9 +94,6 @@ methods
         sliderStep1 = 1 / valExtent;
         sliderStep2 = 10 / valExtent;
         
-        % startup threshold value
-        sliderValue = minVal + valExtent / 2;
-
         % background color of most widgets
         bgColor = getWidgetBackgroundColor(obj.Viewer.Gui);
         
@@ -109,16 +118,16 @@ methods
         
         gui = obj.Viewer.Gui;
         
-        obj.Handles.MinAreaText = addInputTextLine(gui, mainPanel, ...
-            'Minimum area:', '10', ...
-            @obj.onMinAreaTextChanged);
+        obj.Handles.MinSizeText = addInputTextLine(gui, mainPanel, ...
+            'Minimum Size:', num2str(obj.MinSizeValue), ...
+            @obj.onMinSizeTextChanged);
         
         % one slider for changing value
         obj.Handles.ValueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
             'Min', minVal, 'Max', maxVal, ...
-            'Value', sliderValue, ...
+            'Value', obj.MinSizeValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
             'Callback', @obj.onSliderValueChanged);
@@ -129,7 +138,7 @@ methods
         
         % add combo box for choosing region connectivity
         [obj.Handles.ConnectivityPopup, ht] = addComboBoxLine(gui, mainPanel, ...
-            'Connectivity:', {'4', '8'}, ...
+            'Connectivity:', {num2str(obj.ConnValues(:)', '%d')}', ...
             @obj.onConnectivityChanged);
         
         % disable choice of connectivity for label images
@@ -166,8 +175,8 @@ methods
     function updateWidgets(obj)
         
         % update widget values
-        val = obj.MinAreaValue;
-        set(obj.Handles.MinAreaText, 'String', num2str(val))
+        val = obj.MinSizeValue;
+        set(obj.Handles.MinSizeText, 'String', num2str(val))
         set(obj.Handles.ValueSlider, 'Value', val);
         
         % update preview image of the document
@@ -187,7 +196,7 @@ methods
         newDoc = addImageDocument(obj.Viewer, res);
             
         % add history
-        strValue = num2str(obj.MinAreaValue);
+        strValue = num2str(obj.MinSizeValue);
         if isLabelImage(doc.Image)
             string = sprintf('%s = areaOpening(%s, %s);\n', ...
                 newDoc.Tag, doc.Tag, strValue);
@@ -210,6 +219,7 @@ end
 methods
     function updateLabelImage(obj)
         % ensure the image of labels is valid
+        
         img = currentImage(obj.Viewer);
         if isLabelImage(img)
             obj.LabelImage = img;
@@ -218,20 +228,27 @@ methods
         else 
             error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
         end
+        
+        % initialize list of label indices
+        labels = unique(obj.LabelImage.Data(:));
+        labels(labels == 0) = [];
+        obj.LabelList = labels;
     end
     
-    function updateParticleAreaList(obj)
+    function updateRegionSizeList(obj)
         % update the list of areas for each particle in the label image
         lbl = obj.LabelImage;
-        obj.ParticleAreas = imArea(lbl);
+        obj.RegionSizeList = regionElementCounts(lbl, obj.LabelList);
     end
     
     function res = computeResultImage(obj)
+        % Compute result image keeping type of input image.
+
         img = currentImage(obj.Viewer);
         if isLabelImage(img)
-            res = areaOpening(img, obj.MinAreaValue);
+            res = areaOpening(img, obj.MinSizeValue);
         elseif isBinaryImage(img)
-            res = areaOpening(img, obj.MinAreaValue, obj.Conn);
+            res = areaOpening(img, obj.MinSizeValue, obj.Conn);
         else 
             error('ImageM:ImageAreaOpeningAction', 'Unknown image type');
         end
@@ -241,25 +258,25 @@ end
 
 %% GUI Items Callback
 methods
-    function onMinAreaTextChanged(obj, varargin)
-        text = get(obj.Handles.MinAreaText, 'String');
+    function onMinSizeTextChanged(obj, varargin)
+        text = get(obj.Handles.MinSizeText, 'String');
         val = str2double(text);
         if ~isfinite(val)
             return;
         end
         
         % check value is within bounds
-        if val < 0 || val > obj.LabelMax
+        if val < 0 || val > max(obj.RegionSizeList)
             return;
         end
         
-        obj.MinAreaValue = val;
+        obj.MinSizeValue = val;
         updateWidgets(obj);
     end
     
     function onSliderValueChanged(obj, varargin)
         val = get(obj.Handles.ValueSlider, 'Value');
-        obj.MinAreaValue = val;
+        obj.MinSizeValue = val;
         
         updateWidgets(obj);
     end
@@ -270,10 +287,8 @@ methods
         
         % update inner state of the tool
         updateLabelImage(obj);
-        updateParticleAreaList(obj);
-        
-        maxVal = double(max(obj.ParticleAreas));
-        obj.LabelMax = maxVal;
+        updateRegionSizeList(obj);
+        maxVal = double(max(obj.RegionSizeList));
         
         % compute slider steps
         valExtent = maxVal + 1;
@@ -283,7 +298,7 @@ methods
         set(obj.Handles.ValueSlider, 'Max', maxVal);
         set(obj.Handles.ValueSlider, 'SliderStep', [sliderStep1 sliderStep2]); 
         
-        obj.MinAreaValue = min(obj.MinAreaValue, maxVal);
+        obj.MinSizeValue = min(obj.MinSizeValue, maxVal);
         updateWidgets(obj);
     end
 end
