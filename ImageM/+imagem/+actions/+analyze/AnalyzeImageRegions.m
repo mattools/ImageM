@@ -59,7 +59,7 @@ methods
         shapeFactorFlag = get(obj.Handles.ShapeFactorCheckBox, 'Value');
         
         centroidFlag    = get(obj.Handles.CentroidCheckBox, 'Value');
-        ellipseFlag     = get(obj.Handles.InertiaEllipseCheckBox, 'Value');
+        ellipseFlag     = get(obj.Handles.EquivEllipseCheckBox, 'Value');
         ellipseElongFlag    = get(obj.Handles.EllipseElongationCheckBox, 'Value');
         
         feretDiameterFlag   = get(obj.Handles.FeretDiameterCheckBox, 'Value');
@@ -73,23 +73,23 @@ methods
         
         % TODO: use spatial calbration
         resol = [1 1];
+        imgData = img.Data';
         
         % initialize empty table
-        labelList = unique(img(:));
-        labelList(labelList == 0) = [];
-        tab = Table(labelList, {'Label'});
+        labels = imFindLabels(imgData);
+        tab = Table(labels, {'Label'});
         
         % process global size features
         if areaFlag || shapeFactorFlag
-            areaList = imArea(img.Data, resol);
+            areaList = imArea(imgData, labels, resol);
             tab = [tab Table(areaList, {'Area'})];
         end
         if perimeterFlag || shapeFactorFlag
-            perimeterList = imPerimeter(img.Data', resol);
+            perimeterList = imPerimeter(imgData, labels, resol);
             tab = [tab Table(perimeterList, {'Perimeter'})];
         end
         if eulerFlag
-            tab = [tab Table(imEuler2d(img.Data'), {'EulerNumber'})];
+            tab = [tab Table(imEuler2d(imgData), {'EulerNumber'})];
         end
         if shapeFactorFlag
             shapeFactor = 4 * pi * areaList ./ perimeterList .^2;
@@ -98,7 +98,7 @@ methods
 
         % process inertia-based features
         if centroidFlag || ellipseFlag || ellipseElongFlag
-            elli = imEquivalentEllipse(img.Data', resol);
+            elli = imEquivalentEllipse(imgData, resol);
             
             if centroidFlag || ellipseFlag
                 tab = [tab Table(elli(:,1:2), {'CentroidX', 'CentroidY'})];
@@ -115,12 +115,12 @@ methods
         
         % process feret diameter and oriented box features
         if feretDiameterFlag || tortuosityFlag
-            feretDiams = imMaxFeretDiameter(img.Data') * resol(1);
+            feretDiams = imMaxFeretDiameter(imgData) * resol(1);
             tab = [tab Table(feretDiams, {'FeretDiameter'})];
         end
         
         if orientedBoxFlag || boxElongFlag
-            boxes = imOrientedBox(img.Data', 'spacing', resol);
+            boxes = imOrientedBox(imgData, 'spacing', resol);
             colNames = {'BoxCenterX', 'BoxCenterY', 'BoxLength', 'BoxWidth', 'BoxOrientation'};
             tab = [tab Table(boxes, colNames)];
             
@@ -132,7 +132,7 @@ methods
         
         % process geodesic diamter based features
         if geodDiamFlag || geodElongFlag || tortuosityFlag
-            geodDiams = imGeodesicDiameter(img.Data');
+            geodDiams = imGeodesicDiameter(imgData);
             tab = [tab Table(geodDiams, {'GeodesicDiameter'})];
         end
         
@@ -142,7 +142,7 @@ methods
         end
         
         if maxInnerRadiusFlag || geodElongFlag
-            discs = imInscribedCircle(img.Data');
+            discs = imInscribedCircle(imgData);
             
             if maxInnerRadiusFlag
                 colNames = {'InnerDiscCenterX', 'InnerDiscCenterY', 'InnerDiscRadius'};
@@ -251,12 +251,11 @@ methods
             'String', 'Centroid', ...
             'Value', 1);
         
-        obj.Handles.InertiaEllipseCheckBox = uicontrol(...
+        obj.Handles.EquivEllipseCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
-            'String', 'Inertia Ellipse', ...
+            'String', 'Equivalent Ellipse', ...
             'Value', 1);
-        
         
         obj.Handles.EllipseElongationCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
