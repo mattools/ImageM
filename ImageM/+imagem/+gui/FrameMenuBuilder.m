@@ -388,7 +388,8 @@ methods
         
         % Plot menu
         plotMenu = addMenu(obj, hf, 'Plot');
-        addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...');
+        addMenuItem(obj, plotMenu, PlotColumnHistogram(), 'Histogram...');
+        addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...', 'Separator', 'On');
         addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
         addMenuItem(obj, plotMenu, BoxPlot(), 'Box Plot...', 'Separator', 'on');
         addMenuItem(obj, plotMenu, GroupBoxPlot(), 'Box Plot by Group...');
