@@ -38,7 +38,7 @@ methods
 end
 
 
-%% Methods to be overlaid
+%% Methods to be overloaded
 
 methods (Abstract)
     actionPerformed(obj, src, event)
