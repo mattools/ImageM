@@ -39,7 +39,8 @@ methods
         title = 'Export Image Data';
         lines = 1;
         def = {'img'};
-        answer = inputdlg(prompt, title, lines, def);
+        options = struct('Resize', 'on');
+        answer = inputdlg(prompt, title, lines, def, options);
         
         % if user cancels, answer is empty
         if isempty(answer)
