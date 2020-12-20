@@ -57,7 +57,7 @@ methods
             write(img, fullfile(pathName, fileName));
         catch ex
             errordlg(ex.message, 'Image Writing Error', 'modal');
-            return;
+            error(ex.message);
         end
         
         % add history
