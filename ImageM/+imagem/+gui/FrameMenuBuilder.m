@@ -330,7 +330,8 @@ methods
 
         addMenuItem(obj, analyzeMenu, PlotImageLineProfile(), 'Plot Line Profile', ...
             'Accelerator', 'K', 'Separator', 'on');
-        addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(), 'Analyze Regions', 'Separator', 'on');
+        addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(), 'Analyze Regions...', 'Separator', 'on');
+        addMenuItem(obj, analyzeMenu, AverageValueByRegion(), 'Average Value by Region...');
         
         
         % Help menu definition
