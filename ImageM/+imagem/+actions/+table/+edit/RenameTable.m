@@ -55,8 +55,8 @@ methods
         updateTitle(frame);
         
         % add history
-        string = sprintf('%s.Name = ''%s'');\n', ...
-            doc.Tag, newName);
+        string = sprintf('%s.Name = ''%s'';\n', ...
+            frame.Doc.Tag, newName);
         addToHistory(frame, string);
 
     end
