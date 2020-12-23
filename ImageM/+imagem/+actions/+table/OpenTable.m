@@ -51,10 +51,39 @@ methods
         if isequal(fileName,0) || isequal(pathName,0)
             return;
         end
-
-        % read the table
+        
+        % determine file options
         filePath = fullfile(pathName, fileName);
-        tab = Table.read(filePath);
+        [~, tableName] = fileparts(fileName);
+        
+        % creates a new dialog, and populates it with some fields
+        gd = imagem.gui.GenericDialog('Import Table');
+        addTextField(gd, 'Table Name: ', tableName);
+        addNumericField(gd, 'Skip Lines: ', 0);
+        addCheckBox(gd, 'Header Line', true);
+        addChoice(gd, 'Delimiter: ', {'All spaces', ';', ',', 'Tabs', 'Spaces'}, 'All spaces');
+        
+        % displays the dialog, and waits for user
+        showDialog(gd);
+        % check if ok or cancel was clicked
+        if wasCanceled(gd)
+            return;
+        end
+        
+        % parse the user inputs
+        tableName = getNextString(gd);
+        skipLines = getNextNumber(gd);
+        header = getNextBoolean(gd);
+        delimIndex = getNextChoiceIndex(gd);
+        delimList = {' \b\t', ';', ',', '\t', ' '};
+        delim = delimList{delimIndex};
+        
+        % read the table
+        tab = Table.read(filePath, ...
+            'SkipLines', skipLines, ...
+            'Header', header, ...
+            'Delimiter', delim);
+        tab.Name = tableName;
         
         % add image to application, and create new display
         [frame, doc] = createTableFrame(gui, tab);
