@@ -87,17 +87,6 @@ methods
         minVal = 0;
         maxVal = double(max(areas));
         
-        % compute slider steps
-        valExtent = maxVal + 1;
-                
-        % set unit step equal to 1 grayscale unit
-        sliderStep1 = 1 / valExtent;
-        sliderStep2 = 10 / valExtent;
-        
-        % background color of most widgets
-        bgColor = getWidgetBackgroundColor(obj.Viewer.Gui);
-        
-        
         % creates the figure
         hf = figure(...
             'Name', 'Image Area Opening', ...
@@ -123,14 +112,11 @@ methods
             @obj.onMinSizeTextChanged);
         
         % one slider for changing value
-        obj.Handles.ValueSlider = uicontrol(...
-            'Style', 'Slider', ...
-            'Parent', mainPanel, ...
-            'Min', minVal, 'Max', maxVal, ...
-            'Value', obj.MinSizeValue, ...
-            'SliderStep', [sliderStep1 sliderStep2], ...
-            'BackgroundColor', bgColor, ...
+        hs = addSlider(gui, mainPanel, ...
+            [minVal maxVal], ...
+            obj.MinSizeValue, ...
             'Callback', @obj.onSliderValueChanged);
+        obj.Handles.ValueSlider = hs;
         
         % setup listener for slider continuous changes
         addlistener(obj.Handles.ValueSlider, ...
@@ -138,7 +124,7 @@ methods
         
         % add combo box for choosing region connectivity
         [obj.Handles.ConnectivityPopup, ht] = addComboBoxLine(gui, mainPanel, ...
-            'Connectivity:', {num2str(obj.ConnValues(:)', '%d')}', ...
+            'Connectivity:', {num2str(obj.ConnValues(:), '%d')}', ...
             @obj.onConnectivityChanged);
         
         % disable choice of connectivity for label images
@@ -276,7 +262,7 @@ methods
     
     function onSliderValueChanged(obj, varargin)
         val = get(obj.Handles.ValueSlider, 'Value');
-        obj.MinSizeValue = val;
+        obj.MinSizeValue = round(val);
         
         updateWidgets(obj);
     end
