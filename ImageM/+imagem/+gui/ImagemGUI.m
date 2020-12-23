@@ -332,6 +332,34 @@ methods
         set(hLine, 'Widths', [-5 -5]);
     end
     
+    function h = addSlider(obj, parent, range, varargin)
+        % Add a slider to the specified widget.
+        %
+        % HS = addSlider(gui, parent, range)
+        % HS = addSlider(gui, parent, range, value)
+        
+        value = (range(1) + range(2)) / 2;
+        if ~isempty(varargin) && isnumeric(varargin{1}) && isscalar(varargin{1})
+            value = varargin{1};
+            varargin(1) = [];
+        end
+        
+        % compute slider steps
+        valExtent = range(2) - range(1);
+        % set unit step equal to 1 grayscale unit
+        sliderSteps = [1 10] / valExtent;
+
+        % creates the new control
+        bgColor = getWidgetBackgroundColor(obj);
+        h = uicontrol('Style', 'Slider', ...
+            'Parent', parent, ...
+            'Min', range(1), 'Max', range(2), ...
+            'Value', value, ...
+            'SliderStep', sliderSteps, ...
+            'BackgroundColor', bgColor, ...
+            varargin{:});
+    end
+    
     function h = addCheckBox(obj, parent, label, state, cb) %#ok<INUSL>
         
         hLine = uix.HBox('Parent', parent, ...
