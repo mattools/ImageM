@@ -36,19 +36,23 @@ end % end constructors
 methods
     function run(obj, frame) %#ok<INUSL>
         
+        % retrieve data
         gui = frame.Gui;
         table = frame.Doc.Table;
         
+        % open dialog to select relevant columns
         [sel, ok] = listdlg('ListString', table.ColNames, ...
             'Name', 'Select Columns', ...
             'PromptString', 'Select the columns:', ...
             'ListSize', gui.Options.DlgListSize, ...
             'selectionmode', 'multiple');
         
+        % check cancel
         if ~ok || isempty(sel)
             return;
         end
         
+        % create new table
         tab2 = table(:, sel);
         [frame2, doc2] = createTableFrame(gui, tab2, frame);
         
@@ -57,7 +61,6 @@ methods
         string = sprintf('%s = %s(:, %s);\n', ...
             doc2.Tag, frame.Doc.Tag, indsString);
         addToHistory(frame2, string);
-
     end
 end % end methods
 

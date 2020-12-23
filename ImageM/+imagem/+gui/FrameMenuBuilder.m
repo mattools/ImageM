@@ -384,6 +384,7 @@ methods
         addMenuItem(obj, editMenu, Concatenate(), 'Concatenate...');
         addMenuItem(obj, editMenu, SelectTableRows(), 'Select Rows...', 'Separator', 'On');
         addMenuItem(obj, editMenu, SelectTableColumns(), 'Select Columns...');
+        addMenuItem(obj, editMenu, FilterFromColumnValues(), 'Filter From Column Values...');
         addMenuItem(obj, editMenu, FoldTableToImage(), 'Fold Table To Image...', 'Separator', 'On');
         
         % Plot menu
