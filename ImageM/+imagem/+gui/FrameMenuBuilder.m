@@ -395,6 +395,7 @@ methods
         addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...', 'Separator', 'On');
         addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
         addMenuItem(obj, plotMenu, imagem.actions.table.plot.PairPlot(), 'Pair Plot...');
+        addMenuItem(obj, plotMenu, PlotCorrelationCircles(), 'Correlation Circles...');
         addMenuItem(obj, plotMenu, PlotColumns(), 'Plot Columns...', 'Separator', 'on');
         addMenuItem(obj, plotMenu, PlotRows(), 'Plot Rows');
         addMenuItem(obj, plotMenu, ChoosePreferredPlotTypes(), 'Choose Preferred Plot Type...', 'Separator', 'on');
