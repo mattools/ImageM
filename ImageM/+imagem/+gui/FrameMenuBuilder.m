@@ -77,9 +77,9 @@ methods
         
         addMenuItem(obj, fileMenu, CreateImage(),            'New Image...', 'Accelerator', 'N');
         addMenuItem(obj, fileMenu, OpenImage(),              'Open Image...', 'Accelerator', 'O');
-        addMenuItem(obj, fileMenu, OpenTable(),              'Open Table...', 'Accelerator', 'O');
+        addMenuItem(obj, fileMenu, ImportImageFromBinaryFile(),  'Import from binary file...');
 
-        demoMenu = addMenu(obj, fileMenu, 'Open Demo');
+        demoMenu = addMenu(obj, fileMenu, 'Open Demo', 'Separator', 'on');
         addMenuItem(obj, demoMenu, OpenDemoImage('cameraman.tif'), 	'Cameraman (grayscale)');
         addMenuItem(obj, demoMenu, OpenDemoImage('rice.png'),    'Rice (grayscale)');
         addMenuItem(obj, demoMenu, OpenDemoImage('coins.png'),   'Coins (grayscale)');
@@ -89,6 +89,7 @@ methods
         addMenuItem(obj, demoMenu, OpenDemoImage('circles.png'), 'Circles (binary)');
         addMenuItem(obj, demoMenu, OpenDemoImage('text.png'),    'Text (binary)');
         addMenuItem(obj, demoMenu, OpenDemoTable('fisherIris.txt'),    'Fisher Iris (Table)', 'Separator', 'on');
+        addMenuItem(obj, fileMenu, OpenTable(),              'Open Table...');
 
         addMenuItem(obj, fileMenu, ImportImageFromWorkspace(),   'Import From Workspace...');
         
