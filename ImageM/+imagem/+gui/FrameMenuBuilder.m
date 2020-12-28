@@ -75,23 +75,25 @@ methods
         
         fileMenu = addMenu(obj, hf, 'Files');
         
-        addMenuItem(obj, fileMenu, CreateImage(),            'New Image...', 'Accelerator', 'N');
-        addMenuItem(obj, fileMenu, OpenImage(),              'Open Image...', 'Accelerator', 'O');
-        addMenuItem(obj, fileMenu, ImportImageFromBinaryFile(),  'Import from binary file...');
+        addMenuItem(obj, fileMenu, CreateImage(),               'New Image...', 'Accelerator', 'N');
+        addMenuItem(obj, fileMenu, OpenImage(),                 'Open Image...', 'Accelerator', 'O');
+        importMenu = addMenu(obj, fileMenu, 'Import');
+        addMenuItem(obj, importMenu, ImportImageFromBinaryFile(),   'Import from binary file...');
+        addMenuItem(obj, importMenu, ImportImageSeries(),           'Import Image Series...');
+        addMenuItem(obj, importMenu, ImportImageFromWorkspace(),    'Import From Workspace...');
 
         demoMenu = addMenu(obj, fileMenu, 'Open Demo', 'Separator', 'on');
         addMenuItem(obj, demoMenu, OpenDemoImage('cameraman.tif'), 	'Cameraman (grayscale)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('rice.png'),    'Rice (grayscale)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('coins.png'),   'Coins (grayscale)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('peppers.png'), 'Peppers (RGB)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('mri.tif'),     'MRI Head (3D)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('xylophone.mp4'),     'Xylophone (movie)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('circles.png'), 'Circles (binary)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('text.png'),    'Text (binary)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('rice.png'),       'Rice (grayscale)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('coins.png'),      'Coins (grayscale)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('peppers.png'),    'Peppers (RGB)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('mri.tif'),        'MRI Head (3D)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('xylophone.mp4'),  'Xylophone (movie)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('circles.png'),    'Circles (binary)');
+        addMenuItem(obj, demoMenu, OpenDemoImage('text.png'),       'Text (binary)');
         addMenuItem(obj, demoMenu, OpenDemoTable('fisherIris.txt'),    'Fisher Iris (Table)', 'Separator', 'on');
         addMenuItem(obj, fileMenu, OpenTable(),              'Open Table...');
 
-        addMenuItem(obj, fileMenu, ImportImageFromWorkspace(),   'Import From Workspace...');
         
         addMenuItem(obj, fileMenu, SaveImage(),              'Save As...', ...
             'Separator', 'on', 'Accelerator', 'S');

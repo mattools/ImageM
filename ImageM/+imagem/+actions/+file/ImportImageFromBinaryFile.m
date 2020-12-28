@@ -33,7 +33,7 @@ end % end constructors
 %% Methods
 methods
     function run(obj, frame) %#ok<INUSL>
-        disp('% Open new table ');
+        disp('% Open image from raw file');
         
         % get handle to parent GUI
         gui = frame.Gui;
@@ -44,7 +44,7 @@ methods
             '*.raw,'                'Raw Files (*.raw)'; ...
             '*.vol,'                'Vol Files (*.vol)'; ...
             '*.*',                  'All Files (*.*)'}, ...
-            'Choose a data table file to open:');
+            'Choose binary data file:');
         
         if isequal(fileName,0) || isequal(pathName,0)
             return;
