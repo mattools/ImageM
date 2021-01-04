@@ -60,7 +60,7 @@ methods
         % configure axis
         ax = gca;
         hold(ax, 'on');
-        set(ax, 'xlim', [0 channelNumber(img)+1]);
+        set(ax, 'xlim', [0 channelCount(img)+1]);
         set(ax, 'ylim', displayRange);
         titleStr = 'Spectral Profile';
         if ~isempty(img.Name)
@@ -114,11 +114,17 @@ methods
     function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
 
         pos = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
-        obj.LastClickedPoint = pos(1,:);
+        pos = pos(1, 1:2);
+        if is3dImage(obj.Viewer.Doc.Image)
+            pos = [pos obj.Viewer.SliceIndex];
+        end
 
+        obj.LastClickedPoint = pos;
+        
         img = obj.Viewer.Doc.Image;
 %         coord = round(pointToIndex(img, [pos(1, 1:2) obj.Viewer.SliceIndex]));
-        coord = round(pointToIndex(img, [pos(1, 1:2) 1]));
+
+        coord = round(pointToIndex(img, pos));
         coord = coord(1:2);
         
         % control on bounds of image
@@ -155,24 +161,6 @@ methods
                     warning('Unknown channel display type');
             end
         end
-        
-%         % add profile to axis user data
-%         userdata = get(obj.Handles.CProfileAxis, 'userdata');
-% %         if strcmp(get(obj.Handles.Figure, 'SelectionType'), 'normal')
-% %             % replace profile list with current profile
-% %             userdata.profiles = profile;
-% %             delete(userdata.profileHandles);
-%             h = plot(obj.Handles.CProfileAxis, profile, 'b');
-% %             userdata.profileHandles = h;
-% %         else
-% %             % add the current profile to profile list
-% %             userdata.profiles = [userdata.profiles profile];
-% %             h = plot(obj.Handles.ZProfileAxis, profile, 'b');
-% %             userdata.profileHandles = [userdata.profileHandles h];
-% %         end
-%         
-%         set(obj.Handles.CProfileAxis, 'userdata', userdata);
-
     end
     
     function onMouseButtonReleased(obj, hObject, eventdata) %#ok<INUSD>

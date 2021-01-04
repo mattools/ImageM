@@ -4,7 +4,7 @@ classdef Image5DSliceViewer < imagem.gui.ImageViewer
 %   This class displas a side panel that allows to choose:
 %   * the current slice index (Z coordinate)
 %   * the current frame index (T coordinate)
-%   * the current channel, or the way the hannel is displayed.
+%   * the current channel, or the way the channels are displayed.
 %
 %   Example
 %   Image5DSliceViewer
@@ -28,9 +28,12 @@ properties
     % The index of the visible slice (between 1 and TMax).
     FrameIndex;
     
-    % The XY slice to be displayed, as an instance of Image class.
-    SliceImage;
+    % The way to display vector images.
+    % Default is to display the norm.
+    VectorImageConverter = imagem.util.vectorImage.VectorImageNorm();
     
+    % The image to be displayed, as a 2D intensity or RGB Image.
+    ImageToDisplay;
    
     % Specify how to change the zoom when figure is resized. 
     % Can be one of:
@@ -54,11 +57,11 @@ methods
         % setup initial slice and frame indices
         obj.SliceIndex = ceil(size(obj.Doc.Image, 3) / 2);
         obj.FrameIndex = ceil(size(obj.Doc.Image, 5) / 2);
-
-        % setup default display options
-        [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(obj.Doc.Image);
-        obj.DisplayRange = [mini maxi];
-
+        
+        % initialize the image to display
+        updateImageToDisplay(obj);
+        computeDefaultDisplayRange(obj);
+        
         
         % computes a new handle index large enough not to collide with
         % common figure handles
@@ -134,6 +137,27 @@ methods (Access = private)
             'Parent', obj.Handles.HorzPanel, ...
             'Padding', 5);
 
+
+        % setup widgets for vector images display
+        vectorImage = 'off';
+        if isVectorImage(img) && ~isColorImage(img)
+            vectorImage = 'on';
+        end
+        obj.Handles.VectorImageConvertLabel = uicontrol(...
+            'Parent', obj.Handles.DisplayOptionsPanel, ...
+            'Style', 'text', ...
+            'String', 'Vector Image Display', ...
+            'Enable', vectorImage, ...
+            'HorizontalAlignment', 'left');
+        
+        obj.Handles.VectorImageConvertCombo = uicontrol('Style', 'popupmenu', ...
+            'Parent', obj.Handles.DisplayOptionsPanel, ...
+            'String', {'Norm', 'Max Channel', 'First Channel'}, ...
+            'Value', 1, ...
+            'Enable', vectorImage, ...
+            'Callback', @obj.onVectorImageConvertChanged, ...
+            'BackgroundColor', [1 1 1]);
+
         
         % setup widgets for slice index
         zmin = 1;
@@ -194,7 +218,7 @@ methods (Access = private)
                 'Enable', 'off');
         end
 
-        obj.Handles.DisplayOptionsPanel.Heights = [30 20 30 20];
+        obj.Handles.DisplayOptionsPanel.Heights = [30 20 30 20 30 20];
         
         % vertical layout: image display and status bar
         mainPanel = uix.VBox('Parent', obj.Handles.HorzPanel, ...
@@ -257,7 +281,7 @@ methods
         
         text = sprintf('Slice index (%d/%d)', newIndex, size(obj.Doc.Image, 3));
         set(obj.Handles.SliceIndexLabel, 'String', {'', text});
-%         updateSliceImage(obj);
+%         updateImageToDisplay(obj);
         
         updateDisplay(obj);
 %         set(obj.Handles.Image, 'CData', obj.Slice);
@@ -284,9 +308,9 @@ methods
     end
     
     
-    function sliceImage = updateSliceImage(obj)
-        % Recompute the slice image from image and slice+frame indices.
-
+    function sliceImage = updateImageToDisplay(obj)
+        % Recompute the image to display from slice/frame/channel indices.
+        
         % current image is either the document image, or the preview image
         % if there is one
         img = obj.Doc.Image;
@@ -295,17 +319,22 @@ methods
         end
         
         % extract the 2D image to display (can be color or channel)
-        obj.SliceImage = slice(frame(img, obj.FrameIndex), obj.SliceIndex);
+        obj.ImageToDisplay = slice(frame(img, obj.FrameIndex), obj.SliceIndex);
         
-        if strcmpi(obj.SliceImage.Type, 'vector')
-            obj.SliceImage = norm(obj.SliceImage);
+        if strcmpi(obj.ImageToDisplay.Type, 'vector')
+            obj.ImageToDisplay = convert(obj.VectorImageConverter, obj.ImageToDisplay);
         end
         
         if nargout > 0
-            sliceImage = obj.SliceImage;
+            sliceImage = obj.ImageToDisplay;
         end
     end
     
+    function computeDefaultDisplayRange(obj)
+        % Compute default display range from image to display.
+        [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(obj.ImageToDisplay);
+        obj.DisplayRange = [mini maxi];
+    end
 end
 
 %% Methods for Display
@@ -325,10 +354,11 @@ methods
         end
         
         img = obj.Doc.Image;
-        sliceImage = updateSliceImage(obj);
+        sliceImage = updateImageToDisplay(obj);
         
         % compute display data
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, obj.Doc.ColorMap, obj.Doc.BackgroundColor);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, ...
+            obj.Doc.ColorMap, obj.DisplayRange, obj.Doc.BackgroundColor);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
@@ -354,7 +384,7 @@ methods
 %         api.setVisibleLocation(loc);
         
         % eventually adjust displayrange (for the whole image)
-        if isGrayscaleImage(img) || isIntensityImage(img) || isVectorImage(img)
+        if isGrayscaleImage(sliceImage) || isIntensityImage(sliceImage)
             mini = obj.DisplayRange(1);
             maxi = obj.DisplayRange(2);
             set(obj.Handles.ImageAxis, 'CLim', [mini maxi]);
@@ -377,7 +407,7 @@ methods
 %         % display each shape stored in document
 %         drawShapes(obj);
     end
-    
+
     function copySettings(obj, that)
         % copy display settings from another viewer
         obj.DisplayRange = that.DisplayRange;
@@ -431,6 +461,30 @@ end
 
 %% GUI Widgets listeners
 methods
+    function onVectorImageConvertChanged(obj, hObject, eventdata) %#ok<*INUSD>
+        if isempty(obj.Doc.Image)
+            return;
+        end
+        
+        index = round(get(hObject, 'Value'));
+        switch index
+            case 1
+                obj.VectorImageConverter = imagem.util.vectorImage.VectorImageNorm();
+            case 2
+                obj.VectorImageConverter = imagem.util.vectorImage.VectorImageMaxChannel();
+            case 3
+                obj.VectorImageConverter = imagem.util.vectorImage.VectorImageSingleChannel(1);
+            otherwise
+                error('Can not interpret value');
+        end
+        
+        % recompute image to display, to be able to update display ranges
+        updateImageToDisplay(obj);
+        computeDefaultDisplayRange(obj);
+        
+        updateDisplay(obj);
+    end
+    
     function onSliceSliderChanged(obj, hObject, eventdata) %#ok<*INUSD>
         if isempty(obj.Doc.Image)
             return;

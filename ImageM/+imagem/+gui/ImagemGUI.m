@@ -137,10 +137,19 @@ methods
         
         % creates a display for the new image depending on image dimension
         if size(img, 5) > 1
+            % in case of time-lapse images, always use 5D viewer
             frame = imagem.gui.Image5DSliceViewer(obj, doc);
+            
+        elseif size(img, 4) > 3
+            % if more than 3 channels, switch to 5D viewer
+            frame = imagem.gui.Image5DSliceViewer(obj, doc);
+            
         elseif size(img, 3) > 1
+            % more simple viewer for 4D scalar/color images
             frame = imagem.gui.Image3DSliceViewer(obj, doc);
+            
         else
+            % default viewer for 2D images
             frame = imagem.gui.PlanarImageViewer(obj, doc);
         end
         addView(doc, frame);

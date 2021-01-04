@@ -43,7 +43,7 @@ methods
             errordlg('Requires a vector image');
             return;
         end
-        nc = channelNumber(img);
+        nc = channelCount(img);
         if nc < 3
             errordlg('Requires at least three channels in image');
             return;
