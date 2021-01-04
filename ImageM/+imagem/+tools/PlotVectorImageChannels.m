@@ -18,6 +18,8 @@ classdef PlotVectorImageChannels < imagem.gui.Tool & imagem.gui.events.ImageDisp
 
 %% Properties
 properties
+    XData;
+    
     Handles;
     
     LastClickedPoint;
@@ -57,10 +59,21 @@ methods
         img = obj.Viewer.Doc.Image;
         displayRange = [min(img.Data(:)) max(img.Data(:))];
         
+        obj.XData = 1:channelCount(img);
+        xRange = [0 obj.XData(end)+1]; 
+        channelNames = obj.Viewer.Doc.Image.ChannelNames;
+        if ~isempty(channelNames)
+            values = str2num(char(channelNames(:)')); %#ok<ST2NM>
+            if all(isfinite(values))
+                obj.XData = values(:)';
+                xRange = [min(obj.XData) max(obj.XData)];
+            end
+        end
+        
         % configure axis
         ax = gca;
         hold(ax, 'on');
-        set(ax, 'xlim', [0 channelCount(img)+1]);
+        set(ax, 'xlim', xRange);
         set(ax, 'ylim', displayRange);
         titleStr = 'Spectral Profile';
         if ~isempty(img.Name)
@@ -69,13 +82,12 @@ methods
         title(ax, titleStr);
         xlabel(ax, 'Channel');
         ylabel(ax, 'Channel values');
-        
-        channelNames = obj.Viewer.Doc.Image.ChannelNames;
-        if ~isempty(channelNames)
-            set(ax, 'XTick', 1:length(channelNames))
-            set(ax, 'XTickLabels', channelNames)
-        end
-                
+
+%         if ~isempty(channelNames)
+%             set(ax, 'XTick', 1:length(channelNames))
+%             set(ax, 'XTickLabels', channelNames)
+%         end
+
         % store settings
         userdata = struct('profiles', [], 'profileHandles', []);
         set(gca, 'userdata', userdata);
@@ -112,18 +124,18 @@ end
 %% Implements Mouse Listener methods
 methods
     function onMouseButtonPressed(obj, hObject, eventdata) %#ok<INUSD>
-
+        % Update plot display based on last click position.
+        
+        % get coordinates of last click on image.
         pos = get(obj.Viewer.Handles.ImageAxis, 'CurrentPoint');
         pos = pos(1, 1:2);
         if is3dImage(obj.Viewer.Doc.Image)
             pos = [pos obj.Viewer.SliceIndex];
         end
-
         obj.LastClickedPoint = pos;
         
+        % convert to pixel coordinates
         img = obj.Viewer.Doc.Image;
-%         coord = round(pointToIndex(img, [pos(1, 1:2) obj.Viewer.SliceIndex]));
-
         coord = round(pointToIndex(img, pos));
         coord = coord(1:2);
         
@@ -140,11 +152,11 @@ methods
             % create a new curve
             switch obj.Viewer.Doc.ChannelDisplayType
                 case 'Curve'
-                    obj.Handles.CProfileCurve = plot(obj.Handles.CProfileAxis, profile, 'b');
+                    obj.Handles.CProfileCurve = plot(obj.Handles.CProfileAxis, obj.XData, profile, 'b');
                 case 'Bar'
-                    obj.Handles.CProfileCurve = bar(obj.Handles.CProfileAxis, profile, 'b');
+                    obj.Handles.CProfileCurve = bar(obj.Handles.CProfileAxis, obj.XData, profile, 'b');
                 case 'Stem'
-                    obj.Handles.CProfileCurve = stem(obj.Handles.CProfileAxis, profile, 'b');
+                    obj.Handles.CProfileCurve = stem(obj.Handles.CProfileAxis, obj.XData, profile, 'b');
                 otherwise
                     warning('Unknown channel display type');
             end
