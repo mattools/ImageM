@@ -7,11 +7,11 @@ classdef ConvertImage3DToVectorImage < imagem.actions.Image3DAction
 %   ConvertImage3DToVectorImage
 %
 %   See also
-%
+%     ConvertVectorImageToImage3D
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2019-11-15,    using Matlab 9.7.0.1190202 (R2019b)
 % Copyright 2019 INRA - BIA-BIBS.
 
@@ -24,7 +24,7 @@ end % end properties
 %% Constructor
 methods
     function obj = ConvertImage3DToVectorImage(varargin)
-    % Constructor for ConvertImage3DToVectorImage class
+    % Constructor for ConvertImage3DToVectorImage class.
 
     end
 
@@ -39,13 +39,13 @@ methods
         doc = currentDoc(frame);
         
         % apply the conversion operation
-        res = Image('Data', doc.Image.Data, 'vector', true);
+        res = permute(doc.Image, [1 2 4 3 5]);
         
         % create a new doc
         newDoc = addImageDocument(frame, res);
         
         % add history
-        string = sprintf('%s = Image(''Data'', %s.Data, ''vector'', true);\n', ...
+        string = sprintf('%s = permute(%s, [1 2 4 3 5]);\n', ...
             newDoc.Tag, doc.Tag);
         addToHistory(frame, string);
     end

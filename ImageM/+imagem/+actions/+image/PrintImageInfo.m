@@ -68,10 +68,18 @@ methods
         
         if ~isempty(img.ChannelNames)
             fprintf('  Channel Names: {''%s''', img.ChannelNames{1});
-            for i = 2:channelNumber(img)
-                fprintf(',''%s''', img.ChannelNames{i});
+            nc = channelCount(img);
+            if nc > 10
+                for i = 2:10
+                    fprintf(', ''%s''', img.ChannelNames{i});
+                end
+                fprintf('... (%d more)}\n', nc-10);
+            else
+                for i = 2:nc
+                    fprintf(', ''%s''', img.ChannelNames{i});
+                end
+                fprintf('}\n');
             end
-            fprintf('}\n');
         else
             fprintf('  Channel Names: {}\n');
         end

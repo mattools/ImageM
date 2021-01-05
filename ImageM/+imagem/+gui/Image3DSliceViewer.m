@@ -248,7 +248,7 @@ methods
         sliceImage = updateSliceImage(obj);
         
         % compute display data
-        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, obj.Doc.ColorMap, obj.Doc.BackgroundColor);
+        cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, obj.Doc.ColorMap, obj.DisplayRange, obj.Doc.BackgroundColor);
        
         % changes current display data
         api = iptgetapi(obj.Handles.ScrollPanel);
