@@ -35,7 +35,7 @@ methods
         imageNames = getImageNames(app);
         colorNames = imagem.util.enums.BasicColors.allLabels;
         
-        % Creates the Dialogfor choosing options
+        % Creates the Dialog for choosing options
         gd = imagem.gui.GenericDialog('Binary Overlay');
         addChoice(gd, 'Reference Image:', imageNames, imageNames{1});
         addChoice(gd, 'Binary Image:', imageNames, imageNames{1});

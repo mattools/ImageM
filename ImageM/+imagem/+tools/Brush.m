@@ -68,7 +68,7 @@ methods
         if isa(obj.Viewer, 'imagem.gui.Image3DSliceViewer')
             iz = obj.Viewer.SliceIndex;
         end
-        ic = 1:channelNumber(img);
+        ic = 1:channelCount(img);
         it = 1; % not managed for the moment
 
         if ~isempty(obj.PreviousPoint)

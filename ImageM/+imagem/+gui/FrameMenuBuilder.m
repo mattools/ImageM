@@ -139,6 +139,7 @@ methods
         addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
         addMenuItem(obj, convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
         addMenuItem(obj, convertMenu, ConvertVectorImageToRGB(),        'Vector Image to RGB');
+        addMenuItem(obj, convertMenu, ConvertScalarImageToRGB(),        'Intensity Image to RGB', 'Separator', 'on');
         addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
         addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
         addMenuItem(obj, imageMenu, ReshapeImage(),         'Reshape...');
