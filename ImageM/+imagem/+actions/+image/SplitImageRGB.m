@@ -41,9 +41,9 @@ methods
         [red, green, blue] = splitChannels(doc.Image);
         
         % add new images to application, and create new displays
-        docR = addImageDocument(frame, red, [], 'red');
-        docG = addImageDocument(frame, green, [], 'green');
-        docB = addImageDocument(frame, blue, [], 'blue');
+        docR = addImageDocument(frame, red);
+        docG = addImageDocument(frame, green);
+        docB = addImageDocument(frame, blue);
         
         % add history
         string = sprintf('[%s, %s, %s] = splitChannels(%s);\n', ...

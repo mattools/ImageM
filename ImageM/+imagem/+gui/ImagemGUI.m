@@ -72,7 +72,7 @@ methods
     end
     
     
-    function [frame, doc] = createImageFrame(obj, image)
+    function [frame, doc] = createImageFrame(obj, image, varargin)
         % Create a new image viewer frame.
         %
         % FRAME = createImageFrame(obj, image);
@@ -86,6 +86,10 @@ methods
             doc = [];
             frame = imagem.gui.PlanarImageViewer(obj, doc);
             return;
+        end
+        
+        if ~isempty(varargin)
+            name 
         end
         
         % create the document (and add it to the app)

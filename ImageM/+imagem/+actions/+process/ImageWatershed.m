@@ -101,7 +101,7 @@ methods
         
         % update preview image of the document
         bin = computeWatershedImage(obj) == 0;
-        img = overlay(currentImage(obj), bin);
+        img = overlay(currentImage(obj.Viewer), bin);
         updatePreviewImage(obj.Viewer, img);
     end
     
