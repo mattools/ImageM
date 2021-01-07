@@ -128,7 +128,20 @@ methods
         addMenuItem(obj, convertTypeMenu, ImageConvertType('intensity'), 'Intensity');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('label'),     'Label');
 
-        colorMenu = addMenu(obj, imageMenu, 'Color', 'Separator', 'on');
+        addMenuItem(obj, imageMenu, RenameImage(),          'Rename', 'Separator', 'on');
+        addMenuItem(obj, imageMenu, DuplicateImage(),       'Duplicate', 'Accelerator', 'D');
+        addMenuItem(obj, imageMenu, InvertImage(),          'Invert Image', 'Accelerator', 'I');
+
+        transformMenu = addMenu(obj, imageMenu, 'Transfom', 'Separator', 'on');
+        addMenuItem(obj, transformMenu, ReshapeImage(),         'Reshape...');
+        addMenuItem(obj, transformMenu, PermuteDimensions(),    'Permute Dimensions...');
+        
+        addMenuItem(obj, transformMenu, FlipImage(1),           'Horizontal Flip', 'Separator', 'on');
+        addMenuItem(obj, transformMenu, FlipImage(2),           'Vertical Flip');
+        addMenuItem(obj, transformMenu, RotateImage90(1),       'Rotate Right');
+        addMenuItem(obj, transformMenu, RotateImage90(-1),      'Rotate Left');
+
+        colorMenu = addMenu(obj, imageMenu, 'Color');
         addMenuItem(obj, colorMenu, SplitImageRGB(),        'Split RGB');
         addMenuItem(obj, colorMenu, SplitImageChannels(),   'Split Channels');
         addMenuItem(obj, colorMenu, MergeImageChannels(),   'Merge Channels...');
@@ -142,18 +155,8 @@ methods
         addMenuItem(obj, convertMenu, ConvertScalarImageToRGB(),        'Intensity Image to RGB', 'Separator', 'on');
         addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
         addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
-        addMenuItem(obj, imageMenu, ReshapeImage(),         'Reshape...');
-        addMenuItem(obj, imageMenu, PermuteDimensions(),    'Permute Dimensions...');
         
-        addMenuItem(obj, imageMenu, FlipImage(1),           'Horizontal Flip', 'Separator', 'on');
-        addMenuItem(obj, imageMenu, FlipImage(2),           'Vertical Flip');
-        addMenuItem(obj, imageMenu, RotateImage90(1),       'Rotate Right');
-        addMenuItem(obj, imageMenu, RotateImage90(-1),      'Rotate Left');
-
-        addMenuItem(obj, imageMenu, InvertImage(),          'Invert Image', 'Accelerator', 'I', 'Separator', 'on');
         
-        addMenuItem(obj, imageMenu, RenameImage(),          'Rename', 'Separator', 'on');
-        addMenuItem(obj, imageMenu, DuplicateImage(),       'Duplicate', 'Accelerator', 'D');
         addMenuItem(obj, imageMenu, ExtractSlice(),         'Extract Slice');
         addMenuItem(obj, imageMenu, ExtractFrame(),         'Extract Time Frame');
         addMenuItem(obj, imageMenu, CropImageSelection(),   'Crop Selection');
@@ -246,7 +249,6 @@ methods
         processMenu = addMenu(obj, hf, 'Process');
         
         addMenuItem(obj, processMenu, AdjustImageDynamic(),     'Adjust Dynamic');
-        addMenuItem(obj, processMenu, ImageLabelToRgb(),        'Label To RGB...');
         addMenuItem(obj, processMenu, ImageReplaceValue(),      'Replace Value(s)...');
 
 %         filtersMenu = addMenu(obj, processMenu, 'Filters', 'Separator', 'on');
@@ -280,7 +282,7 @@ methods
         addMenuItem(obj, processMenu, ImageValuesTransform(), 'Image Maths 1...');
         addMenuItem(obj, processMenu, ImageMathematic(),    'Image Maths 2...');
         
-        binaryMenu = addMenu(obj, processMenu, 'Binary / Labels', 'Separator', 'On');
+        binaryMenu = addMenu(obj, processMenu, 'Binary / Label Images', 'Separator', 'On');
         addMenuItem(obj, binaryMenu, ConnectedComponentsLabeling(),  'Connected Components Labeling');
         addMenuItem(obj, binaryMenu, KillImageBorders(),    'Kill Borders', 'Separator', 'On');
         addMenuItem(obj, binaryMenu, ImageAreaOpening(),    'Area Opening');
@@ -293,7 +295,9 @@ methods
         
         addMenuItem(obj, binaryMenu, ImageBooleanOp(),      'Boolean Operation...', true);
         addMenuItem(obj, binaryMenu, BinaryImageOverlay(),  'Image Overlay...');
+        addMenuItem(obj, binaryMenu, ImageLabelToRgb(),     'Label To RGB...');
         addMenuItem(obj, binaryMenu, CreateLabelValuesMap(), 'Create Label Values Map...');
+        
         
         % Interactive tools
         

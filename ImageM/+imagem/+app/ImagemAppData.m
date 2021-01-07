@@ -389,7 +389,7 @@ methods
     end
     
     function b = hasDocumentWithName(obj, name)
-        % returns true if the app contains a doc with the given name
+        % Returns true if the app contains a doc with the given name.
         
         b = false;
         for i = 1:length(obj.DocList)
