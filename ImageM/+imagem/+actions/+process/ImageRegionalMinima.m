@@ -38,7 +38,7 @@ methods
         conn = getDefaultConnectivity(app, ndims(img));
         bin = regionalMinima(img, conn);
         
-        newDoc = addImageDocument(frame, bin, [], 'rmin');
+        [frame2, newDoc] = createImageFrame(frame, bin); %#ok<ASGLU>
         
         % add history
         string = sprintf('%s = regionalMinima(%s, %d);\n', ...
