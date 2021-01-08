@@ -330,6 +330,7 @@ methods
         analyzeMenu = addMenu(obj, hf, 'Analyze');
         
         addMenuItem(obj, analyzeMenu, SetImageScale(),      'Set Image Scale');
+        addMenuItem(obj, analyzeMenu, SelectTool(@InteractivePointMeasure), 'Measure Points');
         addMenuItem(obj, analyzeMenu, MeasureWithinSelection(), 'Measure Within Selection', ...
             'Accelerator', 'M');
         addMenuItem(obj, analyzeMenu, ShowImageHistogram(), 'Histogram', ...
