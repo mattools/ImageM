@@ -71,9 +71,10 @@ methods
         geodElongFlag   = get(obj.Handles.GeodesicElongationCheckBox, 'Value');
         tortuosityFlag  = get(obj.Handles.TortuosityCheckBox, 'Value');
         
-        % TODO: use spatial calbration
-        resol = [1 1];
+        % retrieve image data
         imgData = img.Data';
+        spacing = img.Spacing;
+        origin  = img.Origin;
         
         % initialize empty table
         labels = imFindLabels(imgData);
@@ -81,11 +82,11 @@ methods
         
         % process global size features
         if areaFlag || shapeFactorFlag
-            areaList = imArea(imgData, labels, resol);
+            areaList = imArea(imgData, labels, spacing);
             tab = [tab Table(areaList, {'Area'})];
         end
         if perimeterFlag || shapeFactorFlag
-            perimeterList = imPerimeter(imgData, labels, resol);
+            perimeterList = imPerimeter(imgData, labels, spacing);
             tab = [tab Table(perimeterList, {'Perimeter'})];
         end
         if eulerFlag
@@ -98,7 +99,7 @@ methods
 
         % process inertia-based features
         if centroidFlag || ellipseFlag || ellipseElongFlag
-            elli = imEquivalentEllipse(imgData, resol);
+            elli = imEquivalentEllipse(imgData, spacing, origin, labels);
             
             if centroidFlag || ellipseFlag
                 tab = [tab Table(elli(:,1:2), {'CentroidX', 'CentroidY'})];
@@ -115,12 +116,12 @@ methods
         
         % process feret diameter and oriented box features
         if feretDiameterFlag || tortuosityFlag
-            feretDiams = imMaxFeretDiameter(imgData) * resol(1);
+            feretDiams = imMaxFeretDiameter(imgData) * spacing(1);
             tab = [tab Table(feretDiams, {'FeretDiameter'})];
         end
         
         if orientedBoxFlag || boxElongFlag
-            boxes = imOrientedBox(imgData, 'spacing', resol);
+            boxes = imOrientedBox(imgData, 'Spacing', spacing, 'Origin', origin);
             colNames = {'BoxCenterX', 'BoxCenterY', 'BoxLength', 'BoxWidth', 'BoxOrientation'};
             tab = [tab Table(boxes, colNames)];
             
@@ -133,6 +134,7 @@ methods
         % process geodesic diamter based features
         if geodDiamFlag || geodElongFlag || tortuosityFlag
             geodDiams = imGeodesicDiameter(imgData);
+            geodDiams = geodDiams * spacing(1);
             tab = [tab Table(geodDiams, {'GeodesicDiameter'})];
         end
         
@@ -143,7 +145,6 @@ methods
         
         if maxInnerRadiusFlag || geodElongFlag
             discs = imInscribedCircle(imgData);
-            
             if maxInnerRadiusFlag
                 colNames = {'InnerDiscCenterX', 'InnerDiscCenterY', 'InnerDiscRadius'};
                 tab = [tab Table(discs, colNames)];
@@ -240,7 +241,6 @@ methods
             'Parent', featuresPanel, ...
             'Visible', 'Off');
        
-       
         
         % Second column
         
@@ -326,8 +326,6 @@ methods
             'Callback', @obj.onButtonCancel);
         
         set(vb, 'Heights', [-1  40] );
-
-        
     end
 end
 
@@ -339,14 +337,6 @@ methods
         % compute morphological features
         tab = computeFeatures(obj);
         
-%         % display overlay of ellipses
-%         ellis = [centro major/2 minor/2 theta];
-%         shape = struct(...
-%             'type', 'ellipse', ...
-%             'data', ellis, ...
-%             'style', {{'-b', 'LineWidth', 1}});
-%         obj.Viewer.doc.shapes = {shape};
-
         % extract type of overlay
         overlayTypeIndex = get(obj.Handles.OverlayTypePopup, 'Value');
         overlayType = obj.OverlayTypeValues{overlayTypeIndex};
@@ -363,12 +353,14 @@ methods
         createTableFrame(obj.Viewer.Gui, tab);
         
         img = currentImage(obj.Viewer);
+        spacing = img.Spacing;
+        origin = img.Origin;
         
         switch lower(overlayType)
             case 'none'
                 
             case 'boxes'
-                boxes = imBoundingBox(img.Data');
+                boxes = imBoundingBox(img.Data', spacing, origin);
                 nLabels = size(boxes, 1);
                 for i = 1:nLabels
                     shape = struct(...
@@ -379,7 +371,7 @@ methods
                 end
                 
             case 'ellipses'
-                elli = imEquivalentEllipse(img.Data');
+                elli = imEquivalentEllipse(img.Data', spacing, origin);
                 nLabels = size(elli, 1);
                 for i = 1:nLabels
                     shape = struct(...
