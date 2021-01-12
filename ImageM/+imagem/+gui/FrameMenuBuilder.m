@@ -161,6 +161,8 @@ methods
         addMenuItem(obj, imageMenu, ExtractFrame(),         'Extract Time Frame');
         addMenuItem(obj, imageMenu, CropImageSelection(),   'Crop Selection');
         
+        overlayMenu = addMenu(obj, imageMenu, 'Overlay', 'Separator', 'on');
+        addMenuItem(obj, overlayMenu, ClearImageOverlay(),   'Clear Overlays');
         
         settingsMenu = addMenu(obj, imageMenu, 'Settings', 'Separator', 'on');
         addMenuItem(obj, settingsMenu, SetBrushSize(),           'Set Brush Size');

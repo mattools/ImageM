@@ -120,6 +120,10 @@ methods
         s = obj.Shapes;
     end
     
+    function clearShapes(obj)
+        obj.Shapes = {};
+    end
+    
 end % end methods
 
 end % end classdef
