@@ -404,6 +404,7 @@ methods
         addMenuItem(obj, plotMenu, PlotColumnHistogram(), 'Histogram...');
         addMenuItem(obj, plotMenu, BoxPlot(), 'Box Plot...', 'Separator', 'on');
         addMenuItem(obj, plotMenu, GroupBoxPlot(), 'Box Plot by Group...');
+        addMenuItem(obj, plotMenu, ViolinPlot(), 'Violin Plot...');
         addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...', 'Separator', 'On');
         addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
         addMenuItem(obj, plotMenu, imagem.actions.table.plot.PairPlot(), 'Pair Plot...');

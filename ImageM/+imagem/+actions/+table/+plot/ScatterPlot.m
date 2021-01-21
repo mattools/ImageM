@@ -125,7 +125,7 @@ methods
         end
         figure(obj.Handles.PlotFigure); cla;
         
-        scatter(tab, obj.IndX, obj.IndY);
+        scatterPlot(tab, obj.IndX, obj.IndY);
         
     end
     

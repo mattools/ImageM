@@ -1,10 +1,10 @@
-classdef BoxPlot < imagem.actions.CurrentTableAction
-%Box Plot
+classdef ViolinPlot < imagem.actions.CurrentTableAction
+% Violin plot of features within a table.
 %
-%   Class BoxPlot
+%   Class ViolinPlot
 %
 %   Example
-%   BoxPlot
+%   ViolinPlot
 %
 %   See also
 %     imagem.actions.CurrentTableAction
@@ -24,8 +24,8 @@ end % end properties
 
 %% Constructor
 methods
-    function obj = BoxPlot(viewer)
-    % Constructor for BoxPlot class
+    function obj = ViolinPlot(viewer)
+    % Constructor for ViolinPlot class
     end
 
 end % end constructors
@@ -41,7 +41,7 @@ methods
         
         % opens a dialog to select features to display
         [indVar, ok] = listdlg('ListString', table.ColNames, ...
-            'Name', 'Box Plot', ...
+            'Name', 'ViolinPlot', ...
             'PromptString', 'Variables to display:', ...
             'ListSize', gui.Options.DlgListSize, ...
             'SelectionMode', 'multiple');
@@ -50,11 +50,11 @@ methods
             return;
         end
         
-        % open a new frame for plotting     
+        % open a new frame for plotting
         createPlotFrame(gui);
-        boxplot(table(:, indVar));
+        violinPlot(table(:, indVar));
+
     end
-    
 end % end methods
 
 end % end classdef
