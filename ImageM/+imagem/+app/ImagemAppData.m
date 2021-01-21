@@ -70,13 +70,15 @@ methods
         %
 
         
-        % determine the name of the new image
+        % determine the name of the new document
         if nargin < 3 || isempty(newName)
-            % find a 'free' name for image
-            newName = createDocumentName(obj, image.Name);
+            newName = image.Name;
         end
-        image.Name = newName;
         
+        % find a 'free' name for new document
+        newName = createDocumentName(obj, newName);
+        image.Name = newName;
+                
         % creates new instance of ImageDoc
         doc = imagem.app.ImageDoc(image);
         
@@ -394,12 +396,12 @@ methods
         b = false;
         for i = 1:length(obj.DocList)
             doc = obj.DocList{i};
-            if isa(doc, 'imagem.gui.ImageDoc')
+            if isa(doc, 'imagem.app.ImageDoc')
                 if strcmp(doc.Image.Name, name)
                     b = true;
                     return;
                 end
-            elseif isa(doc, 'imagem.gui.TableDoc')
+            elseif isa(doc, 'imagem.app.TableDoc')
                 if strcmp(doc.Table.Name, name)
                     b = true;
                     return;

@@ -88,10 +88,6 @@ methods
             return;
         end
         
-        if ~isempty(varargin)
-            name 
-        end
-        
         % create the document (and add it to the app)
         doc = createImageDocument(obj.App, image);
         
@@ -103,6 +99,7 @@ methods
         % Create a new document from image, add it to app, and display img.
         % (Deprecated, replaced by createImageFrame).
         %
+        warning('deprecated, replaced by ''createImageFrame''');
         
         % in case of empty image, create an "empty view"
         if isempty(image)

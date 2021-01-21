@@ -80,13 +80,12 @@ methods
         img2 = gaussianFilter(doc.Image, size, sigma);
         
         % add image to application, and create new display
-        newDoc = addImageDocument(obj.Viewer, img2);
+        [~, newDoc] = createImageFrame(obj.Viewer, img2);
 
         % add history
         string = sprintf('%s = gaussianFilter(%s, [%g %g], [%g %g]);\n', ...
             newDoc.Tag, doc.Tag, size, sigma);
         addToHistory(obj.Viewer, string);
-
     end
     
     function onNumericFieldModified(obj, src, event) %#ok<INUSD>
