@@ -254,18 +254,7 @@ methods
         % extract current axis
         ax = obj.Handles.ImageAxis;
         
-        switch lower(shape.Type)
-            case 'polygon'
-                h = drawPolygon(ax, shape.Data, shape.Style{:});
-            case 'polyline'
-                h = drawPolyline(ax, shape.Data, shape.Style{:});
-            case 'pointset'
-                h = drawPoint(ax, shape.Data, shape.Style{:});
-            case 'box'
-                h = drawBox(ax, shape.Data, shape.Style{:});
-            case 'ellipse'
-                h = drawEllipse(ax, shape.Data, shape.Style{:});
-        end
+        h = draw(ax, shape);
     end
 
 end

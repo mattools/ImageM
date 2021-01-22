@@ -341,7 +341,6 @@ methods
         overlayTypeIndex = get(obj.Handles.OverlayTypePopup, 'Value');
         overlayType = obj.OverlayTypeValues{overlayTypeIndex};
         
-        
         % get document on which add annotations
         gui = obj.Viewer.Gui;
         imageName = get(obj.Handles.OverlayImagePopup, 'Value');
@@ -352,21 +351,23 @@ methods
         % display data table in its own window
         createTableFrame(obj.Viewer.Gui, tab);
         
+        % retrieve image with its calibration
         img = currentImage(obj.Viewer);
         spacing = img.Spacing;
         origin = img.Origin;
         
+        % create overlay depending on user choice
         switch lower(overlayType)
             case 'none'
+                % (nothing to do)
                 
             case 'boxes'
                 boxes = imBoundingBox(img.Data', spacing, origin);
                 nLabels = size(boxes, 1);
                 for i = 1:nLabels
-                    shape = struct(...
-                        'Type', 'Box', ...
-                        'Data', boxes(i,:), ...
-                        'Style', {{'color', 'g'}});
+                    shape = Shape(...
+                        Box2D(boxes(i,:)), ...
+                        Style('LineColor', 'g'));
                     addShape(docToOverlay, shape);
                 end
                 
@@ -374,10 +375,9 @@ methods
                 elli = imEquivalentEllipse(img.Data', spacing, origin);
                 nLabels = size(elli, 1);
                 for i = 1:nLabels
-                    shape = struct(...
-                        'Type', 'Ellipse', ...
-                        'Data', elli(i,:), ...
-                        'Style', {{'color', 'g'}});
+                    shape = Shape(...
+                        Ellipse2D(elli(i,:)), ...
+                        Style('LineColor', 'g'));
                     addShape(docToOverlay, shape);
                 end
                
@@ -386,11 +386,12 @@ methods
         end
                 
         % update all the views referenced by the document with overlay
-        viewList = getViews(docToOverlay);
-        for i = 1:length(viewList)
-            updateDisplay(viewList{i});
+        if ~strcmpi(overlayType, 'none')
+            viewList = getViews(docToOverlay);
+            for i = 1:length(viewList)
+                updateDisplay(viewList{i});
+            end
         end
-
     end
     
     function onButtonCancel(obj, varargin)

@@ -43,8 +43,8 @@ properties
     % Can be one of: {'Curve'}, 'Bar', 'Stem'.
     ChannelDisplayType = 'Curve';
     
-    % A set of annotations.
-    % stored as an array of structures with fields type, data, style.
+    % A set of annotations, stored as a cell array of Shape instances.
+    % (defined in "Geometry" project)
     Shapes = {};
         
 end % end properties
