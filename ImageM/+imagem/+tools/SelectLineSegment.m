@@ -84,8 +84,7 @@ methods
         set(obj.LineHandle, 'ydata', [obj.Pos1(1,2) pos(1,2)]);
         
         % create new selection object
-        positions = [obj.Pos1 pos(1,1:2)];
-        shape = struct('Type', 'LineSegment', 'Data', positions);
+        shape = LineSegment2D(obj.Pos1, pos(1,1:2));
         obj.Viewer.Selection = shape;
         
         obj.Pos1 = [];

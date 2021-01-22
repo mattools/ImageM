@@ -94,7 +94,7 @@ methods
         y2 = pos(1, 2);
 
         boxData = [min(x1,x2) max(x1,x2) min(y1,y2) max(y1,y2)];
-        shape = struct('Type', 'box', 'Data', boxData);
+        shape = Box2D(boxData);
         
         obj.Viewer.Selection = shape;
         
@@ -124,9 +124,7 @@ methods
         set(obj.LineHandle, 'XData', xdata);
         set(obj.LineHandle, 'YData', ydata);
         
-        
         % update label of info panel
-        
         locString   = sprintf('(x,y) = (%d,%d) px', round(x2), round(y2));
         boxWidth    = abs(round(x2) - round(x1));
         boxHeight   = abs(round(y2) - round(y1));

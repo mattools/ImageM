@@ -32,7 +32,7 @@ properties
     % 'fixed'   -> keep previous zoom factor
     ZoomMode = 'adjust';
     
-    % A selected shape.
+    % A selected shape, as an instance of a Geometry class.
     Selection = [];
 end
 

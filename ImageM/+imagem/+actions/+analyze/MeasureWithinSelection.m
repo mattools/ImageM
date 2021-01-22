@@ -36,7 +36,7 @@ end % end constructors
 
 methods
     function run(obj, frame)
-        disp('Measure Within Selection');
+        % Measure intensity(ies) within current selection.
         
         % if selection exists, use it as roi
         if ~isprop(frame, 'Selection') || isempty(frame.Selection)
@@ -51,8 +51,8 @@ methods
         end
         
         selection = frame.Selection;
-        if strcmp(selection.Type, 'Polygon')
-            poly = selection.Data;
+        if isa(selection, 'SimplePolygon2D')
+            poly = selection.Coords;
             roi = roipoly(img.Data(:,:,1,1,1), poly(:,2), poly(:,1));
         else
             warning('can only manage polygon selection')
@@ -60,7 +60,7 @@ methods
         end
         
         % compute mean values within ROI for each channel
-        nc = channelNumber(img);
+        nc = channelCount(img);
         meanValues = zeros(1, nc);
         for i = 1:nc
             ch = channel(img, i);

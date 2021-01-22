@@ -32,30 +32,31 @@ end % end constructors
 %% Methods
 methods
      function run(obj, frame) %#ok<INUSL>
+         % Crop the portion of image delimited by selection.
          
-         selection = frame.Selection;
-         if isempty(selection)
+         % check current selection validity
+         box = frame.Selection;
+         if isempty(box)
              warndlg('Requires a non empty selection', ...
                  'Empty Selection', 'modal');
              return;
          end
          
-         type = selection.Type;
-         if ~ismember(lower(type), {'box'})
+         if ~isa(box, 'Box2D')
              warndlg('Current selection must be a box', ...
                  'Invalid Selection', 'modal');
              return;
          end
          
-         box = selection.Data;
-         box = round(box);
+         bounds = [box.XMin box.XMax box.YMin box.YMax];
+         bounds = round(bounds);
          
          img = currentImage(frame);
          nd = ndims(img);
          if nd > 2
-             box = [box 1 size(img, 3)];
+             bounds = [bounds 1 size(img, 3)];
          end
-         cropped = crop(img, box);
+         cropped = crop(img, bounds);
          
          % add image to application, and create new display
          newDoc = addImageDocument(frame, cropped);
@@ -64,8 +65,8 @@ methods
          newTag = newDoc.Tag;
          
          % history
-         pattern = ['%s = crop(%s, [' repmat(' %d %d', 1, nd) ']);\n'];
-         string = sprintf(pattern, newTag, tag, box);
+         pattern = ['%s = crop(%s, [' strtrim(repmat(' %d %d', 1, nd)) ']);\n'];
+         string = sprintf(pattern, newTag, tag, bounds);
          addToHistory(frame, string);
          
      end

@@ -52,53 +52,50 @@ methods
                 img = slice(img, frame.SliceIndex);
             end
         end
-
-
-        switch lower(selection.Type)
-            case 'linesegment'
-                % determine the line end point (calibrated coordinates)
-                pos1 = selection.Data(1, 1:2);
-                pos2 = selection.Data(1, 3:4);
-                
-                % length of selection in pixel coordinates
-                pos1px = pointToContinuousIndex(img, pos1);
-                pos2px = pointToContinuousIndex(img, pos2);
-                len = hypot(pos1px(1) - pos2px(1), pos1px(2) - pos2px(2));
-                
-                % choose a number of points to have around 1 pixel spacing
-                nValues = ceil(len) + 1;
-                
-                % compute (calibrated) position of sampling points
-                x = linspace(pos1(1), pos2(1), nValues);
-                y = linspace(pos1(2), pos2(2), nValues);
-                pts = [x' y'];
-                
-                % use cumulative distance as abscissa
-                dists = [0 cumsum(hypot(diff(x), diff(y)))];
-                
-            case 'polyline'
-                % length of selection in pixel coordinates
-                verticesPx = pointToContinuousIndex(img, selection.Data(:,1:2));
-                len = polylineLength(verticesPx);
-                
-                % choose a number of points to have around 1 pixel spacing
-                nValues = ceil(len) + 1;
-                
-                % compute (calibrated) position of sampling points
-                pts = resamplePolyline(selection.Data, nValues);
-                
-                % use cumulative distance as abscissa
-                dx = diff(pts(:,1));
-                dy = diff(pts(:,2));
-                dists = [0 cumsum(hypot(dx, dy))'];
-                
-            otherwise
-                errordlg('Impossible to create line profile for %s selections', selection.Type);
-                return;
+        
+        if isa(selection, 'LineSegment2D')
+            % determine the line end point (calibrated coordinates)
+            pos1 = selection.P1;
+            pos2 = selection.P2;
+            
+            % length of selection in pixel coordinates
+            pos1px = pointToContinuousIndex(img, pos1);
+            pos2px = pointToContinuousIndex(img, pos2);
+            len = hypot(pos1px(1) - pos2px(1), pos1px(2) - pos2px(2));
+            
+            % choose a number of points to have around 1 pixel spacing
+            nValues = ceil(len) + 1;
+            
+            % compute (calibrated) position of sampling points
+            x = linspace(pos1(1), pos2(1), nValues);
+            y = linspace(pos1(2), pos2(2), nValues);
+            pts = [x' y'];
+            
+            % use cumulative distance as abscissa
+            dists = [0 cumsum(hypot(diff(x), diff(y)))];
+            
+        elseif isa(selection, 'LineString2D')
+            % length of selection in pixel coordinates
+            coords = vertexCoordinates(selection);
+            coordsPx = pointToContinuousIndex(img, coords);
+            
+            poly2 = LineString2D(coordsPx);
+            len = length(poly2);
+            
+            % choose a number of points to have around 1 pixel spacing
+            nValues = ceil(len) + 1;
+            
+            % compute (calibrated) position of sampling points
+            poly2 = resample(selection, nValues);
+            
+            % use cumulative distance as abscissa
+            dists = verticesArcLength(poly2);
+            pts = vertexCoordinates(poly2);
+        else
+            errordlg('Impossible to create line profile for %s selections with class ', class(selection));
         end
-        
-        
-        % extract corresponding pixel values (nearest-neighbor eval)
+
+        % extract corresponding pixel values (linear interpolation)
         % new figure for display
         hf = figure;
         set(hf, 'NumberTitle', 'off');

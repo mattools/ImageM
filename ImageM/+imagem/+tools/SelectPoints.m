@@ -72,6 +72,7 @@ methods
             shape = struct('Type', 'PointSet', 'Data', obj.Positions);
             obj.Viewer.Selection = shape;
             
+            % reset positions for next click
             obj.Positions = zeros(0, 2);
             return;
         end

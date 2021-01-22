@@ -68,9 +68,10 @@ methods
         type = get(obj.Viewer.Handles.Figure, 'SelectionType');
         if ~strcmp(type, 'normal')
             % update viewer's current selection
-            shape = struct('Type', 'Polyline', 'Data', obj.Positions);
+            shape = LineString2D(obj.Positions);
             obj.Viewer.Selection = shape;
             
+            % reset positions for next click
             obj.Positions = zeros(0, 2);
             return;
         end

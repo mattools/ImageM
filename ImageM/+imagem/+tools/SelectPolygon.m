@@ -68,9 +68,10 @@ methods
         type = get(obj.Viewer.Handles.Figure, 'SelectionType');
         if ~strcmp(type, 'normal')
             % update viewer's current selection
-            shape = struct('Type', 'Polygon', 'Data', obj.Positions);
+            shape = Polygon2D.create(obj.Positions);
             obj.Viewer.Selection = shape;
             
+            % reset positions for next click
             obj.Positions = zeros(0, 2);
             return;
         end
