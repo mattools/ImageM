@@ -287,13 +287,15 @@ methods
         ht = addLabel(hLine, label);
         
         % set initial value as numeric if not the case
-        if ischar(initialValue)
+        if isa('initialValue', 'var') && ischar(initialValue)
             ind = find(strcmp(choiceLabels, initialValue), 1);
             if isempty(ind)
                 error(['Could not find initial value [' initialValue ...
                     '] within the list of choices']);
             end
             initialValue = ind;
+        else
+            initialValue = 1;
         end
         
         % creates the new control

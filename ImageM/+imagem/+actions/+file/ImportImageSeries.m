@@ -34,18 +34,24 @@ end % end constructors
 %% Methods
 methods
     function run(obj, frame) %#ok<INUSL>
-        disp('% Open Image sequence ');
+        disp('% Open Image Series');
         
         % get handle to parent GUI
         gui = frame.Gui;
         
         [fileName, pathName] = uigetfile( ...
-            {'*.raw;*.bin;*.tif;*.vol',   'All Binary Files (*.raw, *.bin, *.tif, *.vol)'; ...
-            '*.tif,'                'Tif Files (*.tif)'; ...
-            '*.raw,'                'Raw Files (*.raw)'; ...
-            '*.vol,'                'Vol Files (*.vol)'; ...
-            '*.*',                  'All Files (*.*)'}, ...
-            'Choose an image from sequence:');
+            {'*.gif;*.jpg;*.jpeg;*.bmp;*.png;*.tif;*.tiff;*.hdr;*.dcm;*.mhd;*.vgi', ...
+            'All Image Files (*.tif, *.bmp, *.png, *.hdr, *.dcm, *.mhd...)'; ...
+            '*.tif;*.tiff',             'TIF Files (*.tif, *.tiff)'; ...
+            '*.jpg',                    'JPG Files (*.jpg)'; ...
+            '*.bmp',                    'BMP Files (*.bmp)'; ...
+            '*.png',                    'PNG Files (*.png)'; ...
+            '*.hdr',                    'Mayo Analyze Files (*.hdr)'; ...
+            '*.dcm',                    'DICOM Files (*.dcm)'; ...
+            '*.mhd;*.mha',              'MetaImage data files (*.mha, *.mhd)'; ...
+            '*.vgi',                    'VGStudio Max files (*.vgi)'; ...
+            '*.*',                      'All Files (*.*)'}, ...
+            'Choose an image from the series:');
         
         if isequal(fileName,0) || isequal(pathName,0)
             return;
@@ -64,6 +70,7 @@ methods
         addTextField(gd, 'File Name Pattern: ', pattern);
         addNumericField(gd, 'Number of images: ', nFiles);
         addNumericField(gd, 'Starting index: ', 1);
+        addChoice(gd, 'Series Type: ', {'Z-stack', 'Channels', 'Time-lapse'}, 'Z-stack');
         
         % displays the dialog, and waits for user
         showDialog(gd);
@@ -76,32 +83,31 @@ methods
         pattern = getNextString(gd);
         nImages = getNextNumber(gd);
         index0 = getNextNumber(gd);
+        typeIndex = getNextChoiceIndex(gd);
+        % the dimension for concatenation
+        dim = typeIndex + 2;
         
         % read first image
         fileList = dir(fullfile(pathName, pattern));
         img0 = Image.read(fullfile(pathName, fileList(index0).name));
         
-        % allocte memory for full series
-        sizeX = size(img0, 1);
-        sizeY = size(img0, 2);
-        img = Image.create([sizeX sizeY nImages], class(img0.Data));
-        img.Data(:,:,1,:) = img0.Data;
-        
-        % read the remaining images
-        fileList = dir(fullfile(pathName, pattern));
-        for i = 1:nImages
-            index = index0 + i - 1;
-            img_i = Image.read(fullfile(pathName, fileList(index).name));
-            img.Data(:,:,i,:) = img_i.Data;
+        % checkup on inputs
+        if size(img0, 4) > 1 && typeIndex == 2
+            errordlg('Can not import channels series of non scalar images', 'Import Error');
+            return;
         end
-       
-        img.Name = pattern;
         
+        img = Image.readSeries(fullfile(pathName, pattern), ...
+            index0:nImages, ...
+            'dim', dim);
+   
         % add image to application, and create new display
         [frame, doc] = createImageFrame(gui, img);
         
         % add history
-        string = sprintf('%s = Image.importSequence;\n', doc.Tag);
+        string = sprintf(...
+            '%s = Image.readSeries(fullfile(''%s'',''%s'', %d:%d, ''dim'', %d);\n', ...
+            doc.Tag, pathName, pattern, index0, nImages, dim);
             
         addToHistory(frame, string);
     end
