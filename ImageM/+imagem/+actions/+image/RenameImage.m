@@ -59,7 +59,8 @@ methods
              end
              
              % if name already exists, re-display dialog until valid name
-             h = errordlg('An image with obj name already exists', ...
+             h = errordlg(...
+                 sprintf('An image with name ''%s'' already exists', newName), ...
                  'Image Name error', 'modal');
              uiwait(h);
              defaultAnswer = {newName};

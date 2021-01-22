@@ -82,10 +82,6 @@ methods
         % return the name of the image, or a default name is name is empty
         
         name = obj.Image.Name;
-        if ~isempty(obj.Image.FilePath)
-            [path, name, ext] = fileparts(obj.Image.FilePath);  %#ok<ASGLU>
-            name = [name ext];
-        end
         if isempty(name)
             name = 'Unknown Image';
         end
