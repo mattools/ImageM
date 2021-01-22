@@ -39,24 +39,21 @@ end % end constructors
 %% Methods
 methods
     function run(obj, frame) %#ok<INUSD>
-%         disp('Compute Image median filter');
         
         % get handle to current doc
         obj.Viewer = frame;
         img = currentImage(obj.Viewer);
         
-        % creates a new dialog, and populates it with some fields
-        gd = imagem.gui.GenericDialog('Edit Channel Names');
-        obj.Handles.Dialog = gd;
-        
-        % retrieve channel names of current image
-        nChannels = channelNumber(img);
+        % retrieve channel names of current image, or create them if empty
+        nc = channelCount(img);
         names = img.ChannelNames;
-        if length(names) ~= nChannels
-            names = cell(1, nChannels);
+        if length(names) ~= nc
+            names = cell(1, nc);
         end
         
-        for ic = 1:nChannels
+        % creates a new dialog, and populates it with some fields
+        gd = imagem.gui.GenericDialog('Edit Channel Names');
+        for ic = 1:nc
             addTextField(gd, sprintf('Channel %d: ', ic), names{ic});
         end
                 
@@ -68,17 +65,21 @@ methods
             return;
         end
         
-        % get dialog options
-        newNames = cell(1, nChannels);
-        for ic = 1:nChannels
+        % retrieve new channel names
+        newNames = cell(1, nc);
+        for ic = 1:nc
             newNames{ic} = getNextString(gd);
         end
-
+        
+        % update image
         img.ChannelNames = newNames;
-%         % add history
-%         string = sprintf('%s = medianFilter(%s, ones(%d,%d));\n', ...
-%             newDoc.Tag, doc.Tag, width, height);
-%         addToHistory(obj.Viewer, string);
+        
+        % add history
+        pattern = ['{''%s''' repmat(', ''%s''', 1, nc-1)   '}'];
+        namesString = sprintf(pattern, newNames{:});
+        string = sprintf('%s.ChannelNames = %s\n', ...
+            obj.Viewer.Doc.Tag, namesString);
+        addToHistory(obj.Viewer, string);
     end
 
 end % end methods

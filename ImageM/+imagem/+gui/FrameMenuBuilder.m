@@ -91,7 +91,7 @@ methods
         addMenuItem(obj, demoMenu, OpenDemoImage('xylophone.mp4'),  'Xylophone (movie)');
         addMenuItem(obj, demoMenu, OpenDemoImage('circles.png'),    'Circles (binary)');
         addMenuItem(obj, demoMenu, OpenDemoImage('text.png'),       'Text (binary)');
-        addMenuItem(obj, demoMenu, OpenDemoTable('fisherIris.txt'),    'Fisher Iris (Table)', 'Separator', 'on');
+        addMenuItem(obj, demoMenu, OpenDemoTable('fisherIris.txt'), 'Fisher Iris (Table)', 'Separator', 'on');
         addMenuItem(obj, fileMenu, OpenTable(),              'Open Table...');
 
         
@@ -113,12 +113,13 @@ methods
         
         addMenuItem(obj, imageMenu, PrintImageInfo(),       'Print info');
         calibMenu = addMenu(obj, imageMenu, 'Calibration');
-        addMenuItem(obj, calibMenu, EditSpatialCalibration(),       'Edit Spatial Calibration...');
-        addMenuItem(obj, calibMenu, ClearSpatialCalibration(),      'Clear Spatial Calibration');
-        channelTypeMenu = addMenu(obj, calibMenu, 'Channel Display');
+        addMenuItem(obj, calibMenu, EditSpatialCalibration(),   'Edit Spatial Calibration...');
+        addMenuItem(obj, calibMenu, ClearSpatialCalibration(),  'Clear Spatial Calibration');
+        channelTypeMenu = addMenu(obj, calibMenu, 'Channel Display', 'Separator', 'on');
         addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Curve'),   'Curve');
         addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Bar'),     'Bar');
         addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Stem'),    'Stem');
+        addMenuItem(obj, calibMenu, EditChannelNames(),         'Edit Channels Names...');
         
         
         
@@ -146,7 +147,6 @@ methods
         addMenuItem(obj, colorMenu, SplitImageChannels(),   'Split Channels');
         addMenuItem(obj, colorMenu, MergeImageChannels(),   'Merge Channels...');
         addMenuItem(obj, colorMenu, ReorderChannels(),      'Re-order Channels...', true);
-        addMenuItem(obj, colorMenu, EditChannelNames(),     'Edit Channels...');
         
         convertMenu = addMenu(obj, imageMenu, 'Convert');
         addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
