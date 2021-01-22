@@ -347,8 +347,9 @@ methods
             try
                 removeView(obj.Doc, obj);
             catch ME %#ok<NASGU>
+                name = obj.Doc.Image.Name;
                 warning('PlanarImageViewer:close', ...
-                    'Current view is not referenced in document...');
+                    'Current view is not referenced in document ''%s''...', name);
             end
         end
         delete(obj.Handles.Figure);

@@ -68,6 +68,7 @@ methods
         else
             error('Unable to manage document with class: %s', classname(doc));
         end
+        
         addView(doc, frame);
     end
     
@@ -153,6 +154,7 @@ methods
             % default viewer for 2D images
             frame = imagem.gui.PlanarImageViewer(obj, doc);
         end
+        
         addView(doc, frame);
     end
     
@@ -213,7 +215,7 @@ methods
     end
     
     function exit(obj)
-        % EXIT Close all viewers
+        % Close all viewers.
         
         docList = getDocuments(obj.App);
         for d = 1:length(docList)
@@ -223,7 +225,8 @@ methods
             views = getViews(doc);
             for v = 1:length(views)
                 view = views{v};
-                removeView(doc, view);
+                % Close the view (and remove it from the list of views
+                % associated to the document)
                 close(view);
             end
         end
