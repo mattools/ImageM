@@ -28,7 +28,7 @@ properties
 %     overlayType = 'Ellipses';
     
     % the list of available overlay types
-    OverlayTypeValues = {'None', 'Ellipses', 'Boxes'};
+    OverlayTypeValues = {'None', 'Ellipses', 'Boxes', 'Oriented Boxes'};
 end
 
 
@@ -381,6 +381,15 @@ methods
                     addShape(docToOverlay, shape);
                 end
                
+            case 'oriented boxes'
+                boxes = imOrientedBox(img.Data', spacing, origin);
+                nLabels = size(boxes, 1);
+                for i = 1:nLabels
+                    shape = Shape(...
+                        OrientedBox2D(boxes(i,:)), ...
+                        Style('LineColor', 'g'));
+                    addShape(docToOverlay, shape);
+                end
             otherwise
                 error(['Unable to process overlay type: ' overlayType]);
         end
