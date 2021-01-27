@@ -141,6 +141,7 @@ methods
         addMenuItem(obj, transformMenu, FlipImage(2),           'Vertical Flip');
         addMenuItem(obj, transformMenu, RotateImage90(1),       'Rotate Right');
         addMenuItem(obj, transformMenu, RotateImage90(-1),      'Rotate Left');
+        addMenuItem(obj, transformMenu, ImageOrthogonalProjection(),    'Orthogonal Projection', 'Separator', 'on');
 
         colorMenu = addMenu(obj, imageMenu, 'Color');
         addMenuItem(obj, colorMenu, SplitImageRGB(),        'Split RGB');

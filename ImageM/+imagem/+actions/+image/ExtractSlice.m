@@ -1,5 +1,5 @@
 classdef ExtractSlice < imagem.actions.Image3DAction
-%EXTRACTSLICE  One-line description here, please.
+% Extract an XY slice from a 3D image.
 %
 %   Class ExtractSlice
 %
@@ -60,7 +60,7 @@ methods
         end
         
         % apply the conversion operation
-        res = squeeze(slice(img, 3, sliceIndex));
+        res = slice(img, sliceIndex);
         if ~isempty(img.Name)
             nDigits = ceil(log10(sliceNumber));
             pattern = ['%s_z%0' num2str(nDigits) 'd'];
@@ -71,7 +71,7 @@ methods
         newDoc = addImageDocument(frame, res);
         
         % add history
-        string = sprintf('%s = squeeze(slice(%s, 3, %d));\n', ...
+        string = sprintf('%s = slice(%s, %d);\n', ...
             newDoc.Tag, doc.Tag, sliceIndex);
         addToHistory(frame, string);
     end
