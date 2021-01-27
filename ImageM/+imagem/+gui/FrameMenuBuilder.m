@@ -273,12 +273,14 @@ methods
         addMenuItem(obj, minimaMenu, ImageExtendedMaxima(), 'Extended Maxima...');
         addMenuItem(obj, minimaMenu, ImageImposeMinima(),   'Impose Minima...');
         
+        % Threshold sub-menu
         addMenuItem(obj, processMenu, ImageThreshold(),     'Manual Threshold...', ...
             'Separator', 'on', 'Accelerator', 'T');
         addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(), 'Auto Threshold (Otsu)');
-        addMenuItem(obj, processMenu, ImageMaxEntropyThreshold(), 'Auto Threshold (Max Entropy)');
+        addMenuItem(obj, processMenu, ImageMaxEntropyThreshold(),   'Auto Threshold (Max Entropy)');
+        addMenuItem(obj, processMenu, ImageKMeansSegmentation(),    'K-Means Segmentation');
         addMenuItem(obj, processMenu, ImageWatershed(),      'Watershed...');
-        addMenuItem(obj, processMenu, ImageExtendedMinWatershed(), 'Extended Min Watershed...');
+        addMenuItem(obj, processMenu, ImageExtendedMinWatershed(),  'Extended Min Watershed...');
         
         addMenuItem(obj, processMenu, ImageArithmetic(),    'Image Arithmetic...', true);
         addMenuItem(obj, processMenu, ImageValuesTransform(), 'Image Maths 1...');
