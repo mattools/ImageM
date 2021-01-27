@@ -53,6 +53,7 @@ methods
             end
         end
         
+        
         if isa(selection, 'LineSegment2D')
             % determine the line end point (calibrated coordinates)
             pos1 = selection.P1;

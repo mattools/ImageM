@@ -60,21 +60,38 @@ methods
        
         
         % different type of processing depending on selection type
-        switch lower(selection.Type)
-            case {'polyline', 'polygon', 'pointset'}
-                % number of vertices
-                nv = size(selection.Data, 1);
-                
-                % write selection type
-                fprintf(f, '# %s 2 %d\n', selection.Type, nv);
-                
-                for i = 1:nv
-                    fprintf(f, '%d %d\n', selection.Data(i,1), selection.Data(i,2));
-                end
-                
-            otherwise
-                errordlg('Can not save type-%s selections', selection.Type);
-                return;
+        if isa(selection, 'LineString2D')
+            % get vertex coords
+            coords = vertexCoordinates(selection);
+            nv = size(coords, 1);
+            % write selection data
+            fprintf(f, '# %s 2 %d\n', 'Polyline2D', nv);
+            for i = 1:nv
+                fprintf(f, '%d %d\n', coords(i,1), coords(i,2));
+            end
+            
+        elseif isa(selection, 'SimplePolygon2D')
+            % get vertex coords
+            coords = selection.Coords;
+            nv = size(coords, 1);
+            % write selection data
+            fprintf(f, '# %s 2 %d\n', 'Polygon2D', nv);
+            for i = 1:nv
+                fprintf(f, '%d %d\n', coords(i,1), coords(i,2));
+            end
+            
+        elseif isa(selection, 'MultiPoint2D')
+            % get vertex coords
+            coords = selection.Coords;
+            nv = size(coords, 1);
+            % write selection data
+            fprintf(f, '# %s 2 %d\n', 'MultiPoint2D', nv);
+            for i = 1:nv
+                fprintf(f, '%d %d\n', coords(i,1), coords(i,2));
+            end
+        else
+            errordlg('Can not save type-%s selections', class(selection));
+            return;
         end
         
         % closes the file

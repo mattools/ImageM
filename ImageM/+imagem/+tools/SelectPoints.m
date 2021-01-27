@@ -69,7 +69,7 @@ methods
         type = get(obj.Viewer.Handles.Figure, 'SelectionType');
         if ~strcmp(type, 'normal')
             % update viewer's current selection
-            shape = struct('Type', 'PointSet', 'Data', obj.Positions);
+            shape = MultiPoint2D(obj.Positions);
             obj.Viewer.Selection = shape;
             
             % reset positions for next click
@@ -99,9 +99,12 @@ methods
         end
         
         % update viewer's current selection
-        shape = struct('Type', 'PointSet', 'Data', obj.Positions, ...
-            'style', {{'Marker', 'o', 'MarkerSize', 6, 'LineWidth', 1, ...
-                'Color', 'r', 'MarkerFaceColor', 'r'}});
+%         shape = struct('Type', 'PointSet', 'Data', obj.Positions, ...
+%             'style', {{'Marker', 'o', 'MarkerSize', 6, 'LineWidth', 1, ...
+%             'Color', 'r', 'MarkerFaceColor', 'r'}});
+%         style = Style('MarkerStyle', 'o', 'MarkerSize', 6, 'LineWidth', 1, ...
+%             'LineColor', 'r', 'MarkerFillColor', 'r');
+        shape = MultiPoint2D(obj.Positions);
         obj.Viewer.Selection = shape;
     end
     
