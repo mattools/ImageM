@@ -51,23 +51,10 @@ methods
         % setup default display options
         [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(obj.Doc.Image);
         obj.DisplayRange = [mini maxi];
-
         
-        % computes a new handle index large enough not to collide with
-        % common figure handles
-        while true
-            newFigHandle = 23000 + randi(10000);
-            if ~ishandle(newFigHandle)
-                break;
-            end
-        end
-
+        
         % create the figure that will contains the display
-        fig = figure(newFigHandle);
-        set(fig, ...
-            'MenuBar', 'none', ...
-            'NumberTitle', 'off', ...
-            'NextPlot', 'new', ...
+        fig = createNewFigure(gui, ...
             'Name', 'Image3D Slice Viewer', ...
             'Visible', 'Off', ...
             'CloseRequestFcn', @obj.close);

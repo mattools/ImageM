@@ -204,7 +204,53 @@ methods
         clf; hold on;
         set(gca, obj.Options.TextOptions{:});
     end
-
+    
+    function hFig = createNewFigure(obj, varargin) %#ok<INUSL>
+        % Create a new empty figure with pre-defined settings.
+        %
+        % hFig = createNewFigure(GUI);
+        % hFig = createNewFigure(GUI, parentFrame);
+        % hFig = createNewFigure(..., pname, pvalue);
+        %
+        
+        % parse optional parent figure.
+        parentFigure = [];
+        if ~isempty(varargin)
+            var1 = varargin{1};
+            if isa(var1, 'imagem.gui.ImagemFrame')
+                parentFigure = var1.Handles.Figure;
+                varargin(1) = [];
+            end
+        end
+        
+        % computes a new handle index large enough not to collide with
+        % common figure handles
+        while true
+            newFigHandle = 23000 + randi(10000);
+            if ~ishandle(newFigHandle)
+                break;
+            end
+        end
+        
+        % create the figure that will contains the display
+        hFig = figure(newFigHandle);
+        set(hFig, ...
+            'MenuBar', 'none', ...
+            'NumberTitle', 'off', ...
+            'NextPlot', 'new', ...
+            'Units', 'Pixels', ...
+            varargin{:});
+        
+        % if parent figure is specified, adjust position accordingly
+        if ~isempty(parentFigure)
+            parentPosition = get(parentFigure, 'Position');
+            pos = get(hFig, 'Position');
+            xPos = parentPosition(1) + 20;
+            yPos = parentPosition(2) + parentPosition(4) - pos(4) + 20;
+            set(hFig, 'Position', [xPos yPos pos([3 4])]);
+        end
+    end
+    
     function addToHistory(obj, string)
         % Add the specified string to gui history
         
