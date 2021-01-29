@@ -1,5 +1,5 @@
-classdef ConvertVectorImageToRGB < imagem.actions.VectorImageAction
-% One-line description here, please.
+classdef ConvertVectorImageToRGB < imagem.actions.CurrentImageAction
+% Convert vector image to RGB image by selecting the three channels.
 %
 %   Class ConvertVectorImageToRGB
 %

@@ -1,5 +1,5 @@
 classdef ImageConvertType < imagem.actions.CurrentImageAction
-% Convert the type of the current image.
+% Convert the type (grayscale, label...) of the current image.
 %
 %   Class ImageConvertTypeAction
 %

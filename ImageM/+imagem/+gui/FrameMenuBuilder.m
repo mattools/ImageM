@@ -122,6 +122,10 @@ methods
         addMenuItem(obj, calibMenu, EditChannelNames(),         'Edit Channels Names...');
         
         
+        convertMenu = addMenu(obj, imageMenu,  'Convert To');
+        addMenuItem(obj, convertMenu, ConvertDataType('uint8'),     'UInt8 (Grayscale)');
+        addMenuItem(obj, convertMenu, ConvertDataType('uint16'),    'UInt16 (Grayscale)');
+        addMenuItem(obj, convertMenu, ConvertDataType('single'),    'Single (Intensity)');
         
         convertTypeMenu = addMenu(obj, imageMenu,  'Set Image Type');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('binary'),    'Binary');
