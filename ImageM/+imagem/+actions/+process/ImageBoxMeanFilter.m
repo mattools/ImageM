@@ -36,23 +36,32 @@ end % end constructors
 %% Methods
 methods
     function run(obj, frame) %#ok<INUSD>
-%         disp('Compute Image box mean filter');
         
         % get handle to current doc
         doc = currentDoc(frame);
         obj.Viewer = frame;
         
+        % number of spatial dimensions of current image
+        img = doc.Image;
+        nd = ndims(img);
+        
         % creates a new dialog, and populates it with some fields
         gd = imagem.gui.GenericDialog('Box Mean Filter');
         obj.Handles.Dialog = gd;
         
-        hWidth = addNumericField(gd, 'Box Width: ', 3, 0);
+        hWidth = addNumericField(gd, 'Box Size X: ', 3, 0);
         set(hWidth, 'CallBack', @obj.onNumericFieldModified);
         obj.Handles.WidthTextField = hWidth;
         
-        hHeight = addNumericField(gd, 'Box Height: ', 3, 0);
-        set(hHeight, 'CallBack', @obj.onNumericFieldModified);
-        obj.Handles.HeightTextField = hHeight;
+        hDepth = addNumericField(gd, 'Box Size Y: ', 3, 0);
+        set(hDepth, 'CallBack', @obj.onNumericFieldModified);
+        obj.Handles.HeightTextField = hDepth;
+        
+        if nd == 3
+            hDepth = addNumericField(gd, 'Box Size Z: ', 3, 0);
+            set(hDepth, 'CallBack', @obj.onNumericFieldModified);
+            obj.Handles.HeightTextField = hDepth;
+        end
         
         hPreview = addCheckBox(gd, 'Preview', false);
         set(hPreview, 'CallBack', @obj.onPreviewCheckBoxChanged);
@@ -69,13 +78,11 @@ methods
             return;
         end
         
-        % get dialog options
-        width = getNextNumber(gd);
-        height = getNextNumber(gd);
+        % retrieve user params and create kernel
+        sizes = getSizeList(obj);
         
         % apply 'mean' operation
-        se = ones(width, height);
-        img2 = meanFilter(doc.Image, se);
+        img2 = computeResultImage(obj);
         
         % add image to application, and create new display
         [newDoc, newViewer] = addImageDocument(obj.Viewer, img2);
@@ -83,10 +90,10 @@ methods
         updateDisplay(newViewer);
 
         % add history
-        string = sprintf('%s = meanFilter(%s, ones(%d, %d));\n', ...
-            newDoc.Tag, doc.Tag, width, height);
+        arrPat = ['[%d' repmat(' %d', 1, nd-1) ']'];
+        pattern = ['%s = boxFilter(%s, ' arrPat ');\n'];
+        string = sprintf(pattern, newDoc.Tag, doc.Tag, sizes);
         addToHistory(obj.Viewer, string);
-
     end
     
     function onNumericFieldModified(obj, src, event) %#ok<INUSD>
@@ -97,7 +104,7 @@ methods
         hPreview = obj.Handles.PreviewCheckBox;
         if get(hPreview, 'Value') == get(hPreview, 'Max')
             updatePreviewImage(obj);
-            obj.Viewer.doc.PreviewImage = obj.PreviewImage;
+            obj.Viewer.Doc.PreviewImage = obj.PreviewImage;
             updateDisplay(obj.Viewer);
         end
 
@@ -119,21 +126,40 @@ methods
     
     function updatePreviewImage(obj)
         % update preview image from dialog options, and toggle update flag
-        width = getNextNumber(obj.Handles.Dialog);
-        height = getNextNumber(obj.Handles.Dialog);
-        resetCounter(obj.Handles.Dialog);
 
-        % get current image
-        img = currentImage(obj.Viewer);
-        
         % apply smoothing operation
-        kernel = ones(width, height);
-        obj.PreviewImage = meanFilter(img, kernel);
+        obj.PreviewImage = computeResultImage(obj);
         
         % reset state of update
         obj.NeedUpdate = false;
     end
-
+    
+    function res = computeResultImage(obj)
+        
+        % retrieve user params
+        sizes = getSizeList(obj);
+        
+        % apply smoothing operation on current image
+        img = currentImage(obj.Viewer);
+        res = boxFilter(img, sizes);
+    end
+    
+    function sizes = getSizeList(obj)
+        % Retrieve the 1-by-ND list of box size given by user.
+        
+        % get current image
+        img = currentImage(obj.Viewer);
+        
+        sizeX = getNextNumber(obj.Handles.Dialog);
+        sizeY = getNextNumber(obj.Handles.Dialog);
+        sizes = [sizeX sizeY];
+        if img.Dimension > 2
+            sizeZ = getNextNumber(obj.Handles.Dialog);
+            sizes = [sizes sizeZ];
+        end
+        resetCounter(obj.Handles.Dialog);
+    end
+    
 end % end methods
 
 end % end classdef

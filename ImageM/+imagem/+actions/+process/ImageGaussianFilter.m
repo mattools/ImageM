@@ -36,11 +36,14 @@ end % end constructors
 %% Methods
 methods
     function run(obj, frame) %#ok<INUSD>
-%         disp('Compute Image box mean filter');
         
         % get handle to current doc
         obj.Viewer = frame;
         doc = frame.Doc;
+        
+        % number of spatial dimensions of current image
+        img = doc.Image;
+        nd = ndims(img);
         
         % creates a new dialog, and populates it with some fields
         gd = imagem.gui.GenericDialog('Gaussian Filter');
@@ -53,6 +56,12 @@ methods
         hHeight = addNumericField(gd, 'Sigma Y: ', 3, 0);
         set(hHeight, 'CallBack', @obj.onNumericFieldModified);
         obj.Handles.HeightTextField = hHeight;
+        
+        if nd == 3
+            hDepth = addNumericField(gd, 'Sigma Z: ', 3, 0);
+            set(hDepth, 'CallBack', @obj.onNumericFieldModified);
+            obj.Handles.HeightTextField = hDepth;
+        end
         
         hPreview = addCheckBox(gd, 'Preview', false);
         set(hPreview, 'CallBack', @obj.onPreviewCheckBoxChanged);
@@ -70,21 +79,21 @@ methods
             return;
         end
         
-        % get dialog options
-        sigmaX = getNextNumber(gd);
-        sigmaY = getNextNumber(gd);
-        
-        % apply 'mean' operation
-        sigma = [sigmaX sigmaY];
-        size = 2 * round(sigma * 1.25) + 1;
-        img2 = gaussianFilter(doc.Image, size, sigma);
+        % apply smoothing operation
+        img2 = computeResultImage(obj);
         
         % add image to application, and create new display
         [~, newDoc] = createImageFrame(obj.Viewer, img2);
 
+        % retrieve parameters
+        sigmas = getSigmaList(obj);
+        sizes = 2 * round(sigmas * 1.25) + 1;
+
         % add history
-        string = sprintf('%s = gaussianFilter(%s, [%g %g], [%g %g]);\n', ...
-            newDoc.Tag, doc.Tag, size, sigma);
+        pat1 = ['[%d' repmat(' %d', 1, nd-1) ']'];
+        pat2 = ['[%g' repmat(' %g', 1, nd-1) ']'];
+        pattern = ['%s = gaussianFilter(%s, ' pat1 ', ' pat2 ');\n'];
+        string = sprintf(pattern, newDoc.Tag, doc.Tag, sizes, sigmas);
         addToHistory(obj.Viewer, string);
     end
     
@@ -118,22 +127,41 @@ methods
     
     function updatePreviewImage(obj)
         % update preview image from dialog options, and toggle update flag
-        sigmaX = getNextNumber(obj.Handles.Dialog);
-        sigmaY = getNextNumber(obj.Handles.Dialog);
-        resetCounter(obj.Handles.Dialog);
-        
-        % get current image
-        img = currentImage(obj.Viewer);
-        
+
         % apply filter operation
-        sigma = [sigmaX sigmaY];
-        size = 2 * round(sigma * 1.25) + 1;
-        obj.PreviewImage = gaussianFilter(img, size, sigma);
+        obj.PreviewImage = computeResultImage(obj);
         
         % reset state of update
         obj.NeedUpdate = false;
     end
-
+    
+    function res = computeResultImage(obj)
+        
+        % retrieve parameters
+        sigmas = getSigmaList(obj);
+        sizes = 2 * round(sigmas * 1.25) + 1;
+        
+        % apply smoothing operation on current image
+        img = currentImage(obj.Viewer);
+        res = gaussianFilter(img, sizes, sigmas);
+    end
+    
+    function sigma = getSigmaList(obj)
+        % Retrieve the 1-by-ND list of sigma given by user.
+        
+        % get current image
+        img = currentImage(obj.Viewer);
+        
+        sigmaX = getNextNumber(obj.Handles.Dialog);
+        sigmaY = getNextNumber(obj.Handles.Dialog);
+        sigma = [sigmaX sigmaY];
+        if img.Dimension > 2
+            sigmaZ = getNextNumber(obj.Handles.Dialog);
+            sigma = [sigma sigmaZ];
+        end
+        resetCounter(obj.Handles.Dialog);
+    end
+    
 end % end methods
 
 end % end classdef
