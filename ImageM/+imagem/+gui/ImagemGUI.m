@@ -21,11 +21,14 @@ classdef ImagemGUI < handle
 
 %% Properties
 properties
-    % the application instance that contains and manages documents.
+    % The application instance that contains and manages documents.
     App;
     
-    % some options for widgets creation, as an instance of GuiOptions.
+    % Some options for widgets creation, as an instance of GuiOptions.
     Options;
+    
+    % A flag used at startup.
+    FirstRun = true;
 end 
 
 %% Constructor
@@ -41,6 +44,12 @@ methods
         
         obj.Options = imagem.gui.GuiOptions();
         
+        persistent firstRun;
+        if isempty(firstRun)
+            disp('Starting the ImageM application...');
+            firstRun = true;
+        end
+           
     end % constructor 
 
 end % construction function
