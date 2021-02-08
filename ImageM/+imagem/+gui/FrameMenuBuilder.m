@@ -98,7 +98,6 @@ methods
         addMenuItem(obj, fileMenu, SaveImage(),              'Save As...', ...
             'Separator', 'on', 'Accelerator', 'S');
         addMenuItem(obj, fileMenu, ExportImageToWorkspace(), 'Export To Workspace...');
-        addMenuItem(obj, fileMenu, SaveSelection(),          'Save Selection...', 'Separator', 'on');
 
         item = addMenuItem(obj, fileMenu, CloseFrame(),      'Close', 'Separator', 'on');
         set(item, 'Accelerator', 'W');
@@ -106,7 +105,23 @@ methods
         item = addMenuItem(obj, fileMenu, Exit(), 'Quit');
         set(item, 'Accelerator', 'Q');
         
+
+        % Edit Menu Definition
+        % (Management of selection and global settings)
         
+        editMenu = addMenu(obj, hf, 'Edit');
+        
+        addMenuItem(obj, editMenu, SaveSelection(),         'Save Selection...');
+        addMenuItem(obj, editMenu, CropImageSelection(),    'Crop Selection');
+        
+        addMenuItem(obj, editMenu, PrintImageDocList(),     'Print Image List', 'Separator', 'on');
+        
+        settingsMenu = addMenu(obj, editMenu, 'Settings', 'Separator', 'on');
+        addMenuItem(obj, settingsMenu, SetBrushSize(),           'Set Brush Size');
+        addMenuItem(obj, settingsMenu, SetBrushValue(),          'Set Brush Value');
+        addMenuItem(obj, settingsMenu, SetDefaultConnectivity(), 'Set Connectivity', 'Separator', 'on');
+        
+
         % Image Menu Definition
         
         imageMenu = addMenu(obj, hf, 'Image');
@@ -164,15 +179,9 @@ methods
         
         addMenuItem(obj, imageMenu, ExtractSlice(),         'Extract Slice');
         addMenuItem(obj, imageMenu, ExtractFrame(),         'Extract Time Frame');
-        addMenuItem(obj, imageMenu, CropImageSelection(),   'Crop Selection');
         
         overlayMenu = addMenu(obj, imageMenu, 'Overlay', 'Separator', 'on');
         addMenuItem(obj, overlayMenu, ClearImageOverlay(),   'Clear Overlays');
-        
-        settingsMenu = addMenu(obj, imageMenu, 'Settings', 'Separator', 'on');
-        addMenuItem(obj, settingsMenu, SetBrushSize(),           'Set Brush Size');
-        addMenuItem(obj, settingsMenu, SetBrushValue(),          'Set Brush Value');
-        addMenuItem(obj, settingsMenu, SetDefaultConnectivity(), 'Set Connectivity', 'Separator', 'on');
         
         
         % View Menu Definition
@@ -247,9 +256,7 @@ methods
         addMenuItem(obj, viewMenu, ShowImage3DOrthoSlices(),    'Show 3D OrthoSlices...', ...
             'Separator', 'on');
         addMenuItem(obj, viewMenu, Image3DIsosurface(),         'Show 3D Isosurface...');
-        
-        addMenuItem(obj, viewMenu, PrintImageDocList(),         'Print Image List', 'Separator', 'on');
-        
+                
         
         % Process Menu Definition
         
