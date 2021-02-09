@@ -22,17 +22,21 @@ end
 
 methods
     function run(obj, frame) %#ok<INUSL,INUSD>
-        disp('print image list');
         
         % get handle to viewer figure, and current doc
         app = frame.Gui.App;
-
         docList = getDocuments(app);
-        for i = 1:length(docList)
-            doc = docList{i};
-            if ~isempty(doc.Image)
-                disp(doc.Image.Name);
+        
+        if ~isempty(docList)
+            disp('Current list of images:');
+            for i = 1:length(docList)
+                doc = docList{i};
+                if ~isempty(doc.Image)
+                    fprintf('(%s): %s\n', doc.Tag, doc.Image.Name);
+                end
             end
+        else
+            disp('Current list of images: (empty)');
         end
     end
 end
