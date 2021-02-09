@@ -85,7 +85,7 @@ methods
             img = Image('Data', data, 'type', 'vector', 'channelNames', tab.ColNames);
         end
         
-        addImageDocument(frame.Gui, img);
+        createImageFrame(frame.Gui, img);
     end
     
 end % end methods
