@@ -329,20 +329,6 @@ end
 
 %% Figure management
 methods
-    function close(obj, varargin)
-%         disp('Close image viewer');
-        if ~isempty(obj.Doc)
-            try
-                removeView(obj.Doc, obj);
-            catch ME %#ok<NASGU>
-                name = obj.Doc.Image.Name;
-                warning('PlanarImageViewer:close', ...
-                    'Current view is not referenced in document ''%s''...', name);
-            end
-        end
-        delete(obj.Handles.Figure);
-    end
-    
     function onScrollPanelResized(obj, varargin)
         % function called when the Scroll panel has been resized
         

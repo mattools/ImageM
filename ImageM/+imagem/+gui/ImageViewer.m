@@ -185,6 +185,35 @@ methods
 end
 
 
+%% Figure management
+methods
+    function close(obj, varargin)
+        % Default implementation for closing frame.
+        %
+        % Actions:
+        % * remove the view from the doc
+        % * if this view was the last one attached to the doc, remove the
+        %   doc from the app
+        % * close the Figure widget
+        
+        if ~isempty(obj.Doc)
+            try
+                removeView(obj.Doc, obj);
+                
+                if isempty(obj.Doc.Views)
+                    obj.Gui.App.removeDocument(obj.Doc);
+                end
+                
+            catch ME %#ok<NASGU>
+                warning([mfilename ':close'], ...
+                    'Current view is not referenced in document...');
+            end
+        end
+        delete(obj.Handles.Figure);
+    end
+end    
+
+
 %% Image display listeners management
 methods
     function addImageDisplayListener(obj, listener)
