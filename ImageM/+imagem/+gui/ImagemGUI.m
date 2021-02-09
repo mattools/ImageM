@@ -291,7 +291,29 @@ end % general methods
 
 %% GUI Creation methods
 methods
+    function initializeFigure(obj, hf, frame)
+        % Setup figure menu and toolbar depending on frame type.
+        
+        % create menu builder that generates frame-secific menu
+        builder = imagem.gui.FrameMenuBuilder(obj, frame);
+        buildMenu(builder, hf);
+        
+        % special processing: add toolbar
+        if isa(frame, 'imagem.gui.PlanarImageViewer')
+            buildToolbar(builder, hf);
+        end
+    end
+    
     function createFigureMenu(obj, hf, frame)
+        % Setup figure menu depending on frame type.
+        %
+        %   Example:
+        %     % create the figure that will contains the display
+        %     fig = createNewFigure(gui, ...
+        %         'Name', 'ImageM Main Figure');
+        %     % create figure menu and toolbar
+        %     initializeFigure(gui, fig, obj);
+
         builder = imagem.gui.FrameMenuBuilder(obj, frame);
         buildMenu(builder, hf);
     end
@@ -301,6 +323,11 @@ methods
         builder = imagem.gui.FrameMenuBuilder(obj, frame);
         buildMenu(builder, hf);
     end
+    
+    function createFigureToolbar(obj, hf, frame)
+        builder = imagem.gui.FrameMenuBuilder(obj, frame);
+        buildToolbar(builder, hf);
+    end    
 end
 
 methods (Static)

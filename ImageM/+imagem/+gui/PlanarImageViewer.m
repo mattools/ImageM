@@ -52,8 +52,8 @@ methods
             'CloseRequestFcn', @obj.close);
         obj.Handles.Figure = fig;
         
-        % create main figure menu
-        createFigureMenu(gui, fig, obj);
+        % create figure menu and toolbar
+        initializeFigure(gui, fig, obj);
         
         % creates the layout
         setupLayout(fig);
