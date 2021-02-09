@@ -73,39 +73,42 @@ methods
         
         % create the appropriate LUT array depending on LUT name and on
         % number of levels
-        if strcmp(name, 'inverted')
+        if strcmpi(name, 'inverted')
             lut = repmat(((nValues-1):-1:0)', 1, 3) / (nValues-1);
             
-        elseif strcmp(name, 'blue-gray-red')
+        elseif strcmpi(name, 'blue-gray-red')
             lut = gray(nValues);
             lut(1,:) = [0 0 1];
             lut(end,:) = [1 0 0];
             
-        elseif strcmp(name, 'colorcube')
+        elseif strcmpi(name, 'blue-white-red')
+            lut = imagem.util.color.blue2White2Red(nValues);
+            
+        elseif strcmpi(name, 'colorcube')
             map = colorcube(double(nValues) + 2);
             lut = [0 0 0; map(sum(map==0, 2)~=3 & sum(map==1, 2)~=3, :)];
             
-        elseif strcmp(name, 'red')
+        elseif strcmpi(name, 'red')
             lut = gray(nValues);
             lut(:, 2:3) = 0;
             
-        elseif strcmp(name, 'green')
+        elseif strcmpi(name, 'green')
             lut = gray(nValues);
             lut(:, [1 3]) = 0;
             
-        elseif strcmp(name, 'blue')
+        elseif strcmpi(name, 'blue')
             lut = gray(nValues);
             lut(:, 1:2) = 0;
             
-        elseif strcmp(name, 'yellow')
+        elseif strcmpi(name, 'yellow')
             lut = gray(nValues);
             lut(:, 3) = 0;
             
-        elseif strcmp(name, 'cyan')
+        elseif strcmpi(name, 'cyan')
             lut = gray(nValues);
             lut(:, 1) = 0;
             
-        elseif strcmp(name, 'magenta')
+        elseif strcmpi(name, 'magenta')
             lut = gray(nValues);
             lut(:, 2) = 0;
             

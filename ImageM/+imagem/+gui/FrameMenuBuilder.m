@@ -200,6 +200,7 @@ methods
         addMenuItem(obj, lutMenu, SetImageColorMap('colorcube'),      'Color Cube');
         addMenuItem(obj, lutMenu, SetImageColorMap('prism'),          'Prism');
         addMenuItem(obj, lutMenu, SetImageColorMap('jet'),            'Jet');
+        addMenuItem(obj, lutMenu, SetImageColorMap('blue-white-red'), 'Blue-White-Red');
         
         matlabLutMenu = addMenu(obj, lutMenu, 'Matlab''s');
         addMenuItem(obj, matlabLutMenu, SetImageColorMap('hot'),      'Hot');
