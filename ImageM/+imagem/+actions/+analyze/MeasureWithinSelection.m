@@ -60,7 +60,7 @@ methods
         end
         
         % compute mean values within ROI for each channel
-        nc = channelNumber(img);
+        nc = channelCount(img);
         meanValues = zeros(1, nc);
         for i = 1:nc
             ch = channel(img, i);
