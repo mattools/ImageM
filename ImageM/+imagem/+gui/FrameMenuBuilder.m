@@ -127,7 +127,9 @@ methods
         imageMenu = addMenu(obj, hf, 'Image');
         
         addMenuItem(obj, imageMenu, PrintImageInfo(),       'Print info');
-        calibMenu = addMenu(obj, imageMenu, 'Calibration');
+        addMenuItem(obj, imageMenu, RenameImage(),          'Rename');
+        
+        calibMenu = addMenu(obj, imageMenu, 'Calibration', 'Separator', 'on');
         addMenuItem(obj, calibMenu, EditSpatialCalibration(),   'Edit Spatial Calibration...');
         addMenuItem(obj, calibMenu, ClearSpatialCalibration(),  'Clear Spatial Calibration');
         channelTypeMenu = addMenu(obj, calibMenu, 'Channel Display', 'Separator', 'on');
@@ -136,23 +138,35 @@ methods
         addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Stem'),    'Stem');
         addMenuItem(obj, calibMenu, EditChannelNames(),         'Edit Channels Names...');
         
-        
-        convertMenu = addMenu(obj, imageMenu,  'Convert To');
-        addMenuItem(obj, convertMenu, ConvertDataType('uint8'),     'UInt8 (Grayscale)');
-        addMenuItem(obj, convertMenu, ConvertDataType('uint16'),    'UInt16 (Grayscale)');
-        addMenuItem(obj, convertMenu, ConvertDataType('single'),    'Single (Intensity)');
-        
         convertTypeMenu = addMenu(obj, imageMenu,  'Set Image Type');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('binary'),    'Binary');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('grayscale'), 'Grayscale');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('intensity'), 'Intensity');
         addMenuItem(obj, convertTypeMenu, ImageConvertType('label'),     'Label');
+                
+        convertMenu = addMenu(obj, imageMenu,  'Convert Data Type');
+        addMenuItem(obj, convertMenu, ConvertDataType('uint8'),     'UInt8 (Grayscale)');
+        addMenuItem(obj, convertMenu, ConvertDataType('uint16'),    'UInt16 (Grayscale)');
+        addMenuItem(obj, convertMenu, ConvertDataType('single'),    'Single (Intensity)');
+        
 
-        addMenuItem(obj, imageMenu, RenameImage(),          'Rename', 'Separator', 'on');
-        addMenuItem(obj, imageMenu, DuplicateImage(),       'Duplicate', 'Accelerator', 'D');
-        addMenuItem(obj, imageMenu, InvertImage(),          'Invert Image', 'Accelerator', 'I');
-
-        transformMenu = addMenu(obj, imageMenu, 'Transfom', 'Separator', 'on');
+        convertMenu = addMenu(obj, imageMenu, 'Convert', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
+        addMenuItem(obj, convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
+        addMenuItem(obj, convertMenu, ConvertVectorImageToRGB(),        'Vector Image to RGB');
+        addMenuItem(obj, convertMenu, ConvertScalarImageToRGB(),        'Intensity Image to RGB', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
+        
+        colorMenu = addMenu(obj, imageMenu, 'Color and channels');
+        addMenuItem(obj, colorMenu, SplitImageRGB(),        'Split RGB');
+        addMenuItem(obj, colorMenu, SplitImageChannels(),   'Split Channels');
+        addMenuItem(obj, colorMenu, MergeImageChannels(),   'Merge Channels...');
+        addMenuItem(obj, colorMenu, ReorderChannels(),      'Re-order Channels...', true);
+        
+        
+        addMenuItem(obj, imageMenu, DuplicateImage(),       'Duplicate', 'Accelerator', 'D', 'Separator', 'on');
+        transformMenu = addMenu(obj, imageMenu, 'Transfom');
         addMenuItem(obj, transformMenu, ReshapeImage(),         'Reshape...');
         addMenuItem(obj, transformMenu, PermuteDimensions(),    'Permute Dimensions...');
         
@@ -162,24 +176,11 @@ methods
         addMenuItem(obj, transformMenu, RotateImage90(-1),      'Rotate Left');
         addMenuItem(obj, transformMenu, ImageOrthogonalProjection(),    'Orthogonal Projection', 'Separator', 'on');
 
-        colorMenu = addMenu(obj, imageMenu, 'Color');
-        addMenuItem(obj, colorMenu, SplitImageRGB(),        'Split RGB');
-        addMenuItem(obj, colorMenu, SplitImageChannels(),   'Split Channels');
-        addMenuItem(obj, colorMenu, MergeImageChannels(),   'Merge Channels...');
-        addMenuItem(obj, colorMenu, ReorderChannels(),      'Re-order Channels...', true);
-        
-        convertMenu = addMenu(obj, imageMenu, 'Convert');
-        addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
-        addMenuItem(obj, convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
-        addMenuItem(obj, convertMenu, ConvertVectorImageToRGB(),        'Vector Image to RGB');
-        addMenuItem(obj, convertMenu, ConvertScalarImageToRGB(),        'Intensity Image to RGB', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
-        
-        
         addMenuItem(obj, imageMenu, ExtractSlice(),         'Extract Slice');
         addMenuItem(obj, imageMenu, ExtractFrame(),         'Extract Time Frame');
-        
+
+        addMenuItem(obj, imageMenu, InvertImage(),          'Invert Image', 'Accelerator', 'I');
+
         overlayMenu = addMenu(obj, imageMenu, 'Overlay', 'Separator', 'on');
         addMenuItem(obj, overlayMenu, ClearImageOverlay(),   'Clear Overlays');
         
