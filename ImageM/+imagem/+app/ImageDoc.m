@@ -27,6 +27,8 @@ properties
     % Display range info are managed within the ImageViewer class.
     
     % Look-up table (colormap) used for displaying the image. 
+    % Uses 256 values for grayscale/intensity images, and label number for
+    % label images.
     % If empty -> no lut
     ColorMap = [];
     
