@@ -16,27 +16,28 @@ classdef ImageExtendedMinWatershed < imagem.actions.ScalarImageAction
 % Copyright 2011 INRA - Cepia Software Platform.
 
 properties
-    % the set of handles to dialog widgets, indexed by their name
+    % the set of handles to dialog widgets, indexed by their name.
     Handles;
     
     Viewer;
     
-    % the min and max of values present in image. Default is [0 255]
+    % the min and max of values present in image. Default is [0 255].
     ImageExtent = [0 255];
     
-    % the value of dynamic used to pre-filter images
+    % the value of dynamic used to pre-filter images.
     ExtendedMinimaValue = 10;
     
-    % the connectivity of the regions
-    Conn = 4;
+    % the connectivity of the regions, as integer value.
+    Conn;
     
-    % the list of available connectivity values
-    ConnValues = [4, 8];
+    % The labels used to populate the combo box.
+    ConnLabels;
     
-    % boolean flag indicating is binary image of watershed should be created
+    % boolean flag indicating is binary image of watershed should be
+    % created.
     ComputeWatershed = true;
     
-    % boolean flag indicating if label image of basins should be created
+    % boolean flag indicating if label image of basins should be created.
     ComputeBasins = false;
 end
 
@@ -59,26 +60,42 @@ methods
             return;
         end
         
+        % initialize initial value of parameters
+        minVal = double(min(img));
+        maxVal = double(max(img));
+        if any(~isfinite([minVal maxVal]))
+            finiteValues = img.Data(isfinite(img.Data));
+            minVal = double(min(finiteValues));
+            maxVal = double(max(finiteValues));
+        end
+        obj.ImageExtent = [minVal maxVal];
+        
+        obj.ExtendedMinimaValue = minVal + (maxVal - minVal) * 0.25;
+        if isGrayscaleImage(img)
+            obj.ExtendedMinimaValue = round(obj.ExtendedMinimaValue);
+        end
+        
+        if ndims(img) == 2 %#ok<ISMAT>
+            obj.Conn = value(imagem.util.enums.Connectivities2D.C4);
+            obj.ConnLabels = imagem.util.enums.Connectivities2D.allLabels;
+        elseif ndims(img) == 3
+            obj.Conn = value(imagem.util.enums.Connectivities3D.C6);
+            obj.ConnLabels = imagem.util.enums.Connectivities3D.allLabels;
+        else
+            error('Can only manage with dimensions 2 or 3');
+        end
+        
         createWatershedFigure(obj);
         updateWidgets(obj);
     end
     
     function hf = createWatershedFigure(obj)
         
-        % range of grayscale values
-        img = currentImage(obj.Viewer);
-        minVal = double(min(img));
-        maxVal = double(max(img));
-        obj.ImageExtent = [minVal maxVal];
-        
         gui = obj.Viewer.Gui;
         
         % compute slider steps
-        valExtent = maxVal - minVal;
-        if minVal == 0
-            valExtent = valExtent + 1;
-        end
-        
+        valExtent = obj.ImageExtent(2) - obj.ImageExtent(1);
+        img = currentImage(obj.Viewer);
         if isGrayscaleImage(img)
             % set unit step equal to 1 grayscale unit
             sliderStep1 = 1 / valExtent;
@@ -90,7 +107,7 @@ methods
         end
         
         % startup dynamic value
-        sliderValue = valExtent / 4;
+        sliderValue = obj.ExtendedMinimaValue;
         
         % background color of most widgets
         bgColor = getWidgetBackgroundColor(gui);
@@ -114,14 +131,14 @@ methods
         mainPanel = uix.VBox('Parent', vb);
         
         obj.Handles.ExtendedMinText = addInputTextLine(gui, mainPanel, ...
-            'Basin Dynamic:', '10', ...
+            'Basin Dynamic:', num2str(obj.ExtendedMinimaValue), ...
             @obj.onExtendedMinTextChanged);
         
         % one slider for changing value
         obj.Handles.ValueSlider = uicontrol(...
             'Style', 'Slider', ...
             'Parent', mainPanel, ...
-            'Min', 1, 'Max', valExtent, ...
+            'Min', 0, 'Max', valExtent, ...
             'Value', sliderValue, ...
             'SliderStep', [sliderStep1 sliderStep2], ...
             'BackgroundColor', bgColor, ...
@@ -132,7 +149,7 @@ methods
             'ContinuousValueChange', @obj.onSliderValueChanged);
        
         obj.Handles.ConnectivityPopup = addComboBoxLine(gui, mainPanel, ...
-            'Connectivity:', {'4', '8'}, ...
+            'Connectivity:', obj.ConnLabels, ...
             @obj.onConnectivityChanged);
 
         obj.Handles.ResultTypePopup = addComboBoxLine(gui, mainPanel, ...
@@ -196,7 +213,7 @@ methods
         end
         
         % add history
-        string = sprintf('%s = watershed(%s, ''dynamic'', %f, ''conn'', %d));\n', ...
+        string = sprintf('%s = watershed(%s, ''dynamic'', %g, ''conn'', %d);\n', ...
             newDoc.Tag, refDoc.Tag, obj.ExtendedMinimaValue, obj.Conn);
         addToHistory(obj.Viewer, string);
         
@@ -230,13 +247,26 @@ methods
     
     function onSliderValueChanged(obj, varargin)
         val = get(obj.Handles.ValueSlider, 'Value');
+        if isGrayscaleImage(currentImage(obj.Viewer))
+            val = round(val);
+        end
+        
         obj.ExtendedMinimaValue = val;
         updateWidgets(obj);
     end
     
     function onConnectivityChanged(obj, varargin)
+        
+        
         index = get(obj.Handles.ConnectivityPopup, 'Value');
-        obj.Conn = obj.ConnValues(index);
+        label = obj.ConnLabels{index};
+
+        img = currentImage(obj.Viewer);
+        if ndims(img) == 2 %#ok<ISMAT>
+            obj.Conn = value(imagem.util.enums.Connectivities2D.fromLabel(label));
+        elseif ndims(img) == 3
+            obj.Conn = value(imagem.util.enums.Connectivities3D.fromLabel(label));
+        end
         
         updateWidgets(obj);
     end
