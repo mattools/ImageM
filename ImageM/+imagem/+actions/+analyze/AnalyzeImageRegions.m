@@ -43,10 +43,19 @@ methods
         
         % setup display
         obj.Viewer = frame;
-        createFigure(obj);
+        
+        % choose dialog accoding to image dimension
+        nd = ndims(currentImage(obj.Viewer));
+        if nd == 2
+            createFigure2d(obj);
+        elseif nd == 3
+            createFigure3d(obj);
+        else
+            error('Can process only dimensions 2 and 3');
+        end
     end
     
-    function tab = computeFeatures(obj)
+    function tab = computeFeatures2d(obj)
         % compute the selected features on the current image and return table 
         
         % get current image
@@ -97,7 +106,7 @@ methods
             tab = [tab Table(shapeFactor, {'ShapeFactor'})];
         end
 
-        % process inertia-based features
+        % process moment-based features
         if centroidFlag || ellipseFlag || ellipseElongFlag
             elli = imEquivalentEllipse(imgData, spacing, origin, labels);
             
@@ -157,14 +166,98 @@ methods
         
         tab.Name = [img.Name '-features'];
     end
+
+    function tab = computeFeatures3d(obj)
+        % Compute the selected 3D features on the current image and return Table.
+        
+        % get current image
+        img = currentImage(obj.Viewer);
+        
+        % identify features to compute
+        volumeFlag          = get(obj.Handles.VolumeCheckBox, 'Value');
+        surfaceAreaFlag     = get(obj.Handles.SurfaceAreaCheckBox, 'Value');
+        meanBreadthFlag     = get(obj.Handles.MeanBreadthCheckBox, 'Value');
+        eulerFlag           = get(obj.Handles.EulerNumberCheckBox, 'Value');
+        sphericityFlag      = get(obj.Handles.SphericityCheckBox, 'Value');
+        
+        centroidFlag        = get(obj.Handles.CentroidCheckBox, 'Value');
+        ellipsoidFlag       = get(obj.Handles.EllipsoidCheckBox, 'Value');
+        ellipsoidShapeFlag  = get(obj.Handles.EllipsoidShapeCheckBox, 'Value');
+        
+        boundingBoxFlag     = get(obj.Handles.BoundingBoxCheckBox, 'Value');
+%         convexVolumeFlag    = get(obj.Handles.ConvexVolumeCheckBox, 'Value');
+        convexityFlag       = get(obj.Handles.ConvexityCheckBox, 'Value');
+        
+        
+        % retrieve image data
+        imgData = permute(img.Data, [2 1 3]);
+        spacing = img.Spacing;
+        origin  = img.Origin;
+        
+        % initialize empty table
+        labels = imFindLabels(imgData);
+        tab = Table(labels, {'Label'});
+        
+        % process global size features
+        if volumeFlag || sphericityFlag
+            volList = imVolume(imgData, labels, spacing);
+            tab = [tab Table(volList, {'Volume'})];
+        end
+        if surfaceAreaFlag || sphericityFlag
+            surfList = imSurfaceArea(imgData, labels, spacing);
+            tab = [tab Table(surfList, {'SurfaceArea'})];
+        end
+        if meanBreadthFlag
+            mbList = imMeanBreadth(imgData, labels, spacing);
+            tab = [tab Table(mbList, {'MeanBreadth'})];
+        end
+        if eulerFlag
+            tab = [tab Table(imEuler3d(imgData), {'EulerNumber'})];
+        end
+        if sphericityFlag
+            shapeFactor = 36 * pi * volList.^2 ./ surfList .^3;
+            tab = [tab Table(shapeFactor, {'Sphericity'})];
+        end
+
+        if boundingBoxFlag
+            boxes = imBoundingBox(imgData, spacing, origin, labels);
+            colNames = {'XMin', 'XMax', 'YMin', 'YMax', 'ZMin', 'ZMax'};
+            tab = [tab Table(boxes, colNames)];
+        end
+        
+        % process moment-based features
+        if centroidFlag || ellipsoidFlag || ellipsoidShapeFlag
+            elli = imEquivalentEllipsoid(imgData, spacing, origin, labels);
+            
+            if centroidFlag || ellipsoidFlag
+                tab = [tab Table(elli(:,1:3), {'CentroidX', 'CentroidY', 'CentroidZ'})];
+            end
+            if ellipsoidFlag
+                tab = [tab Table(elli(:,4:6), {'SemiAxis1', 'SemiAxis2', 'SemiAxis3'})];
+                tab = [tab Table(elli(:,7:9), {'Phi', 'Theta', 'Psi'})];
+            end
+            if ellipsoidShapeFlag
+                elongs = [elli(:,4) ./ elli(:,6), elli(:,4) ./ elli(:,5), elli(:,5) ./ elli(:,6)] ;
+                tab = [tab Table(elongs, {'R1/R3', 'R1/R2', 'R2/R3'})];
+            end
+        end
+        
+        if convexityFlag
+            convexityList = imConvexity(imgData, labels);
+            tab = [tab Table(convexityList, {'Convexity'})];
+        end
+        
+        tab.Name = [img.Name '-features'];
+    end
 end
 
 methods
-    function hf = createFigure(obj)
-        % creates the figure
+   
+    function hf = createFigure2d(obj)
+        % creates the figure for 2D images.
         
         hf = figure(...
-            'Name', 'Analysis Particles', ...
+            'Name', 'Analyze Regions 2D', ...
             'NumberTitle', 'off', ...
             'MenuBar', 'none', ...
             'Toolbar', 'none', ...
@@ -176,18 +269,18 @@ methods
         
         obj.Handles.Figure = hf;
         gui = obj.Viewer.Gui;
-
+        
         % the list of images for choosing the overlay
         imageNames = getImageNames(gui.App);
         
-
+        
         % vertical layout, containing main panel and buttons panel
         vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
         
         mainPanel = uix.VBox('Parent', vb);
-
+        
         featuresPanel = uix.Grid('Parent', mainPanel);
-
+        
         
         % First column
         
@@ -240,7 +333,7 @@ methods
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'Visible', 'Off');
-       
+        
         
         % Second column
         
@@ -262,7 +355,7 @@ methods
             'Parent', featuresPanel, ...
             'String', 'Ellipse Elongation', ...
             'Value', 1);
-  
+        
         
         % Feret diameters
         uicontrol(...
@@ -281,19 +374,19 @@ methods
             'Parent', featuresPanel, ...
             'String', 'Oriented Box', ...
             'Value', 1);
-          
+        
         obj.Handles.BoxElongationCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Box Elongation', ...
             'Value', 1);
         
-         obj.Handles.TortuosityCheckBox = uicontrol(...
+        obj.Handles.TortuosityCheckBox = uicontrol(...
             'Style', 'Checkbox', ...
             'Parent', featuresPanel, ...
             'String', 'Tortuosity');
         
-
+        
         % use same widths for all columns
         set(featuresPanel, 'Widths', [-1 -1]);
         set(featuresPanel, 'Heights', [20 20 20 20 20 20 20 20 20]);
@@ -304,7 +397,7 @@ methods
             'Overlay:', obj.OverlayTypeValues);
         set(obj.Handles.OverlayTypePopup, 'Value', 2);
         
-        % add combo box for choosing the image to overlay 
+        % add combo box for choosing the image to overlay
         obj.Handles.OverlayImagePopup = addComboBoxLine(gui, mainPanel, ...
             'Image to overlay:', imageNames);
         
@@ -327,7 +420,118 @@ methods
         
         set(vb, 'Heights', [-1  40] );
     end
-end
+    
+    function hf = createFigure3d(obj)
+        % creates the figure for 3D images.
+        
+        hf = figure(...
+            'Name', 'Analyze Regions 3D', ...
+            'NumberTitle', 'off', ...
+            'MenuBar', 'none', ...
+            'Toolbar', 'none', ...
+            'CloseRequestFcn', @obj.closeFigure);
+        set(hf, 'units', 'pixels');
+        pos = get(hf, 'Position');
+        pos(3:4) = [250 300];
+        set(hf, 'Position', pos);
+        
+        obj.Handles.Figure = hf;        
+        
+        % vertical layout, containing main panel and buttons panel
+        vb  = uix.VBox('Parent', hf, 'Spacing', 5, 'Padding', 5);
+        
+        mainPanel = uix.VBox('Parent', vb);
+        
+        featuresPanel = uix.Grid('Parent', mainPanel);
+        
+        
+        % First column
+        
+        % global morphometry
+        obj.Handles.VolumeCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Volume', ...
+            'Value', 1);
+        obj.Handles.SurfaceAreaCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Surface Area', ...
+            'Value', 1);
+        obj.Handles.MeanBreadthCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Mean Breadth', ...
+            'Value', 0);
+        obj.Handles.EulerNumberCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Euler Number', ...
+            'Value', 0);
+        obj.Handles.SphericityCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Sphericity', ...
+            'Value', 0);
+        
+        
+        % Second column
+        
+        % inertia-based  parameters
+        obj.Handles.BoundingBoxCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Bounding Box', ...
+            'Value', 1);
+
+        % moment-based  parameters
+        obj.Handles.CentroidCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Centroid', ...
+            'Value', 1);
+        
+        obj.Handles.EllipsoidCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Equivalent Ellipsoid', ...
+            'Value', 1);
+        
+        obj.Handles.EllipsoidShapeCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Ellipsoid Shapes', ...
+            'Value', 0);
+        
+        % convexity
+        obj.Handles.ConvexityCheckBox = uicontrol(...
+            'Style', 'Checkbox', ...
+            'Parent', featuresPanel, ...
+            'String', 'Convexity', ...
+            'Value', 0);
+
+        
+        % use same widths for all columns
+        set(featuresPanel, 'Widths', [-1 -1]);
+        set(featuresPanel, 'Heights', [20 20 20 20 20]);
+        
+
+        % setup layout for all widgets but control panel
+        set(mainPanel, 'Heights', -1 );
+%         set(mainPanel, 'Heights', [-1 35 35] );
+        
+        % button for control panel
+        buttonsPanel = uix.HButtonBox('Parent', vb, 'Padding', 5);
+        uicontrol('Parent', buttonsPanel, ...
+            'String', 'OK', ...
+            'Callback', @obj.onButtonOK3d);
+        uicontrol('Parent', buttonsPanel, ...
+            'String', 'Cancel', ...
+            'Callback', @obj.onButtonCancel);
+        
+        set(vb, 'Heights', [-1  40] );
+    end
+ end
 
 
 %% Control buttons Callback
@@ -335,7 +539,7 @@ methods
     function onButtonOK(obj, varargin)
         
         % compute morphological features
-        tab = computeFeatures(obj);
+        tab = computeFeatures2d(obj);
         
         % extract type of overlay
         overlayTypeIndex = get(obj.Handles.OverlayTypePopup, 'Value');
@@ -348,7 +552,7 @@ methods
         docToOverlay = getDocument(gui.App, imageName);
         
         closeFigure(obj);
-
+        
         % display data table in its own window
         createTableFrame(obj.Viewer.Gui, tab);
         
@@ -380,17 +584,28 @@ methods
                         'Style', {{'color', 'g'}});
                     addShape(docToOverlay, shape);
                 end
-               
+                
             otherwise
                 error(['Unable to process overlay type: ' overlayType]);
         end
-                
+        
         % update all the views referenced by the document with overlay
         viewList = getViews(docToOverlay);
         for i = 1:length(viewList)
             updateDisplay(viewList{i});
         end
-
+        
+    end
+    
+    function onButtonOK3d(obj, varargin)
+        
+        % compute morphological features
+        tab = computeFeatures3d(obj);
+                
+        closeFigure(obj);
+        
+        % display data table in its own window
+        createTableFrame(obj.Viewer.Gui, tab);
     end
     
     function onButtonCancel(obj, varargin)
