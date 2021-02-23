@@ -34,12 +34,11 @@ end % end constructors
 %% Methods
 methods
     function run(obj, frame) %#ok<INUSL,INUSD>
-        disp('Change Image Background Color');
         
         % get handle to current doc
         doc = frame.Doc;
         
-        gd = imagem.gui.GenericDialog('Set Background Color');
+        gd = imagem.gui.GenericDialog('Replace values');
         addTextField(gd, 'Old value(s): ', '1');
         addTextField(gd, 'New value: ', '0');
         
@@ -67,7 +66,15 @@ methods
         
         updateDisplay(frame);
         
-        
+        % update history
+        nValues = length(oldValues);
+        pattern = ['[%g' repmat(' %g', 1, nValues-1) ']'];
+        str1 = sprintf(pattern, oldValues);
+        tag = doc.Tag;
+        string = sprintf('%s(ismember(%s, %s)) = %g;\n', tag, tag, str1, newValue);
+        addToHistory(frame, string);
+
+        % utility function to parse a numeric value
         function val = parseValue(str)
             val = str2num(str); %#ok<ST2NM>
             if isempty(val)

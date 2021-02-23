@@ -48,7 +48,6 @@ end
 
 methods
     function run(obj, frame) %#ok<INUSD>
-        disp('apply imposed watershed to current image');
         
         % get handle to viewer figure, and current doc
         obj.Viewer = frame;

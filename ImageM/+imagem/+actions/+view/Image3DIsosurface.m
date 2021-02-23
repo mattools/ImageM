@@ -131,7 +131,7 @@ methods
         if ~isLabelImage(img)
             string = sprintf('isosurface(%s, %g);\n', doc.Tag, isosurfaceValue);
         else
-            string = sprintf('%% isosurface of label image %s\n', doc.Tag);
+            string = sprintf('regionIsosurfaces(%s);\n', doc.Tag);
         end
         addToHistory(frame, string);
     end
