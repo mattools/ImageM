@@ -57,52 +57,38 @@ end % end methods
 methods
     function buildImageFrameMenu(obj, hf)
         
-        import imagem.gui.ImagemGUI;
-        import imagem.gui.actions.*;
-        import imagem.actions.*;
-        import imagem.actions.file.*;
-        import imagem.actions.edit.*;
-        import imagem.actions.image.*;
-        import imagem.actions.view.*;
-        import imagem.actions.process.*;
-        import imagem.actions.process.binary.*;
-        import imagem.actions.analyze.*;
-        import imagem.actions.table.*;
-        import imagem.gui.tools.*;
-        import imagem.tools.*;
-                
         % File Menu Definition
         
         fileMenu = addMenu(obj, hf, 'Files');
         
-        addMenuItem(obj, fileMenu, CreateImage(),               'New Image...', 'Accelerator', 'N');
-        addMenuItem(obj, fileMenu, OpenImage(),                 'Open Image...', 'Accelerator', 'O');
+        addMenuItem(obj, fileMenu, imagem.actions.file.CreateImage(),               'New Image...', 'Accelerator', 'N');
+        addMenuItem(obj, fileMenu, imagem.actions.file.OpenImage(),                 'Open Image...', 'Accelerator', 'O');
         importMenu = addMenu(obj, fileMenu, 'Import');
-        addMenuItem(obj, importMenu, ImportImageFromBinaryFile(),   'Import from binary file...');
-        addMenuItem(obj, importMenu, ImportImageSeries(),           'Import Image Series...');
-        addMenuItem(obj, importMenu, ImportImageFromWorkspace(),    'Import From Workspace...');
+        addMenuItem(obj, importMenu, imagem.actions.file.ImportImageFromBinaryFile(),   'Import from binary file...');
+        addMenuItem(obj, importMenu, imagem.actions.file.ImportImageSeries(),           'Import Image Series...');
+        addMenuItem(obj, importMenu, imagem.actions.file.ImportImageFromWorkspace(),    'Import From Workspace...');
 
         demoMenu = addMenu(obj, fileMenu, 'Open Demo', 'Separator', 'on');
-        addMenuItem(obj, demoMenu, OpenDemoImage('cameraman.tif'), 	'Cameraman (grayscale)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('rice.png'),       'Rice (grayscale)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('coins.png'),      'Coins (grayscale)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('peppers.png'),    'Peppers (RGB)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('mri.tif'),        'MRI Head (3D)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('xylophone.mp4'),  'Xylophone (movie)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('circles.png'),    'Circles (binary)');
-        addMenuItem(obj, demoMenu, OpenDemoImage('text.png'),       'Text (binary)');
-        addMenuItem(obj, demoMenu, OpenDemoTable('fisherIris.txt'), 'Fisher Iris (Table)', 'Separator', 'on');
-        addMenuItem(obj, fileMenu, OpenTable(),              'Open Table...');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('cameraman.tif'), 	'Cameraman (grayscale)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('rice.png'),       'Rice (grayscale)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('coins.png'),      'Coins (grayscale)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('peppers.png'),    'Peppers (RGB)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('mri.tif'),        'MRI Head (3D)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('xylophone.mp4'),  'Xylophone (movie)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('circles.png'),    'Circles (binary)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('text.png'),       'Text (binary)');
+        addMenuItem(obj, demoMenu, imagem.actions.table.OpenDemoTable('fisherIris.txt'), 'Fisher Iris (Table)', 'Separator', 'on');
+        addMenuItem(obj, fileMenu, imagem.actions.table.OpenTable(),              'Open Table...');
 
         
-        addMenuItem(obj, fileMenu, SaveImage(),              'Save As...', ...
+        addMenuItem(obj, fileMenu, imagem.actions.file.SaveImage(),              'Save As...', ...
             'Separator', 'on', 'Accelerator', 'S');
-        addMenuItem(obj, fileMenu, ExportImageToWorkspace(), 'Export To Workspace...');
+        addMenuItem(obj, fileMenu, imagem.actions.file.ExportImageToWorkspace(), 'Export To Workspace...');
 
-        item = addMenuItem(obj, fileMenu, CloseFrame(),      'Close', 'Separator', 'on');
+        item = addMenuItem(obj, fileMenu, imagem.actions.file.CloseFrame(),      'Close', 'Separator', 'on');
         set(item, 'Accelerator', 'W');
 
-        item = addMenuItem(obj, fileMenu, Exit(), 'Quit');
+        item = addMenuItem(obj, fileMenu, imagem.actions.file.Exit(), 'Quit');
         set(item, 'Accelerator', 'Q');
         
 
@@ -111,235 +97,236 @@ methods
         
         editMenu = addMenu(obj, hf, 'Edit');
         
-        addMenuItem(obj, editMenu, SaveSelection(),         'Save Selection...');
-        addMenuItem(obj, editMenu, CropImageSelection(),    'Crop Selection');
+        addMenuItem(obj, editMenu, imagem.actions.edit.SaveSelection(),         'Save Selection...');
+        addMenuItem(obj, editMenu, imagem.actions.edit.CropImageSelection(),    'Crop Selection');
         
-        addMenuItem(obj, editMenu, PrintImageDocList(),     'Print Image List', 'Separator', 'on');
+        addMenuItem(obj, editMenu, imagem.actions.edit.PrintImageDocList(),     'Print Image List', 'Separator', 'on');
         
         settingsMenu = addMenu(obj, editMenu, 'Settings', 'Separator', 'on');
-        addMenuItem(obj, settingsMenu, SetBrushSize(),           'Set Brush Size');
-        addMenuItem(obj, settingsMenu, SetBrushValue(),          'Set Brush Value');
-        addMenuItem(obj, settingsMenu, SetDefaultConnectivity(), 'Set Connectivity', 'Separator', 'on');
+        addMenuItem(obj, settingsMenu, imagem.actions.image.SetBrushSize(),           'Set Brush Size');
+        addMenuItem(obj, settingsMenu, imagem.actions.image.SetBrushValue(),          'Set Brush Value');
+        addMenuItem(obj, settingsMenu, imagem.actions.image.SetDefaultConnectivity(), 'Set Connectivity', 'Separator', 'on');
         
 
         % Image Menu Definition
         
         imageMenu = addMenu(obj, hf, 'Image');
         
-        addMenuItem(obj, imageMenu, PrintImageInfo(),       'Print info');
-        addMenuItem(obj, imageMenu, RenameImage(),          'Rename');
+        addMenuItem(obj, imageMenu, imagem.actions.image.PrintImageInfo(),       'Print info');
+        addMenuItem(obj, imageMenu, imagem.actions.image.RenameImage(),          'Rename');
         
         calibMenu = addMenu(obj, imageMenu, 'Calibration', 'Separator', 'on');
-        addMenuItem(obj, calibMenu, EditSpatialCalibration(),   'Edit Spatial Calibration...');
-        addMenuItem(obj, calibMenu, ClearSpatialCalibration(),  'Clear Spatial Calibration');
+        addMenuItem(obj, calibMenu, imagem.actions.image.EditSpatialCalibration(),   'Edit Spatial Calibration...');
+        addMenuItem(obj, calibMenu, imagem.actions.image.ClearSpatialCalibration(),  'Clear Spatial Calibration');
         channelTypeMenu = addMenu(obj, calibMenu, 'Channel Display', 'Separator', 'on');
-        addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Curve'),   'Curve');
-        addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Bar'),     'Bar');
-        addMenuItem(obj, channelTypeMenu, SetChannelDisplayType('Stem'),    'Stem');
-        addMenuItem(obj, calibMenu, EditChannelNames(),         'Edit Channels Names...');
+        addMenuItem(obj, channelTypeMenu, imagem.actions.image.SetChannelDisplayType('Curve'),   'Curve');
+        addMenuItem(obj, channelTypeMenu, imagem.actions.image.SetChannelDisplayType('Bar'),     'Bar');
+        addMenuItem(obj, channelTypeMenu, imagem.actions.image.SetChannelDisplayType('Stem'),    'Stem');
+        addMenuItem(obj, calibMenu, imagem.actions.image.EditChannelNames(),         'Edit Channels Names...');
         
         convertTypeMenu = addMenu(obj, imageMenu,  'Set Image Type');
-        addMenuItem(obj, convertTypeMenu, ImageConvertType('binary'),    'Binary');
-        addMenuItem(obj, convertTypeMenu, ImageConvertType('grayscale'), 'Grayscale');
-        addMenuItem(obj, convertTypeMenu, ImageConvertType('intensity'), 'Intensity');
-        addMenuItem(obj, convertTypeMenu, ImageConvertType('label'),     'Label');
+        addMenuItem(obj, convertTypeMenu, imagem.actions.image.ImageConvertType('binary'),    'Binary');
+        addMenuItem(obj, convertTypeMenu, imagem.actions.image.ImageConvertType('grayscale'), 'Grayscale');
+        addMenuItem(obj, convertTypeMenu, imagem.actions.image.ImageConvertType('intensity'), 'Intensity');
+        addMenuItem(obj, convertTypeMenu, imagem.actions.image.ImageConvertType('label'),     'Label');
                 
         convertMenu = addMenu(obj, imageMenu,  'Convert Data Type');
-        addMenuItem(obj, convertMenu, ConvertDataType('uint8'),     'UInt8 (Grayscale)');
-        addMenuItem(obj, convertMenu, ConvertDataType('uint16'),    'UInt16 (Grayscale)');
-        addMenuItem(obj, convertMenu, ConvertDataType('single'),    'Single (Intensity)');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('uint8'),     'UInt8 (Grayscale)');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('uint16'),    'UInt16 (Grayscale)');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('single'),    'Single (Intensity)');
         
 
         convertMenu = addMenu(obj, imageMenu, 'Convert', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
-        addMenuItem(obj, convertMenu, ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
-        addMenuItem(obj, convertMenu, ConvertVectorImageToRGB(),        'Vector Image to RGB');
-        addMenuItem(obj, convertMenu, ConvertScalarImageToRGB(),        'Intensity Image to RGB', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertVectorImageToRGB(),        'Vector Image to RGB');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertScalarImageToRGB(),        'Intensity Image to RGB', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, imagem.actions.image.UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, imagem.actions.image.UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
         
         colorMenu = addMenu(obj, imageMenu, 'Color and channels');
-        addMenuItem(obj, colorMenu, SplitImageRGB(),        'Split RGB');
-        addMenuItem(obj, colorMenu, SplitImageChannels(),   'Split Channels');
-        addMenuItem(obj, colorMenu, MergeImageChannels(),   'Merge Channels...');
-        addMenuItem(obj, colorMenu, ReorderChannels(),      'Re-order Channels...', true);
+        addMenuItem(obj, colorMenu, imagem.actions.image.SplitImageRGB(),        'Split RGB');
+        addMenuItem(obj, colorMenu, imagem.actions.image.SplitImageChannels(),   'Split Channels');
+        addMenuItem(obj, colorMenu, imagem.actions.image.MergeImageChannels(),   'Merge Channels...');
+        addMenuItem(obj, colorMenu, imagem.actions.image.ReorderChannels(),      'Re-order Channels...', true);
         
         
-        addMenuItem(obj, imageMenu, DuplicateImage(),       'Duplicate', 'Accelerator', 'D', 'Separator', 'on');
+        addMenuItem(obj, imageMenu, imagem.actions.image.DuplicateImage(),       'Duplicate', 'Accelerator', 'D', 'Separator', 'on');
         transformMenu = addMenu(obj, imageMenu, 'Transfom');
-        addMenuItem(obj, transformMenu, ReshapeImage(),         'Reshape...');
-        addMenuItem(obj, transformMenu, PermuteDimensions(),    'Permute Dimensions...');
+        addMenuItem(obj, transformMenu, imagem.actions.image.ReshapeImage(),         'Reshape...');
+        addMenuItem(obj, transformMenu, imagem.actions.image.PermuteDimensions(),    'Permute Dimensions...');
         
-        addMenuItem(obj, transformMenu, FlipImage(1),           'Horizontal Flip', 'Separator', 'on');
-        addMenuItem(obj, transformMenu, FlipImage(2),           'Vertical Flip');
-        addMenuItem(obj, transformMenu, RotateImage90(1),       'Rotate Right');
-        addMenuItem(obj, transformMenu, RotateImage90(-1),      'Rotate Left');
-        addMenuItem(obj, transformMenu, ImageOrthogonalProjection(),    'Orthogonal Projection', 'Separator', 'on');
+        addMenuItem(obj, transformMenu, imagem.actions.image.FlipImage(1),           'Horizontal Flip', 'Separator', 'on');
+        addMenuItem(obj, transformMenu, imagem.actions.image.FlipImage(2),           'Vertical Flip');
+        addMenuItem(obj, transformMenu, imagem.actions.image.RotateImage90(1),       'Rotate Right');
+        addMenuItem(obj, transformMenu, imagem.actions.image.RotateImage90(-1),      'Rotate Left');
+        addMenuItem(obj, transformMenu, imagem.actions.process.ImageOrthogonalProjection(),    'Orthogonal Projection', 'Separator', 'on');
 
-        addMenuItem(obj, imageMenu, ExtractSlice(),         'Extract Slice');
-        addMenuItem(obj, imageMenu, ExtractFrame(),         'Extract Time Frame');
+        addMenuItem(obj, imageMenu, imagem.actions.image.ExtractSlice(),         'Extract Slice');
+        addMenuItem(obj, imageMenu, imagem.actions.image.ExtractFrame(),         'Extract Time Frame');
 
-        addMenuItem(obj, imageMenu, InvertImage(),          'Invert Image', 'Accelerator', 'I');
+        addMenuItem(obj, imageMenu, imagem.actions.image.InvertImage(),          'Invert Image', 'Accelerator', 'I');
 
         overlayMenu = addMenu(obj, imageMenu, 'Overlay', 'Separator', 'on');
-        addMenuItem(obj, overlayMenu, ClearImageOverlay(),   'Clear Overlays');
+        addMenuItem(obj, overlayMenu, imagem.actions.image.ClearImageOverlay(),   'Clear Overlays');
         
         
         % View Menu Definition
         
         viewMenu = addMenu(obj, hf, 'View');
 
-        addMenuItem(obj, viewMenu, ImageSetDisplayRange(),  'Set Display Range...');
+        addMenuItem(obj, viewMenu, imagem.actions.view.ImageSetDisplayRange(),  'Set Display Range...');
 
         lutMenu = addMenu(obj, viewMenu, 'Color Maps');
-        addMenuItem(obj, lutMenu, SetImageColorMap('gray'),           'Gray');
-        addMenuItem(obj, lutMenu, SetImageColorMap('inverted'),       'Inverted');
-        addMenuItem(obj, lutMenu, SetImageColorMap('blue-gray-red'),  'Blue-Gray-Red');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('gray'),           'Gray');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('inverted'),       'Inverted');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('blue-gray-red'),  'Blue-Gray-Red');
         
-        addMenuItem(obj, lutMenu, SetImageColorMap('parula'),         'Parula', 'Separator', 'on');
-        addMenuItem(obj, lutMenu, SetImageColorMap('hsv'),            'HSV');
-        addMenuItem(obj, lutMenu, SetImageColorMap('colorcube'),      'Color Cube');
-        addMenuItem(obj, lutMenu, SetImageColorMap('prism'),          'Prism');
-        addMenuItem(obj, lutMenu, SetImageColorMap('jet'),            'Jet');
-        addMenuItem(obj, lutMenu, SetImageColorMap('blue-white-red'), 'Blue-White-Red');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('parula'),         'Parula', 'Separator', 'on');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('hsv'),            'HSV');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('colorcube'),      'Color Cube');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('prism'),          'Prism');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('jet'),            'Jet');
+        addMenuItem(obj, lutMenu, imagem.actions.view.SetImageColorMap('blue-white-red'), 'Blue-White-Red');
         
         matlabLutMenu = addMenu(obj, lutMenu, 'Matlab''s');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('hot'),      'Hot');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('cool'),     'Cool');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('spring'),   'Spring');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('summer'),   'Summer');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('winter'),   'Winter');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('autumn'),   'Autumn');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('copper'),   'Copper');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('bone'),     'Bone');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('pink'),     'Pink');
-        addMenuItem(obj, matlabLutMenu, SetImageColorMap('lines'),    'Lines');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('hot'),      'Hot');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('cool'),     'Cool');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('spring'),   'Spring');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('summer'),   'Summer');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('winter'),   'Winter');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('autumn'),   'Autumn');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('copper'),   'Copper');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('bone'),     'Bone');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('pink'),     'Pink');
+        addMenuItem(obj, matlabLutMenu, imagem.actions.view.SetImageColorMap('lines'),    'Lines');
         
         colorLutMenu = addMenu(obj, lutMenu, 'Simple Colors');
-        addMenuItem(obj, colorLutMenu, SetImageColorMap('blue'),      'Blue');
-        addMenuItem(obj, colorLutMenu, SetImageColorMap('red'),       'Red');
-        addMenuItem(obj, colorLutMenu, SetImageColorMap('green'),     'Green');
-        addMenuItem(obj, colorLutMenu, SetImageColorMap('cyan'),      'Cyan');
-        addMenuItem(obj, colorLutMenu, SetImageColorMap('yellow'),    'Yellow');
-        addMenuItem(obj, colorLutMenu, SetImageColorMap('magenta'),   'Magenta');
+        addMenuItem(obj, colorLutMenu, imagem.actions.view.SetImageColorMap('blue'),      'Blue');
+        addMenuItem(obj, colorLutMenu, imagem.actions.view.SetImageColorMap('red'),       'Red');
+        addMenuItem(obj, colorLutMenu, imagem.actions.view.SetImageColorMap('green'),     'Green');
+        addMenuItem(obj, colorLutMenu, imagem.actions.view.SetImageColorMap('cyan'),      'Cyan');
+        addMenuItem(obj, colorLutMenu, imagem.actions.view.SetImageColorMap('yellow'),    'Yellow');
+        addMenuItem(obj, colorLutMenu, imagem.actions.view.SetImageColorMap('magenta'),   'Magenta');
         
-        addMenuItem(obj, viewMenu, SetBackgroundColor(),  'Set Background Color...');
+        addMenuItem(obj, viewMenu, imagem.actions.view.SetBackgroundColor(),  'Set Background Color...');
 
         
-        addMenuItem(obj, viewMenu, ZoomIn(),         'Zoom In', true);
-        addMenuItem(obj, viewMenu, ZoomOut(),        'Zoom Out');
-        addMenuItem(obj, viewMenu, ZoomOne(),        'Zoom 1:1');
-        addMenuItem(obj, viewMenu, ZoomBestFit(),    'Zoom Best');
+        addMenuItem(obj, viewMenu, imagem.actions.view.ZoomIn(),         'Zoom In', true);
+        addMenuItem(obj, viewMenu, imagem.actions.view.ZoomOut(),        'Zoom Out');
+        addMenuItem(obj, viewMenu, imagem.actions.view.ZoomOne(),        'Zoom 1:1');
+        addMenuItem(obj, viewMenu, imagem.actions.view.ZoomBestFit(),    'Zoom Best');
         
         zoomsMenu = addMenu(obj, viewMenu, 'Others');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(8),     'Zoom 8:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(4),     'Zoom 4:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(2),     'Zoom 2:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1),     'Zoom 1:1');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/2),   'Zoom 1:2');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/4),   'Zoom 1:4');
-        addMenuItem(obj, zoomsMenu, SetCurrentZoomLevel(1/8),   'Zoom 1:8');
+        addMenuItem(obj, zoomsMenu, imagem.actions.view.SetCurrentZoomLevel(8),     'Zoom 8:1');
+        addMenuItem(obj, zoomsMenu, imagem.actions.view.SetCurrentZoomLevel(4),     'Zoom 4:1');
+        addMenuItem(obj, zoomsMenu, imagem.actions.view.SetCurrentZoomLevel(2),     'Zoom 2:1');
+        addMenuItem(obj, zoomsMenu, imagem.actions.view.SetCurrentZoomLevel(1),     'Zoom 1:1');
+        addMenuItem(obj, zoomsMenu, imagem.actions.view.SetCurrentZoomLevel(1/2),   'Zoom 1:2');
+        addMenuItem(obj, zoomsMenu, imagem.actions.view.SetCurrentZoomLevel(1/4),   'Zoom 1:4');
+        addMenuItem(obj, zoomsMenu, imagem.actions.view.SetCurrentZoomLevel(1/8),   'Zoom 1:8');
 
         zoomModesMenu = addMenu(obj, viewMenu, 'Zoom Mode');
-        adjustZoomAction = SetZoomMode('adjust');
+        adjustZoomAction = imagem.actions.view.SetZoomMode('adjust');
         mi1 = addMenuItem(obj, zoomModesMenu, adjustZoomAction, 'Adjust', 'Checked', 'on');
         setMenuItem(adjustZoomAction, mi1);
         
-        fixedZoomAction = SetZoomMode('fixed');
+        fixedZoomAction = imagem.actions.view.SetZoomMode('fixed');
         mi2 = addMenuItem(obj, zoomModesMenu, fixedZoomAction,  'Fixed');
         setMenuItem(fixedZoomAction, mi2);
-
+        
+        % also create a group to toggle only one zoom mode option
         actionGroup = [adjustZoomAction fixedZoomAction];
         for iAction = 1:2
             action = actionGroup(iAction);
             setActionGroup(action, actionGroup);
         end
         
-        addMenuItem(obj, viewMenu, ShowImage3DOrthoSlices(),    'Show 3D OrthoSlices...', ...
+        addMenuItem(obj, viewMenu, imagem.actions.view.ShowImage3DOrthoSlices(),    'Show 3D OrthoSlices...', ...
             'Separator', 'on');
-        addMenuItem(obj, viewMenu, Image3DIsosurface(),         'Show 3D Isosurface...');
+        addMenuItem(obj, viewMenu, imagem.actions.view.Image3DIsosurface(),         'Show 3D Isosurface...');
                 
         
         % Process Menu Definition
         
         processMenu = addMenu(obj, hf, 'Process');
         
-        addMenuItem(obj, processMenu, AdjustImageDynamic(),     'Adjust Dynamic');
-        addMenuItem(obj, processMenu, ImageReplaceValue(),      'Replace Value(s)...');
+        addMenuItem(obj, processMenu, imagem.actions.process.AdjustImageDynamic(),     'Adjust Dynamic');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageReplaceValue(),      'Replace Value(s)...');
 
 %         filtersMenu = addMenu(obj, processMenu, 'Filters', 'Separator', 'on');
 
-        addMenuItem(obj, processMenu, ImageBoxMeanFilter(), 'Box Mean Filter...', 'Separator', 'on');
-        addMenuItem(obj, processMenu, ImageMedianFilter(),  'Median Filter...');
-        addMenuItem(obj, processMenu, ImageGaussianFilter(), 'Gaussian Filter...');
-        addMenuItem(obj, processMenu, ImageMorphologicalFilter(), 'Morphological Filter...');    
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageBoxMeanFilter(), 'Box Mean Filter...', 'Separator', 'on');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageMedianFilter(),  'Median Filter...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageGaussianFilter(), 'Gaussian Filter...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageMorphologicalFilter(), 'Morphological Filter...');    
         
-        addMenuItem(obj, processMenu, ImageGradient(),      'Gradient', ...
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageGradient(),      'Gradient', ...
             'Separator', 'on', 'Accelerator', 'G');
-        addMenuItem(obj, processMenu, ImageGradientVector(), 'Gradient Vector');
-        addMenuItem(obj, processMenu, VectorImageNorm(),    'Norm');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageGradientVector(), 'Gradient Vector');
+        addMenuItem(obj, processMenu, imagem.actions.process.VectorImageNorm(),    'Norm');
 
         minimaMenu = addMenu(obj, processMenu, 'Connected Regions Operators', 'Separator', 'on');
-        addMenuItem(obj, minimaMenu, ImageMorphologicalReconstruction(), 'Morphological Reconstruction...');    
-        addMenuItem(obj, minimaMenu, ImageRegionalMinima(), 'Regional Minima', 'Separator', 'on');
-        addMenuItem(obj, minimaMenu, ImageRegionalMaxima(), 'Regional Maxima');
-        addMenuItem(obj, minimaMenu, ImageExtendedMinima(), 'Extended Minima...');
-        addMenuItem(obj, minimaMenu, ImageExtendedMaxima(), 'Extended Maxima...');
-        addMenuItem(obj, minimaMenu, ImageImposeMinima(),   'Impose Minima...');
+        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageMorphologicalReconstruction(), 'Morphological Reconstruction...');    
+        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageRegionalMinima(), 'Regional Minima', 'Separator', 'on');
+        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageRegionalMaxima(), 'Regional Maxima');
+        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageExtendedMinima(), 'Extended Minima...');
+        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageExtendedMaxima(), 'Extended Maxima...');
+        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageImposeMinima(),   'Impose Minima...');
         
         % Threshold sub-menu
-        addMenuItem(obj, processMenu, ImageThreshold(),     'Manual Threshold...', ...
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageThreshold(),     'Manual Threshold...', ...
             'Separator', 'on', 'Accelerator', 'T');
-        addMenuItem(obj, processMenu, ImageAutoThresholdOtsu(), 'Auto Threshold (Otsu)');
-        addMenuItem(obj, processMenu, ImageMaxEntropyThreshold(),   'Auto Threshold (Max Entropy)');
-        addMenuItem(obj, processMenu, ImageKMeansSegmentation(),    'K-Means Segmentation');
-        addMenuItem(obj, processMenu, ImageWatershed(),      'Watershed...');
-        addMenuItem(obj, processMenu, ImageExtendedMinWatershed(),  'Extended Min Watershed...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageAutoThresholdOtsu(), 'Auto Threshold (Otsu)');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageMaxEntropyThreshold(),   'Auto Threshold (Max Entropy)');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageKMeansSegmentation(),    'K-Means Segmentation');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageWatershed(),      'Watershed...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageExtendedMinWatershed(),  'Extended Min Watershed...');
         
-        addMenuItem(obj, processMenu, ImageArithmetic(),    'Image Arithmetic...', true);
-        addMenuItem(obj, processMenu, ImageValuesTransform(), 'Image Maths 1...');
-        addMenuItem(obj, processMenu, ImageMathematic(),    'Image Maths 2...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageArithmetic(),    'Image Arithmetic...', true);
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageValuesTransform(), 'Image Maths 1...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageMathematic(),    'Image Maths 2...');
         
         binaryMenu = addMenu(obj, processMenu, 'Binary / Label Images', 'Separator', 'On');
-        addMenuItem(obj, binaryMenu, ConnectedComponentsLabeling(),  'Connected Components Labeling');
-        addMenuItem(obj, binaryMenu, KillImageBorders(),    'Kill Borders', 'Separator', 'On');
-        addMenuItem(obj, binaryMenu, ImageAreaOpening(),    'Area Opening');
-        addMenuItem(obj, binaryMenu, KeepLargestRegion(),   'Keep Largest Region');
-        addMenuItem(obj, binaryMenu, FillImageHoles(),      'Fill Holes');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ConnectedComponentsLabeling(),  'Connected Components Labeling');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.KillImageBorders(),    'Kill Borders', 'Separator', 'On');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ImageAreaOpening(),    'Area Opening');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.binary.KeepLargestRegion(),   'Keep Largest Region');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.FillImageHoles(),      'Fill Holes');
 
-        addMenuItem(obj, binaryMenu, ApplyImageFunction('distanceMap'), 'Distance Map');
-        addMenuItem(obj, binaryMenu, GeodesicDistanceMap(), 'Geodesic Distance Map');
-        addMenuItem(obj, binaryMenu, ImageSkeleton(),       'Skeleton');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.ApplyImageFunction('distanceMap'), 'Distance Map');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.binary.GeodesicDistanceMap(), 'Geodesic Distance Map');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ImageSkeleton(),       'Skeleton');
         
-        addMenuItem(obj, binaryMenu, ImageBooleanOp(),      'Boolean Operation...', true);
-        addMenuItem(obj, binaryMenu, BinaryImageOverlay(),  'Image Overlay...');
-        addMenuItem(obj, binaryMenu, ImageLabelToRgb(),     'Label To RGB...');
-        addMenuItem(obj, binaryMenu, CreateLabelValuesMap(), 'Create Label Values Map...');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ImageBooleanOp(),      'Boolean Operation...', true);
+        addMenuItem(obj, binaryMenu, imagem.actions.process.binary.BinaryImageOverlay(),  'Image Overlay...');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.ImageLabelToRgb(),     'Label To RGB...');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.CreateLabelValuesMap(), 'Create Label Values Map...');
         
         
         % Interactive tools
         
         toolsMenu = addMenu(obj, hf, 'Tools');
         
-        addMenuItem(obj, toolsMenu, SelectTool(@PrintCurrentPointPosition), 'Print Current Point');
-        addMenuItem(obj, toolsMenu, SelectTool(@ScrollImagePosition),        'Scroll Image');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.PrintCurrentPointPosition), 'Print Current Point');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.ScrollImagePosition),        'Scroll Image');
         
-        addMenuItem(obj, toolsMenu, SelectTool(@SelectRectangle),  'Select Rectangle', true);
-        addMenuItem(obj, toolsMenu, SelectTool(@SelectPoints),     'Select Points');
-        addMenuItem(obj, toolsMenu, SelectTool(@SelectPolyline),   'Select Polyline');
-        addMenuItem(obj, toolsMenu, SelectTool(@SelectPolygon),    'Select Polygon');
-        addMenuItem(obj, toolsMenu, SelectTool(@SelectLineSegment),'Select Line Segment');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.SelectRectangle),  'Select Rectangle', true);
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.SelectPoints),     'Select Points');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.SelectPolyline),   'Select Polyline');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.SelectPolygon),    'Select Polygon');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.SelectLineSegment),'Select Line Segment');
 
-        addMenuItem(obj, toolsMenu, SelectTool(@SetPixelToWhite), ...
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.SetPixelToWhite), ...
             'Set Pixel to White', true);
         
-        addMenuItem(obj, toolsMenu, SelectTool(@Brush),            'Brush');
-        addMenuItem(obj, toolsMenu, SelectTool(@FloodFillTool),    'Flood Fill');
-        addMenuItem(obj, toolsMenu, SelectTool(@PickValueOrColor), 'Pick Current Value/Color');
-        addMenuItem(obj, toolsMenu, PlotLabelMapCurvesFromTable(), 'Plot Curves From Labels...', true);
-        action = SelectTool(@PlotImage3DZProfile);
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.Brush),            'Brush');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.FloodFillTool),    'Flood Fill');
+        addMenuItem(obj, toolsMenu, imagem.actions.SelectTool(@imagem.tools.PickValueOrColor), 'Pick Current Value/Color');
+        addMenuItem(obj, toolsMenu, imagem.actions.view.PlotLabelMapCurvesFromTable(), 'Plot Curves From Labels...', true);
+        action = imagem.actions.SelectTool(@imagem.tools.PlotImage3DZProfile);
         addMenuItem(obj, toolsMenu, action,  'Plot Image3D Z-Profile');
-        action = SelectTool(@PlotVectorImageChannels);
+        action = imagem.actions.SelectTool(@imagem.tools.PlotVectorImageChannels);
         addMenuItem(obj, toolsMenu, action,  'Plot Vector Image Channels');
         
         
@@ -347,18 +334,18 @@ methods
         
         analyzeMenu = addMenu(obj, hf, 'Analyze');
         
-        addMenuItem(obj, analyzeMenu, SetImageScale(),      'Set Image Scale');
-        addMenuItem(obj, analyzeMenu, SelectTool(@InteractivePointMeasure), 'Measure Points');
-        addMenuItem(obj, analyzeMenu, MeasureWithinSelection(), 'Measure Within Selection', ...
+        addMenuItem(obj, analyzeMenu, imagem.actions.analyze.SetImageScale(),      'Set Image Scale');
+        addMenuItem(obj, analyzeMenu, imagem.actions.SelectTool(@imagem.tools.InteractivePointMeasure), 'Measure Points');
+        addMenuItem(obj, analyzeMenu, imagem.actions.analyze.MeasureWithinSelection(), 'Measure Within Selection', ...
             'Accelerator', 'M');
-        addMenuItem(obj, analyzeMenu, ShowImageHistogram(), 'Histogram', ...
+        addMenuItem(obj, analyzeMenu, imagem.actions.analyze.ShowImageHistogram(), 'Histogram', ...
             'Accelerator', 'H');
-        addMenuItem(obj, analyzeMenu, VectorImageJointHistogram(), 'Joint Histogram...');
+        addMenuItem(obj, analyzeMenu, imagem.actions.analyze.VectorImageJointHistogram(), 'Joint Histogram...');
 
-        addMenuItem(obj, analyzeMenu, PlotImageLineProfile(), 'Plot Line Profile', ...
+        addMenuItem(obj, analyzeMenu, imagem.actions.analyze.PlotImageLineProfile(), 'Plot Line Profile', ...
             'Accelerator', 'K', 'Separator', 'on');
-        addMenuItem(obj, analyzeMenu, AnalyzeImageRegions(), 'Analyze Regions...', 'Separator', 'on');
-        addMenuItem(obj, analyzeMenu, AverageValueByRegion(), 'Average Value by Region...');
+        addMenuItem(obj, analyzeMenu, imagem.actions.analyze.AnalyzeImageRegions(), 'Analyze Regions...', 'Separator', 'on');
+        addMenuItem(obj, analyzeMenu, imagem.actions.analyze.AverageValueByRegion(), 'Average Value by Region...');
         
         
         % Help menu definition
@@ -372,67 +359,49 @@ methods
     
     function buildTableFrameMenu(obj, hf)
         
-        import imagem.gui.ImagemGUI;
-        import imagem.gui.actions.*;
-        import imagem.actions.*;
-        import imagem.actions.file.*;
-        import imagem.actions.edit.*;
-        import imagem.actions.image.*;
-        import imagem.actions.table.*;
-        import imagem.actions.table.file.*;
-        import imagem.actions.table.edit.*;
-        import imagem.actions.table.plot.*;
-        import imagem.actions.table.pca.*;
-        import imagem.actions.view.*;
-        import imagem.actions.process.*;
-        import imagem.actions.process.binary.*;
-        import imagem.actions.analyze.*;
-        import imagem.gui.tools.*;
-        import imagem.tools.*;
-        
         % File Menu Definition
         
         fileMenu = addMenu(obj, hf, 'Files');
 
-        addMenuItem(obj, fileMenu, OpenTable(),              'Open Table...', 'Accelerator', 'O');
-        addMenuItem(obj, fileMenu, SaveTable(),              'Save As...', ...
+        addMenuItem(obj, fileMenu, imagem.actions.table.OpenTable(),              'Open Table...', 'Accelerator', 'O');
+        addMenuItem(obj, fileMenu, imagem.actions.table.file.SaveTable(),         'Save As...', ...
             'Separator', 'on', 'Accelerator', 'S');
 
-        item = addMenuItem(obj, fileMenu, CloseFrame(),      'Close', 'Separator', 'on');
+        item = addMenuItem(obj, fileMenu, imagem.actions.file.CloseFrame(),      'Close', 'Separator', 'on');
         set(item, 'Accelerator', 'W');
 
-        item = addMenuItem(obj, fileMenu, Exit(), 'Quit');
+        item = addMenuItem(obj, fileMenu, imagem.actions.file.Exit(), 'Quit');
         set(item, 'Accelerator', 'Q');
         
         
         % Edit menu
         editMenu = addMenu(obj, hf, 'Edit');
-        addMenuItem(obj, editMenu, RenameTable(), 'Rename...');
-        addMenuItem(obj, editMenu, Transpose(), 'Transpose');
-        addMenuItem(obj, editMenu, Concatenate(), 'Concatenate...');
-        addMenuItem(obj, editMenu, SelectTableRows(), 'Select Rows...', 'Separator', 'On');
-        addMenuItem(obj, editMenu, SelectTableColumns(), 'Select Columns...');
-        addMenuItem(obj, editMenu, FilterFromColumnValues(), 'Filter From Column Values...');
-        addMenuItem(obj, editMenu, FoldTableToImage(), 'Fold Table To Image...', 'Separator', 'On');
+        addMenuItem(obj, editMenu, imagem.actions.table.edit.RenameTable(), 'Rename...');
+        addMenuItem(obj, editMenu, imagem.actions.table.edit.Transpose(), 'Transpose');
+        addMenuItem(obj, editMenu, imagem.actions.table.edit.Concatenate(), 'Concatenate...');
+        addMenuItem(obj, editMenu, imagem.actions.table.edit.SelectTableRows(), 'Select Rows...', 'Separator', 'On');
+        addMenuItem(obj, editMenu, imagem.actions.table.edit.SelectTableColumns(), 'Select Columns...');
+        addMenuItem(obj, editMenu, imagem.actions.table.edit.FilterFromColumnValues(), 'Filter From Column Values...');
+        addMenuItem(obj, editMenu, imagem.actions.table.FoldTableToImage(), 'Fold Table To Image...', 'Separator', 'On');
         
         % Plot menu
         plotMenu = addMenu(obj, hf, 'Plot');
-        addMenuItem(obj, plotMenu, PlotColumnHistogram(), 'Histogram...');
-        addMenuItem(obj, plotMenu, BoxPlot(), 'Box Plot...', 'Separator', 'on');
-        addMenuItem(obj, plotMenu, GroupBoxPlot(), 'Box Plot by Group...');
-        addMenuItem(obj, plotMenu, ViolinPlot(), 'Violin Plot...');
-        addMenuItem(obj, plotMenu, ScatterPlot(), 'Scatter Plot...', 'Separator', 'On');
-        addMenuItem(obj, plotMenu, ScatterGroups(), 'Scatter Groups...');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.PlotColumnHistogram(), 'Histogram...');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.BoxPlot(), 'Box Plot...', 'Separator', 'on');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.GroupBoxPlot(), 'Box Plot by Group...');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.ViolinPlot(), 'Violin Plot...');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.ScatterPlot(), 'Scatter Plot...', 'Separator', 'On');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.ScatterGroups(), 'Scatter Groups...');
         addMenuItem(obj, plotMenu, imagem.actions.table.plot.PairPlot(), 'Pair Plot...');
-        addMenuItem(obj, plotMenu, PlotCorrelationCircles(), 'Correlation Circles...');
-        addMenuItem(obj, plotMenu, PlotColumns(), 'Plot Columns...', 'Separator', 'on');
-        addMenuItem(obj, plotMenu, PlotRows(), 'Plot Rows');
-        addMenuItem(obj, plotMenu, ChoosePreferredPlotTypes(), 'Choose Preferred Plot Type...', 'Separator', 'on');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.PlotCorrelationCircles(), 'Correlation Circles...');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.PlotColumns(), 'Plot Columns...', 'Separator', 'on');
+        addMenuItem(obj, plotMenu, imagem.actions.table.plot.PlotRows(), 'Plot Rows');
+        addMenuItem(obj, plotMenu, imagem.actions.table.edit.ChoosePreferredPlotTypes(), 'Choose Preferred Plot Type...', 'Separator', 'on');
         
         % Process menu
         processMenu = addMenu(obj, hf, 'Process');
-        addMenuItem(obj, processMenu, Pca(), 'PCA...');
-        addMenuItem(obj, processMenu, TableKMeans(), 'K-Means...', 'Separator', 'On');
+        addMenuItem(obj, processMenu, imagem.actions.table.pca.Pca(), 'PCA...');
+        addMenuItem(obj, processMenu, imagem.actions.table.TableKMeans(), 'K-Means...', 'Separator', 'On');
         
 
         % Help menu definition
