@@ -74,13 +74,6 @@ methods
 end % getter / setter methods
 
 
-%% Abstract methods
-methods (Abstract)
-    % Refresh display of current image.
-    updateDisplay(obj);
-    
-end
-
 
 %% Constructor
 methods

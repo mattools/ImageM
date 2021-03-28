@@ -16,10 +16,10 @@ classdef Action < handle
 % Copyright 2019 INRA - Cepia Software Platform.
 
 
-%% Methods to overload
-methods (Abstract)
-    run(obj, frame)
-end
+##%% Methods to overload
+##methods (Abstract)
+##    run(obj, frame)
+##end
 
 %% Methods that can be overloaded
 methods
