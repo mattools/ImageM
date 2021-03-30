@@ -52,11 +52,11 @@ methods
         [mini, maxi] = imagem.gui.ImageUtils.computeDisplayRange(obj.Doc.Image);
         obj.DisplayRange = [mini maxi];
         
-        
         % create the figure that will contains the display
         fig = createNewFigure(gui, ...
             'Name', 'Image3D Slice Viewer', ...
             'Visible', 'Off', ...
+            'Resize', 'Off', ...
             'CloseRequestFcn', @obj.close);
         obj.Handles.Figure = fig;
 
@@ -69,11 +69,6 @@ methods
         updateDisplay(obj);
         updateTitle(obj);
         
-        % adjust zoom to view the full image
-        api = iptgetapi(obj.Handles.ScrollPanel);
-        mag = api.findFitMag();
-        api.setMagnification(mag);
-
         % setup listeners associated to the figure
         if ~isempty(doc) && ~isempty(doc.Image)
             set(fig, 'WindowButtonDownFcn',     @obj.processMouseButtonPressed);
@@ -95,12 +90,15 @@ methods
         function setupLayout(hf)
             
             % vertical layout: image display and status bar
-            mainPanel = uix.VBox('Parent', hf, ...
+            mainPanel = uipanel('Parent', hf, ...
                 'Units', 'normalized', ...
                 'Position', [0 0 1 1]);
             
             % panel for image display
-            displayPanel = uix.HBox('Parent', mainPanel);
+            displayPanel = uipanel('Parent', mainPanel, ...
+                'BorderType', 'none', ...
+                'Units', 'pixels', ...
+                'Position', [1 21 560 400]);
 
             % Slider for choosing slice index
             img = obj.Doc.Image;
@@ -112,36 +110,32 @@ methods
                 zstep2 = min(10/zmax, .5);
                 obj.Handles.ZSlider = uicontrol('Style', 'slider', ...
                     'Parent', displayPanel, ...
+                    'Units', 'pixels', ...
+                    'Position', [1 1 20 400], ...
                     'Min', zmin, 'Max', zmax', ...
                     'SliderStep', [zstep1 zstep2], ...
                     'Value', obj.SliceIndex, ...
                     'Callback', @obj.onSliceSliderChanged, ...
                     'BackgroundColor', [1 1 1]);
-                
-                % code for dragging the slider thumb
-                % @see http://undocumentedmatlab.com/blog/continuous-slider-callback
-                addlistener(obj.Handles.ZSlider, ...
-                    'ContinuousValueChange', @obj.onSliceSliderChanged);
             end
-%             sliceIndexPanel = uipanel('Parent', displayPanel, ...
-%                 'resizeFcn', @obj.onScrollPanelResized);
 
             % scrollable panel for image display
             scrollPanel = uipanel('Parent', displayPanel, ...
+                'Units', 'pixels', ...
+                'Position', [21 1 560 400], ...
                 'resizeFcn', @obj.onScrollPanelResized);
           
             % creates an axis that fills the available space
             ax = axes('Parent', scrollPanel, ...
                 'Units', 'Normalized', ...
-                'NextPlot', 'add', ...
-                'Position', [0 0 1 1]);
+                'Position', [0 0 1 1], ...
+                'NextPlot', 'add');
             
             % initialize image display with default image. 
             hIm = imshow(ones(10, 10), 'parent', ax);
-            obj.Handles.ScrollPanel = imscrollpanel(scrollPanel, hIm);
+            % as imscrollpanel is not implemented for octave, keep it empty
+            obj.Handles.ScrollPanel = [];
 
-            displayPanel.Widths = [20 -1];
-            
             % keep widgets handles
             obj.Handles.ImageAxis = ax;
             obj.Handles.Image = hIm;
@@ -155,19 +149,12 @@ methods
             % info panel for cursor position and value
             obj.Handles.InfoPanel = uicontrol(...
                 'Parent', mainPanel, ...
+                'Units', 'pixels', ...
+                'Position', [1 1 560 20], ...
                 'Style', 'text', ...
                 'String', ' x=    y=     I=', ...
                 'HorizontalAlignment', 'left');
-                        
-            % set up relative sizes of layouts
-            mainPanel.Heights = [-1 20];
-
-            % once each panel has been resized, setup image magnification
-            api = iptgetapi(obj.Handles.ScrollPanel);
-            mag = api.findFitMag();
-            api.setMagnification(mag);
         end
-
     end
 
 end % end constructors
@@ -180,15 +167,10 @@ methods
         end
         
         obj.SliceIndex = newIndex;
-        
-%         updateSliceImage(obj);
-        
         updateDisplay(obj);
-%         set(obj.Handles.Image, 'CData', obj.Slice);
         
         % update gui information for slider and textbox
         set(obj.Handles.ZSlider, 'Value', newIndex);
-%         set(obj.Handles.ZEdit, 'String', num2str(newIndex));
     end
     
     function sliceImage = updateSliceImage(obj)
@@ -222,7 +204,7 @@ methods
         % Refresh image display of the current slice
 
         % basic check up to avoid problems when display is already closed
-        if ~ishandle(obj.Handles.ScrollPanel)
+        if ~ishandle(obj.Handles.Image)
             return;
         end
         
@@ -238,9 +220,7 @@ methods
         cdata = imagem.gui.ImageUtils.computeDisplayImage(sliceImage, obj.Doc.ColorMap, obj.DisplayRange, obj.Doc.BackgroundColor);
        
         % changes current display data
-        api = iptgetapi(obj.Handles.ScrollPanel);
-%         loc = api.getVisibleLocation();
-        api.replaceImage(cdata, 'PreserveView', true);
+        set(obj.Handles.Image, 'CData', cdata);
         
         % extract calibration data
         spacing = sliceImage.Spacing;
@@ -258,7 +238,6 @@ methods
         extent = physicalExtent(sliceImage);
         set(obj.Handles.ImageAxis, 'XLim', extent(1:2));
         set(obj.Handles.ImageAxis, 'YLim', extent(3:4));
-%         api.setVisibleLocation(loc);
         
         % eventually adjust displayrange (for the whole image)
         if isGrayscaleImage(img) || isIntensityImage(img) || isVectorImage(img)
@@ -281,8 +260,6 @@ methods
             end
         end
         
-%         % display each shape stored in document
-%         drawShapes(obj);
     end
     
     function copySettings(obj, that)
@@ -295,9 +272,8 @@ end
 
 %% Zoom Management
 methods
-    function zoom = currentZoomLevel(obj)
-        api = iptgetapi(obj.Handles.ScrollPanel);
-        zoom = api.getMagnification();
+    function zoom = currentZoomLevel(obj) %#ok<MANU>
+        zoom = 1;
     end
     
     function zoom = getZoom(obj)
@@ -306,8 +282,6 @@ methods
     end
     
     function setCurrentZoomLevel(obj, newZoom)
-        api = iptgetapi(obj.Handles.ScrollPanel);
-        api.setMagnification(newZoom);
     end
     
     function setZoom(obj, newZoom)
@@ -315,9 +289,8 @@ methods
         setCurrentZoomLevel(obj, newZoom);
     end
     
-    function zoom = findBestZoom(obj)
-        api = iptgetapi(obj.Handles.ScrollPanel);
-        zoom = api.findFitMag();
+    function zoom = findBestZoom(obj) %#ok<MANU>
+        zoom = 1;
     end
     
     function mode = getZoomMode(obj)
@@ -390,16 +363,6 @@ methods
     function onScrollPanelResized(obj, varargin)
         % function called when the Scroll panel has been resized
         
-       if strcmp(obj.ZoomMode, 'adjust')
-            if ~isfield(obj.Handles, 'ScrollPanel')
-                return;
-            end
-            scroll = obj.Handles.ScrollPanel;
-            api = iptgetapi(scroll);
-            mag = api.findFitMag();
-            api.setMagnification(mag);
-            updateTitle(obj);
-        end
     end
     
 end

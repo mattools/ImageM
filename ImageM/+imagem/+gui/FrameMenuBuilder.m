@@ -235,12 +235,12 @@ methods
         mi2 = addMenuItem(obj, zoomModesMenu, fixedZoomAction,  'Fixed');
         setMenuItem(fixedZoomAction, mi2);
         
-        % also create a group to toggle only one zoom mode option
-        actionGroup = [adjustZoomAction fixedZoomAction];
-        for iAction = 1:2
-            action = actionGroup(iAction);
-            setActionGroup(action, actionGroup);
-        end
+%         % also create a group to toggle only one zoom mode option
+%         actionGroup = [adjustZoomAction fixedZoomAction];
+%         for iAction = 1:2
+%             action = actionGroup(iAction);
+%             setActionGroup(action, actionGroup);
+%         end
         
         addMenuItem(obj, viewMenu, imagem.actions.view.ShowImage3DOrthoSlices(),    'Show 3D OrthoSlices...', ...
             'Separator', 'on');
@@ -493,69 +493,69 @@ end
 %% Toolbar creation
 methods
     function buildToolbar(obj, hf)
-        toolbar = uitoolbar(hf);
         
-        % select rectangle
-        [img, map] = imread(fullfile(matlabroot,...
-            'toolbox', 'matlab', 'icons', 'tool_rectangle.gif'));
-        cdata = ind2rgb(img, map);
-        pt = uipushtool(toolbar, ...
-            'CData', cdata, ...
-            'Tooltip', 'Select Rectangle');
-        action = imagem.actions.SelectTool(@imagem.tools.SelectRectangle);
-        pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
         
-        % select line
-        img = imread(fullfile('+imagem', '+gui', '+icons', 'points.png'));
-        pt = uipushtool(toolbar, ...
-            'CData', img, ...
-            'Tooltip', 'Select Points');
-        action = imagem.actions.SelectTool(@imagem.tools.SelectPoints);
-        pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
-        
-        % select line segment
-        img = imread(fullfile('+imagem', '+gui', '+icons', 'lineSegment.png'));
-        pt = uipushtool(toolbar, ...
-            'CData', img, ...
-            'Tooltip', 'Select Line Segment');
-        action = imagem.actions.SelectTool(@imagem.tools.SelectLineSegment);
-        pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
-        
-        % select polyline
-        img = imread(fullfile('+imagem', '+gui', '+icons', 'polyline.png'));
-        pt = uipushtool(toolbar, ...
-            'CData', img, ...
-            'Tooltip', 'Select PolyLine');
-        action = imagem.actions.SelectTool(@imagem.tools.SelectPolyline);
-        pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
-        
-        % select polygon
-        img = imread(fullfile('+imagem', '+gui', '+icons', 'polygon.png'));
-        pt = uipushtool(toolbar, ...
-            'CData', img, ...
-            'Tooltip', 'Select Polygon');
-        action = imagem.actions.SelectTool(@imagem.tools.SelectPolygon);
-        pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
-        
-        % select brush
-        [img, map] = imread(fullfile(matlabroot,...
-            'toolbox', 'matlab', 'icons', 'paintbrush.gif'));
-        cdata = ind2rgb(img, map);
-        pt = uipushtool(toolbar, ...
-            'CData', cdata, ...
-            'Tooltip', 'Select Brush tool');
-        action = imagem.actions.SelectTool(@imagem.tools.Brush);
-        pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
-
-        % select flood-fill
-        [img, map] = imread(fullfile(matlabroot,...
-            'toolbox', 'matlab', 'icons', 'tool_facecolor.gif'));
-        cdata = ind2rgb(img, map);
-        pt = uipushtool(toolbar, ...
-            'CData', cdata, ...
-            'Tooltip', 'Flood-Fill');
-        action = imagem.actions.SelectTool(@imagem.tools.FloodFillTool);
-        pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
+%         toolbar = uitoolbar(hf);
+%         
+%         % identify the path to directory containing icons
+%         basePath = fileparts(mfilename('fullpath'));
+%         iconsDir = fullfile(basePath, '+icons');
+%         
+%         % select rectangle
+%         img = imread(fullfile(iconsDir, 'rectangle.png'));
+%         pt = uipushtool(toolbar, ...
+%             'CData', img, ...
+%             'Tooltip', 'Select Rectangle');
+%         action = imagem.actions.SelectTool(@imagem.tools.SelectRectangle);
+%         pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
+%         
+%         % select line
+%         img = imread(fullfile(iconsDir, 'points.png'));
+%         pt = uipushtool(toolbar, ...
+%             'CData', img, ...
+%             'Tooltip', 'Select Points');
+%         action = imagem.actions.SelectTool(@imagem.tools.SelectPoints);
+%         pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
+%         
+%         % select line segment
+%         img = imread(fullfile(iconsDir, 'lineSegment.png'));
+%         pt = uipushtool(toolbar, ...
+%             'CData', img, ...
+%             'Tooltip', 'Select Line Segment');
+%         action = imagem.actions.SelectTool(@imagem.tools.SelectLineSegment);
+%         pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
+%         
+%         % select polyline
+%         img = imread(fullfile(iconsDir, 'polyline.png'));
+%         pt = uipushtool(toolbar, ...
+%             'CData', img, ...
+%             'Tooltip', 'Select PolyLine');
+%         action = imagem.actions.SelectTool(@imagem.tools.SelectPolyline);
+%         pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
+%         
+%         % select polygon
+%         img = imread(fullfile(iconsDir, 'polygon.png'));
+%         pt = uipushtool(toolbar, ...
+%             'CData', img, ...
+%             'Tooltip', 'Select Polygon');
+%         action = imagem.actions.SelectTool(@imagem.tools.SelectPolygon);
+%         pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
+%         
+%         % select brush
+%         img = imread(fullfile(iconsDir, 'brush.png'));
+%         pt = uipushtool(toolbar, ...
+%             'CData', img, ...
+%             'Tooltip', 'Select Brush tool');
+%         action = imagem.actions.SelectTool(@imagem.tools.Brush);
+%         pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
+%         
+%         % select flood-fill
+%         img = imread(fullfile(iconsDir, 'floodFill.png'));
+%         pt = uipushtool(toolbar, ...
+%             'CData', img, ...
+%             'Tooltip', 'Flood-Fill');
+%         action = imagem.actions.SelectTool(@imagem.tools.FloodFillTool);
+%         pt.ClickedCallback = @(src, evt) action.run(obj.Frame);
     end
 end
 

@@ -32,10 +32,16 @@ end % end constructors
 
 
 %% Methods
-methods (Abstract)
-    onMouseButtonPressed(obj, source, event)
-    onMouseButtonReleased(obj, source, event)
-    onMouseMoved(obj, source, event)
+% Default implementation of methods that should be astract
+methods
+    function onMouseButtonPressed(obj, source, event)
+    end
+    
+    function onMouseButtonReleased(obj, source, event)
+    end
+    
+    function onMouseMoved(obj, source, event)
+    end
 end % end methods
 
 end % end classdef
