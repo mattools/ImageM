@@ -73,8 +73,9 @@ methods
         addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('rice.png'),       'Rice (grayscale)');
         addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('coins.png'),      'Coins (grayscale)');
         addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('peppers.png'),    'Peppers (RGB)');
-        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('mri.tif'),        'MRI Head (3D)');
-        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('xylophone.mp4'),  'Xylophone (movie)');
+%         addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('mri.tif'),        'MRI Head (3D)');
+        addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('wheatGrain_tomo.tif'), 'Wheat Grain (3D)');
+%         addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('xylophone.mp4'),  'Xylophone (movie)');
         addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('circles.png'),    'Circles (binary)');
         addMenuItem(obj, demoMenu, imagem.actions.file.OpenDemoImage('text.png'),       'Text (binary)');
         addMenuItem(obj, demoMenu, imagem.actions.table.OpenDemoTable('fisherIris.txt'), 'Fisher Iris (Table)', 'Separator', 'on');
