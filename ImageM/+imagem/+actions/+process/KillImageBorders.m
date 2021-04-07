@@ -11,7 +11,7 @@ classdef KillImageBorders < imagem.actions.CurrentImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2012-05-25,    using Matlab 7.9.0.529 (R2009b)
 % Copyright 2011 INRA - Cepia Software Platform.
 
@@ -37,7 +37,7 @@ methods
         doc = currentDoc(frame);
         img = currentImage(frame);
         
-        % compute Image skeleton
+        % kill image borders
         img2 = killBorders(img);
         
         % add image to application, and create new display
@@ -54,9 +54,9 @@ methods
         b = isActivable@imagem.actions.CurrentImageAction(obj, frame);
         if b
             img = currentImage(frame);
-            binFlag = isBinaryImage(img);
+            grayFlag = isGrayscaleImage(img);
             lblFlag = isLabelImage(img);
-            b = b && (binFlag || lblFlag);
+            b = b && (grayFlag || lblFlag);
         end
     end
 end

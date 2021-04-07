@@ -265,14 +265,17 @@ methods
             'Separator', 'on', 'Accelerator', 'G');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageGradientVector(), 'Gradient Vector');
         addMenuItem(obj, processMenu, imagem.actions.process.VectorImageNorm(),    'Norm');
-
-        minimaMenu = addMenu(obj, processMenu, 'Connected Regions Operators', 'Separator', 'on');
-        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageMorphologicalReconstruction(), 'Morphological Reconstruction...');    
-        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageRegionalMinima(), 'Regional Minima', 'Separator', 'on');
-        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageRegionalMaxima(), 'Regional Maxima');
-        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageExtendedMinima(), 'Extended Minima...');
-        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageExtendedMaxima(), 'Extended Maxima...');
-        addMenuItem(obj, minimaMenu, imagem.actions.process.ImageImposeMinima(),   'Impose Minima...');
+        
+        % several operators based on connectivity (and reconstruction)
+        connectOpMenu = addMenu(obj, processMenu, 'Connectivity-based Operators', 'Separator', 'on');
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.ImageMorphologicalReconstruction(), 'Morphological Reconstruction...');    
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.KillImageBorders(),    'Kill Borders', 'Separator', 'On');
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.FillImageHoles(),      'Fill Holes');
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.ImageRegionalMinima(), 'Regional Minima', 'Separator', 'on');
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.ImageRegionalMaxima(), 'Regional Maxima');
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.ImageExtendedMinima(), 'Extended Minima...');
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.ImageExtendedMaxima(), 'Extended Maxima...');
+        addMenuItem(obj, connectOpMenu, imagem.actions.process.ImageImposeMinima(),   'Impose Minima...');
         
         % Threshold sub-menu
         addMenuItem(obj, processMenu, imagem.actions.process.ImageThreshold(),     'Manual Threshold...', ...
@@ -289,10 +292,8 @@ methods
         
         binaryMenu = addMenu(obj, processMenu, 'Binary / Label Images', 'Separator', 'On');
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ConnectedComponentsLabeling(),  'Connected Components Labeling');
-        addMenuItem(obj, binaryMenu, imagem.actions.process.KillImageBorders(),    'Kill Borders', 'Separator', 'On');
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ImageAreaOpening(),    'Area Opening');
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.KeepLargestRegion(),   'Keep Largest Region');
-        addMenuItem(obj, binaryMenu, imagem.actions.process.FillImageHoles(),      'Fill Holes');
 
         addMenuItem(obj, binaryMenu, imagem.actions.process.ApplyImageFunction('distanceMap'), 'Distance Map');
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.GeodesicDistanceMap(), 'Geodesic Distance Map');
