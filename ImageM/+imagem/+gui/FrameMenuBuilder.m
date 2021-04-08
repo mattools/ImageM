@@ -132,18 +132,19 @@ methods
         addMenuItem(obj, convertTypeMenu, imagem.actions.image.ImageConvertType('label'),     'Label');
                 
         convertMenu = addMenu(obj, imageMenu,  'Convert Data Type');
-        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('uint8'),     'UInt8 (Grayscale)');
-        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('uint16'),    'UInt16 (Grayscale)');
-        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('single'),    'Single (Intensity)');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('uint8'),        'UInt8 (Grayscale)');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('uint16'),       'UInt16 (Grayscale)');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertDataType('single'),       'Single (Intensity)');
         
 
         convertMenu = addMenu(obj, imageMenu, 'Convert', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertImage3DToVectorImage(),    '3D Image to Vector Image');
-        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertVectorImageToImage3D(),    'Vector Image to 3D Image');
-        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertVectorImageToRGB(),        'Vector Image to RGB');
-        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertScalarImageToRGB(),        'Intensity Image to RGB', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, imagem.actions.image.UnfoldVectorImage(),              'Unfold Vector Image to Table', 'Separator', 'on');
-        addMenuItem(obj, convertMenu, imagem.actions.image.UnfoldVectorImageWithMask(),      'Unfold Vector Image Within Mask to Table...');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertRGBImageToGrayscale(),    'RGB to Grayscale');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertImage3DToVectorImage(),   '3D Image to Vector Image');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertVectorImageToImage3D(),   'Vector Image to 3D Image');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertVectorImageToRGB(),       'Vector Image to RGB');
+        addMenuItem(obj, convertMenu, imagem.actions.image.ConvertScalarImageToRGB(),       'Intensity Image to RGB', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, imagem.actions.image.UnfoldVectorImage(),             'Unfold Vector Image to Table', 'Separator', 'on');
+        addMenuItem(obj, convertMenu, imagem.actions.image.UnfoldVectorImageWithMask(),     'Unfold Vector Image Within Mask to Table...');
         
         colorMenu = addMenu(obj, imageMenu, 'Color and channels');
         addMenuItem(obj, colorMenu, imagem.actions.image.SplitImageRGB(),        'Split RGB');
@@ -251,20 +252,20 @@ methods
         
         processMenu = addMenu(obj, hf, 'Process');
         
-        addMenuItem(obj, processMenu, imagem.actions.process.AdjustImageDynamic(),     'Adjust Dynamic');
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageReplaceValue(),      'Replace Value(s)...');
+        addMenuItem(obj, processMenu, imagem.actions.process.AdjustImageDynamic(),  'Adjust Dynamic');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageReplaceValue(),   'Replace Value(s)...');
 
 %         filtersMenu = addMenu(obj, processMenu, 'Filters', 'Separator', 'on');
 
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageBoxMeanFilter(), 'Box Mean Filter...', 'Separator', 'on');
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageMedianFilter(),  'Median Filter...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageBoxMeanFilter(),  'Box Mean Filter...', 'Separator', 'on');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageMedianFilter(),   'Median Filter...');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageGaussianFilter(), 'Gaussian Filter...');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageMorphologicalFilter(), 'Morphological Filter...');    
         
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageGradient(),      'Gradient', ...
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageGradient(),       'Gradient', ...
             'Separator', 'on', 'Accelerator', 'G');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageGradientVector(), 'Gradient Vector');
-        addMenuItem(obj, processMenu, imagem.actions.process.VectorImageNorm(),    'Norm');
+        addMenuItem(obj, processMenu, imagem.actions.process.VectorImageNorm(),     'Norm');
         
         % several operators based on connectivity (and reconstruction)
         connectOpMenu = addMenu(obj, processMenu, 'Connectivity-based Operators', 'Separator', 'on');
@@ -278,7 +279,7 @@ methods
         addMenuItem(obj, connectOpMenu, imagem.actions.process.ImageImposeMinima(),   'Impose Minima...');
         
         % Threshold sub-menu
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageThreshold(),     'Manual Threshold...', ...
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageThreshold(),      'Manual Threshold...', ...
             'Separator', 'on', 'Accelerator', 'T');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageAutoThresholdOtsu(), 'Auto Threshold (Otsu)');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageMaxEntropyThreshold(),   'Auto Threshold (Max Entropy)');
@@ -286,9 +287,9 @@ methods
         addMenuItem(obj, processMenu, imagem.actions.process.ImageWatershed(),      'Watershed...');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageExtendedMinWatershed(),  'Extended Min Watershed...');
         
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageArithmetic(),    'Image Arithmetic...', true);
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageArithmetic(),     'Image Arithmetic...', true);
         addMenuItem(obj, processMenu, imagem.actions.process.ImageValuesTransform(), 'Image Maths 1...');
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageMathematic(),    'Image Maths 2...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageMathematic(),     'Image Maths 2...');
         
         binaryMenu = addMenu(obj, processMenu, 'Binary / Label Images', 'Separator', 'On');
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ConnectedComponentsLabeling(),  'Connected Components Labeling');
@@ -301,7 +302,7 @@ methods
         
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ImageBooleanOp(),      'Boolean Operation...', true);
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.BinaryImageOverlay(),  'Image Overlay...');
-        addMenuItem(obj, binaryMenu, imagem.actions.process.ImageLabelToRgb(),     'Label To RGB...');
+        addMenuItem(obj, binaryMenu, imagem.actions.process.ImageLabelToRgb(),      'Label To RGB...');
         addMenuItem(obj, binaryMenu, imagem.actions.process.CreateLabelValuesMap(), 'Create Label Values Map...');
         
         
