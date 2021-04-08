@@ -114,6 +114,7 @@ methods
         
         addMenuItem(obj, imageMenu, imagem.actions.image.PrintImageInfo(),       'Print info');
         addMenuItem(obj, imageMenu, imagem.actions.image.RenameImage(),          'Rename');
+        addMenuItem(obj, imageMenu, imagem.actions.image.DuplicateImage(),       'Duplicate', 'Accelerator', 'D');
         
         calibMenu = addMenu(obj, imageMenu, 'Calibration', 'Separator', 'on');
         addMenuItem(obj, calibMenu, imagem.actions.image.EditSpatialCalibration(),   'Edit Spatial Calibration...');
@@ -151,7 +152,6 @@ methods
         addMenuItem(obj, colorMenu, imagem.actions.image.ReorderChannels(),      'Re-order Channels...', true);
         
         
-        addMenuItem(obj, imageMenu, imagem.actions.image.DuplicateImage(),       'Duplicate', 'Accelerator', 'D', 'Separator', 'on');
         transformMenu = addMenu(obj, imageMenu, 'Transfom');
         addMenuItem(obj, transformMenu, imagem.actions.image.ReshapeImage(),         'Reshape...');
         addMenuItem(obj, transformMenu, imagem.actions.image.PermuteDimensions(),    'Permute Dimensions...');
