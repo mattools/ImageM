@@ -100,7 +100,9 @@ methods
         end
 
         % create first axis
-        res.Axes{1} = table.axis.NumericalAxis('Label', labels(:)');
+        if isprop(res, 'Axes')
+            res.Axes{1} = table.axis.NumericalAxis('Label', labels(:)');
+        end
         res.Name = [intensityImage.Name '-AverageValues'];
         
         % display in a new table

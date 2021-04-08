@@ -287,9 +287,9 @@ methods
         addMenuItem(obj, processMenu, imagem.actions.process.ImageWatershed(),      'Watershed...');
         addMenuItem(obj, processMenu, imagem.actions.process.ImageExtendedMinWatershed(),  'Extended Min Watershed...');
         
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageArithmetic(),     'Image Arithmetic...', true);
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageValuesTransform(), 'Image Maths 1...');
-        addMenuItem(obj, processMenu, imagem.actions.process.ImageMathematic(),     'Image Maths 2...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageValuesTransform(), 'Image Values Transform...', true);
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageMathematic(),     'Image Maths (Image+Value)...');
+        addMenuItem(obj, processMenu, imagem.actions.process.ImageArithmetic(),     'Image Maths (Image+Image)...');
         
         binaryMenu = addMenu(obj, processMenu, 'Binary / Label Images', 'Separator', 'On');
         addMenuItem(obj, binaryMenu, imagem.actions.process.binary.ConnectedComponentsLabeling(),  'Connected Components Labeling');
