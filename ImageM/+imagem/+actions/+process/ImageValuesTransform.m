@@ -21,8 +21,11 @@ properties
     Handles;
     Viewer;
     
-    OpList = {@log, @exp, @sqrt, @sin, @cos, @tan};
-    OpNames = {'log', 'exp', 'sqrt', 'sin', 'cos', 'tan'};
+    % the list of math operation to apply, as function handles
+    OpList = {@log, @exp, @sqrt, @sin, @cos, @tan, @round, @floor, @ceil};
+    
+    % the list of math operation names, to populate widgets
+    OpNames = {'log', 'exp', 'sqrt', 'sin', 'cos', 'tan', 'round', 'floor', 'ceil'};
     
 end % end properties
 
@@ -103,15 +106,18 @@ methods
         op = obj.OpList{opIndex};
         opName = char(op);
         
+        % compute result data
+        data2 = op(doc.Image.Data);
+        
         % compute result image
-        res = op(doc.Image);
+        res = Image('Data', data2, 'Parent', doc.Image);
         
         % add image to application, and create new display
         newDoc = addImageDocument(obj.Viewer, res);
         
         % add history
-        string = sprintf('%s = %s(%s));\n', ...
-            newDoc.Tag, opName, doc.Tag);
+        string = sprintf('%s = Image(''Data'', %s(%s.Data), ''Parent'', %s);\n', ...
+            newDoc.Tag, opName, doc.Tag, doc.Tag);
         addToHistory(obj.Viewer, string);
 
         closeFigure(obj);

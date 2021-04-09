@@ -41,7 +41,7 @@ methods
         table = frame.Doc.Table;
         
         % open a dioalog to set up PCA options and launch computation
-        imagem.actions.table.pca.PcaDialog(frame.Gui, table, frame);
+        imagem.actions.table.process.PcaDialog(frame.Gui, table, frame);
     end
 end % end methods
 

@@ -1,5 +1,5 @@
-classdef ImageConvertType < imagem.actions.CurrentImageAction
-% Convert the type (grayscale, label...) of the current image.
+classdef ImageConvertType < imagem.actions.ScalarImageAction
+% Convert the type (grayscale, label...) of the current (scalar) image.
 %
 %   Class ImageConvertTypeAction
 %
@@ -11,7 +11,7 @@ classdef ImageConvertType < imagem.actions.CurrentImageAction
 
 % ------
 % Author: David Legland
-% e-mail: david.legland@inra.fr
+% e-mail: david.legland@inrae.fr
 % Created: 2016-01-06,    using Matlab 8.6.0.267246 (R2015b)
 % Copyright 2016 INRA - BIA-BIBS.
 
@@ -45,13 +45,13 @@ methods
         doc = currentDoc(frame);
         
         % apply the conversion operation
-        res = Image(doc.Image, 'type', obj.TypeName);
+        res = Image(doc.Image, 'Type', obj.TypeName);
         
         % create a new doc
         newDoc = addImageDocument(frame, res);
         
         % add history
-        string = sprintf('%s = Image(%s, ''type'', ''%s'');\n', ...
+        string = sprintf('%s = Image(%s, ''Type'', ''%s'');\n', ...
             newDoc.Tag, doc.Tag, obj.TypeName);
         addToHistory(frame, string);
     end

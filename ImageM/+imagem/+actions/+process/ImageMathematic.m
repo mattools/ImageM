@@ -21,7 +21,7 @@ properties
     Handles;
     Viewer;
     
-    OpList = {@plus, @minus, @times, @rdivide, @power, @min, @max};
+    OpList = {@plus, @minus, @mtimes, @mrdivide, @mpower, @min, @max};
     OpNames = {'Plus', 'Minus', 'Times', 'Divides', 'power', 'min', 'max'};
     
 end % end properties
