@@ -72,7 +72,7 @@ methods
 
         % update history
         historyString = sprintf('[%s, %s] = nmf(%s, %d);\n', ...
-            docW.Tag, docH.Tag, doc.Tag, nComps);
+            docW.Tag, docH.Tag, frame.Doc.Tag, nComps);
         addToHistory(frame, historyString);
 
     end

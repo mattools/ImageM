@@ -402,9 +402,9 @@ methods
         
         % Process menu
         processMenu = addMenu(obj, hf, 'Process');
-        addMenuItem(obj, processMenu, imagem.actions.table.pca.Pca(), 'Principal Components Analysis (PCA)...');
+        addMenuItem(obj, processMenu, imagem.actions.table.process.Pca(), 'Principal Components Analysis (PCA)...');
         addMenuItem(obj, processMenu, imagem.actions.table.process.Nmf(), 'Non-Negative Matrix Factorization (NMF)...');
-        addMenuItem(obj, processMenu, imagem.actions.table.TableKMeans(), 'K-Means...', 'Separator', 'On');
+        addMenuItem(obj, processMenu, imagem.actions.table.process.TableKMeans(), 'K-Means...', 'Separator', 'On');
         
 
         % Help menu definition
