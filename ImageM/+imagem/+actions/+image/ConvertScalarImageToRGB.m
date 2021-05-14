@@ -82,7 +82,7 @@ methods
         
         % add history
         string = sprintf('cmap = createColorMap(imagem.util.enums.BasicColors.%s, 256);\n', ...
-            colorItem.Name);
+            char(colorItem));
         addToHistory(frame, string);
         string = sprintf('%s = double2rgb(%s, %s, [%g %g], [%g %g %g]);\n', ...
             newDoc.Tag, doc.Tag, 'cmap', vmin, vmax, bgColor);
