@@ -1,0 +1,4293 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass scrreprt
+\begin_preamble
+\usepackage{textcomp}
+
+\usepackage[dvipsnames]{xcolor}
+
+\usepackage{hyperref}
+
+\definecolor{bl}{rgb}{0.0,0.2,0.6} 
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{lightgray}{rgb}{0.95,0.95,0.95}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\hypersetup{colorlinks=true, citecolor=blue, linkcolor=blue}
+
+% package that modifies style of section headers
+\addtokomafont{chapter}{\color{bl}\scshape \selectfont}
+\addtokomafont{section}{\color{bl}\scshape \selectfont}
+\addtokomafont{subsection}{\color{bl}\scshape \selectfont}
+\addtokomafont{subsubsection}{\color{bl}\scshape \selectfont}
+%\allsectionsfont{\color{bl}\scshape \selectfont }
+
+% setup font style for different title elements
+\setkomafont{title}{\color{bl} \bfseries \scshape}
+\setkomafont{author}{\centering \small}
+\setkomafont{date}{\centering \small}
+
+
+% Change the abstract environment
+\usepackage[runin]{abstract}		% runin option for a run-in title
+\setlength\absleftindent{30pt}		% left margin
+\setlength\absrightindent{30pt}		% right margin
+\abslabeldelim{\quad }						% 
+\setlength{\abstitleskip}{-10pt}
+\renewcommand{\abstractname}{}
+\renewcommand{\abstracttextfont}{\color{bl} \small \slshape }	% slanted text
+
+% Custom headers and footers using KOMA-Script
+\usepackage{scrlayer-scrpage}
+\usepackage{lastpage}	% for page numbering	
+
+% Left header: chapter title on even pages
+\lehead{\slshape\leftmark}
+\lohead{}
+% Center header: empty
+\chead{}
+% Right header: section title on odd pages
+\rehead{}
+\rohead{\slshape\rightmark}
+
+% Outer footer (left of even pages, right of odd pages)
+\KOMAoptions{footsepline=on}
+\ofoot[\footnotesize page \thepage\ / \pageref{LastPage}]{\footnotesize page \thepage\ / \pageref{LastPage}}
+% Center footer: empty
+\cfoot{}
+% Inner footer (right of even pages, left of odd pages)
+\ifoot[\footnotesize \jobname]{\footnotesize \jobname}
+
+% left chapter no number, nothing on the right
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter\ #1}{}}
+% right section with number
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+
+% Added by lyx2lyx
+\usepackage[charter]{mathdesign}
+
+% setup of figure captions 
+\usepackage[format=plain,font=it,labelfont=bf]{caption}
+%\captionsetup[figure]{name=Figure}
+%\DeclareCaptionLabelSeparator{colon}{.}
+
+
+% for mini table of contents at the beginning of chapters
+\usepackage{minitoc}
+
+
+
+\author{D. Legland}
+\date{\today}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format pdf2
+\output_sync 1
+\bibtex_command default
+\index_command default
+\float_placement h
+\paperfontsize default
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder false
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
+\papersize a4paper
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 1
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+ImageM user manual
+\end_layout
+
+\begin_layout Abstract
+ImageM is a graphical user interface (GUI) for interactive exploration,
+ processing and analysis of multi-dimensional images.
+ It is developped in Matlab.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+dominitoc
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+ajouter plus d'explication des algos (style manuel MorphoLibJ)
+\end_layout
+
+\begin_layout Plain Layout
+analyse image multi-variées
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Introduction
+\end_layout
+
+\begin_layout Standard
+The variety of images generated by modern imaging devices continuously provide
+ new challenges for their exploration, interpretation, and exploitation:
+ dimensionality (2D, 3D, 3D+T), volumetry (up to several gigabytes), heterogenei
+ty of the pixel information (intensity, colour, several channels, spectrum…).
+\end_layout
+
+\begin_layout Standard
+Matlab is an efficient software solution for image processing, as it provides
+ native support for multi-dimensional array, and a large number of image
+ processing methods through dedicated toolboxes.
+ However, it lacks many features for facilitating the interactive interpretation
+ of image data, such as ergonomic image visualisation and management of
+ image meta-data.
+\end_layout
+
+\begin_layout Standard
+The ImageM application proposes a graphical user interface that facilitates
+ the application of the image processing algorithms provided by Matlab.
+ The general design was largely inspired by the popular ImageJ software
+ 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Schneider_2012_NatureMethods,Schindelin_2015_mrd"
+literal "false"
+
+\end_inset
+
+.
+ An overview of the interface is presented on Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:gui-overview"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/gui-overview.png
+	width 90text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:gui-overview"
+
+\end_inset
+
+Overview of the ImageM Graphical User Interface with a 3D color image.
+ Image Viewer, Color profile display, 3D Orthoslices.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Its most notable features are:
+\end_layout
+
+\begin_layout Itemize
+Interactive visualization of 
+\series bold
+multi-dimensional images
+\series default
+ (2D, 3D, 3D+T...)
+\end_layout
+
+\begin_layout Itemize
+Quick access to many image processing operations via 
+\series bold
+user-friendly interface 
+\series default
+(menus and dialogs)
+\end_layout
+
+\begin_layout Itemize
+Viewers take into account the 
+\series bold
+image types
+\series default
+ (intensity, colour, binary, label, vector…), making it possible to automaticall
+y adapt the display or available image processing options
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Spatial calibration
+\series default
+ of images is stored along the different processing steps, providing analysis
+ measurements in user units 
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Multi-variate images
+\series default
+ can be explored using multi-variate statistical approaches (PCA, multivariate
+ histograms…) and machine learning approaches
+\end_layout
+
+\begin_layout Itemize
+Most operators result in a command line that can be easily re-used for writing
+ more complex scripts
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Import from several formats
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Installation-and-Configuration"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ provides details about installation and configuration of the application.
+ The Image data model is described in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Image-data"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+ The operations available from image viewer menus are detailed in chapter
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Menu-reference"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Chapter
+Installation and Configuration
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Installation-and-Configuration"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Requirements
+\end_layout
+
+\begin_layout Standard
+To install ImageM you need a version of Matlab, and the following Matlab
+ toolboxes :
+\end_layout
+
+\begin_layout Itemize
+the image processing toolbox
+\end_layout
+
+\begin_layout Itemize
+the Statistics and Machine Learning toolbox, for some algorithms devoted
+ to data mining
+\end_layout
+
+\begin_layout Standard
+Other libraries are required (see Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Sources-and-dependencies"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+), but are packaged into the auto-installable archive.
+\end_layout
+
+\begin_layout Section
+Installation
+\end_layout
+
+\begin_layout Standard
+The application can be installed using different ways.
+\end_layout
+
+\begin_layout Subsection
+Using App Manager
+\end_layout
+
+\begin_layout Standard
+The simplest way to install ImageM is by using the application manager provided
+ by Matlab:
+\end_layout
+
+\begin_layout Enumerate
+Within the 
+\begin_inset Quotes eld
+\end_inset
+
+Home
+\begin_inset Quotes erd
+\end_inset
+
+ toolbar, select the 
+\begin_inset Quotes eld
+\end_inset
+
+Add-ons...
+\begin_inset Quotes erd
+\end_inset
+
+ button.
+ This will open a 
+\begin_inset Quotes eld
+\end_inset
+
+add on explorer
+\begin_inset Quotes erd
+\end_inset
+
+ dialog.
+\end_layout
+
+\begin_layout Enumerate
+In the search area, type 
+\begin_inset Quotes eld
+\end_inset
+
+ImageM
+\begin_inset Quotes erd
+\end_inset
+
+.
+ This will provide several selections.
+ The first one should be the right one!
+\end_layout
+
+\begin_layout Enumerate
+Click on the 
+\begin_inset Quotes eld
+\end_inset
+
+ImageM
+\begin_inset Quotes erd
+\end_inset
+
+ selection.
+ This opens the page of the application on the Mathworks site.
+\end_layout
+
+\begin_layout Enumerate
+Click on the 
+\begin_inset Quotes eld
+\end_inset
+
+Add
+\begin_inset Quotes erd
+\end_inset
+
+ button (on the right)
+\end_layout
+
+\begin_layout Subsection
+From Mathworks FileExchange
+\end_layout
+
+\begin_layout Standard
+It is also possible to explore the different application directly from Mathworks
+ user contribution web page.
+ The location of the ImageM application is 
+\begin_inset Flex URL
+status collapsed
+
+\begin_layout Plain Layout
+
+https://fr.mathworks.com/matlabcentral/fileexchange/45847-imagem
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Once the page is identified, the installation is similar to what described
+ previously.
+\end_layout
+
+\begin_layout Subsection
+From the sources
+\end_layout
+
+\begin_layout Standard
+It is also possible to get the source of the project, and manually adds
+ the necessary repository.
+ Please note that the ImageM application depends on several other libraries,
+ that have to be installed as well.
+\end_layout
+
+\begin_layout Section
+Sources and dependencies
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Sources-and-dependencies"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The latest versions of the sources are available on the project page on
+ GitHub
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/mattools/ImageM
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In addition to the Image Processing and the Statistics and Machine Learning
+ toolboxes, the ImageM requires the following (free) libraries: 
+\end_layout
+
+\begin_layout Itemize
+the Image class
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/mattools/matlab-image-class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, shortly described in chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Image-data"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+the MatStats library
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/mattools/matStats
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, for the management of data tables
+\end_layout
+
+\begin_layout Itemize
+the GUI Layout Toolbox V2
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://fr.mathworks.com/matlabcentral/fileexchange/47982-gui-layout-toolbox
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+, for the graphical user interface 
+\end_layout
+
+\begin_layout Itemize
+some functionalities also require the MatGeom toolbox
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/mattools/matGeom
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Each library has to be downloaded, extracted, and the path(s) to the required
+ directories need to be added to the Matlab 
+\begin_inset Quotes eld
+\end_inset
+
+path
+\begin_inset Quotes erd
+\end_inset
+
+.
+ In most cases, an installation script (usually called 
+\begin_inset Quotes eld
+\end_inset
+
+setupLibrary
+\begin_inset Quotes erd
+\end_inset
+
+) is provided in the root directory of the library.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Chapter
+Main interface
+\end_layout
+
+\begin_layout Plain Layout
+The main interface of the ImageM application corresponds to the display
+ of an image (Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Image-3D-Viewer"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ The interface comprises:
+\end_layout
+
+\begin_layout Itemize
+the window title, containing information about image dimensions, type, and
+ zoom level
+\end_layout
+
+\begin_layout Itemize
+a menu (described in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Menu-reference"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Itemize
+optionnal navigation widgets
+\end_layout
+
+\begin_layout Itemize
+an image display 
+\end_layout
+
+\begin_layout Itemize
+a status bar 
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/imagem_wheatgrain.png
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Image-3D-Viewer"
+
+\end_inset
+
+Visualization of a 3D color image.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Depending on image dimensionality and type, the global interface of the
+ viewer as well as the menu items may change:
+\end_layout
+
+\begin_layout Itemize
+for 3D images, a vertical slider is added in order to change the current
+ slice,
+\end_layout
+
+\begin_layout Itemize
+for time-lapse images, a side panel is added that allows to change current
+ frame index, and eventually the slice index.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Image data
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Image-data"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This chapter recalls the conventions for manipulating images within the
+ ImageM application.
+ The data model for images is managed by a class 
+\begin_inset Quotes eld
+\end_inset
+
+Image
+\begin_inset Quotes erd
+\end_inset
+
+, described on its own project page
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://github.com/mattools/matlab-image-class
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Image dimensions
+\end_layout
+
+\begin_layout Standard
+ImageM considers images as multi-dimensional arrays up to five dimensions.
+ Images can have two or three spatial dimensions (denoted by XYZ), and one
+ time dimension (T).
+ Additionnaly, images can be composed of different channels.
+ Channels may correspond to the red, green and blue channels of a RGB image,
+ to fluorescence channels, or to the wavelengths of a multi-spectral image.
+ This 
+\begin_inset Quotes eld
+\end_inset
+
+channel
+\begin_inset Quotes erd
+\end_inset
+
+ dimension is denoted by C.
+\end_layout
+
+\begin_layout Section
+Image types
+\end_layout
+
+\begin_layout Standard
+In order to facilitate the interpretation of the data stored within images,
+ different image types are considered:
+\end_layout
+
+\begin_layout Description
+grayscale
+\begin_inset space ~
+\end_inset
+
+images correspond to images containing scalar values stored as integers
+ (usually uint8 or uint16).
+\end_layout
+
+\begin_layout Description
+intensity
+\begin_inset space ~
+\end_inset
+
+images correspond to images containing scalar values stored as floating
+ point data types.
+ The values may be negative and have various ranges.
+\end_layout
+
+\begin_layout Description
+binary
+\begin_inset space ~
+\end_inset
+
+images correspond to images containing boolean values, that can have only
+ the values true or false.
+\end_layout
+
+\begin_layout Description
+label
+\begin_inset space ~
+\end_inset
+
+images (sometimes called label maps) correspond to images containing integer
+ values, where the value correspond to the index of the label the pixel
+ belong to.
+ By convention, the value 0 correspond to the background.
+ Note that binary images are sometimes considered as a special case of label
+ images.
+\end_layout
+
+\begin_layout Description
+color
+\begin_inset space ~
+\end_inset
+
+images correspond to images containing three channels, one for each of the
+ red, green and blue colors.
+\end_layout
+
+\begin_layout Description
+vector
+\begin_inset space ~
+\end_inset
+
+images correspond to images in which each pixel or voxel contains a list
+ of values.
+ Color images are a special case of vector images.
+\end_layout
+
+\begin_layout Section
+Image calibration
+\end_layout
+
+\begin_layout Subsection
+Image indexing
+\end_layout
+
+\begin_layout Standard
+Elements of an image are indexed in the 
+\begin_inset Formula $x$
+\end_inset
+
+, 
+\begin_inset Formula $y$
+\end_inset
+
+ order or in the 
+\begin_inset Formula $(x,y,z)$
+\end_inset
+
+ order.
+ Indexing is 
+\begin_inset Formula $1$
+\end_inset
+
+-based, following Matlab convention for arrays (Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Image-Coordinate-System"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/image_coordinate_system.png
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Image-Coordinate-System"
+
+\end_inset
+
+Coordinate system for representing uncalibrated images.
+ First index corresponds to the 
+\begin_inset Formula $x$
+\end_inset
+
+ direction.
+ Indices start at 1.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+An element of an image is usually associated to a square region centered
+ on its coordinates.
+ Its bounds are therefore 
+\begin_inset Formula $\pm0.5$
+\end_inset
+
+ around each dimension.
+ 
+\end_layout
+
+\begin_layout Subsection
+Spatial calibration
+\end_layout
+
+\begin_layout Standard
+The spatial calibration of the image can be used to relate index coordinates
+ to physical space coordinates.
+ The Image class stores the spacing between elements (as a 
+\begin_inset Formula $1\times d$
+\end_inset
+
+ row vector, where 
+\begin_inset Formula $d$
+\end_inset
+
+ is the number of spatial dimensions), the coordinates of the first element
+ (as a 
+\begin_inset Formula $1\times d$
+\end_inset
+
+ row vector), and the name of the calibration unit.
+ These information can be used to provide results of image analysis operations
+ in calibrated units (see Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Image-Analysis"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Time calibration
+\end_layout
+
+\begin_layout Standard
+For time-lapse images, the time origin, the time step between frames, and
+ the time unit are also stored in the Image class.
+\end_layout
+
+\begin_layout Section
+Other meta-data
+\end_layout
+
+\begin_layout Standard
+The image class also stores general-use meta data.
+\end_layout
+
+\begin_layout Description
+Name the name of the image, used to display frame titles.
+\end_layout
+
+\begin_layout Description
+FilePath the path to the file was loaded from.
+\end_layout
+
+\begin_layout Description
+ChannelNames the name of the channels.
+ Can be used to identify channel from their names, or store channel-related
+ information.
+\end_layout
+
+\begin_layout Chapter
+Image Frame menu
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Menu-reference"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This chapter describes the menu operations available from the Image viewer
+ frame.
+ Note that depending on image dimensionality and type, some operators may
+ be disabled.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+minitoc
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+File Menu
+\end_layout
+
+\begin_layout Standard
+Items in this menu allow to import/export images from/to various sources,
+ or to interact with Matlab Workspace.
+\end_layout
+
+\begin_layout Subsection
+Importing and creating data
+\end_layout
+
+\begin_layout Standard
+The following menu entries allow to create or import images from various
+ sources.
+\end_layout
+
+\begin_layout Minisec
+New Image...
+\end_layout
+
+\begin_layout Standard
+Creates a new image by specifying the dimensions and the type.
+\end_layout
+
+\begin_layout Minisec
+Open...
+\end_layout
+
+\begin_layout Standard
+Opens an image and creates a new window to display it.
+ Supports all image file formats provided by Matlab Image Processing, as
+ well as more specific formats such as the MetaImage file format.
+ 3D Tiff files as saved by ImageJ can also be imported.
+\end_layout
+
+\begin_layout Minisec
+Import\SpecialChar menuseparator
+Import from binary file
+\end_layout
+
+\begin_layout Standard
+Imports an image from a raw data file, by specifying image size, data type
+ and encoding.
+\end_layout
+
+\begin_layout Minisec
+Import\SpecialChar menuseparator
+Import series
+\end_layout
+
+\begin_layout Standard
+Imports a multi-dimensional image from a series of 2D images.
+ Specify the file name pattern and the indices of the files to import.
+\end_layout
+
+\begin_layout Minisec
+Import\SpecialChar menuseparator
+Import from workspace
+\end_layout
+
+\begin_layout Standard
+Imports an instance of the image class, or a numeric array, from Matlab
+ workspace into the interface.
+\end_layout
+
+\begin_layout Minisec
+Open Demo...
+\end_layout
+
+\begin_layout Standard
+Opens one of the demo images bundled with the ImageM application.
+ Demo images comprises classical Matlab images, as well as sample images
+ from previous studies.
+\end_layout
+
+\begin_layout Minisec
+Open Table
+\end_layout
+
+\begin_layout Standard
+Opens a text file as Table, and displays it in a new Table Frame.
+\end_layout
+
+\begin_layout Subsection
+Exporting and saving images
+\end_layout
+
+\begin_layout Minisec
+Save As...
+\end_layout
+
+\begin_layout Standard
+Saves the current image into a file.
+\end_layout
+
+\begin_layout Minisec
+Export to Workspace
+\end_layout
+
+\begin_layout Standard
+Exports the current image as a variable in Matlab Workspace.
+\end_layout
+
+\begin_layout Subsection
+Other commands
+\end_layout
+
+\begin_layout Minisec
+Close
+\end_layout
+
+\begin_layout Standard
+Closes the current frame.
+\end_layout
+
+\begin_layout Minisec
+Quit 
+\end_layout
+
+\begin_layout Standard
+Close all frames and quit the application.
+\end_layout
+
+\begin_layout Section
+Edit Menu
+\end_layout
+
+\begin_layout Standard
+Provides functions for managing the selection, and global settings.
+\end_layout
+
+\begin_layout Minisec
+Save Selection...
+\end_layout
+
+\begin_layout Standard
+Save current selection as a text file.
+\end_layout
+
+\begin_layout Minisec
+Crop Selection
+\end_layout
+
+\begin_layout Standard
+Create a new image based on the area enclosed by the current selection.
+\end_layout
+
+\begin_layout Minisec
+Print Image List
+\end_layout
+
+\begin_layout Standard
+Display the list of image document currently open.
+ 
+\end_layout
+
+\begin_layout Minisec
+Settings
+\end_layout
+
+\begin_layout Standard
+A sub-menu for choosing the value of several global options.
+\end_layout
+
+\begin_layout Section
+Image Menu
+\end_layout
+
+\begin_layout Standard
+Provides operators to display information about image, and to perform basic
+ image conversion utilities.
+\end_layout
+
+\begin_layout Subsection
+General information
+\end_layout
+
+\begin_layout Minisec
+Print Info
+\end_layout
+
+\begin_layout Standard
+Displays general information about the current image.
+\end_layout
+
+\begin_layout Minisec
+Rename
+\end_layout
+
+\begin_layout Standard
+Changes the name of the current image.
+\end_layout
+
+\begin_layout Minisec
+Duplicate
+\end_layout
+
+\begin_layout Standard
+Creates a copy of the current image, keeping the same settings.
+\end_layout
+
+\begin_layout Subsection
+Calibration and conversion
+\end_layout
+
+\begin_layout Minisec
+Calibration
+\end_layout
+
+\begin_layout Standard
+Several options to update spatial calibration of image, or to update channel
+ names.
+\end_layout
+
+\begin_layout Minisec
+Set Image Type
+\end_layout
+
+\begin_layout Standard
+Changes the type of the image, allowing to convert to label, grayscale,
+ binary...
+\end_layout
+
+\begin_layout Minisec
+Convert Data Type
+\end_layout
+
+\begin_layout Standard
+Changes the type of the underlying data array.
+ Can choose a typical matlab numeric type (uint8, single...)
+\end_layout
+
+\begin_layout Subsubsection
+Image Type conversions
+\end_layout
+
+\begin_layout Standard
+Several conversion utilities, to convert between 3D and vector images, or
+ to 
+\begin_inset Quotes eld
+\end_inset
+
+unfold
+\begin_inset Quotes erd
+\end_inset
+
+ a multi-channel image into a table.
+\end_layout
+
+\begin_layout Minisec
+3D Image to Vector Image
+\end_layout
+
+\begin_layout Standard
+Converts a 3D image into a vector image, by assimilating the 
+\begin_inset Formula $z$
+\end_inset
+
+-axis to the channel axis.
+\end_layout
+
+\begin_layout Minisec
+Vector Image to 3D Image
+\end_layout
+
+\begin_layout Standard
+Converts a vector image into a 3D image, by assimilating the channel axis
+ to the 
+\begin_inset Formula $z$
+\end_inset
+
+-axis.
+\end_layout
+
+\begin_layout Minisec
+Vector Image to RGB
+\end_layout
+
+\begin_layout Standard
+Converts a vector image into a RGB color image, by specifying the channels
+ indices to use for each of the red, green and blue channels of the result
+ image.
+\end_layout
+
+\begin_layout Minisec
+Intensity Image to RGB
+\end_layout
+
+\begin_layout Standard
+Converts a grayscale or intensity image into a color image by choosing the
+ colormap and the value range.
+\end_layout
+
+\begin_layout Minisec
+Unfold Vector Image to Table
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "cmd:Unfold-Vector-Image-To-Table"
+
+\end_inset
+
+Converts a vector image into a data table, where each row corresponds to
+ a pixel (or voxel), and each column corresponds to a channel (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Unfold-Image"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ The resulting table can be used for data mining or classification tasks.
+ The coordinates of the original pixels may be optionnally generated.
+ The conversion from table to image is managed by the 
+\begin_inset Quotes eld
+\end_inset
+
+Fold Table To Image
+\begin_inset Quotes erd
+\end_inset
+
+ command (see section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cmd:Fold-Table-To-Image"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Minisec
+Unfold Vector Image Within Mask to Table...
+\end_layout
+
+\begin_layout Standard
+Converts a specific region of a vector image into a data table, where each
+ row corresponds to a pixel (or voxel), and each column corresponds to a
+ channel.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/convert/peppers_crop_unfold.png
+	lyxscale 50
+	width 95text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Unfold-Image"
+
+\end_inset
+
+Unfolding a color image into a data table.
+ The resulting table has three columns, one for each of the three color
+ channels.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Color and channels management
+\end_layout
+
+\begin_layout Standard
+Utilities for color management (split / merge channels, extract a specific
+ channel, re-order channels...).
+\end_layout
+
+\begin_layout Minisec
+Split RGB
+\end_layout
+
+\begin_layout Standard
+Creates three new images from a color image, one for each of the red, green
+ and blue channels.
+\end_layout
+
+\begin_layout Minisec
+Split Channels
+\end_layout
+
+\begin_layout Standard
+Creates new images from a vector image, one for each channel of the original
+ image.
+\end_layout
+
+\begin_layout Minisec
+Merge Channels...
+\end_layout
+
+\begin_layout Standard
+Create a new RGB image by choosing the grayscale images for each of the
+ red, green and blue channels.
+\end_layout
+
+\begin_layout Minisec
+Re-order Channels...
+\end_layout
+
+\begin_layout Standard
+Choose a new order for the channels of a vector image.
+\end_layout
+
+\begin_layout Subsection
+Image shape transform
+\end_layout
+
+\begin_layout Standard
+This section provides several elementary geometruic transformations.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/peppers/peppers.png
+	lyxscale 50
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Original
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/peppers/peppers-permute.png
+	lyxscale 50
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Permute 
+\begin_inset Formula $x$
+\end_inset
+
+ & 
+\begin_inset Formula $y$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/peppers/peppers-flipH.png
+	lyxscale 50
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Flip horizontal
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/peppers/peppers-rotateLeft.png
+	lyxscale 50
+	scale 20
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Rotate left
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Geometric transforms applied on a color image.
+ (a) Original image, (b) permutation of the 
+\begin_inset Formula $x$
+\end_inset
+
+ and 
+\begin_inset Formula $y$
+\end_inset
+
+ dimensions, (c) flip in the horizontal direction, (d) 
+\begin_inset Quotes eld
+\end_inset
+
+left
+\begin_inset Quotes erd
+\end_inset
+
+ (counter-clockwise) rotation.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Reshape
+\end_layout
+
+\begin_layout Standard
+Changes the dimensions of the image, keeping the same number of total elements.
+\end_layout
+
+\begin_layout Minisec
+Permute Dimensions
+\end_layout
+
+\begin_layout Standard
+Permute the dimensions of the image.
+\end_layout
+
+\begin_layout Minisec
+Horizontal Flip
+\end_layout
+
+\begin_layout Standard
+Flips the image in the horizontal direction.
+\end_layout
+
+\begin_layout Minisec
+Vertical Flip
+\end_layout
+
+\begin_layout Standard
+Flips the image in the vertical direction.
+\end_layout
+
+\begin_layout Minisec
+Rotate Right
+\end_layout
+
+\begin_layout Standard
+Rotates the image clockwise.
+\end_layout
+
+\begin_layout Minisec
+Rotate Left
+\end_layout
+
+\begin_layout Standard
+Rotates the image in counter-clockwise direction.
+\end_layout
+
+\begin_layout Subsection
+Other shape utilities
+\end_layout
+
+\begin_layout Minisec
+Orthogonal Projection
+\end_layout
+
+\begin_layout Standard
+Projects the values of a 3D image into a plane along one of the main directions.
+\end_layout
+
+\begin_layout Minisec
+Extract Slice
+\end_layout
+
+\begin_layout Standard
+Extracts a specific slice from a 3D image.
+\end_layout
+
+\begin_layout Minisec
+Extract Time Frame
+\end_layout
+
+\begin_layout Standard
+Extracts a specific frame from a time-lapse image.
+\end_layout
+
+\begin_layout Minisec
+Invert Image
+\end_layout
+
+\begin_layout Standard
+Inverts a grayscale image.
+\end_layout
+
+\begin_layout Section
+View Menu
+\end_layout
+
+\begin_layout Standard
+Items in this menu allow to get informations on images, and to perform basic
+ editing.
+\end_layout
+
+\begin_layout Minisec
+Set Display Range
+\end_layout
+
+\begin_layout Standard
+Set the values corresponding to the minimal and maximal displayed values.
+ 
+\end_layout
+
+\begin_layout Minisec
+Set Color Map
+\end_layout
+
+\begin_layout Standard
+Choose the color map for displaying intensity images, or label images.
+\end_layout
+
+\begin_layout Minisec
+Set Background Color
+\end_layout
+
+\begin_layout Standard
+Set the background color, that is used for display of NaN values in intensity
+ images.
+\end_layout
+
+\begin_layout Subsection
+Zoom
+\end_layout
+
+\begin_layout Standard
+The current zoom level can be updated from menu items (note: these features
+ are not available from the octave version).
+\end_layout
+
+\begin_layout Minisec
+Zoom In
+\end_layout
+
+\begin_layout Standard
+Multiplies the current zoom level by 2.
+\end_layout
+
+\begin_layout Minisec
+Zoom Out
+\end_layout
+
+\begin_layout Standard
+Divides the current zoom level by 2.
+\end_layout
+
+\begin_layout Minisec
+Zoom 1:1
+\end_layout
+
+\begin_layout Standard
+Set the zoom level such that one displayed pixel corresponds to one image
+ pixel.
+\end_layout
+
+\begin_layout Minisec
+Zoom Best
+\end_layout
+
+\begin_layout Standard
+Adapts the current zoom level such that the entire image fits within the
+ window.
+\end_layout
+
+\begin_layout Minisec
+Others
+\end_layout
+
+\begin_layout Standard
+Provides several options to choose pre-determined zoom levels.
+\end_layout
+
+\begin_layout Subsection
+3D Views
+\end_layout
+
+\begin_layout Standard
+Some utilities are provided for the visualization of 3D images
+\end_layout
+
+\begin_layout Minisec
+Show 3D OrthoSlices...
+\end_layout
+
+\begin_layout Standard
+Opens a new window and displays three mutually orthogonal slices (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Visualisation-Label-Image-3D"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-b).
+\end_layout
+
+\begin_layout Minisec
+Show 3D Isosurface...
+\end_layout
+
+\begin_layout Standard
+Generates a 3D isosurface from an intensity image and a threshold level,
+ and displays it in a new window (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Visualisation-Label-Image-3D"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-c).
+ Can be slow on large images.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/arabidoEmbryo/arabidoEmbryo_seg3d_ortho3d.png
+	width 45text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/arabidoEmbryo/arabidoEmbryo_seg3d_surf3d.png
+	width 45text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Visualisation-Label-Image-3D"
+
+\end_inset
+
+Several representations of a 3D label image.
+ (a) Result of 3D orthogonal repreentation.
+ (b) Result of 3D isosurface computation.
+ Original image from 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Moukhtar_2019_plosCompBiol"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Process Menu
+\end_layout
+
+\begin_layout Standard
+Comprises most of the image processing operators.
+\end_layout
+
+\begin_layout Subsection
+Intensity processing
+\end_layout
+
+\begin_layout Minisec
+Adjust Dynamic
+\end_layout
+
+\begin_layout Standard
+Converts an intensity image into a 8-bits grayscale images by choosing the
+ min and max intensities.
+\end_layout
+
+\begin_layout Minisec
+Replace Values
+\end_layout
+
+\begin_layout Standard
+Replaces intensity or label values within an image.
+ May be useful to remove or merge labels.
+\end_layout
+
+\begin_layout Subsection
+Image filtering
+\end_layout
+
+\begin_layout Standard
+Provides several operators for removing noise or enhancing features from
+ images.
+ Most operators can be applied on 2D/3D images, and provide a preview of
+ the result.
+\end_layout
+
+\begin_layout Minisec
+Box Mean filter...
+\end_layout
+
+\begin_layout Standard
+Applies box filter on the current image (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Linear-Filters-Rice"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-a).
+ Filter is defined by the size of the box along each dimension.
+\end_layout
+
+\begin_layout Minisec
+Median Filter...
+\end_layout
+
+\begin_layout Standard
+Applies median filter on the current image, by computing the median value
+ in the neighborhood of each pixel (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Linear-Filters-Rice"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-c).
+ Filter is defined by the size of the neighborhood along each dimension.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/filters/rice-boxFilter5x5.png
+	width 30text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Box filter 5x5
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/filters/rice-gaussFilter5x5s2.png
+	width 30text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Gaussian filter 5x5, sigma = 2
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/filters/rice-medFilter5x5.png
+	width 30text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Median filter 5x5
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Linear-Filters-Rice"
+
+\end_inset
+
+Comparison of several noise removal filters.
+ Median filters tends to better preserve edges than box or gaussian filters.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Gaussian Filter...
+\end_layout
+
+\begin_layout Standard
+Applies Gaussian filter on the current image (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Linear-Filters-Rice"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-b).
+ Filter is defined by the sigma value of the gaussian kernel along each
+ dimension.
+ The size of the neighborhood is automatically computed from the sigma value.
+\end_layout
+
+\begin_layout Minisec
+Morphological Filters...
+\end_layout
+
+\begin_layout Standard
+Morphological filtering of the current image.
+ Parameters can be tuned from dialog (Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Morphological-Filter"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Itemize
+the type of the morphological filter: dilation, erosion, closing, opening,
+ (morphological) gradient, (morphological) laplacian, white top-hat, black
+ top-hat
+\end_layout
+
+\begin_layout Itemize
+the shape of the structuring element (square, disk...)
+\end_layout
+
+\begin_layout Itemize
+the size of the structuring element
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/morphology/morphologicalFilter_gui_rice.png
+	width 70text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Morphological-Filter"
+
+\end_inset
+
+Interactive morphological filtering of a grayscale image.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Gradient
+\end_layout
+
+\begin_layout Standard
+Computes the (Sobel) gradient of the grayscale or intensity image.
+ The result is a vector image, each component corresponding to the gradient
+ in one of the dimensions (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Gradients-Of-Intensity-Image"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-b and -c).
+\end_layout
+
+\begin_layout Minisec
+Gradient Norm
+\end_layout
+
+\begin_layout Standard
+Computes the norm of the gradient of the grayscale or intensity image.
+ The result is an intensity image (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Gradients-Of-Intensity-Image"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-a).
+\end_layout
+
+\begin_layout Minisec
+Norm
+\end_layout
+
+\begin_layout Standard
+Computes the norm of a multi-channel image, as an intensity image.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/filters/rice_gradientNorm.png
+	width 30text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+norm(grad)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/filters/rice_gradientX.png
+	width 30text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+channel(grad,1)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/filters/rice_gradientY.png
+	width 30text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+channel(grad,2)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Gradients-Of-Intensity-Image"
+
+\end_inset
+
+Gradients computed on an intensity image.
+ (a) Norm of the gradient.
+ (b) Gradient along the x direction.
+ (c) Gradient along the y direction.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Connectivity based operators
+\end_layout
+
+\begin_layout Standard
+Several operators are based on the notion of connectivity, and provide powerful
+ operations such as the selection of connected based on regional minima
+ or maxima.
+ The morphological reconstruction operator is also at the basis of kill
+ borders or fill hoels operations.
+\end_layout
+
+\begin_layout Minisec
+Morphological Reconstruction...
+\end_layout
+
+\begin_layout Standard
+Performs morphological reconstruction of a marker image constrained by a
+ mask image.
+ Can be performed on binary or grayscale images with the same size.
+\end_layout
+
+\begin_layout Minisec
+Kill Borders
+\end_layout
+
+\begin_layout Standard
+Removes the regions that touch the borders of the image (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:FillHoles-KillBorders"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-b).
+ Can be applied to a grayscale, binary, or label image.
+\end_layout
+
+\begin_layout Minisec
+Fill Holes
+\end_layout
+
+\begin_layout Standard
+Removes holes within binary or intensity image (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:FillHoles-KillBorders"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-c).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/morphology/wheatGrain_tomo_z630.tif
+	lyxscale 50
+	width 32text%
+
+\end_inset
+
+ 
+\begin_inset Graphics
+	filename images/morphology/wheatGrain_tomo_z630_fillHoles.tif
+	lyxscale 50
+	width 32text%
+
+\end_inset
+
+ 
+\begin_inset Graphics
+	filename images/morphology/wheatGrain_tomo_z630_killBorders.tif
+	lyxscale 50
+	width 32text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:FillHoles-KillBorders"
+
+\end_inset
+
+Example of two operators based on connectivity.
+ (a) Original image.
+ (b) Result of Fill Holes operator.
+ (c) Result of Kill Borders operator.
+ Image from 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Le_2019_PlantMethods"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Regional Minima / Maxima
+\end_layout
+
+\begin_layout Standard
+Extracts the regional minima or maxima from a grayscale or intensity image.
+\end_layout
+
+\begin_layout Minisec
+Extended Minima / Maxima
+\end_layout
+
+\begin_layout Standard
+Extracts the extended minima or maxima from a grayscale or intensity image.
+ The dialog allows to specify the dynamic of the minima/maxima as well as
+ the connectivity.
+\end_layout
+
+\begin_layout Minisec
+Impose Minima
+\end_layout
+
+\begin_layout Standard
+Imposes minima on a grayscale / intensity image.
+ Often used to impose the markers of a watershed segmentation (see Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Watershed"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Image segmentation
+\end_layout
+
+\begin_layout Standard
+Several operators for image segmentation.
+ Results are usually returned as binary or label images.
+\end_layout
+
+\begin_layout Minisec
+Manual Threshold
+\end_layout
+
+\begin_layout Standard
+Binarizes an image by manually choosing the threshold level (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Manual_Threshold"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/segmentation/wheatGrain_manualThreshold.png
+	width 70text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Manual_Threshold"
+
+\end_inset
+
+Interactive segmentation of a grayscale image using manual segmentation.
+ Image from 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Le_2019_PlantMethods"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Auto Threshold...
+\end_layout
+
+\begin_layout Standard
+Binarizes an image by using an automated threshold method.
+ Method can be either Otsu, or minimum entropy.
+\end_layout
+
+\begin_layout Minisec
+Watershed...
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "Watershed"
+
+\end_inset
+
+Identifies catchment basins within a grayscale or intensity image using
+ a watershed algorithm 
+\begin_inset CommandInset citation
+LatexCommand citep
+key "Vincent1991,Soille2003"
+literal "false"
+
+\end_inset
+
+.
+ Some pre-processing may be needed.
+ The resut is a label image, each label corresponding to a basin of the
+ original image.
+\end_layout
+
+\begin_layout Minisec
+K-Means Segmentation
+\end_layout
+
+\begin_layout Standard
+K-means is a method for cluster analysis.
+ It consists in building a partition of 
+\begin_inset Formula $n$
+\end_inset
+
+ observations into 
+\begin_inset Formula $k$
+\end_inset
+
+ clusters in which each observation belongs to the cluster with the nearest
+ mean, serving as a prototype of the cluster.
+ In the case of a grayscale image, this results in a muti-level threshold
+ based on images intensities.
+ In the case of a multi-variate image, each observation corresponds to an
+ image element, and each component corresponds a feature.
+ The resulting clusters correspond to groups of pixels with similar or near
+ colors or channel intensities.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/segmentation/peppers_kmeans6_classes.png
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Labels
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/segmentation/peppers_kmeans6_averageColor.png
+	width 48text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Average colors
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:kmeans-colorImage-classes"
+
+\end_inset
+
+Result of the kmeans method applied to a color image.
+ (a) The colors correspond to the class index.
+ (b) The colors correspond to the average color within the corresponding
+ class.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Extended Min Watershed...
+\end_layout
+
+\begin_layout Standard
+Concatenates several operations into a single operator.
+ This operators consists in (1) computing extended minima, (2) imposing
+ minima on the original image, and (3) applying the watershed algorithm.
+ These three operation are integrated into simple dialog that allows to
+ choose the dynamic of the minima and the connectivity, and visualize a
+ preview of the output (Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Interactive-Watershed-Segmentation"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+ The resut is a label image.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/segmentation/segment_watershed_embryo3d.png
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Interactive-Watershed-Segmentation"
+
+\end_inset
+
+Interactive segmentation of a 3D grayscale image using watershed.
+ Image from 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Moukhtar_2019_plosCompBiol"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Binary / Label images processing
+\end_layout
+
+\begin_layout Standard
+Some operators are more specific to binary images.
+ Some of them may also be applied to label images.
+\end_layout
+
+\begin_layout Minisec
+Connected Components Labeling
+\end_layout
+
+\begin_layout Standard
+Converts a binary image into a label image by identifying the connected
+ components.
+\end_layout
+
+\begin_layout Minisec
+Area Opening
+\end_layout
+
+\begin_layout Standard
+Removes the binary regions whose size (in number of pixels or voxels) is
+ smaller than the specified threshold.
+\end_layout
+
+\begin_layout Minisec
+Keep Largest Region
+\end_layout
+
+\begin_layout Standard
+Keeps the largest binary region within the image.
+\end_layout
+
+\begin_layout Minisec
+Distance Map
+\end_layout
+
+\begin_layout Standard
+Computes the distance map of a binary image.
+ For each foreground pixel or voxel, computed the distance to the nearest
+ background pixel or voxel (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Binary-Images-Operators"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-a).
+\end_layout
+
+\begin_layout Minisec
+Geodesic Distance Map
+\end_layout
+
+\begin_layout Standard
+Computes the geodesic distance map from a binary marker within a binary
+ mask (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Binary-Images-Operators"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-b).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/binary/circles-distmap-rgb.png
+	width 30text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/binary/circles-geodDistMap.png
+	width 30text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/binary/circles-skeleton-ovr.png
+	width 30text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Binary-Images-Operators"
+
+\end_inset
+
+Several operators for binary images.
+ (a) Distance map.
+ (b) geodesic distance map within a binary mask (the marker is shown as
+ a red cross).
+ (c) Skeleton (shown as red overlay).
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Skeleton 
+\end_layout
+
+\begin_layout Standard
+Computes the skeleton of each binary region (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Binary-Images-Operators"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-c).
+\end_layout
+
+\begin_layout Minisec
+Boolean Op...
+\end_layout
+
+\begin_layout Standard
+Combines two binary images using logical operators (AND, OR, XOR...)
+\end_layout
+
+\begin_layout Minisec
+Binary Overlay
+\end_layout
+
+\begin_layout Standard
+Creates a Color image by computing a binary overlay over a grayscale or
+ color image.
+\end_layout
+
+\begin_layout Minisec
+Label To RGB...
+\end_layout
+
+\begin_layout Standard
+Converts an label image into a RGB image by choosing LUT and background
+ color.
+\end_layout
+
+\begin_layout Minisec
+Create Label Values Map...
+\end_layout
+
+\begin_layout Standard
+Creates an intensity image by combining a label image, and a table containing
+ a value associated to each label.
+\end_layout
+
+\begin_layout Section
+Tools
+\end_layout
+
+\begin_layout Standard
+Selection of interactive tools, such as ROI selection or interactive measurement
+s.
+\end_layout
+
+\begin_layout Subsection
+Selection of regions of interest
+\end_layout
+
+\begin_layout Minisec
+Select Rectangle
+\end_layout
+
+\begin_layout Standard
+Selects a rectangular region of interest.
+\end_layout
+
+\begin_layout Minisec
+Select Points
+\end_layout
+
+\begin_layout Standard
+Selects a region of interest composed of several points.
+\end_layout
+
+\begin_layout Minisec
+Select Polyline
+\end_layout
+
+\begin_layout Standard
+Selects a polyline region of interest based on several vertices.
+ Can be used to draw line profiles.
+\end_layout
+
+\begin_layout Minisec
+Select Polygon
+\end_layout
+
+\begin_layout Standard
+Selects a polygon region of interest based on several vertices.
+ Can be used to measure average values within regions.
+\end_layout
+
+\begin_layout Minisec
+Select Line Segment
+\end_layout
+
+\begin_layout Standard
+Selects line segment based on two extremity points.
+ Can be used to draw line profiles.
+\end_layout
+
+\begin_layout Subsection
+Drawing tools
+\end_layout
+
+\begin_layout Minisec
+Set Pixel to White
+\end_layout
+
+\begin_layout Standard
+Changes the value of the selected pixel to white.
+\end_layout
+
+\begin_layout Minisec
+Brush
+\end_layout
+
+\begin_layout Standard
+Draws onto the current image, using current value.
+\end_layout
+
+\begin_layout Minisec
+Flood Fill
+\end_layout
+
+\begin_layout Standard
+Fills a connected region with the current value.
+\end_layout
+
+\begin_layout Minisec
+Pick Current Value/Color
+\end_layout
+
+\begin_layout Standard
+Changes the current value / color from the picked pixel.
+\end_layout
+
+\begin_layout Subsection
+Interactive exploration tools
+\end_layout
+
+\begin_layout Standard
+Some tools allow to interactively expore the values or the profiles within
+ multi-dimensional images.
+\end_layout
+
+\begin_layout Minisec
+Print Current Point
+\end_layout
+
+\begin_layout Standard
+Prints the value of selected pixel(s) on the command line.
+\end_layout
+
+\begin_layout Minisec
+Plot Image 3D Z-Profile
+\end_layout
+
+\begin_layout Standard
+Opens a new plot window, and when clicking on a position of a 3D image slice,
+ plots the corresponding z-profile.
+\end_layout
+
+\begin_layout Minisec
+Plot Vector Image Channels
+\end_layout
+
+\begin_layout Standard
+Opens a new plot window, and when clicking on a position of a multi-channel
+ image, plots the corresponding channel profile.
+\end_layout
+
+\begin_layout Section
+Analysis
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Image-Analysis"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Extracts quantitative information from images.
+\end_layout
+
+\begin_layout Subsection
+Interactive measurements
+\end_layout
+
+\begin_layout Minisec
+Set Image Scale
+\end_layout
+
+\begin_layout Standard
+Sets the image spatial calibration from the current line segment selection.
+\end_layout
+
+\begin_layout Minisec
+Measure Points
+\end_layout
+
+\begin_layout Standard
+Creates a new table containing the image values measured for each point
+ in the current multi-point selection.
+\end_layout
+
+\begin_layout Minisec
+Measure Within Selection
+\end_layout
+
+\begin_layout Standard
+Creates a new table containing the average image value measured within the
+ current polygon selection.
+\end_layout
+
+\begin_layout Minisec
+Line Profile
+\end_layout
+
+\begin_layout Standard
+Plots a lines profile of intensities (or three line profiles of color intensitie
+s) along a path previously defined by a 
+\begin_inset Quotes eld
+\end_inset
+
+line selection
+\begin_inset Quotes erd
+\end_inset
+
+ tool.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/demo_ImageM_peppers.png
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Computation of Histogram and Line profile of a color image.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Image value distributions
+\end_layout
+
+\begin_layout Minisec
+Histogram
+\end_layout
+
+\begin_layout Standard
+Computes the histogram of the values (or of the colors) within the image.
+\end_layout
+
+\begin_layout Minisec
+Joint Histogram
+\end_layout
+
+\begin_layout Standard
+Computes the joint histogram of two images with the same size.
+ The result is a 2D image, where each axis corresponds to the intensities
+ of one of the images, and the values correspond to the count of pixels
+ or voxels that share the specified pair of values.
+\end_layout
+
+\begin_layout Subsection
+Analysis of Regions
+\end_layout
+
+\begin_layout Standard
+Analyis morphology and values of regions.
+ Requires label (or binary) images.
+\end_layout
+
+\begin_layout Minisec
+Analyze Regions...
+\end_layout
+
+\begin_layout Standard
+Opens a dialog to choose a selection of morphometric features.
+ The result is a new data table with as many rows as the number of regions
+ within the current label image.
+\end_layout
+
+\begin_layout Minisec
+Average Value by Region
+\end_layout
+
+\begin_layout Standard
+Opens a dialog to choose a label image and an intensity image with same
+ dimensions.
+ The result is a new data table that contains for each region the average
+ value of the corresponding pixels/voxels in the intensity image.
+\end_layout
+
+\begin_layout Chapter
+Table Management
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Table-Management"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Several image operators return results as data tables.
+ Data tables are based on a 
+\begin_inset Formula $n\times p$
+\end_inset
+
+ array, where 
+\begin_inset Formula $n$
+\end_inset
+
+ is the number of rows, usually corresponding to observations, and 
+\begin_inset Formula $p$
+\end_inset
+
+ is the number of columns, usually corresponding to features.
+ 
+\end_layout
+
+\begin_layout Standard
+Data tables are displayed in their own frames, and a collection of operators
+ for Tables is available from Table frame menu.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+minitoc
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+File Menu
+\end_layout
+
+\begin_layout Standard
+Commands within the File menu allow to load and save tables.
+\end_layout
+
+\begin_layout Minisec
+Open Table...
+\end_layout
+
+\begin_layout Standard
+Opens a file stored in a text file such as a CSV (Coma-Separated-Values)
+ file.
+\end_layout
+
+\begin_layout Minisec
+Save As...
+\end_layout
+
+\begin_layout Standard
+Saves the table in the current frame as a CSV file.
+\end_layout
+
+\begin_layout Minisec
+Close
+\end_layout
+
+\begin_layout Standard
+Closes the current frame.
+\end_layout
+
+\begin_layout Minisec
+Quit 
+\end_layout
+
+\begin_layout Standard
+Close all frames and quit the application.
+\end_layout
+
+\begin_layout Section
+Edit Menu
+\end_layout
+
+\begin_layout Standard
+Commands within the Edit menu allow to combine tables and apply common edition
+ operations on tables.
+\end_layout
+
+\begin_layout Minisec
+Rename
+\end_layout
+
+\begin_layout Standard
+Changes the name of the current table.
+\end_layout
+
+\begin_layout Minisec
+Transpose
+\end_layout
+
+\begin_layout Standard
+Transposes the current table, by interverting columns and rows.
+\end_layout
+
+\begin_layout Minisec
+Concatenate...
+\end_layout
+
+\begin_layout Standard
+Concatenate two tables, either horizontally or vertically.
+\end_layout
+
+\begin_layout Minisec
+Select Rows...
+\end_layout
+
+\begin_layout Standard
+Extracts a portion of the current table by manually selecting rows.
+\end_layout
+
+\begin_layout Minisec
+Select Columns...
+\end_layout
+
+\begin_layout Standard
+Extracts a portion of the current table by manually selecting columns.
+\end_layout
+
+\begin_layout Minisec
+Filter From Column Values...
+\end_layout
+
+\begin_layout Standard
+Extracts a portion of the current table by using a condition on the values
+ within one of the columns.
+\end_layout
+
+\begin_layout Minisec
+Fold Table To Image...
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "cmd:Fold-Table-To-Image"
+
+\end_inset
+
+Converts a table into an image, by 
+\begin_inset Quotes eld
+\end_inset
+
+folding
+\begin_inset Quotes erd
+\end_inset
+
+ the values into a 2D or 3D array.
+ This is the counterpart of the 
+\begin_inset Quotes eld
+\end_inset
+
+Unfold Vector Image To Table
+\begin_inset Quotes erd
+\end_inset
+
+ operator (see section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "cmd:Unfold-Vector-Image-To-Table"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Plot Menu
+\end_layout
+
+\begin_layout Standard
+Plotting facilities are available from the Plot menu.
+\end_layout
+
+\begin_layout Subsection
+Distribution plots
+\end_layout
+
+\begin_layout Standard
+Several commands allow to represents graphically the distribution of the
+ values within a column.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/table-plots/iris_histogram_PetalLength_n30.png
+	lyxscale 30
+	width 33text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/table-plots/iris_boxplot.png
+	lyxscale 30
+	width 33text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/table-plots/iris_violinPlot.png
+	lyxscale 30
+	width 33text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Distribution-Plots"
+
+\end_inset
+
+Distribution plots of features within a table.
+ (a) Histogram.
+ (b) Box Plot.
+ (c) Violin Plot.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Histogram...
+\end_layout
+
+\begin_layout Standard
+Displays the histogram of values within one of the columns of the table
+ (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Distribution-Plots"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-a).
+\end_layout
+
+\begin_layout Minisec
+Box Plot...
+\end_layout
+
+\begin_layout Standard
+Displays the value distribution within one of the columns of the table as
+ a box plot (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Distribution-Plots"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-b).
+\end_layout
+
+\begin_layout Minisec
+Box Plot by Group...
+\end_layout
+
+\begin_layout Standard
+Displays the value distribution within one of the columns of the table as
+ a box plot, by grouping the values according to the specified factor column.
+\end_layout
+
+\begin_layout Minisec
+Violin Plot...
+\end_layout
+
+\begin_layout Standard
+Displays the value distribution within one of the columns of the table as
+ a violin plot, by grouping the values according to the specified factor
+ column (see Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Distribution-Plots"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-c).
+\end_layout
+
+\begin_layout Subsection
+Correlation plots
+\end_layout
+
+\begin_layout Standard
+Another series of commands is better suited to represent correlations, or
+ relationships between the values within two or more columns.
+\end_layout
+
+\begin_layout Minisec
+Scatter Plot...
+\end_layout
+
+\begin_layout Standard
+Displays the observations as markers according to the coordinates in two
+ columns.
+\end_layout
+
+\begin_layout Minisec
+Scatter Groups...
+\end_layout
+
+\begin_layout Standard
+Displays the observations as markers according to the coordinates in two
+ columns, using a color that depends on a factor column.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename images/table-plots/iris_pairPlot_bySpecies.png
+	lyxscale 50
+	width 50text%
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename images/table-plots/carsmall_correlationCircles.png
+	lyxscale 50
+	width 50text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Correlation-plots"
+
+\end_inset
+
+Correlation plots.
+ (a) Resut of 
+\begin_inset Quotes eld
+\end_inset
+
+Pair Plot
+\begin_inset Quotes erd
+\end_inset
+
+ on a subset of the iris data set.
+ (b) Result of 
+\begin_inset Quotes eld
+\end_inset
+
+Correlation Circles
+\begin_inset Quotes erd
+\end_inset
+
+ on a subset of the cars data set.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Minisec
+Pair Plot
+\end_layout
+
+\begin_layout Standard
+Pairwise scatter plots and histograms of table columns (See Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-plots"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-a).
+\end_layout
+
+\begin_layout Minisec
+Correlation Circles 
+\end_layout
+
+\begin_layout Standard
+Represents the correlation matrix of table columns using colored circles
+ (See Fig.
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Correlation-plots"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+-b).
+ The intensity of the correlation is given by the size of the circle, while
+ the color indicates whether the correlation is positive or negative.
+\end_layout
+
+\begin_layout Subsection
+Simple plots
+\end_layout
+
+\begin_layout Minisec
+Plot Columns
+\end_layout
+
+\begin_layout Standard
+Display the values within the columns as curves, using row index as 
+\begin_inset Formula $x$
+\end_inset
+
+-position.
+\end_layout
+
+\begin_layout Minisec
+Plot Rows
+\end_layout
+
+\begin_layout Standard
+Display the values within the rows as curves, using column index as 
+\begin_inset Formula $x$
+\end_inset
+
+-position.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Process Menu
+\end_layout
+
+\begin_layout Standard
+Commands in this menu allow more elaborate processing of the underlying
+ data table.
+\end_layout
+
+\begin_layout Subsection
+Dimensionality reduction
+\end_layout
+
+\begin_layout Minisec
+Principal Component Analysis
+\end_layout
+
+\begin_layout Standard
+Performs a principal component analysis (PCA) of the current data table.
+ A new frame opens, allowing to choose the results to display (score plots,
+ loadings plot, scree plot...)
+\end_layout
+
+\begin_layout Minisec
+Non-Negative Matrix Factorization
+\end_layout
+
+\begin_layout Standard
+Performs a non-negative matrix factorization (NMF) of the current data table.
+ The user inputs the number of components, and two new tables are created,
+ that correspond to the weights and the coefficients of the factorization.
+\end_layout
+
+\begin_layout Subsection
+Clustering
+\end_layout
+
+\begin_layout Minisec
+K-Means
+\end_layout
+
+\begin_layout Standard
+Performs a k-means clustering of the data within the current table.
+ User can choose the number of classes, and the result is provided as a
+ new table containing the class index associated to each observation (row).
+\end_layout
+
+\begin_layout Section
+Help Menu
+\end_layout
+
+\begin_layout Minisec
+Print History
+\end_layout
+
+\begin_layout Standard
+A simple utilty that dispays the commands registered within ImageM history.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+btprint "btPrintCited"
+bibfiles "ImageM-manual"
+options "apalike2"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
