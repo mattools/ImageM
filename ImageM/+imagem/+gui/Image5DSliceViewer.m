@@ -507,6 +507,8 @@ end
 %% Mouse listeners management
 methods
     function onKeyPressed(obj, hObject, eventdata) %#ok<INUSL>
+        % callback function for key pressed.
+        
 %         disp(['key pressed: ' eventdata.Character]);
         
         key = eventdata.Character;
@@ -528,7 +530,9 @@ methods
         end
     end
     
-    function onKeyReleased(obj, hObject, eventdata) %#ok<INUSD>
+    function onKeyReleased(obj, hObject, eventdata)
+        % callback function for key released.
+        
 %         disp(['key relased: ' eventdata.Character]);
     end
     

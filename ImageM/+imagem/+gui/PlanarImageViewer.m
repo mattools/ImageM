@@ -7,15 +7,17 @@ classdef PlanarImageViewer < imagem.gui.ImageViewer
 %   DOC: the instance of ImageDoc that contains the data to display.
 %
 %   Example
-%     app = imagem.app.ImagemApp;
-%     gui = imagem.gui.ImagemGUI(app);
+%     % read a sample image
 %     img = Image.read('cameraman.tif');
-%     doc = imagem.app.ImageDoc(image);
-%     addDocument(app, doc);
-%     viewer = imagem.gui.PlanarImageViewer(obj, doc);
+%     % create app data, gui, image document, and finally viewer
+%     % (viewer displays at creation)
+%     app = imagem.app.ImagemAppData;
+%     gui = imagem.gui.ImagemGUI(app);
+%     doc = createImageDocument(app, img);
+%     viewer = imagem.gui.PlanarImageViewer(gui, doc);
 %
 %   See also
-%     ImagemGUI, PlanarImageViewer, ImageDoc
+%     ImagemGUI, ImageViewer, imagem.app.ImageDoc
 %
 
 % ------
@@ -40,10 +42,15 @@ end
 %% Constructor
 methods
     function obj = PlanarImageViewer(gui, doc)
+        % Constructor for the PlanarImageViewer class.
+        %
+        % Usage:
+        %  VIEWER = imagem.gui.PlanarImageViewer(GUI, DOC);
+        %  where GUI is an instance of ImagemGUI, and DOC is an instance of
+        %  ImageDoc.
         
         % call constructor of super class
         obj = obj@imagem.gui.ImageViewer(gui, doc);
-        
         
         % create the figure that will contains the display
         fig = createNewFigure(gui, ...
@@ -65,13 +72,13 @@ methods
         api = iptgetapi(obj.Handles.ScrollPanel);
         mag = api.findFitMag();
         api.setMagnification(mag);
-
+        
         % setup listeners associated to the figure
         if ~isempty(doc) && ~isempty(doc.Image)
             set(fig, 'WindowButtonDownFcn',     @obj.processMouseButtonPressed);
             set(fig, 'WindowButtonUpFcn',       @obj.processMouseButtonReleased);
             set(fig, 'WindowButtonMotionFcn',   @obj.processMouseMoved);
-
+            
             % setup mouse listener for display of mouse coordinates
             tool = imagem.tools.ShowCursorPosition(obj, 'showMousePosition');
             addMouseListener(obj, tool);
@@ -300,6 +307,8 @@ end
 %% Key listeners management
 methods
     function onKeyPressed(obj, hObject, eventdata) %#ok<INUSL>
+        % Callback function for key pressed.
+        
 %         disp(['key pressed: ' eventdata.Character]);
         
         key = eventdata.Character;
@@ -322,6 +331,8 @@ methods
     end
     
     function onKeyReleased(obj, hObject, eventdata) %#ok<INUSD>
+        % Callback function for key released.
+        
 %         disp(['key relased: ' eventdata.Character]);
     end
     

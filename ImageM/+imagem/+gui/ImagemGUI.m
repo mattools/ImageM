@@ -142,7 +142,6 @@ methods
         
         if isempty(img)
             frame = imagem.gui.PlanarImageViewer(obj, doc);
-            addView(doc, frame);
             return;
         end
         
@@ -156,7 +155,7 @@ methods
             frame = imagem.gui.Image5DSliceViewer(obj, doc);
             
         elseif size(img, 3) > 1
-            % more simple viewer for 4D scalar/color images
+            % most simple viewer for 4D scalar/color images
             frame = imagem.gui.Image3DSliceViewer(obj, doc);
             
         else
@@ -164,7 +163,6 @@ methods
             frame = imagem.gui.PlanarImageViewer(obj, doc);
         end
         
-        addView(doc, frame);
     end
     
     
@@ -178,7 +176,7 @@ methods
         %   [FRAME, DOC] = createTableFrame(obj, table);
         %   Also returns the created doc.
         
-        parentFrame = []; % will be used to locate the new frame
+%         parentFrame = []; % will be used to locate the new frame
         tableDoc = [];
         
         while ~isempty(varargin)
@@ -187,7 +185,7 @@ methods
                 parentFrame = var1;
                 tableDoc = currentDoc(parentFrame);
             elseif isa(var1, 'imagem.gui.ImagemFrame')
-                parentFrame = var1;
+%                 parentFrame = var1;
             elseif isa(var1, 'imagem.app.TableDoc')
                 tableDoc = var1;
             else

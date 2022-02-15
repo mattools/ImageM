@@ -95,6 +95,11 @@ methods
         % call constructor of super class
         obj = obj@imagem.gui.ImagemFrame(gui);
         obj.Doc = doc;
+        
+        % add  this viewer to the list of viewers of the doc
+        if ~isempty(doc)
+            addView(doc, obj);
+        end
     end
 
 end % end constructors
@@ -265,12 +270,12 @@ end
 %% Mouse listeners management
 methods
     function addMouseListener(obj, listener)
-        % Add a mouse listener to obj viewer.
+        % Adds a mouse listener to this viewer.
         obj.MouseListeners = [obj.MouseListeners {listener}];
     end
     
     function removeMouseListener(obj, listener)
-        % Remove a mouse listener from obj viewer.
+        % Removes a mouse listener from this viewer.
         
         % find which listeners are the same as the given one
         inds = false(size(obj.MouseListeners));
@@ -288,21 +293,21 @@ methods
     end
     
     function processMouseButtonPressed(obj, hObject, eventdata)
-        % propagates mouse event to all listeners.
+        % Propagates mouse event to all listeners.
         for i = 1:length(obj.MouseListeners)
             onMouseButtonPressed(obj.MouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseButtonReleased(obj, hObject, eventdata)
-        % propagates mouse event to all listeners.
+        % Propagates mouse event to all listeners.
         for i = 1:length(obj.MouseListeners)
             onMouseButtonReleased(obj.MouseListeners{i}, hObject, eventdata);
         end
     end
     
     function processMouseMoved(obj, hObject, eventdata)
-        % propagates mouse event to all listeners.
+        % Propagates mouse event to all listeners.
         for i = 1:length(obj.MouseListeners)
             onMouseMoved(obj.MouseListeners{i}, hObject, eventdata);
         end
